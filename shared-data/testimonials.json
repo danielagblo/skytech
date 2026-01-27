@@ -1,0 +1,23 @@
+[
+  {
+    "id": "1",
+    "author": "Sarah Johnson",
+    "company": "Tech Innovations Inc.",
+    "quote": "SkyTech delivered an exceptional platform that transformed our operations.",
+    "rating": 5
+  },
+  {
+    "id": "2",
+    "author": "Michael Chen",
+    "company": "Global Ventures",
+    "quote": "Professional team, clear communication, and results exceeded expectations.",
+    "rating": 5
+  },
+  {
+    "id": "3",
+    "author": "Lisa Anderson",
+    "company": "StartUp Labs",
+    "quote": "From concept to launch in record time. Highly recommended.",
+    "rating": 5
+  }
+]

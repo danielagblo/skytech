@@ -1,0 +1,32 @@
+[
+  {
+    "id": "1",
+    "title": "Custom Web Applications",
+    "description": "Scalable, modern web platforms built with React, Next.js, and Node.js",
+    "icon": "🌐"
+  },
+  {
+    "id": "2",
+    "title": "Mobile Development",
+    "description": "iOS and Android apps using React Native and native frameworks",
+    "icon": "📱"
+  },
+  {
+    "id": "3",
+    "title": "Cloud & DevOps",
+    "description": "Infrastructure automation, CI/CD, and deployment optimization",
+    "icon": "☁️"
+  },
+  {
+    "id": "4",
+    "title": "Data & AI",
+    "description": "Machine learning models, analytics, and intelligent automation",
+    "icon": "🤖"
+  },
+  {
+    "id": "5",
+    "title": "UI/UX Design",
+    "description": "User-centered design, prototyping, and design systems",
+    "icon": "🎨"
+  }
+]

@@ -1,0 +1,28 @@
+[
+  {
+    "id": 1769512845273,
+    "name": "Faustina Agblo",
+    "email": "agblod27@gmail.com",
+    "phone": "0552892433",
+    "company": "HG",
+    "projectType": "cloud",
+    "budget": "50000",
+    "timeline": "1-3mo",
+    "urgency": "exploring",
+    "message": "GGG",
+    "submittedAt": "2026-01-27T11:20:45.235Z"
+  },
+  {
+    "id": 1769513065129,
+    "name": "Faustina Agblo",
+    "email": "agblod27@gmail.com",
+    "phone": "0552892433",
+    "company": "HG",
+    "projectType": "cloud",
+    "budget": "3000",
+    "timeline": "over-6mo",
+    "urgency": "this-quarter",
+    "message": "D",
+    "submittedAt": "2026-01-27T11:24:25.089Z"
+  }
+]

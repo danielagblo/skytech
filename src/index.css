@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Manrope", "Inter", system-ui, -apple-system, sans-serif;
+  color: #0f172a;
+  background: radial-gradient(circle at 20% 20%, rgba(59,130,246,0.08), transparent 32%),
+    radial-gradient(circle at 80% 0%, rgba(56,189,248,0.08), transparent 28%),
+    #f8fafc;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.section-shell {
+  @apply max-w-6xl mx-auto px-4 md:px-6;
+}
+
+.glass-panel {
+  @apply bg-white/80 backdrop-blur-xl border border-white/60 shadow-lg shadow-blue-500/5;
+}
+
+.pill {
+  @apply inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] bg-white/80 text-blue-700 border border-blue-100;
+}
+
+.btn-primary {
+  @apply inline-flex items-center justify-center rounded-xl bg-blue-600 px-6 py-3 font-semibold text-white shadow-lg shadow-blue-600/25 transition hover:-translate-y-0.5 hover:bg-blue-700 active:translate-y-0;
+}
+
+.btn-secondary {
+  @apply inline-flex items-center justify-center rounded-xl border border-blue-200 px-6 py-3 font-semibold text-blue-700 transition hover:-translate-y-0.5 hover:border-blue-300 hover:bg-blue-50 active:translate-y-0;
+}

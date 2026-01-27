@@ -1,0 +1,26 @@
+[
+  {
+    "id": "1",
+    "name": "Amelia Boateng",
+    "role": "Delivery Lead",
+    "focus": "Owns timelines, scope, and weekly stakeholder updates.",
+    "note": "Calm operator with a bias for clarity and action.",
+    "avatar": "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=200&q=80"
+  },
+  {
+    "id": "2",
+    "name": "Kwame Mensah",
+    "role": "Engineering Lead",
+    "focus": "Architecture, code quality, and DevOps practices.",
+    "note": "Keeps code reviews, CI, and observability humming.",
+    "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80"
+  },
+  {
+    "id": "3",
+    "name": "Nadia Owusu",
+    "role": "Product Design",
+    "focus": "User journeys, UX flows, and design systems.",
+    "note": "Pairs with engineering for smooth handoffs and polish.",
+    "avatar": "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=200&q=80"
+  }
+]
