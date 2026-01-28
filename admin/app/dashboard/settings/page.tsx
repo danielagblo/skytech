@@ -170,7 +170,7 @@ export default function SettingsPage() {
               {settings.pricingBookletUrl && (
                 <div className="mt-2">
                   <a
-                    href={`/api/content/view-booklet?file=${encodeURIComponent(settings.pricingBookletUrl.split('/').pop())}`}
+                    href={`/api/content/view-booklet?file=${encodeURIComponent(settings.pricingBookletUrl.split('/').pop() || '')}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-sm text-blue-600 hover:underline"

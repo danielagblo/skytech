@@ -4,15 +4,26 @@ import path from 'path';
 // Path relative to the admin directory (cwd in Next.js)
 const dataPath = path.join(process.cwd(), '../shared-data/analytics.json');
 
+interface AnalyticsEvent {
+  sessionId?: string;
+  type?: string;
+  page?: string;
+  source?: string;
+  deviceType?: string;
+  browser?: string;
+  country?: string;
+  timestamp?: string;
+}
+
 export async function GET(request: Request) {
   try {
     const data = fs.readFileSync(dataPath, 'utf-8');
-    const analytics = JSON.parse(data);
+    const analytics: AnalyticsEvent[] = JSON.parse(data);
     
     // Calculate aggregated metrics
-    const uniqueVisitors = new Set(analytics.map(e => e.sessionId));
-    const pageViews = analytics.filter(e => e.type === 'pageview');
-    const interactions = analytics.filter(e => e.type === 'interaction');
+    const uniqueVisitors = new Set(analytics.map((e: AnalyticsEvent) => e.sessionId));
+    const pageViews = analytics.filter((e: AnalyticsEvent) => e.type === 'pageview');
+    const interactions = analytics.filter((e: AnalyticsEvent) => e.type === 'interaction');
     
     const metrics = {
       totalVisitors: uniqueVisitors.size,
@@ -37,7 +48,7 @@ export async function POST(request: Request) {
   try {
     const event = await request.json();
     const data = fs.readFileSync(dataPath, 'utf-8');
-    const analytics = JSON.parse(data);
+    const analytics: AnalyticsEvent[] = JSON.parse(data);
     
     analytics.push({
       ...event,
@@ -52,19 +63,21 @@ export async function POST(request: Request) {
   }
 }
 
-function aggregateByPage(events: any[]) {
+function aggregateByPage(events: AnalyticsEvent[]) {
   const pages: Record<string, number> = {};
-  events.forEach(e => {
-    pages[e.page] = (pages[e.page] || 0) + 1;
+  events.forEach((e: AnalyticsEvent) => {
+    if (e.page) {
+      pages[e.page] = (pages[e.page] || 0) + 1;
+    }
   });
   return Object.entries(pages)
     .map(([page, count]) => ({ page, count }))
     .sort((a, b) => b.count - a.count);
 }
 
-function aggregateBySource(events: any[]) {
+function aggregateBySource(events: AnalyticsEvent[]) {
   const sources: Record<string, number> = {};
-  events.forEach(e => {
+  events.forEach((e: AnalyticsEvent) => {
     const source = e.source || 'direct';
     sources[source] = (sources[source] || 0) + 1;
   });
@@ -73,9 +86,9 @@ function aggregateBySource(events: any[]) {
     .sort((a, b) => b.count - a.count);
 }
 
-function aggregateByDeviceType(events: any[]) {
+function aggregateByDeviceType(events: AnalyticsEvent[]) {
   const devices: Record<string, number> = {};
-  events.forEach(e => {
+  events.forEach((e: AnalyticsEvent) => {
     const device = e.deviceType || 'unknown';
     devices[device] = (devices[device] || 0) + 1;
   });
@@ -84,9 +97,9 @@ function aggregateByDeviceType(events: any[]) {
     .sort((a, b) => b.count - a.count);
 }
 
-function aggregateByBrowser(events: any[]) {
+function aggregateByBrowser(events: AnalyticsEvent[]) {
   const browsers: Record<string, number> = {};
-  events.forEach(e => {
+  events.forEach((e: AnalyticsEvent) => {
     const browser = e.browser || 'unknown';
     browsers[browser] = (browsers[browser] || 0) + 1;
   });
@@ -95,9 +108,9 @@ function aggregateByBrowser(events: any[]) {
     .sort((a, b) => b.count - a.count);
 }
 
-function aggregateByCountry(events: any[]) {
+function aggregateByCountry(events: AnalyticsEvent[]) {
   const countries: Record<string, number> = {};
-  events.forEach(e => {
+  events.forEach((e: AnalyticsEvent) => {
     if (e.country) {
       countries[e.country] = (countries[e.country] || 0) + 1;
     }
