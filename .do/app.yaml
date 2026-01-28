@@ -1,13 +1,13 @@
-{
-  "name": "skytech",
-  "static_sites": [],
-  "services": [
-    {
-      "name": "web",
-      "run_command": "cd admin && PORT=8080 npm start",
-      "build_command": "npm run build && cd admin && npm run build",
-      "environment_slug": "node-js",
-      "http_port": 8080
-    }
-  ]
-}
+name: skytech
+services:
+- name: web
+  github:
+    repo: danielagblo/skytech
+    branch: main
+  build_command: npm run build && cd admin && npm run build
+  run_command: cd admin && npm start
+  environment_slug: node-js
+  envs:
+  - key: PORT
+    value: "8080"
+
