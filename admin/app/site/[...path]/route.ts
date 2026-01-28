@@ -2,8 +2,8 @@ import { readFile } from 'fs/promises';
 import { join } from 'path';
 import { NextResponse } from 'next/server';
 
-// Get the dist folder path - it's at the root of the project
-const publicDir = join(process.cwd(), '..', '..', 'dist');
+// Get the dist folder path - when running from admin/, dist is one level up
+const publicDir = join(process.cwd(), '..', 'dist');
 
 export async function GET(
   request: Request,
