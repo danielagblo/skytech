@@ -1,6 +1,7 @@
 import { readFile } from "fs/promises";
 import path from "path";
 import { NextRequest, NextResponse } from "next/server";
+import resolveSharedData from '../../../lib/sharedData';
 
 export async function GET(request: NextRequest) {
   try {
