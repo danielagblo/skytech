@@ -24,5 +24,29 @@
     "urgency": "this-quarter",
     "message": "D",
     "submittedAt": "2026-01-27T11:24:25.089Z"
+  },
+  {
+    "id": 1769700931929,
+    "name": "Edmund Amonoo",
+    "email": "edmundamonoo@gmail.com",
+    "phone": "0557609106",
+    "company": "",
+    "projectType": "mobile",
+    "budget": "304500",
+    "timeline": "<1mo",
+    "urgency": "asap",
+    "message": "Project details\r\n"
+  },
+  {
+    "id": 1769701360817,
+    "name": "Edmund Amonoo",
+    "email": "edmundamonoo@gmail.com",
+    "phone": "0557609106",
+    "company": "",
+    "projectType": "mobile",
+    "budget": "4500",
+    "timeline": "<1mo",
+    "urgency": "asap",
+    "message": "{\"success\":true,\"id\":1769700931929}"
   }
 ]
