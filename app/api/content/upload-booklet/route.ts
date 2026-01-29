@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { writeFile, mkdir } from "fs/promises";
+import resolveSharedData from "../../../lib/sharedData";
 import path from "path";
 
 export async function POST(request: NextRequest) {

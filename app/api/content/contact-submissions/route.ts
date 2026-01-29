@@ -40,7 +40,8 @@ export async function POST(request: NextRequest) {
     ) {
       const form = await request.formData();
       submission = {};
-      for (const [key, value] of form.entries()) {
+      // Convert entries to an array to avoid TypeScript downlevel-iteration issues
+      for (const [key, value] of Array.from(form.entries())) {
         if (typeof value === "string") submission[key] = value;
         else if (value instanceof File) submission[key] = value.name;
         else submission[key] = String(value);

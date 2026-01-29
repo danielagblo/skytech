@@ -1,14 +1,11 @@
-import { Helmet } from 'react-helmet-async';
+export const metadata = {
+  title: 'About SkyTech - Our Mission & Values',
+  description: "Learn about SkyTech's mission, values, and expertise in software development.",
+};
 
 export default function About() {
   return (
     <>
-      <Helmet>
-        <title>About SkyTech - Our Mission & Values</title>
-        <meta name="description" content="Learn about SkyTech's mission, values, and expertise in software development." />
-        <meta property="og:title" content="About SkyTech - Our Mission & Values" />
-        <meta property="og:description" content="Learn about SkyTech's mission, values, and expertise in software development." />
-      </Helmet>
 
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-slate-950 text-white py-24 px-4">

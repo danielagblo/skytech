@@ -32,16 +32,16 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
         <meta name="description" content="SkyTech Admin Dashboard" />
       </head>
       <body>
-        {/* If we're rendering the public site under /site, don't include admin chrome */}
-        {isLogin ? (
-          <main className="min-h-screen">{children}</main>
-        ) : isSite ? (
-          <main className="min-h-screen">
-            <Header />
-            {children}
-            <Footer />
-          </main>
-        ) : (
+          {/* If we're rendering the public site under /site, don't include admin chrome */}
+          {isLogin ? (
+            <main className="min-h-screen">{children}</main>
+          ) : isSite ? (
+            <main className="min-h-screen">
+              <Header />
+              {children}
+              <Footer />
+            </main>
+          ) : (
           <div className="flex min-h-screen bg-gradient-to-br from-slate-50 via-slate-100 to-blue-50">
             {/* Sidebar */}
             <aside className="w-72 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 text-white p-6 shadow-2xl border-r border-slate-700 flex flex-col sticky top-0 h-screen">
@@ -117,6 +117,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
             </main>
           </div>
         )}
+        
       </body>
     </html>
   );
