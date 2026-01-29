@@ -1,12 +1,12 @@
-import path from 'path';
-import fs from 'fs';
+import path from "path";
+import fs from "fs";
 
 function candidatePaths(...segments: string[]) {
   const cwd = process.cwd();
   return [
-    path.join(cwd, 'shared-data', ...segments), // when running from repo root
-    path.join(cwd, '..', 'shared-data', ...segments), // when running from admin/
-    path.join(__dirname, '..', '..', 'shared-data', ...segments), // compiled/.next contexts
+    path.join(cwd, "shared-data", ...segments), // when running from repo root
+    path.join(cwd, "..", "shared-data", ...segments), // when running from admin/
+    path.join(__dirname, "..", "..", "shared-data", ...segments), // compiled/.next contexts
   ];
 }
 
