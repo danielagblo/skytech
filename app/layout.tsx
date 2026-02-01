@@ -31,8 +31,8 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
       <head>
         <title>SkyTech Admin</title>
         <meta name="description" content="SkyTech Admin Dashboard" />
-        <link rel="icon" href="/favicon.svg" />
-        <link rel="apple-touch-icon" href="/logo.svg" />
+        <link rel="icon" href="/bricskylogo.png" />
+        <link rel="apple-touch-icon" href="/bricskylogo.png" />
         
         {/* Google tag (gtag.js) */}
         <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17868191918"></script>
