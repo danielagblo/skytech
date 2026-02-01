@@ -27,7 +27,7 @@ export default function Header() {
           href="/site/contact"
           className="hidden md:inline-flex items-center gap-2 rounded-full bg-blue-700 px-5 py-2 text-sm font-semibold text-white shadow-md shadow-blue-600/30 transition hover:-translate-y-0.5 hover:bg-blue-800 active:translate-y-0"
         >
-          Start a project
+          Talk to us
         </Link>
 
         {/* Mobile Menu Button */}
@@ -78,7 +78,7 @@ export default function Header() {
             className="block rounded-full bg-blue-700 text-white px-6 py-3 font-semibold text-center shadow-md shadow-blue-600/25 transition hover:bg-blue-800"
             onClick={() => setIsOpen(false)}
           >
-            Start a project
+            Talk to us
           </Link>
         </div>
       )}

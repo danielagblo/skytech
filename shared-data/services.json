@@ -2,31 +2,31 @@
   {
     "id": "1",
     "title": "Custom Web Applications",
-    "description": "We build digital products that actually work. Fast, reliable platforms that grow with your business.",
+    "description": "We build websites that are fast and easy to use.",
     "icon": "🌐"
   },
   {
     "id": "2",
     "title": "Mobile Apps",
-    "description": "Beautiful mobile experiences your customers love. Apps that feel native, work flawlessly, and drive results.",
+    "description": "We build mobile apps for iPhone and Android.",
     "icon": "📱"
   },
   {
     "id": "3",
     "title": "Cloud Infrastructure",
-    "description": "Rock-solid infrastructure that just works. Automated, reliable, and scales when you need it to.",
+    "description": "We keep your app running fast and safe online.",
     "icon": "☁️"
   },
   {
     "id": "4",
     "title": "AI & Smart Solutions",
-    "description": "Intelligent systems that solve real problems. Automate what's repetitive, gain insight from your data.",
+    "description": "We automate boring tasks and give clear reports.",
     "icon": "🤖"
   },
   {
     "id": "5",
     "title": "Design & User Experience",
-    "description": "Beautiful design that people actually want to use. Thoughtful, intuitive interfaces that feel right.",
+    "description": "We design screens that are simple and clear.",
     "icon": "🎨"
   }
 ]

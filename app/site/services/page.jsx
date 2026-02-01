@@ -3,8 +3,8 @@ import Link from 'next/link';
 import { fetchServices } from '../../../utils/api';
 
 export const metadata = {
-  title: 'Services - SkyTech Software Solutions',
-  description: "Explore SkyTech's comprehensive software development services including web development, mobile apps, and cloud solutions.",
+  title: 'Services - SkyTech Website & App Development',
+  description: "We build websites and mobile apps. Simple, clear, and focused on results.",
 };
 
 export default async function Services() {
@@ -19,8 +19,8 @@ return (
         </div>
         <div className="section-shell relative space-y-6">
           <span className="pill">Services</span>
-          <h1 className="text-4xl sm:text-5xl font-extrabold leading-tight max-w-3xl">Product squads for every stage of your roadmap.</h1>
-          <p className="text-lg text-white/85 max-w-3xl">From discovery to scale, we assemble cross-functional teams with the right depth in product, design, engineering, and DevOps.</p>
+          <h1 className="text-4xl sm:text-5xl font-extrabold leading-tight max-w-3xl">We build websites and mobile apps.</h1>
+          <p className="text-lg text-white/85 max-w-3xl">We plan, design, build, and launch. Then we support you after launch.</p>
           <div className="flex flex-wrap gap-3 text-sm">
             {capabilities.map((cap) => (
               <span key={cap} className="rounded-full bg-white/10 px-4 py-2 border border-white/15">{cap}</span>
@@ -34,8 +34,8 @@ return (
         <div className="section-shell space-y-8">
           <div className="text-center max-w-3xl mx-auto space-y-4">
             <span className="pill">Who we serve</span>
-            <h2 className="text-3xl font-extrabold text-white">The businesses we build for</h2>
-            <p className="text-white/85">We work with startups, scale-ups, and established companies across industries.</p>
+            <h2 className="text-3xl font-extrabold text-white">Who we help</h2>
+            <p className="text-white/85">We help startups and growing businesses.</p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {whoWeWorkFor.map((item) => (
@@ -62,8 +62,8 @@ return (
         <div className="section-shell space-y-12">
           <div className="text-center max-w-3xl mx-auto space-y-4">
             <span className="pill">What we do</span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900">End-to-end delivery with accountable ownership.</h2>
-            <p className="text-slate-600">Each engagement has a lead, clear milestones, and built-in QA and observability.</p>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900">We handle the full job.</h2>
+            <p className="text-slate-600">You get a clear plan, a simple timeline, and a lead to guide the work.</p>
           </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
             {services.map((service) => (
@@ -86,8 +86,8 @@ return (
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <div className="space-y-3">
               <span className="pill">Engagement models</span>
-              <h2 className="text-3xl font-extrabold text-slate-900">Choose how we partner.</h2>
-              <p className="text-slate-600 max-w-2xl">Flexible models that match your team’s rhythm and budget.</p>
+              <h2 className="text-3xl font-extrabold text-slate-900">Choose how we work together.</h2>
+              <p className="text-slate-600 max-w-2xl">Pick what fits your budget and timeline.</p>
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -115,9 +115,9 @@ return (
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div className="space-y-2">
               <span className="pill">Tech stack</span>
-              <h2 className="text-2xl font-extrabold text-slate-900">Battle-tested tools we love.</h2>
+              <h2 className="text-2xl font-extrabold text-slate-900">Tools we use</h2>
             </div>
-            <p className="text-slate-600 max-w-xl">We pick the right tools for the problem—not the other way around.</p>
+            <p className="text-slate-600 max-w-xl">We choose tools that are reliable and easy to maintain.</p>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
             {stack.map((tech) => (
@@ -135,11 +135,11 @@ return (
           <div className="absolute -right-10 -top-16 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
         </div>
         <div className="section-shell relative text-center space-y-6">
-          <h2 className="text-3xl sm:text-4xl font-extrabold">Need a custom solution?</h2>
-          <p className="text-lg text-white/85 max-w-2xl mx-auto">Let’s scope your project and build a delivery plan that fits.</p>
-            <div className="flex justify-center gap-4 flex-wrap">
-            <a href="/site/contact" className="btn-primary bg-white text-blue-700 hover:bg-blue-50 shadow-white/30">Schedule a consultation</a>
-            <a href="/site/contact" className="btn-secondary border-white/60 text-white hover:bg-white/10">Share your brief</a>
+          <h2 className="text-3xl sm:text-4xl font-extrabold">Need help with a website or app?</h2>
+          <p className="text-lg text-white/85 max-w-2xl mx-auto">Tell us what you need. We will guide you step by step.</p>
+          <div className="flex justify-center gap-4 flex-wrap">
+            <a href="/site/contact" className="btn-primary bg-white text-blue-700 hover:bg-blue-50 shadow-white/30">Talk to us</a>
+            <a href="/site/contact" className="btn-secondary border-white/60 text-white hover:bg-white/10">Send your idea</a>
           </div>
         </div>
       </section>
@@ -149,72 +149,72 @@ return (
 
 const engagements = [
   {
-    title: 'Embedded squad',
-    description: 'Cross-functional team that pairs with your product and engineering leads.',
-    items: ['Weekly demos & async updates', 'Flexible scope with clear guardrails', 'Shared rituals and tools']
+    title: 'Team with you',
+    description: 'A small team works with your team every week.',
+    items: ['Weekly updates', 'Clear plan', 'Shared tools']
   },
   {
-    title: 'Project-based',
-    description: 'Fixed-scope initiatives with defined milestones and delivery dates.',
-    items: ['Discovery to launch plan', 'Agreed acceptance criteria', 'Risk register and mitigation']
+    title: 'Fixed project',
+    description: 'We agree on the work and finish by the date.',
+    items: ['Clear scope', 'Simple milestones', 'On-time delivery']
   },
   {
-    title: 'Advisory & audits',
-    description: 'Architecture reviews, roadmap shaping, and quality audits.',
-    items: ['Architecture & DX audits', 'Performance & cost reviews', 'Security and observability gaps']
+    title: 'Review & advice',
+    description: 'We check your app and tell you what to improve.',
+    items: ['Speed checks', 'Cost checks', 'Security checks']
   },
 ];
 
 const stack = ['React / Next.js', 'Node.js', 'TypeScript', 'Python', 'Flutter', 'PostgreSQL', 'MongoDB', 'AWS', 'Azure', 'DigitalOcean', 'Linode', 'Railway', 'Kubernetes', 'Docker', 'Terraform', 'Kafka'];
 
-const capabilities = ['Web', 'Mobile', 'Cloud & DevOps', 'Data & AI', 'Product & UX'];
+const capabilities = ['Websites', 'Mobile apps', 'Cloud', 'Data', 'Design'];
 
 const whoWeWorkFor = [
   {
-    name: 'SaaS & Platforms',
-    description: 'B2B and B2C subscription businesses',
+    name: 'Software companies',
+    description: 'Businesses that sell software',
     icon: '🚀',
     types: ['Web', 'Mobile']
   },
   {
-    name: 'E-Commerce',
-    description: 'Retail, marketplaces, and DTC brands',
+    name: 'Online stores',
+    description: 'Shops and marketplaces',
     icon: '🛍️',
     types: ['Web', 'Mobile']
   },
   {
-    name: 'FinTech & Payments',
-    description: 'Fintech companies, payment processors',
+    name: 'Payments',
+    description: 'Money and payment apps',
     icon: '💳',
     types: ['Web', 'Mobile']
   },
   {
-    name: 'Healthcare & BioTech',
-    description: 'Medical platforms, health tech, biotech',
+    name: 'Health',
+    description: 'Health and medical platforms',
     icon: '⚕️',
     types: ['Web', 'Mobile']
   },
   {
-    name: 'Logistics & Supply Chain',
-    description: 'Delivery, tracking, and inventory',
+    name: 'Logistics',
+    description: 'Delivery and tracking tools',
     icon: '📦',
     types: ['Web', 'Mobile']
   },
   {
-    name: 'Real Estate & PropTech',
-    description: 'Property platforms and management tools',
+    name: 'Real estate',
+    description: 'Property and housing tools',
     icon: '🏠',
     types: ['Web', 'Mobile']
   },
   {
-    name: 'Enterprise Software',
-    description: 'B2B tools, ERPs, and internal systems',
+    name: 'Business tools',
+    description: 'Internal tools for teams',
     icon: '💼',
     types: ['Web']
   },
   {
-    name: 'EdTech & Learning',
-    description: 'Education platforms and learning management',
+    name: 'Education',
+    description: 'Learning apps and platforms',
     icon: '📚',
     types: ['Web', 'Mobile']
   },

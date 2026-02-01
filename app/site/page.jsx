@@ -4,9 +4,9 @@ import { fetchTestimonials, fetchSettings } from "../../utils/api";
 import PDFViewer from "../../components/PDFViewer";
 
 export const metadata = {
-  title: "SkyTech - Professional Software Development Solutions",
+  title: "SkyTech - Website & Mobile App Developers",
   description:
-    "SkyTech delivers cutting-edge software development solutions for modern businesses. Expert team, innovative technology, proven results.",
+    "SkyTech builds websites and mobile apps for businesses. Simple, clear, and focused on results.",
 };
 
 export default async function Home() {
@@ -23,12 +23,12 @@ export default async function Home() {
         </div>
         <div className="section-shell relative grid gap-10 lg:grid-cols-[1.1fr,0.9fr] items-center">
           <div className="space-y-6">
-            <span className="pill">Your digital partner</span>
+            <span className="pill">Website & mobile app developers</span>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight tracking-tight">
-              Ideas into products people actually love.
+              We build simple, fast websites and mobile apps.
             </h1>
             <p className="text-lg text-slate-200/90 max-w-2xl">
-              We're builders, not just coders. From your first spark of an idea to scaling your platform, we're here as true partners in your success.
+              Tell us what you need. We plan it, build it, and launch it. We stay to help you grow.
             </p>
             <div className="flex flex-wrap gap-4">
               <Link href="/site/contact" className="btn-primary">
@@ -101,12 +101,12 @@ export default async function Home() {
       <section className="py-20 bg-slate-50">
         <div className="section-shell space-y-12">
           <div className="text-center max-w-3xl mx-auto space-y-4">
-            <span className="pill">Why partners choose us</span>
+            <span className="pill">Why people choose us</span>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900">
-              We care about your success more than the hype.
+              We keep it simple and honest.
             </h2>
             <p className="text-slate-600">
-              We deliver real outcomes: faster time-to-market, happy customers, and sustainable growth. No buzzwords, just results.
+              Clear updates, clean work, and results you can see.
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -137,10 +137,10 @@ export default async function Home() {
             <div className="space-y-3">
               <span className="pill">What we do</span>
               <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900">
-                From idea to growth—we handle the heavy lifting.
+                We build and improve websites and apps.
               </h2>
               <p className="text-slate-600 max-w-2xl">
-                Whether you're building something new or scaling what you've got, we adapt our team to fit your exact needs and timeline.
+                New product or old one, we help you make it work better.
               </p>
             </div>
             <button className="btn-secondary w-fit">
@@ -181,12 +181,12 @@ export default async function Home() {
       <section className="py-20 bg-slate-50">
         <div className="section-shell space-y-12">
           <div className="text-center max-w-3xl mx-auto space-y-4">
-            <span className="pill">How we partner with you</span>
+            <span className="pill">How we work</span>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900">
-              Calm, honest delivery you can trust.
+              We plan, build, test, and launch.
             </h2>
             <p className="text-slate-600">
-              No surprises, no scope creep, no radio silence. Clear roadmaps, weekly visibility, and partners who care about your win.
+              You get clear steps and regular updates, so nothing is confusing.
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -260,12 +260,12 @@ export default async function Home() {
         <div className="section-shell">
           <div className="glass-panel rounded-3xl p-8 lg:p-10 flex flex-col lg:flex-row gap-6 lg:items-center lg:justify-between">
             <div className="space-y-3 max-w-2xl">
-              <span className="pill">Investment guide</span>
+              <span className="pill">Pricing</span>
               <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900">
-                Understand project costs upfront
+                See what a project can cost
               </h3>
               <p className="text-slate-600">
-                Get clear pricing, engagement models, and budget ranges. No hidden fees, just honest conversations about your investment.
+                Simple price ranges and clear options. No hidden fees.
               </p>
             </div>
             {pricingBookletUrl && (
@@ -286,10 +286,10 @@ export default async function Home() {
         </div>
         <div className="section-shell relative text-center space-y-6">
           <h2 className="text-3xl sm:text-4xl font-extrabold">
-            Let's build something great together.
+            Ready to build your website or app?
           </h2>
           <p className="text-lg text-white/85 max-w-2xl mx-auto">
-            Chat with us about your goals, timeline, and what success looks like. We'll put together a clear plan to get you there.
+            Tell us what you need. We will give you a clear plan and next steps.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link
@@ -341,71 +341,71 @@ const workstreams = [
 const features = [
   {
     icon: "⚡",
-    title: "Speed + Clarity",
+    title: "Fast and clear",
     description:
-      "No silos, no blockers. Weekly demos and transparent updates keep everyone aligned and moving forward together.",
+      "We move fast and keep you updated, so you always know what is happening.",
   },
   {
     icon: "🤝",
-    title: "True Partnership",
+    title: "We work with you",
     description:
-      "We're invested in your success. You get a dedicated team that understands your business, not just your code.",
+      "We listen, ask questions, and build what your customers need.",
   },
   {
     icon: "📈",
-    title: "Measurable Impact",
+    title: "Real results",
     description:
-      "Every feature, every sprint ties to outcomes that matter. We track metrics, not just features shipped.",
+      "We build things that help your business grow.",
   },
 ];
 
 const services = [
   {
     tag: "Building",
-    name: "New product launches",
+    name: "New websites and apps",
     description:
-      "Validate your idea, design something people want, and launch confidently. We handle the complexity so you focus on your business.",
+      "We plan, design, and build from scratch, then launch with you.",
     points: [
-      "User research & validation",
-      "Design & prototyping",
-      "Fast MVP launch",
-      "Built-in analytics from day one",
+      "Simple planning",
+      "Clean design",
+      "Fast launch",
+      "Easy to grow later",
     ],
   },
   {
     tag: "Scaling",
-    name: "Platform growth",
+    name: "Improve what you have",
     description:
-      "Your product is working. Now it needs to handle more users, work faster, and cost less. We'll modernize and optimize.",
+      "We fix slow apps, reduce costs, and make things more reliable.",
     points: [
-      "Performance improvements",
-      "Cost optimization",
-      "Modern infrastructure",
-      "Rock-solid reliability",
+      "Faster speed",
+      "Lower cost",
+      "Stronger security",
+      "Better uptime",
     ],
   },
   {
     tag: "Mobile",
-    name: "Mobile-first experiences",
+    name: "Mobile apps",
     description:
-      "Native apps that feel fast, beautiful, and intuitive. Apps your customers actually open every day.",
+      "iPhone and Android apps that are easy to use and fast.",
     points: [
-      "iOS & Android apps",
-      "Cross-platform options",
-      "Secure authentication",
+      "iOS + Android",
+      "Login and payments",
       "App store ready",
+      "Ongoing support",
     ],
   },
   {
     tag: "AI & Data",
-    name: "Smart automation",
+    name: "Simple automation",
     description:
-      "Let AI handle the repetitive work. Build systems that learn and improve over time with your data.",
+      "We automate repeat tasks and turn data into clear answers.",
     points: [
-      "Intelligent automation",
-      "Predictive analytics",
-      "Custom AI models",
-      "Data pipelines that work",
+      "Save time",
+      "Reduce errors",
+      "Clear reports",
+      "Smarter decisions",
     ],
   },
 ];
@@ -413,20 +413,20 @@ const services = [
 const processSteps = [
   {
     number: "01",
-    title: "Let's understand your world",
+    title: "We listen",
     description:
-      "We dive deep into your business, your users, and what you're trying to achieve. Then we map out scope, realistic timelines, and what success looks like.",
+      "You tell us your goals. We ask questions and agree on the plan.",
   },
   {
     number: "02",
-    title: "Build and iterate together",
+    title: "We build",
     description:
-      "Weekly demos keep you in the loop. Designers and engineers work hand-in-hand. Feedback flows freely. No surprises, no waiting.",
+      "We design and build while keeping you updated each week.",
   },
   {
     number: "03",
-    title: "Launch strong, then grow",
+    title: "We launch and support",
     description:
-      "We don't disappear at launch. You get runbooks, analytics, and support to ensure your product lands well and keeps improving.",
+      "We launch, fix issues fast, and help you grow.",
   },
 ];
