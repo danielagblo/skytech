@@ -33,6 +33,17 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
         <meta name="description" content="SkyTech Admin Dashboard" />
         <link rel="icon" href="/favicon.svg" />
         <link rel="apple-touch-icon" href="/logo.svg" />
+        
+        {/* Google tag (gtag.js) */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17868191918"></script>
+        <script>
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'AW-17868191918');
+          `}
+        </script>
       </head>
       <body>
           {/* If we're rendering the public site under /site, don't include admin chrome */}
