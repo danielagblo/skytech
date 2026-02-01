@@ -25,7 +25,7 @@ export default async function Home() {
           <div className="space-y-6">
             <span className="pill">Website & mobile app developers</span>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight tracking-tight">
-              We build simple, fast websites and mobile apps.
+              We create sleek websites and mobile apps that help your business grow, attract customers, and shine online — without the hassle.
             </h1>
             <p className="text-lg text-slate-200/90 max-w-2xl">
               Tell us what you need. We plan it, build it, and launch it. We stay to help you grow.
