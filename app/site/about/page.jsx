@@ -144,11 +144,11 @@ const values = [
   },
   {
     title: 'Honesty',
-    description: 'No smoke and mirrors. We tell you what's real, flag risks early, and celebrate wins together.'
+    description: 'No smoke and mirrors. We tell you what\'s real, flag risks early, and celebrate wins together.'
   },
   {
     title: 'Craftsmanship',
-    description: 'We build to last. Clean code, good docs, and systems you'll be proud to own and evolve.'
+    description: 'We build to last. Clean code, good docs, and systems you\'ll be proud to own and evolve.'
   }
 ];
 
