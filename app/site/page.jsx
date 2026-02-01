@@ -23,13 +23,12 @@ export default async function Home() {
         </div>
         <div className="section-shell relative grid gap-10 lg:grid-cols-[1.1fr,0.9fr] items-center">
           <div className="space-y-6">
-            <span className="pill">Software development studio</span>
+            <span className="pill">Your digital partner</span>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight tracking-tight">
-              Building resilient products that ship fast and scale with you.
+              Ideas into products people actually love.
             </h1>
             <p className="text-lg text-slate-200/90 max-w-2xl">
-              Strategy, design, and engineering in one team. We craft performant
-              web, mobile, and cloud platforms with measurable outcomes.
+              We're builders, not just coders. From your first spark of an idea to scaling your platform, we're here as true partners in your success.
             </p>
             <div className="flex flex-wrap gap-4">
               <Link href="/site/contact" className="btn-primary">
@@ -102,13 +101,12 @@ export default async function Home() {
       <section className="py-20 bg-slate-50">
         <div className="section-shell space-y-12">
           <div className="text-center max-w-3xl mx-auto space-y-4">
-            <span className="pill">Why teams choose us</span>
+            <span className="pill">Why partners choose us</span>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900">
-              Strategy, design, and engineering under one roof.
+              We care about your success more than the hype.
             </h2>
             <p className="text-slate-600">
-              We ship measurable outcomes with predictable timelines using
-              modern stacks and calm communication.
+              We deliver real outcomes: faster time-to-market, happy customers, and sustainable growth. No buzzwords, just results.
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -137,14 +135,12 @@ export default async function Home() {
         <div className="section-shell space-y-12">
           <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
             <div className="space-y-3">
-              <span className="pill">Services</span>
+              <span className="pill">What we do</span>
               <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900">
-                Purpose-built squads for every stage.
+                From idea to growth—we handle the heavy lifting.
               </h2>
               <p className="text-slate-600 max-w-2xl">
-                From zero-to-one product builds to platform modernization, we
-                tailor the team to the outcome and integrate with your
-                workflows.
+                Whether you're building something new or scaling what you've got, we adapt our team to fit your exact needs and timeline.
               </p>
             </div>
             <button className="btn-secondary w-fit">
@@ -185,13 +181,12 @@ export default async function Home() {
       <section className="py-20 bg-slate-50">
         <div className="section-shell space-y-12">
           <div className="text-center max-w-3xl mx-auto space-y-4">
-            <span className="pill">How we work</span>
+            <span className="pill">How we partner with you</span>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900">
-              Calm, transparent delivery you can rely on.
+              Calm, honest delivery you can trust.
             </h2>
             <p className="text-slate-600">
-              Weekly demos, async updates, and measurable milestones keep
-              stakeholders in sync.
+              No surprises, no scope creep, no radio silence. Clear roadmaps, weekly visibility, and partners who care about your win.
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -265,13 +260,12 @@ export default async function Home() {
         <div className="section-shell">
           <div className="glass-panel rounded-3xl p-8 lg:p-10 flex flex-col lg:flex-row gap-6 lg:items-center lg:justify-between">
             <div className="space-y-3 max-w-2xl">
-              <span className="pill">Pricing guide</span>
+              <span className="pill">Investment guide</span>
               <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900">
-                View our pricing booklet
+                Understand project costs upfront
               </h3>
               <p className="text-slate-600">
-                Get a breakdown of typical engagement models, sample scopes, and
-                budget ranges in one PDF.
+                Get clear pricing, engagement models, and budget ranges. No hidden fees, just honest conversations about your investment.
               </p>
             </div>
             {pricingBookletUrl && (
@@ -292,11 +286,10 @@ export default async function Home() {
         </div>
         <div className="section-shell relative text-center space-y-6">
           <h2 className="text-3xl sm:text-4xl font-extrabold">
-            Ready to ship your next release?
+            Let's build something great together.
           </h2>
           <p className="text-lg text-white/85 max-w-2xl mx-auto">
-            Let’s align on scope, timelines, and the outcomes that matter to
-            you.
+            Chat with us about your goals, timeline, and what success looks like. We'll put together a clear plan to get you there.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link
@@ -348,71 +341,71 @@ const workstreams = [
 const features = [
   {
     icon: "⚡",
-    title: "Speed without the chaos",
+    title: "Speed + Clarity",
     description:
-      "Lean squads, weekly demos, and async updates keep you shipping faster without adding noise.",
+      "No silos, no blockers. Weekly demos and transparent updates keep everyone aligned and moving forward together.",
   },
   {
-    icon: "🛠️",
-    title: "Full-stack expertise",
+    icon: "🤝",
+    title: "True Partnership",
     description:
-      "Product strategy, UX, frontend, backend, and DevOps in one team so nothing falls through the cracks.",
+      "We're invested in your success. You get a dedicated team that understands your business, not just your code.",
   },
   {
-    icon: "🧭",
-    title: "Outcome-first roadmap",
+    icon: "📈",
+    title: "Measurable Impact",
     description:
-      "We anchor every sprint on measurable outcomes that ladder to your KPIs and revenue goals.",
+      "Every feature, every sprint ties to outcomes that matter. We track metrics, not just features shipped.",
   },
 ];
 
 const services = [
   {
-    tag: "Product Build",
-    name: "Zero-to-one product teams",
+    tag: "Building",
+    name: "New product launches",
     description:
-      "Validate, design, and launch new products with a compact team of strategists, designers, and engineers.",
+      "Validate your idea, design something people want, and launch confidently. We handle the complexity so you focus on your business.",
     points: [
-      "Discovery & UX flows",
-      "Technical architecture",
-      "Iterative delivery to MVP",
-      "Analytics & observability baked in",
+      "User research & validation",
+      "Design & prototyping",
+      "Fast MVP launch",
+      "Built-in analytics from day one",
     ],
   },
   {
-    tag: "Platform",
-    name: "Modernization & scale",
+    tag: "Scaling",
+    name: "Platform growth",
     description:
-      "Untangle legacy systems, improve performance, and prepare your platform for the next wave of growth.",
+      "Your product is working. Now it needs to handle more users, work faster, and cost less. We'll modernize and optimize.",
     points: [
-      "Cloud-native refactors",
-      "API design & governance",
-      "Performance profiling",
-      "Cost & reliability tuning",
+      "Performance improvements",
+      "Cost optimization",
+      "Modern infrastructure",
+      "Rock-solid reliability",
     ],
   },
   {
     tag: "Mobile",
-    name: "Mobile experiences",
+    name: "Mobile-first experiences",
     description:
-      "Delightful native and cross-platform apps with secure auth, offline support, and smooth animations.",
+      "Native apps that feel fast, beautiful, and intuitive. Apps your customers actually open every day.",
     points: [
-      "Native iOS & Android",
-      "React Native expertise",
-      "Secure auth + payments",
-      "Launch readiness support",
+      "iOS & Android apps",
+      "Cross-platform options",
+      "Secure authentication",
+      "App store ready",
     ],
   },
   {
-    tag: "Data & AI",
-    name: "Data-driven products",
+    tag: "AI & Data",
+    name: "Smart automation",
     description:
-      "Build pipelines and productize AI use-cases with responsible, observable systems.",
+      "Let AI handle the repetitive work. Build systems that learn and improve over time with your data.",
     points: [
-      "Data modeling & ETL",
-      "LLM integrations",
-      "Feature stores & evaluation",
-      "MLOps & monitoring",
+      "Intelligent automation",
+      "Predictive analytics",
+      "Custom AI models",
+      "Data pipelines that work",
     ],
   },
 ];
@@ -420,20 +413,20 @@ const services = [
 const processSteps = [
   {
     number: "01",
-    title: "Discovery & framing",
+    title: "Let's understand your world",
     description:
-      "Workshops to map objectives, success metrics, and risks. We align on scope, guardrails, and timelines.",
+      "We dive deep into your business, your users, and what you're trying to achieve. Then we map out scope, realistic timelines, and what success looks like.",
   },
   {
     number: "02",
-    title: "Design & build loops",
+    title: "Build and iterate together",
     description:
-      "Rapid iterations with tight design-engineering pairing, weekly demos, and async updates for stakeholders.",
+      "Weekly demos keep you in the loop. Designers and engineers work hand-in-hand. Feedback flows freely. No surprises, no waiting.",
   },
   {
     number: "03",
-    title: "Launch & grow",
+    title: "Launch strong, then grow",
     description:
-      "Hardening, performance, analytics, and runbooks so launches are calm and growth is measurable.",
+      "We don't disappear at launch. You get runbooks, analytics, and support to ensure your product lands well and keeps improving.",
   },
 ];

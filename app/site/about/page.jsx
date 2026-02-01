@@ -16,10 +16,10 @@ export default function About() {
         <div className="section-shell relative space-y-6">
           <span className="pill">About SkyTech</span>
           <h1 className="text-4xl sm:text-5xl font-extrabold leading-tight max-w-3xl">
-            We are a product-minded engineering studio focused on measurable outcomes.
+            We build digital products and lasting partnerships.
           </h1>
           <p className="text-lg text-white/85 max-w-3xl">
-            SkyTech blends strategy, design, and engineering to help teams ship faster without sacrificing quality. We integrate like an internal squad and stay until the results are real.
+            Small but mighty. Product-minded. We care about your success as much as you do. From early sketches to scaling at speed, we're all-in with you.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4">
             {aboutStats.map((stat) => (
@@ -38,7 +38,7 @@ export default function About() {
           <div className="space-y-4">
             <h2 className="text-3xl font-extrabold text-slate-900">Our mission</h2>
             <p className="text-lg text-slate-700 leading-relaxed">
-              Empower teams to build, launch, and scale digital products with clarity, speed, and a calm delivery rhythm. Every engagement is anchored on measurable business outcomes and a partnership mindset.
+              Help ambitious teams turn ideas into real products. We're not just coders—we're partners who care about your outcomes, move with speed, and communicate with complete honesty.
             </p>
             <ul className="space-y-3 text-slate-600">
               {missionPoints.map((point) => (
@@ -139,16 +139,16 @@ export default function About() {
 
 const values = [
   {
-    title: 'Innovation',
-    description: 'We stay ahead of technology trends and continuously innovate to provide cutting-edge solutions.'
+    title: 'Speed + Care',
+    description: 'We move fast without cutting corners. Shipping weekly without sacrificing quality is how we do partnership right.'
   },
   {
-    title: 'Quality',
-    description: 'We maintain the highest standards of code quality and craftsmanship in everything we build.'
+    title: 'Honesty',
+    description: 'No smoke and mirrors. We tell you what's real, flag risks early, and celebrate wins together.'
   },
   {
-    title: 'Partnership',
-    description: 'We view our clients as partners and work collaboratively to achieve shared success.'
+    title: 'Craftsmanship',
+    description: 'We build to last. Clean code, good docs, and systems you'll be proud to own and evolve.'
   }
 ];
 
@@ -159,9 +159,9 @@ const aboutStats = [
 ];
 
 const missionPoints = [
-  'Outcome-driven roadmaps aligned to business KPIs',
-  'Design-engineering pairing for faster cycles',
-  'Observability, QA, and documentation baked into delivery',
+  'Every feature ties to business outcomes that matter',
+  'Transparent roadmaps and weekly demos keep you in the loop',
+  'Senior team members lead engagements and make the calls',
 ];
 
 const timeline = [
@@ -171,7 +171,7 @@ const timeline = [
   { year: '2024', title: 'Global delivery', detail: 'Remote-first pods serving 12 countries' },
 ];
 
-const teamTraits = ['Design + build mindset', 'Calm communication', 'Systems thinking', 'Senior-led squads'];
+const teamTraits = ['Small + senior-led', 'Product thinking', 'Transparent & calm', 'Customer obsessed'];
 
 const teamCards = [
   { title: 'Leadership involvement', copy: 'Every engagement has a hands-on lead who removes blockers and keeps delivery smooth.' },
