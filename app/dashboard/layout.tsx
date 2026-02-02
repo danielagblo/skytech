@@ -38,7 +38,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
         </div>
 
         {/* Scrollable Navigation */}
-        <nav className="flex-1 overflow-y-auto px-6 space-y-1.5">
+        <nav className="flex-1 overflow-y-auto px-6 space-y-1.5 scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
           {navItems.map((item) => {
             const isActive = pathname === item.href;
             return (
