@@ -12,7 +12,6 @@ export default function Header() {
       <nav className="section-shell flex items-center justify-between py-4">
         {/* Logo */}
         <Link href="/site" className="flex items-center gap-2">
-          <Image src="/bricskylogo.png" alt="SkyTech" width={40} height={40} className="h-10 w-10 object-contain" priority />
           <span className="text-2xl font-extrabold tracking-tight text-blue-700">SkyTech</span>
         </Link>
 

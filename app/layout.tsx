@@ -58,8 +58,9 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
           ) : (
           <div className="flex min-h-screen bg-gradient-to-br from-slate-50 via-slate-100 to-blue-50">
             {/* Sidebar */}
-            <aside className="w-72 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 text-white p-6 shadow-2xl border-r border-slate-700 flex flex-col sticky top-0 h-screen">
-              <div className="mb-10">
+            <aside className="w-72 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 text-white shadow-2xl border-r border-slate-700 flex flex-col sticky top-0 h-screen">
+              {/* Fixed Header */}
+              <div className="p-6 pb-4 flex-shrink-0">
                 <div className="flex items-center gap-3 mb-2">
                   <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center text-xl shadow-lg">
                     🚀
@@ -71,7 +72,8 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
                 </div>
               </div>
 
-              <nav className="space-y-1.5">
+              {/* Scrollable Navigation */}
+              <nav className="flex-1 overflow-y-auto px-6 space-y-1.5">
                 {navItems.map((item) => {
                   const isActive = pathname === item.href;
                   return (
@@ -91,7 +93,8 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
                 })}
               </nav>
 
-              <div className="mt-auto pt-6 border-t border-slate-700">
+              {/* Fixed Logout Button */}
+              <div className="p-6 pt-4 border-t border-slate-700 flex-shrink-0">
                 <button
                   onClick={async () => {
                     try {
