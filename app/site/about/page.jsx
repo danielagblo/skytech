@@ -3,7 +3,13 @@ export const metadata = {
   description: "Meet the team that builds websites and mobile apps for businesses.",
 };
 
-export default function About() {
+import { getPageContent } from '../../lib/pages';
+
+export const dynamic = 'force-dynamic';
+
+export default async function About() {
+  const pages = getPageContent();
+  const aboutContent = pages.about || {};
   return (
     <>
 
@@ -15,12 +21,8 @@ export default function About() {
         </div>
         <div className="section-shell relative space-y-6">
           <span className="pill">About SkyTech</span>
-          <h1 className="text-4xl sm:text-5xl font-extrabold leading-tight max-w-3xl">
-            We build websites and mobile apps for real people.
-          </h1>
-          <p className="text-lg text-white/85 max-w-3xl">
-            We are a small, skilled team. We listen, build, and stay with you as you grow.
-          </p>
+          <h1 className="text-4xl sm:text-5xl font-extrabold leading-tight max-w-3xl">{aboutContent.heroTitle || "We build websites and mobile apps for real people."}</h1>
+          <p className="text-lg text-white/85 max-w-3xl">{aboutContent.heroSubtitle || "We are a small, skilled team. We listen, build, and stay with you as you grow."}</p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4">
             {aboutStats.map((stat) => (
               <div key={stat.label} className="rounded-2xl bg-white/5 border border-white/10 px-4 py-3">
@@ -36,9 +38,9 @@ export default function About() {
       <section className="py-20 bg-white">
         <div className="section-shell grid grid-cols-1 lg:grid-cols-[1.1fr,0.9fr] gap-12 items-center">
           <div className="space-y-4">
-            <h2 className="text-3xl font-extrabold text-slate-900">Our mission</h2>
+            <h2 className="text-3xl font-extrabold text-slate-900">{aboutContent.missionTitle || "Our mission"}</h2>
             <p className="text-lg text-slate-700 leading-relaxed">
-              Help you build a website or app that works well and helps your business.
+              {aboutContent.missionSubtitle || "Help you build a website or app that works well and helps your business."}
             </p>
             <ul className="space-y-3 text-slate-600">
               {missionPoints.map((point) => (
@@ -74,8 +76,8 @@ export default function About() {
         <div className="section-shell space-y-12">
           <div className="text-center max-w-2xl mx-auto space-y-3">
             <span className="pill">Our principles</span>
-            <h2 className="text-3xl font-extrabold text-slate-900">How we work</h2>
-            <p className="text-slate-600">Simple, honest, and focused on results.</p>
+            <h2 className="text-3xl font-extrabold text-slate-900">{aboutContent.valuesTitle || "How we work"}</h2>
+            <p className="text-slate-600">{aboutContent.valuesSubtitle || "Simple, honest, and focused on results."}</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {values.map((value) => (
@@ -115,8 +117,8 @@ export default function About() {
         <div className="section-shell grid grid-cols-1 lg:grid-cols-[1.1fr,0.9fr] gap-12 items-center">
           <div className="space-y-4">
             <span className="pill">Team DNA</span>
-            <h2 className="text-3xl font-extrabold leading-tight">Small team. Big care.</h2>
-            <p className="text-white/80">You work with real people who care about your success.</p>
+            <h2 className="text-3xl font-extrabold leading-tight">{aboutContent.teamTitle || "Small team. Big care."}</h2>
+            <p className="text-white/80">{aboutContent.teamSubtitle || "You work with real people who care about your success."}</p>
             <div className="flex flex-wrap gap-3 text-sm">
               {teamTraits.map((trait) => (
                 <span key={trait} className="rounded-full bg-white/10 px-4 py-2 border border-white/15">{trait}</span>

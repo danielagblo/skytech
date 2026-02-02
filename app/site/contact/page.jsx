@@ -5,6 +5,7 @@ import path from 'path';
 import ContactFormClient from '../../../components/ContactFormClient';
 import { getSettings } from '../../lib/settings';
 import resolveSharedData from '../../lib/sharedData';
+import { getPageContent } from '../../lib/pages';
 
 export const dynamic = 'force-dynamic';
 
@@ -28,6 +29,8 @@ export default async function Contact() {
   const settings = getSettings();
   const teamMembers = getTeam();
   const submitted = false;
+  const pages = getPageContent();
+  const contactContent = pages.contact || {};
   return (
   <>
       {/* Hero Section */}
@@ -38,8 +41,8 @@ export default async function Contact() {
         </div>
         <div className="section-shell relative space-y-6">
           <span className="pill">Contact</span>
-          <h1 className="text-4xl sm:text-5xl font-extrabold leading-tight max-w-3xl">Tell us what you want to build.</h1>
-          <p className="text-lg text-white/85 max-w-3xl">We will reply fast and guide you step by step.</p>
+          <h1 className="text-4xl sm:text-5xl font-extrabold leading-tight max-w-3xl">{contactContent.heroTitle || "Tell us what you want to build."}</h1>
+          <p className="text-lg text-white/85 max-w-3xl">{contactContent.heroSubtitle || "We will reply fast and guide you step by step."}</p>
           <div className="flex flex-wrap gap-4 text-sm text-white/80">
             <span className="rounded-full bg-white/10 px-4 py-2 border border-white/15">Reply in 24 hours</span>
             <span className="rounded-full bg-white/10 px-4 py-2 border border-white/15">Remote team</span>
@@ -54,7 +57,7 @@ export default async function Contact() {
             {/* Contact Info */}
             <div className="space-y-6">
               <div className="rounded-3xl bg-slate-50 border border-slate-100 p-6">
-                <h2 className="text-2xl font-extrabold text-slate-900 mb-4">Contact information</h2>
+                <h2 className="text-2xl font-extrabold text-slate-900 mb-4">{contactContent.contactInfoTitle || "Contact information"}</h2>
                 <div className="space-y-5">
                   <div className="flex items-start gap-4">
                     <div className="text-2xl">📧</div>
@@ -109,8 +112,8 @@ export default async function Contact() {
 
             {/* Contact Form */}
             <div className="glass-panel rounded-3xl p-8">
-              <h2 className="text-2xl font-extrabold text-slate-900 mb-2">Tell us about your project</h2>
-              <p className="text-sm text-slate-600 mb-6">Share what you need and when you want it done.</p>
+              <h2 className="text-2xl font-extrabold text-slate-900 mb-2">{contactContent.formTitle || "Tell us about your project"}</h2>
+                <p className="text-sm text-slate-600 mb-6">{contactContent.formSubtitle || "Share what you need and when you want it done."}</p>
               
               {submitted && (
                 <div className="bg-emerald-50 border border-emerald-200 text-emerald-800 px-4 py-3 rounded-xl mb-6">
@@ -129,8 +132,8 @@ export default async function Contact() {
         <div className="section-shell space-y-8">
           <div className="space-y-2">
             <span className="pill">Meet the team</span>
-            <h2 className="text-3xl font-extrabold text-slate-900">Your SkyTech leads</h2>
-            <p className="text-slate-600 max-w-2xl">Core leaders who guide delivery and keep communication smooth.</p>
+            <h2 className="text-3xl font-extrabold text-slate-900">{contactContent.teamTitle || "Your SkyTech leads"}</h2>
+            <p className="text-slate-600 max-w-2xl">{contactContent.teamSubtitle || "Core leaders who guide delivery and keep communication smooth."}</p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {teamMembers.map((person) => (

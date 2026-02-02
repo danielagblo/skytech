@@ -1,0 +1,50 @@
+{
+  "home": {
+    "heroTitle": "We create sleek websites and mobile apps that help your business grow, attract customers, and shine online — without the hassle.",
+    "heroSubtitle": "Tell us what you need. We plan it, build it, and launch it. We stay to help you grow.",
+    "featuresSectionTitle": "We keep it simple and honest.",
+    "featuresSectionSubtitle": "Clear updates, clean work, and results you can see.",
+    "servicesSectionTitle": "We build and improve websites and apps.",
+    "servicesSubtitle": "New product or old one, we help you make it work better.",
+    "ctaTitle": "Ready to build your website or app?",
+    "ctaSubtitle": "Tell us what you need. We will give you a clear plan and next steps."
+  },
+  "services": {
+    "heroTitle": "We build websites and mobile app",
+    "heroSubtitle": "We plan, design, build, and launch. Then we support you after launch.",
+    "whatWeDoTitle": "We handle the full job.",
+    "whatWeDoSubtitle": "You get a clear plan, a simple timeline, and a lead to guide the work.",
+    "engagementTitle": "Choose how we work together.",
+    "engagementSubtitle": "Pick what fits your budget and timeline.",
+    "ctaTitle": "Need help with a website or app?",
+    "ctaSubtitle": "Tell us what you need. We will guide you step by step."
+  },
+  "contact": {
+    "heroTitle": "Tell us what you want to build.",
+    "heroSubtitle": "We will reply fast and guide you step by step.",
+    "contactInfoTitle": "Contact information",
+    "formTitle": "Tell us about your project",
+    "formSubtitle": "Share what you need and when you want it done.",
+    "teamTitle": "Your SkyTech leads",
+    "teamSubtitle": "Core leaders who guide delivery and keep communication smooth."
+  },
+  "about": {
+    "heroTitle": "We build websites and mobile apps for real people.",
+    "heroSubtitle": "We are a small, skilled team. We listen, build, and stay with you as you grow.",
+    "missionTitle": "Our mission",
+    "missionSubtitle": "Help you build a website or app that works well and helps your business.",
+    "valuesTitle": "How we work",
+    "valuesSubtitle": "Simple, honest, and focused on results.",
+    "teamTitle": "Small team. Big care.",
+    "teamSubtitle": "You work with real people who care about your success."
+  },
+  "internship": {
+    "heroTitle": "Apply for an internship or attachment.",
+    "heroSubtitle": "Fill the form below. We will review your request and contact you.",
+    "whoCanApplyTitle": "Who can apply",
+    "formTitle": "Internship form",
+    "formSubtitle": "Please fill in your details.",
+    "responseTimeLabel": "Response time",
+    "responseTimeText": "We reply within 1–3 business days."
+  }
+}

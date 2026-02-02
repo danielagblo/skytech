@@ -5,6 +5,7 @@ import path from 'path';
 import PDFViewer from "../../components/PDFViewer";
 import { getSettings } from '../lib/settings';
 import resolveSharedData from '../lib/sharedData';
+import { getPageContent } from '../lib/pages';
 
 export const dynamic = 'force-dynamic';
 
@@ -41,6 +42,8 @@ export default async function Home() {
   const settings = getSettings();
   const services = getServices();
   const pricingBookletUrl = settings.pricingBookletUrl || "";
+  const pages = getPageContent();
+  const homeContent = pages.home || {};
   return (
     <>
       {/* Hero Section */}
@@ -53,10 +56,10 @@ export default async function Home() {
           <div className="space-y-6">
             <span className="pill">Website & mobile app developers</span>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight tracking-tight">
-              We create sleek websites and mobile apps that help your business grow, attract customers, and shine online — without the hassle.
+                {homeContent.heroTitle || "We create sleek websites and mobile apps that help your business grow, attract customers, and shine online — without the hassle."}
             </h1>
             <p className="text-lg text-slate-200/90 max-w-2xl">
-              Tell us what you need. We plan it, build it, and launch it. We stay to help you grow.
+                {homeContent.heroSubtitle || "Tell us what you need. We plan it, build it, and launch it. We stay to help you grow."}
             </p>
             <div className="flex flex-wrap gap-4">
               <Link href="/site/contact" className="btn-primary">
@@ -131,10 +134,10 @@ export default async function Home() {
           <div className="text-center max-w-3xl mx-auto space-y-4">
             <span className="pill">Why people choose us</span>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900">
-              We keep it simple and honest.
+              {homeContent.featuresSectionTitle || "We keep it simple and honest."}
             </h2>
             <p className="text-slate-600">
-              Clear updates, clean work, and results you can see.
+              {homeContent.featuresSectionSubtitle || "Clear updates, clean work, and results you can see."}
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -165,10 +168,10 @@ export default async function Home() {
             <div className="space-y-3">
               <span className="pill">What we do</span>
               <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900">
-                We build and improve websites and apps.
+                  {homeContent.servicesSectionTitle || "We build and improve websites and apps."}
               </h2>
               <p className="text-slate-600 max-w-2xl">
-                New product or old one, we help you make it work better.
+                  {homeContent.servicesSubtitle || "New product or old one, we help you make it work better."}
               </p>
             </div>
             <button className="btn-secondary w-fit">
@@ -304,10 +307,10 @@ export default async function Home() {
         </div>
         <div className="section-shell relative text-center space-y-6">
           <h2 className="text-3xl sm:text-4xl font-extrabold">
-            Ready to build your website or app?
+              {homeContent.ctaTitle || "Ready to build your website or app?"}
           </h2>
           <p className="text-lg text-white/85 max-w-2xl mx-auto">
-            Tell us what you need. We will give you a clear plan and next steps.
+              {homeContent.ctaSubtitle || "Tell us what you need. We will give you a clear plan and next steps."}
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link

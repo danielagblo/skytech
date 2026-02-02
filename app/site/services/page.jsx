@@ -3,6 +3,7 @@ import Link from 'next/link';
 import fs from 'fs';
 import path from 'path';
 import resolveSharedData from '../../lib/sharedData';
+import { getPageContent } from '../../lib/pages';
 
 export const dynamic = 'force-dynamic';
 
@@ -24,6 +25,8 @@ function getServices() {
 
 export default async function Services() {
   const services = getServices();
+  const pages = getPageContent();
+  const servicesContent = pages.services || {};
 return (
   <>
       {/* Hero Section */}
@@ -34,8 +37,8 @@ return (
         </div>
         <div className="section-shell relative space-y-6">
           <span className="pill">Services</span>
-          <h1 className="text-4xl sm:text-5xl font-extrabold leading-tight max-w-3xl">We build websites and mobile apps.</h1>
-          <p className="text-lg text-white/85 max-w-3xl">We plan, design, build, and launch. Then we support you after launch.</p>
+          <h1 className="text-4xl sm:text-5xl font-extrabold leading-tight max-w-3xl">{servicesContent.heroTitle || "We build websites and mobile apps."}</h1>
+          <p className="text-lg text-white/85 max-w-3xl">{servicesContent.heroSubtitle || "We plan, design, build, and launch. Then we support you after launch."}</p>
           <div className="flex flex-wrap gap-3 text-sm">
             {capabilities.map((cap) => (
               <span key={cap} className="rounded-full bg-white/10 px-4 py-2 border border-white/15">{cap}</span>
@@ -77,8 +80,8 @@ return (
         <div className="section-shell space-y-12">
           <div className="text-center max-w-3xl mx-auto space-y-4">
             <span className="pill">What we do</span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900">We handle the full job.</h2>
-            <p className="text-slate-600">You get a clear plan, a simple timeline, and a lead to guide the work.</p>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900">{servicesContent.whatWeDoTitle || "We handle the full job."}</h2>
+            <p className="text-slate-600">{servicesContent.whatWeDoSubtitle || "You get a clear plan, a simple timeline, and a lead to guide the work."}</p>
           </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
             {services.map((service) => (
@@ -100,8 +103,8 @@ return (
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <div className="space-y-3">
               <span className="pill">Engagement models</span>
-              <h2 className="text-3xl font-extrabold text-slate-900">Choose how we work together.</h2>
-              <p className="text-slate-600 max-w-2xl">Pick what fits your budget and timeline.</p>
+              <h2 className="text-3xl font-extrabold text-slate-900">{servicesContent.engagementTitle || "Choose how we work together."}</h2>
+              <p className="text-slate-600 max-w-2xl">{servicesContent.engagementSubtitle || "Pick what fits your budget and timeline."}</p>
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -149,8 +152,8 @@ return (
           <div className="absolute -right-10 -top-16 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
         </div>
         <div className="section-shell relative text-center space-y-6">
-          <h2 className="text-3xl sm:text-4xl font-extrabold">Need help with a website or app?</h2>
-          <p className="text-lg text-white/85 max-w-2xl mx-auto">Tell us what you need. We will guide you step by step.</p>
+          <h2 className="text-3xl sm:text-4xl font-extrabold">{servicesContent.ctaTitle || "Need help with a website or app?"}</h2>
+          <p className="text-lg text-white/85 max-w-2xl mx-auto">{servicesContent.ctaSubtitle || "Tell us what you need. We will guide you step by step."}</p>
           <div className="flex justify-center gap-4 flex-wrap">
             <a href="/site/contact" className="btn-primary bg-white text-blue-700 hover:bg-blue-50 shadow-white/30">Talk to us</a>
             <a href="/site/contact" className="btn-secondary border-white/60 text-white hover:bg-white/10">Send your idea</a>

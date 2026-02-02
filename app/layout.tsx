@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 import Script from 'next/script';
 import './globals.css';
 import '../index.css';
+import AnalyticsTracker from '../components/AnalyticsTracker';
 
 export const metadata = {
   title: 'SkyTech',
@@ -16,6 +17,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <link rel="apple-touch-icon" href="/icon.png" />
       </head>
       <body>
+        <AnalyticsTracker />
         {children}
         
         {/* Google Analytics */}
