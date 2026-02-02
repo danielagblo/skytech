@@ -1,6 +1,6 @@
 'use client';
 
-import { ReactNode } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 
@@ -17,8 +17,27 @@ const navItems = [
 ];
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
+  const [siteName, setSiteName] = useState('SkyTech');
   const pathname = usePathname();
   const router = useRouter();
+
+  useEffect(() => {
+    let active = true;
+    const loadSettings = async () => {
+      try {
+        const res = await fetch('/api/content/settings', { cache: 'no-store' });
+        if (!res.ok) return;
+        const data = await res.json();
+        if (active && data?.siteName) setSiteName(data.siteName);
+      } catch (error) {
+        console.error('Failed to load settings:', error);
+      }
+    };
+    loadSettings();
+    return () => {
+      active = false;
+    };
+  }, []);
 
   return (
     <div className="flex min-h-screen bg-gradient-to-br from-slate-50 via-slate-100 to-blue-50">
@@ -31,7 +50,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
               🚀
             </div>
             <div>
-              <h1 className="text-2xl font-extrabold bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">SkyTech</h1>
+              <h1 className="text-2xl font-extrabold bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">{siteName}</h1>
               <p className="text-xs text-slate-400">Admin Dashboard</p>
             </div>
           </div>

@@ -82,7 +82,7 @@ export default function AnalyticsPage() {
         {/* Page Views */}
         <div className="bg-white rounded-lg border border-slate-200 p-6 shadow-sm">
           <h3 className="font-bold text-slate-900 mb-4">Top Pages</h3>
-          {analytics.pages.length > 0 ? (
+          {analytics.pages && analytics.pages.length > 0 ? (
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={analytics.pages}>
                 <CartesianGrid strokeDasharray="3 3" />
@@ -100,7 +100,7 @@ export default function AnalyticsPage() {
         {/* Traffic Sources */}
         <div className="bg-white rounded-lg border border-slate-200 p-6 shadow-sm">
           <h3 className="font-bold text-slate-900 mb-4">Traffic Sources</h3>
-          {analytics.sources.length > 0 ? (
+          {analytics.sources && analytics.sources.length > 0 ? (
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
                 <Pie
@@ -127,7 +127,7 @@ export default function AnalyticsPage() {
         {/* Device Types */}
         <div className="bg-white rounded-lg border border-slate-200 p-6 shadow-sm">
           <h3 className="font-bold text-slate-900 mb-4">Device Types</h3>
-          {analytics.deviceTypes.length > 0 ? (
+          {analytics.deviceTypes && analytics.deviceTypes.length > 0 ? (
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
                 <Pie
@@ -154,7 +154,7 @@ export default function AnalyticsPage() {
         {/* Browsers */}
         <div className="bg-white rounded-lg border border-slate-200 p-6 shadow-sm">
           <h3 className="font-bold text-slate-900 mb-4">Top Browsers</h3>
-          {analytics.browsers.length > 0 ? (
+          {analytics.browsers && analytics.browsers.length > 0 ? (
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={analytics.browsers}>
                 <CartesianGrid strokeDasharray="3 3" />
@@ -171,7 +171,7 @@ export default function AnalyticsPage() {
       </div>
 
       {/* Geographic Data */}
-      {analytics.countries.length > 0 && (
+      {analytics.countries && analytics.countries.length > 0 && (
         <div className="bg-white rounded-lg border border-slate-200 p-6 shadow-sm">
           <h3 className="font-bold text-slate-900 mb-4">Top Countries</h3>
           <div className="space-y-3">
@@ -194,36 +194,40 @@ export default function AnalyticsPage() {
       {/* Recent Events */}
       <div className="bg-white rounded-lg border border-slate-200 p-6 shadow-sm">
         <h3 className="font-bold text-slate-900 mb-4">Recent Events (Last 20)</h3>
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-slate-200">
-                <th className="text-left py-2 px-3 font-semibold text-slate-900">Type</th>
-                <th className="text-left py-2 px-3 font-semibold text-slate-900">Event</th>
-                <th className="text-left py-2 px-3 font-semibold text-slate-900">Device</th>
-                <th className="text-left py-2 px-3 font-semibold text-slate-900">Time</th>
-              </tr>
-            </thead>
-            <tbody>
-              {analytics.recentEvents.slice(-20).reverse().map((event, idx) => (
-                <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50">
-                  <td className="py-2 px-3">
-                    <span className={`text-xs font-semibold px-2 py-1 rounded ${
-                      event.type === 'pageview' ? 'bg-blue-50 text-blue-700' : 'bg-purple-50 text-purple-700'
-                    }`}>
-                      {event.type}
-                    </span>
-                  </td>
-                  <td className="py-2 px-3 text-slate-600">{event.page || event.action}</td>
-                  <td className="py-2 px-3 text-slate-600">{event.deviceType}</td>
-                  <td className="py-2 px-3 text-slate-500 text-xs">
-                    {new Date(event.timestamp).toLocaleTimeString()}
-                  </td>
+        {analytics.recentEvents && analytics.recentEvents.length > 0 ? (
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-slate-200">
+                  <th className="text-left py-2 px-3 font-semibold text-slate-900">Type</th>
+                  <th className="text-left py-2 px-3 font-semibold text-slate-900">Event</th>
+                  <th className="text-left py-2 px-3 font-semibold text-slate-900">Device</th>
+                  <th className="text-left py-2 px-3 font-semibold text-slate-900">Time</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {analytics.recentEvents.slice(-20).reverse().map((event, idx) => (
+                  <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50">
+                    <td className="py-2 px-3">
+                      <span className={`text-xs font-semibold px-2 py-1 rounded ${
+                        event.type === 'pageview' ? 'bg-blue-50 text-blue-700' : 'bg-purple-50 text-purple-700'
+                      }`}>
+                        {event.type}
+                      </span>
+                    </td>
+                    <td className="py-2 px-3 text-slate-600">{event.page || event.action}</td>
+                    <td className="py-2 px-3 text-slate-600">{event.deviceType}</td>
+                    <td className="py-2 px-3 text-slate-500 text-xs">
+                      {new Date(event.timestamp).toLocaleTimeString()}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <p className="text-slate-500 text-center py-12">No recent events yet</p>
+        )}
       </div>
     </div>
   );

@@ -1,7 +1,12 @@
 /* eslint-disable react-refresh/only-export-components */
 import Link from "next/link";
-import { fetchTestimonials, fetchSettings } from "../../utils/api";
+import fs from 'fs';
+import path from 'path';
 import PDFViewer from "../../components/PDFViewer";
+import { getSettings } from '../lib/settings';
+import resolveSharedData from '../lib/sharedData';
+
+export const dynamic = 'force-dynamic';
 
 export const metadata = {
   title: "SkyTech - Website & Mobile App Developers",
@@ -9,9 +14,32 @@ export const metadata = {
     "SkyTech builds websites and mobile apps for businesses. Simple, clear, and focused on results.",
 };
 
+function getTestimonials() {
+  try {
+    const filePath = path.join(resolveSharedData(), 'testimonials.json');
+    const data = fs.readFileSync(filePath, 'utf-8');
+    return JSON.parse(data);
+  } catch (error) {
+    console.error('Failed to read testimonials:', error);
+    return [];
+  }
+}
+
+function getServices() {
+  try {
+    const filePath = path.join(resolveSharedData(), 'services.json');
+    const data = fs.readFileSync(filePath, 'utf-8');
+    return JSON.parse(data);
+  } catch (error) {
+    console.error('Failed to read services:', error);
+    return [];
+  }
+}
+
 export default async function Home() {
-  const testimonials = await fetchTestimonials();
-  const settings = await fetchSettings();
+  const testimonials = getTestimonials();
+  const settings = getSettings();
+  const services = getServices();
   const pricingBookletUrl = settings.pricingBookletUrl || "";
   return (
     <>
@@ -39,7 +67,7 @@ export default async function Home() {
               </Link>
               {pricingBookletUrl && (
                 <PDFViewer
-                  src={`/api/booklet/view?file=${encodeURIComponent(
+                  src={`/api/content/view-booklet?file=${encodeURIComponent(
                     pricingBookletUrl.split("/").pop()
                   )}`}
                 />
@@ -149,28 +177,18 @@ export default async function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {services.map((service) => (
+            {services.slice(0, 4).map((service) => (
               <div
-                key={service.name}
+                key={service.id}
                 className="rounded-3xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-lg hover:-translate-y-1 transition"
               >
-                <p className="text-sm font-semibold uppercase tracking-[0.14em] text-blue-700 mb-3">
-                  {service.tag}
-                </p>
+                <div className="text-3xl mb-3">{service.icon}</div>
                 <h3 className="text-lg font-bold text-slate-900 mb-3">
-                  {service.name}
+                  {service.title}
                 </h3>
                 <p className="text-slate-600 text-sm leading-relaxed mb-4">
                   {service.description}
                 </p>
-                <ul className="space-y-2 text-sm text-slate-500">
-                  {service.points.map((point) => (
-                    <li key={point} className="flex items-start gap-2">
-                      <span className="mt-1 h-2 w-2 rounded-full bg-blue-500" />
-                      <span>{point}</span>
-                    </li>
-                  ))}
-                </ul>
               </div>
             ))}
           </div>
@@ -270,7 +288,7 @@ export default async function Home() {
             </div>
             {pricingBookletUrl && (
               <PDFViewer
-                src={`/api/booklet/view?file=${encodeURIComponent(
+                src={`/api/content/view-booklet?file=${encodeURIComponent(
                   pricingBookletUrl.split("/").pop()
                 )}`}
               />
@@ -359,56 +377,7 @@ const features = [
   },
 ];
 
-const services = [
-  {
-    tag: "Building",
-    name: "New websites and apps",
-    description:
-      "We plan, design, and build from scratch, then launch with you.",
-    points: [
-      "Simple planning",
-      "Clean design",
-      "Fast launch",
-      "Easy to grow later",
-    ],
-  },
-  {
-    tag: "Scaling",
-    name: "Improve what you have",
-    description:
-      "We fix slow apps, reduce costs, and make things more reliable.",
-    points: [
-      "Faster speed",
-      "Lower cost",
-      "Stronger security",
-      "Better uptime",
-    ],
-  },
-  {
-    tag: "Mobile",
-    name: "Mobile apps",
-    description:
-      "iPhone and Android apps that are easy to use and fast.",
-    points: [
-      "iOS + Android",
-      "Login and payments",
-      "App store ready",
-      "Ongoing support",
-    ],
-  },
-  {
-    tag: "AI & Data",
-    name: "Simple automation",
-    description:
-      "We automate repeat tasks and turn data into clear answers.",
-    points: [
-      "Save time",
-      "Reduce errors",
-      "Clear reports",
-      "Smarter decisions",
-    ],
-  },
-];
+
 
 const processSteps = [
   {

@@ -1,16 +1,32 @@
 /* eslint-disable react-refresh/only-export-components */
 import Link from 'next/link';
-import { fetchSettings, fetchTeam } from '../../../utils/api';
+import fs from 'fs';
+import path from 'path';
 import ContactFormClient from '../../../components/ContactFormClient';
+import { getSettings } from '../../lib/settings';
+import resolveSharedData from '../../lib/sharedData';
+
+export const dynamic = 'force-dynamic';
 
 export const metadata = {
   title: 'Contact SkyTech - Get In Touch',
   description: 'Contact SkyTech for software development inquiries. Get in touch with our team today.',
 };
 
+function getTeam() {
+  try {
+    const filePath = path.join(resolveSharedData(), 'team.json');
+    const data = fs.readFileSync(filePath, 'utf-8');
+    return JSON.parse(data);
+  } catch (error) {
+    console.error('Failed to read team:', error);
+    return [];
+  }
+}
+
 export default async function Contact() {
-  const settings = await fetchSettings();
-  const teamMembers = await fetchTeam();
+  const settings = getSettings();
+  const teamMembers = getTeam();
   const submitted = false;
   return (
   <>

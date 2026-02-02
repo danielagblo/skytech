@@ -1,6 +1,15 @@
 import Link from 'next/link';
+import { getSettings } from '../app/lib/settings';
 
-export default function Footer() {
+export default function Footer({ settings }) {
+  const resolved = settings || getSettings();
+  const {
+    siteName,
+    siteDescription,
+    contactEmail,
+    contactPhone,
+    address,
+  } = resolved;
   return (
     <footer className="relative overflow-hidden bg-slate-950 text-slate-200 py-16 px-4 mt-20">
       <div className="absolute inset-0 opacity-60" aria-hidden>
@@ -12,9 +21,9 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
           {/* Brand */}
           <div className="space-y-4">
-            <h3 className="text-white text-2xl font-bold tracking-tight">SkyTech</h3>
+            <h3 className="text-white text-2xl font-bold tracking-tight">{siteName}</h3>
             <p className="text-sm text-slate-300/90">
-              We build websites and mobile apps that work.
+              {siteDescription}
             </p>
             <div className="flex items-center gap-2 text-xs uppercase tracking-[0.12em] text-blue-200">
               <span className="h-1.5 w-1.5 rounded-full bg-blue-400" />
@@ -47,8 +56,20 @@ export default function Footer() {
           {/* Contact */}
           <div className="space-y-3 text-sm">
             <h4 className="text-white font-semibold mb-4">Get in Touch</h4>
-            <p className="flex items-center gap-2"><span className="text-blue-300">●</span> hello@skytech.com</p>
-            <p className="flex items-center gap-2"><span className="text-blue-300">●</span> +1 (555) 123-4567</p>
+            <p className="flex items-center gap-2">
+              <span className="text-blue-300">●</span>
+              <a href={`mailto:${contactEmail}`} className="hover:text-white transition-colors">{contactEmail}</a>
+            </p>
+            <p className="flex items-center gap-2">
+              <span className="text-blue-300">●</span>
+              <a href={`tel:${contactPhone.replace(/\s/g, '')}`} className="hover:text-white transition-colors">{contactPhone}</a>
+            </p>
+            {address && (
+              <p className="flex items-center gap-2 text-slate-300/90">
+                <span className="text-blue-300">●</span>
+                <span>{address}</span>
+              </p>
+            )}
             <div className="flex items-center gap-4 pt-2 text-sm">
               <a href="#" className="hover:text-white transition-colors">LinkedIn</a>
               <a href="#" className="hover:text-white transition-colors">Twitter</a>

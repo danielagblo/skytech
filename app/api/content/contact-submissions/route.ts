@@ -62,9 +62,10 @@ export async function POST(request: NextRequest) {
     const fileContent = await readFile(SUBMISSIONS_FILE, "utf-8");
     const submissions = JSON.parse(fileContent);
 
-    // Add new submission
+    // Add new submission with timestamp
     submissions.push({
       id: Date.now(),
+      submittedAt: new Date().toISOString(),
       ...submission,
     });
 

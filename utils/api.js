@@ -1,9 +1,8 @@
-const API_BASE =
-  process.env.NEXT_PUBLIC_API_BASE || "http://localhost:3000/api/content";
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE || "/api/content";
 
 export const fetchTeam = async () => {
   try {
-    const response = await fetch(`${API_BASE}/team`);
+    const response = await fetch(`${API_BASE}/team`, { cache: "no-store" });
     if (!response.ok) throw new Error("Failed to fetch team");
     return await response.json();
   } catch (error) {
@@ -14,7 +13,7 @@ export const fetchTeam = async () => {
 
 export const fetchServices = async () => {
   try {
-    const response = await fetch(`${API_BASE}/services`);
+    const response = await fetch(`${API_BASE}/services`, { cache: "no-store" });
     if (!response.ok) throw new Error("Failed to fetch services");
     return await response.json();
   } catch (error) {
@@ -25,7 +24,9 @@ export const fetchServices = async () => {
 
 export const fetchTestimonials = async () => {
   try {
-    const response = await fetch(`${API_BASE}/testimonials`);
+    const response = await fetch(`${API_BASE}/testimonials`, {
+      cache: "no-store",
+    });
     if (!response.ok) throw new Error("Failed to fetch testimonials");
     return await response.json();
   } catch (error) {
@@ -36,7 +37,7 @@ export const fetchTestimonials = async () => {
 
 export const fetchSettings = async () => {
   try {
-    const response = await fetch(`${API_BASE}/settings`);
+    const response = await fetch(`${API_BASE}/settings`, { cache: "no-store" });
     if (!response.ok) throw new Error("Failed to fetch settings");
     return await response.json();
   } catch (error) {

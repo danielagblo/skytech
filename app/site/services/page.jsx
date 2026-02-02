@@ -1,14 +1,29 @@
 /* eslint-disable react-refresh/only-export-components */
 import Link from 'next/link';
-import { fetchServices } from '../../../utils/api';
+import fs from 'fs';
+import path from 'path';
+import resolveSharedData from '../../lib/sharedData';
+
+export const dynamic = 'force-dynamic';
 
 export const metadata = {
   title: 'Services - SkyTech Website & App Development',
   description: "We build websites and mobile apps. Simple, clear, and focused on results.",
 };
 
+function getServices() {
+  try {
+    const filePath = path.join(resolveSharedData(), 'services.json');
+    const data = fs.readFileSync(filePath, 'utf-8');
+    return JSON.parse(data);
+  } catch (error) {
+    console.error('Failed to read services:', error);
+    return [];
+  }
+}
+
 export default async function Services() {
-  const services = await fetchServices();
+  const services = getServices();
 return (
   <>
       {/* Hero Section */}
@@ -69,10 +84,9 @@ return (
             {services.map((service) => (
               <div key={service.id} className="rounded-3xl border border-slate-100 bg-slate-50 p-8 shadow-sm hover:-translate-y-1 transition">
                 <div className="flex items-center justify-between mb-4">
-                  <p className="text-sm font-semibold uppercase tracking-[0.14em] text-blue-700">{service.category}</p>
-                  <span className="text-2xl">{service.icon}</span>
+                  <span className="text-3xl">{service.icon}</span>
                 </div>
-                <h3 className="text-2xl font-bold text-slate-900 mb-3">{service.name}</h3>
+                <h3 className="text-2xl font-bold text-slate-900 mb-3">{service.title}</h3>
                 <p className="text-slate-600 mb-5 leading-relaxed">{service.description}</p>
               </div>
             ))}

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 
-export default function Header() {
+export default function Header({ siteName = "SkyTech" }) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -12,7 +12,7 @@ export default function Header() {
       <nav className="section-shell flex items-center justify-between py-4">
         {/* Logo */}
         <Link href="/site" className="flex items-center gap-2">
-          <span className="text-2xl font-extrabold tracking-tight text-blue-700">SkyTech</span>
+          <span className="text-2xl font-extrabold tracking-tight text-blue-700">{siteName}</span>
         </Link>
 
         {/* Desktop Menu */}
