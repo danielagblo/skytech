@@ -9,7 +9,12 @@ export async function POST(request: Request) {
   const expectedPass = process.env.ADMIN_PASSWORD || "admin";
 
   if (username === expectedUser && password === expectedPass) {
-    const res = NextResponse.redirect(new URL("/dashboard", request.url));
+    // Use the request's origin/host to construct proper redirect URL
+    const origin =
+      request.headers.get("origin") ||
+      request.headers.get("referer")?.split("/").slice(0, 3).join("/") ||
+      new URL(request.url).origin;
+    const res = NextResponse.redirect(new URL("/dashboard", origin));
     // set a simple httpOnly cookie for the session (1 hour) with the username
     res.headers.set(
       "Set-Cookie",
@@ -19,5 +24,9 @@ export async function POST(request: Request) {
   }
 
   // failed login -> redirect back to login with error
-  return NextResponse.redirect(new URL("/login?error=1", request.url));
+  const origin =
+    request.headers.get("origin") ||
+    request.headers.get("referer")?.split("/").slice(0, 3).join("/") ||
+    new URL(request.url).origin;
+  return NextResponse.redirect(new URL("/login?error=1", origin));
 }
