@@ -14,11 +14,11 @@ export default function Footer() {
           <div className="space-y-4">
             <h3 className="text-white text-2xl font-bold tracking-tight">SkyTech</h3>
             <p className="text-sm text-slate-300/90">
-              Professional software development partners delivering web, mobile, and cloud solutions.
+              We build websites and mobile apps that work.
             </p>
             <div className="flex items-center gap-2 text-xs uppercase tracking-[0.12em] text-blue-200">
               <span className="h-1.5 w-1.5 rounded-full bg-blue-400" />
-              Trusted engineering team
+              Clear and honest work
             </div>
           </div>
 
@@ -35,12 +35,12 @@ export default function Footer() {
 
           {/* Services */}
           <div>
-            <h4 className="text-white font-semibold mb-4">Expertise</h4>
+            <h4 className="text-white font-semibold mb-4">Services</h4>
             <ul className="space-y-2 text-sm">
-              <li><a href="#" className="hover:text-white transition-colors">Product Engineering</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Cloud & DevOps</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Data & AI</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Mobile Experiences</a></li>
+              <li><a href="#" className="hover:text-white transition-colors">Websites</a></li>
+              <li><a href="#" className="hover:text-white transition-colors">Mobile Apps</a></li>
+              <li><a href="#" className="hover:text-white transition-colors">Fix & Improve</a></li>
+              <li><a href="#" className="hover:text-white transition-colors">Simple Automation</a></li>
             </ul>
           </div>
 

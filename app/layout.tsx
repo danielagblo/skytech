@@ -13,6 +13,7 @@ const navItems = [
   { href: '/dashboard/analytics', label: 'Analytics', icon: '📈' },
   { href: '/dashboard/pages', label: 'Pages', icon: '📄' },
   { href: '/dashboard/submissions', label: 'Submissions', icon: '💬' },
+  { href: '/dashboard/internships', label: 'Internships', icon: '🎓' },
   { href: '/dashboard/team', label: 'Team', icon: '👥' },
   { href: '/dashboard/services', label: 'Services', icon: '⚙️' },
   { href: '/dashboard/testimonials', label: 'Testimonials', icon: '⭐' },
@@ -30,6 +31,19 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
       <head>
         <title>SkyTech Admin</title>
         <meta name="description" content="SkyTech Admin Dashboard" />
+        <link rel="icon" href="/bricskylogo.png" />
+        <link rel="apple-touch-icon" href="/bricskylogo.png" />
+        
+        {/* Google tag (gtag.js) */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17868191918"></script>
+        <script>
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'AW-17868191918');
+          `}
+        </script>
       </head>
       <body>
           {/* If we're rendering the public site under /site, don't include admin chrome */}

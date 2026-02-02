@@ -1,6 +1,6 @@
 export const metadata = {
-  title: 'About SkyTech - Our Mission & Values',
-  description: "Learn about SkyTech's mission, values, and expertise in software development.",
+  title: 'About SkyTech - Website & App Team',
+  description: "Meet the team that builds websites and mobile apps for businesses.",
 };
 
 export default function About() {
@@ -16,10 +16,10 @@ export default function About() {
         <div className="section-shell relative space-y-6">
           <span className="pill">About SkyTech</span>
           <h1 className="text-4xl sm:text-5xl font-extrabold leading-tight max-w-3xl">
-            We are a product-minded engineering studio focused on measurable outcomes.
+            We build websites and mobile apps for real people.
           </h1>
           <p className="text-lg text-white/85 max-w-3xl">
-            SkyTech blends strategy, design, and engineering to help teams ship faster without sacrificing quality. We integrate like an internal squad and stay until the results are real.
+            We are a small, skilled team. We listen, build, and stay with you as you grow.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4">
             {aboutStats.map((stat) => (
@@ -38,7 +38,7 @@ export default function About() {
           <div className="space-y-4">
             <h2 className="text-3xl font-extrabold text-slate-900">Our mission</h2>
             <p className="text-lg text-slate-700 leading-relaxed">
-              Empower teams to build, launch, and scale digital products with clarity, speed, and a calm delivery rhythm. Every engagement is anchored on measurable business outcomes and a partnership mindset.
+              Help you build a website or app that works well and helps your business.
             </p>
             <ul className="space-y-3 text-slate-600">
               {missionPoints.map((point) => (
@@ -50,19 +50,19 @@ export default function About() {
             </ul>
           </div>
           <div className="glass-panel rounded-3xl p-8 space-y-5">
-            <p className="text-sm font-semibold uppercase tracking-[0.14em] text-blue-700">What we promise</p>
+            <p className="text-sm font-semibold uppercase tracking-[0.14em] text-blue-700">What you can expect</p>
             <div className="space-y-4 text-slate-700">
               <div className="rounded-2xl border border-slate-100 p-4">
-                <p className="text-sm text-blue-700 font-semibold">Predictability</p>
-                <p className="text-sm">Weekly demos, clear scope, and transparent progress so stakeholders stay aligned.</p>
+                <p className="text-sm text-blue-700 font-semibold">Clear updates</p>
+                <p className="text-sm">We share progress often so you always know what is happening.</p>
               </div>
               <div className="rounded-2xl border border-slate-100 p-4">
-                <p className="text-sm text-blue-700 font-semibold">Quality</p>
-                <p className="text-sm">Code reviews, testing, observability, and documentation are part of every sprint.</p>
+                <p className="text-sm text-blue-700 font-semibold">Good work</p>
+                <p className="text-sm">We test, fix, and document so your product is stable.</p>
               </div>
               <div className="rounded-2xl border border-slate-100 p-4">
-                <p className="text-sm text-blue-700 font-semibold">Partnership</p>
-                <p className="text-sm">We integrate with your rituals and communicate early to avoid surprises.</p>
+                <p className="text-sm text-blue-700 font-semibold">Support</p>
+                <p className="text-sm">We work with you and stay to help after launch.</p>
               </div>
             </div>
           </div>
@@ -74,8 +74,8 @@ export default function About() {
         <div className="section-shell space-y-12">
           <div className="text-center max-w-2xl mx-auto space-y-3">
             <span className="pill">Our principles</span>
-            <h2 className="text-3xl font-extrabold text-slate-900">The way we think and build.</h2>
-            <p className="text-slate-600">We favor momentum, clarity, and craftsmanship.</p>
+            <h2 className="text-3xl font-extrabold text-slate-900">How we work</h2>
+            <p className="text-slate-600">Simple, honest, and focused on results.</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {values.map((value) => (
@@ -94,9 +94,9 @@ export default function About() {
           <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
             <div className="space-y-3">
               <span className="pill">Track record</span>
-              <h2 className="text-3xl font-extrabold text-slate-900">Milestones that shaped us.</h2>
+              <h2 className="text-3xl font-extrabold text-slate-900">Our story</h2>
             </div>
-            <p className="text-slate-600 max-w-xl">From early product builds to enterprise platform work, we keep a bias toward impact and learning.</p>
+            <p className="text-slate-600 max-w-xl">A few key moments that helped us grow.</p>
           </div>
           <div className="space-y-6">
             {timeline.map((item) => (
@@ -115,8 +115,8 @@ export default function About() {
         <div className="section-shell grid grid-cols-1 lg:grid-cols-[1.1fr,0.9fr] gap-12 items-center">
           <div className="space-y-4">
             <span className="pill">Team DNA</span>
-            <h2 className="text-3xl font-extrabold leading-tight">Small, senior teams that integrate fast.</h2>
-            <p className="text-white/80">Every squad blends strategy, design, engineering, and QA to keep delivery smooth and accountable.</p>
+            <h2 className="text-3xl font-extrabold leading-tight">Small team. Big care.</h2>
+            <p className="text-white/80">You work with real people who care about your success.</p>
             <div className="flex flex-wrap gap-3 text-sm">
               {teamTraits.map((trait) => (
                 <span key={trait} className="rounded-full bg-white/10 px-4 py-2 border border-white/15">{trait}</span>
@@ -139,16 +139,16 @@ export default function About() {
 
 const values = [
   {
-    title: 'Innovation',
-    description: 'We stay ahead of technology trends and continuously innovate to provide cutting-edge solutions.'
+    title: 'Clear work',
+    description: 'We keep things simple and easy to understand.'
+  },
+  {
+    title: 'Honesty',
+    description: 'We tell you the truth, even when it is hard.'
   },
   {
     title: 'Quality',
-    description: 'We maintain the highest standards of code quality and craftsmanship in everything we build.'
-  },
-  {
-    title: 'Partnership',
-    description: 'We view our clients as partners and work collaboratively to achieve shared success.'
+    description: 'We test and fix things so they work well.'
   }
 ];
 
@@ -159,23 +159,23 @@ const aboutStats = [
 ];
 
 const missionPoints = [
-  'Outcome-driven roadmaps aligned to business KPIs',
-  'Design-engineering pairing for faster cycles',
-  'Observability, QA, and documentation baked into delivery',
+  'Clear plan before we start',
+  'Regular updates while we build',
+  'Support after we launch',
 ];
 
 const timeline = [
-  { year: '2020', title: 'Studio founded', detail: 'Lean squad builds first enterprise-grade platform' },
-  { year: '2021', title: 'Mobile practice launched', detail: 'Native and cross-platform expertise formalized' },
-  { year: '2023', title: 'Cloud & data expansion', detail: 'DevOps and data platform teams added' },
-  { year: '2024', title: 'Global delivery', detail: 'Remote-first pods serving 12 countries' },
+  { year: '2020', title: 'We started', detail: 'Built our first big website' },
+  { year: '2021', title: 'Mobile apps', detail: 'Started building iPhone and Android apps' },
+  { year: '2023', title: 'More services', detail: 'Expanded our team and tools' },
+  { year: '2024', title: 'Global work', detail: 'Helped clients in many countries' },
 ];
 
-const teamTraits = ['Design + build mindset', 'Calm communication', 'Systems thinking', 'Senior-led squads'];
+const teamTraits = ['Small team', 'Clear communication', 'Reliable delivery', 'Client first'];
 
 const teamCards = [
-  { title: 'Leadership involvement', copy: 'Every engagement has a hands-on lead who removes blockers and keeps delivery smooth.' },
-  { title: 'Embedded rituals', copy: 'We mirror your standups, sprint reviews, and docs to keep collaboration seamless.' },
-  { title: 'Quality gates', copy: 'Peer review, automated checks, and measurable acceptance criteria each sprint.' },
-  { title: 'Documentation by default', copy: 'Runbooks, architecture notes, and handover guides stay updated as we ship.' },
+  { title: 'Hands-on lead', copy: 'A lead works with you and keeps everything on track.' },
+  { title: 'Clear steps', copy: 'We agree on steps and share updates often.' },
+  { title: 'Quality checks', copy: 'We test and fix issues before launch.' },
+  { title: 'Easy handover', copy: 'We explain things so your team can continue.' },
 ];

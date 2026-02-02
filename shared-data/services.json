@@ -2,31 +2,31 @@
   {
     "id": "1",
     "title": "Custom Web Applications",
-    "description": "Scalable, modern web platforms built with React, Next.js, and Node.js",
+    "description": "We build websites that are fast and easy to use.",
     "icon": "🌐"
   },
   {
     "id": "2",
-    "title": "Mobile Development",
-    "description": "iOS and Android apps using React Native and native frameworks",
+    "title": "Mobile Apps",
+    "description": "We build mobile apps for iPhone and Android.",
     "icon": "📱"
   },
   {
     "id": "3",
-    "title": "Cloud & DevOps",
-    "description": "Infrastructure automation, CI/CD, and deployment optimization",
+    "title": "Cloud Infrastructure",
+    "description": "We keep your app running fast and safe online.",
     "icon": "☁️"
   },
   {
     "id": "4",
-    "title": "Data & AI",
-    "description": "Machine learning models, analytics, and intelligent automation",
+    "title": "AI & Smart Solutions",
+    "description": "We automate boring tasks and give clear reports.",
     "icon": "🤖"
   },
   {
     "id": "5",
-    "title": "UI/UX Design",
-    "description": "User-centered design, prototyping, and design systems",
+    "title": "Design & User Experience",
+    "description": "We design screens that are simple and clear.",
     "icon": "🎨"
   }
 ]

@@ -22,11 +22,11 @@ export default async function Contact() {
         </div>
         <div className="section-shell relative space-y-6">
           <span className="pill">Contact</span>
-          <h1 className="text-4xl sm:text-5xl font-extrabold leading-tight max-w-3xl">Let’s scope your next release together.</h1>
-          <p className="text-lg text-white/85 max-w-3xl">Tell us about your goals and constraints. We’ll respond within one business day with next steps.</p>
+          <h1 className="text-4xl sm:text-5xl font-extrabold leading-tight max-w-3xl">Tell us what you want to build.</h1>
+          <p className="text-lg text-white/85 max-w-3xl">We will reply fast and guide you step by step.</p>
           <div className="flex flex-wrap gap-4 text-sm text-white/80">
-            <span className="rounded-full bg-white/10 px-4 py-2 border border-white/15">Avg. response: under 24h</span>
-            <span className="rounded-full bg-white/10 px-4 py-2 border border-white/15">Global remote teams</span>
+            <span className="rounded-full bg-white/10 px-4 py-2 border border-white/15">Reply in 24 hours</span>
+            <span className="rounded-full bg-white/10 px-4 py-2 border border-white/15">Remote team</span>
           </div>
         </div>
       </section>
@@ -85,16 +85,16 @@ export default async function Contact() {
               </div>
 
               <div className="rounded-3xl bg-slate-900 text-white p-6 space-y-4">
-                <p className="text-sm font-semibold uppercase tracking-[0.14em] text-blue-200">Need something fast?</p>
-                <p className="text-lg">We can assemble a discovery sprint in under 7 days for time-sensitive launches.</p>
-                <p className="text-sm text-white/80">Office hours: Mon–Fri, 9am–6pm PT</p>
+                <p className="text-sm font-semibold uppercase tracking-[0.14em] text-blue-200">Quick call?</p>
+                <p className="text-lg">Book a short call and tell us your idea.</p>
+                <p className="text-sm text-white/80">Mon–Fri, 9am–6pm PT</p>
               </div>
             </div>
 
             {/* Contact Form */}
             <div className="glass-panel rounded-3xl p-8">
               <h2 className="text-2xl font-extrabold text-slate-900 mb-2">Tell us about your project</h2>
-              <p className="text-sm text-slate-600 mb-6">A few details help us prepare the right next steps.</p>
+              <p className="text-sm text-slate-600 mb-6">Share what you need and when you want it done.</p>
               
               {submitted && (
                 <div className="bg-emerald-50 border border-emerald-200 text-emerald-800 px-4 py-3 rounded-xl mb-6">

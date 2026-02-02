@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -10,8 +11,9 @@ export default function Header() {
     <header className="sticky top-0 z-50 bg-white/70 backdrop-blur-xl border-b border-white/60 shadow-sm">
       <nav className="section-shell flex items-center justify-between py-4">
         {/* Logo */}
-        <Link href="/site" className="text-2xl font-extrabold tracking-tight text-blue-700">
-          SkyTech
+        <Link href="/site" className="flex items-center gap-2">
+          <Image src="/bricskylogo.png" alt="SkyTech" width={40} height={40} className="h-10 w-10 object-contain" priority />
+          <span className="text-2xl font-extrabold tracking-tight text-blue-700">SkyTech</span>
         </Link>
 
         {/* Desktop Menu */}
@@ -19,6 +21,7 @@ export default function Header() {
           <Link href="/site" className="hover:text-blue-700 transition-colors">Home</Link>
           <Link href="/site/about" className="hover:text-blue-700 transition-colors">About</Link>
           <Link href="/site/services" className="hover:text-blue-700 transition-colors">Services</Link>
+          <Link href="/site/internship" className="hover:text-blue-700 transition-colors">Internship</Link>
           <Link href="/site/contact" className="hover:text-blue-700 transition-colors">Contact</Link>
         </div>
 
@@ -27,7 +30,7 @@ export default function Header() {
           href="/site/contact"
           className="hidden md:inline-flex items-center gap-2 rounded-full bg-blue-700 px-5 py-2 text-sm font-semibold text-white shadow-md shadow-blue-600/30 transition hover:-translate-y-0.5 hover:bg-blue-800 active:translate-y-0"
         >
-          Start a project
+          Talk to us
         </Link>
 
         {/* Mobile Menu Button */}
@@ -67,6 +70,13 @@ export default function Header() {
             Services
           </Link>
           <Link 
+            href="/site/internship" 
+            className="block text-slate-800 hover:text-blue-700 transition-colors"
+            onClick={() => setIsOpen(false)}
+          >
+            Internship
+          </Link>
+          <Link 
             href="/site/contact" 
             className="block text-slate-800 hover:text-blue-700 transition-colors"
             onClick={() => setIsOpen(false)}
@@ -78,7 +88,7 @@ export default function Header() {
             className="block rounded-full bg-blue-700 text-white px-6 py-3 font-semibold text-center shadow-md shadow-blue-600/25 transition hover:bg-blue-800"
             onClick={() => setIsOpen(false)}
           >
-            Start a project
+            Talk to us
           </Link>
         </div>
       )}
