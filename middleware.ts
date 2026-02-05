@@ -11,7 +11,8 @@ export function middleware(request: NextRequest) {
     pathname.startsWith("/site") ||
     pathname.startsWith("/login") ||
     pathname.startsWith("/static") ||
-    pathname.startsWith("/favicon.ico")
+    pathname.startsWith("/favicon.ico") ||
+    pathname === "/icon.png"
   ) {
     // allow public and asset routes through; dashboard is protected below
     return NextResponse.next();

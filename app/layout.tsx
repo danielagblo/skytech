@@ -7,15 +7,15 @@ import AnalyticsTracker from '../components/AnalyticsTracker';
 export const metadata = {
   title: 'SkyTech',
   description: 'SkyTech - Website & Mobile App Developers',
+  icons: {
+    icon: '/icon.png',
+    apple: '/icon.png',
+  },
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
-      <head>
-        <link rel="icon" href="/icon.png" />
-        <link rel="apple-touch-icon" href="/icon.png" />
-      </head>
       <body>
         <AnalyticsTracker />
         {children}

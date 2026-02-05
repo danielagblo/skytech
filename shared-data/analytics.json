@@ -475,5 +475,95 @@
     "deviceType": "desktop",
     "browser": "Chrome",
     "timestamp": "2026-02-02T15:58:09.737Z"
+  },
+  {
+    "type": "pageview",
+    "page": "/site",
+    "sessionId": "bec51168-8077-454a-b1de-1a99f3e111bd",
+    "source": "direct",
+    "deviceType": "desktop",
+    "browser": "Chrome",
+    "timestamp": "2026-02-05T06:15:11.249Z"
+  },
+  {
+    "type": "pageview",
+    "page": "/site",
+    "sessionId": "bec51168-8077-454a-b1de-1a99f3e111bd",
+    "source": "direct",
+    "deviceType": "desktop",
+    "browser": "Chrome",
+    "timestamp": "2026-02-05T06:15:12.383Z"
+  },
+  {
+    "type": "pageview",
+    "page": "/site",
+    "sessionId": "bec51168-8077-454a-b1de-1a99f3e111bd",
+    "source": "direct",
+    "deviceType": "desktop",
+    "browser": "Chrome",
+    "timestamp": "2026-02-05T06:20:57.553Z"
+  },
+  {
+    "type": "pageview",
+    "page": "/site",
+    "sessionId": "bec51168-8077-454a-b1de-1a99f3e111bd",
+    "source": "direct",
+    "deviceType": "desktop",
+    "browser": "Chrome",
+    "timestamp": "2026-02-05T06:20:58.794Z"
+  },
+  {
+    "type": "pageview",
+    "page": "/login",
+    "sessionId": "bec51168-8077-454a-b1de-1a99f3e111bd",
+    "source": "direct",
+    "deviceType": "desktop",
+    "browser": "Chrome",
+    "timestamp": "2026-02-05T06:23:23.500Z"
+  },
+  {
+    "type": "pageview",
+    "page": "/login",
+    "sessionId": "bec51168-8077-454a-b1de-1a99f3e111bd",
+    "source": "direct",
+    "deviceType": "desktop",
+    "browser": "Chrome",
+    "timestamp": "2026-02-05T06:23:24.292Z"
+  },
+  {
+    "type": "interaction",
+    "action": "form_submit",
+    "page": "/login",
+    "sessionId": "bec51168-8077-454a-b1de-1a99f3e111bd",
+    "deviceType": "desktop",
+    "browser": "Chrome",
+    "timestamp": "2026-02-05T06:23:56.360Z"
+  },
+  {
+    "type": "interaction",
+    "action": "Sign in",
+    "page": "/login",
+    "sessionId": "bec51168-8077-454a-b1de-1a99f3e111bd",
+    "deviceType": "desktop",
+    "browser": "Chrome",
+    "timestamp": "2026-02-05T06:23:56.437Z"
+  },
+  {
+    "type": "pageview",
+    "page": "/dashboard",
+    "sessionId": "bec51168-8077-454a-b1de-1a99f3e111bd",
+    "source": "http://localhost:3000/login",
+    "deviceType": "desktop",
+    "browser": "Chrome",
+    "timestamp": "2026-02-05T06:24:25.848Z"
+  },
+  {
+    "type": "pageview",
+    "page": "/dashboard",
+    "sessionId": "bec51168-8077-454a-b1de-1a99f3e111bd",
+    "source": "http://localhost:3000/login",
+    "deviceType": "desktop",
+    "browser": "Chrome",
+    "timestamp": "2026-02-05T06:24:25.925Z"
   }
 ]
