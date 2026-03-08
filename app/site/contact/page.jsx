@@ -10,8 +10,8 @@ import { getPageContent } from '../../lib/pages';
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
-  title: 'Contact SkyTech - Get In Touch',
-  description: 'Contact SkyTech for software development inquiries. Get in touch with our team today.',
+  title: 'Contact Skytech Ghana - Get In Touch',
+  description: 'Contact Skytech Ghana for software development inquiries. Get in touch with our team today.',
 };
 
 function getTeam() {
@@ -31,8 +31,23 @@ export default async function Contact() {
   const submitted = false;
   const pages = getPageContent();
   const contactContent = pages.contact || {};
+  const businessSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'LocalBusiness',
+    name: 'Skytech Ghana',
+    url: 'https://skytechghana.com',
+    telephone: settings.contactPhone,
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: settings.address,
+    },
+  };
   return (
-  <>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(businessSchema) }}
+      />
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-slate-950 text-white py-24 px-4">
         <div className="absolute inset-0" aria-hidden>
@@ -92,8 +107,8 @@ export default async function Contact() {
 
               <div className="rounded-3xl overflow-hidden border border-slate-100 shadow-sm">
                 <iframe
-                  title="Bricsky on Google Maps"
-                  src="https://maps.google.com/maps?q=Bricsky&output=embed"
+                  title="skytechghana on Google Maps"
+                  src="https://maps.google.com/maps?q=skytechghana&output=embed"
                   width="100%"
                   height="280"
                   style={{ border: 0 }}
