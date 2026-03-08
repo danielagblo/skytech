@@ -10,9 +10,9 @@ import { getPageContent } from '../lib/pages';
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
-  title: "SkyTech - Website & Mobile App Developers",
+  title: "Skytech Ghana - Website & Mobile App Developers",
   description:
-    "SkyTech builds websites and mobile apps for businesses. Simple, clear, and focused on results.",
+    "Skytech Ghana builds websites and mobile apps for businesses. Simple, clear, and focused on results.",
 };
 
 function getTestimonials() {
@@ -84,43 +84,6 @@ export default async function Home() {
                 >
                   <p className="text-3xl font-bold text-white">{stat.value}</p>
                   <p className="text-sm text-slate-200/80">{stat.label}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="glass-panel rounded-3xl p-8 text-slate-900 shadow-2xl">
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <p className="text-sm text-slate-500">Active sprints</p>
-                <p className="text-2xl font-bold text-slate-900">
-                  Product Delivery Board
-                </p>
-              </div>
-              <span className="rounded-full bg-blue-50 px-3 py-1 text-sm font-semibold text-blue-700">
-                Live
-              </span>
-            </div>
-            <div className="space-y-4">
-              {workstreams.map((item) => (
-                <div
-                  key={item.title}
-                  className="rounded-2xl border border-slate-100 p-4"
-                >
-                  <div className="flex items-center justify-between mb-2">
-                    <p className="text-sm font-semibold text-slate-900">
-                      {item.title}
-                    </p>
-                    <span
-                      className={`rounded-full px-3 py-1 text-xs font-semibold ${item.state === "In QA" ? "bg-amber-50 text-amber-700" : item.state === "In Discovery" ? "bg-indigo-50 text-indigo-700" : "bg-emerald-50 text-emerald-700"}`}
-                    >
-                      {item.state}
-                    </span>
-                  </div>
-                  <p className="text-sm text-slate-500">{item.desc}</p>
-                  <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-slate-100">
-                    <div className={`h-full rounded-full ${item.progress}`} />
-                  </div>
                 </div>
               ))}
             </div>

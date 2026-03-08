@@ -147,7 +147,7 @@ export default async function Contact() {
         <div className="section-shell space-y-8">
           <div className="space-y-2">
             <span className="pill">Meet the team</span>
-            <h2 className="text-3xl font-extrabold text-slate-900">{contactContent.teamTitle || "Your SkyTech leads"}</h2>
+            <h2 className="text-3xl font-extrabold text-slate-900">{contactContent.teamTitle || "Your Skytech Ghana leads"}</h2>
             <p className="text-slate-600 max-w-2xl">{contactContent.teamSubtitle || "Core leaders who guide delivery and keep communication smooth."}</p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

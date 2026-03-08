@@ -1,5 +1,5 @@
 export const metadata = {
-  title: 'About SkyTech - Website & App Team',
+  title: 'About Skytech Ghana - Website & App Team',
   description: "Meet the team that builds websites and mobile apps for businesses.",
 };
 
@@ -20,7 +20,7 @@ export default async function About() {
           <div className="absolute right-0 bottom-0 h-80 w-80 rounded-full bg-cyan-400/40 blur-3xl" />
         </div>
         <div className="section-shell relative space-y-6">
-          <span className="pill">About SkyTech</span>
+          <span className="pill">About Skytech Ghana</span>
           <h1 className="text-4xl sm:text-5xl font-extrabold leading-tight max-w-3xl">{aboutContent.heroTitle || "We build websites and mobile apps for real people."}</h1>
           <p className="text-lg text-white/85 max-w-3xl">{aboutContent.heroSubtitle || "We are a small, skilled team. We listen, build, and stay with you as you grow."}</p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4">

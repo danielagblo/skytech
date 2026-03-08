@@ -5,8 +5,8 @@ import '../index.css';
 import AnalyticsTracker from '../components/AnalyticsTracker';
 
 export const metadata = {
-  title: 'SkyTech',
-  description: 'SkyTech - Website & Mobile App Developers',
+  title: 'Skytech Ghana',
+  description: 'Skytech Ghana - Website & Mobile App Developers',
   icons: {
     icon: '/icon.png',
     apple: '/icon.png',

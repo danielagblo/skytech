@@ -8,7 +8,7 @@ import { getPageContent } from '../../lib/pages';
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
-  title: 'Services - SkyTech Website & App Development',
+  title: 'Services - Skytech Ghana Website & App Development',
   description: "We build websites and mobile apps. Simple, clear, and focused on results.",
 };
 

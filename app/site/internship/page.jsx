@@ -3,8 +3,8 @@ import InternshipFormClient from "../../../components/InternshipFormClient";
 import { getPageContent } from '../../lib/pages';
 
 export const metadata = {
-  title: "Internship / Attachment - SkyTech",
-  description: "Apply for an internship or attachment at SkyTech.",
+  title: "Internship / Attachment - Skytech Ghana",
+  description: "Apply for an internship or attachment at Skytech Ghana.",
 };
 
 export const dynamic = 'force-dynamic';

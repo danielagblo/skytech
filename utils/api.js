@@ -43,7 +43,7 @@ export const fetchSettings = async () => {
   } catch (error) {
     console.error("Error fetching settings:", error);
     return {
-      siteName: "SkyTech",
+      siteName: "Skytech Ghana",
       siteDescription: "Premium software development solutions",
       contactEmail: "hello@skytech.com",
       contactPhone: "+1 (555) 123-4567",

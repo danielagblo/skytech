@@ -13,7 +13,7 @@ export type SiteSettings = {
 };
 
 export const DEFAULT_SETTINGS: SiteSettings = {
-  siteName: "SkyTech",
+  siteName: "Skytech Ghana",
   siteDescription: "We build websites and mobile apps for businesses.",
   contactEmail: "hello@skytech.com",
   contactPhone: "+1 (555) 123-4567",

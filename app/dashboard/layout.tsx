@@ -17,7 +17,7 @@ const navItems = [
 ];
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
-  const [siteName, setSiteName] = useState('SkyTech');
+  const [siteName, setSiteName] = useState('Skytech Ghana');
   const pathname = usePathname();
   const router = useRouter();
 
