@@ -1,13 +1,13 @@
 import { NextResponse } from "next/server";
-import fs from "fs";
-import path from "path";
-import resolveSharedData from "../../../lib/sharedData";
-
-const DATA_FILE = path.join(resolveSharedData(), "pages.json");
+import dbConnect from "../../../lib/mongodb";
+import Page from "../../../models/Page";
 
 export async function GET() {
   try {
-    if (!fs.existsSync(DATA_FILE)) {
+    await dbConnect();
+    const pageDoc = await Page.findOne({ name: "all_pages" });
+    
+    if (!pageDoc) {
       return NextResponse.json({
         home: {},
         services: {},
@@ -15,8 +15,8 @@ export async function GET() {
         about: {},
       });
     }
-    const data = fs.readFileSync(DATA_FILE, "utf-8");
-    return NextResponse.json(JSON.parse(data));
+    
+    return NextResponse.json(pageDoc.content);
   } catch (error) {
     console.error("Failed to read pages data:", error);
     return NextResponse.json(
@@ -29,7 +29,14 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    fs.writeFileSync(DATA_FILE, JSON.stringify(body, null, 2));
+    await dbConnect();
+    
+    await Page.findOneAndUpdate(
+      { name: "all_pages" },
+      { content: body },
+      { upsert: true },
+    );
+    
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Failed to save pages data:", error);

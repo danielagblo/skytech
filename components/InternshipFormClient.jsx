@@ -109,13 +109,20 @@ export default function InternshipFormClient() {
           </div>
           <div>
             <label className="block text-sm font-semibold text-slate-800 mb-2">Level / Year</label>
-            <input
+            <select
               name="level"
-              type="text"
               required
-              className="w-full px-4 py-3 border border-slate-200 rounded-xl bg-white"
-              placeholder="e.g., Year 2"
-            />
+              className="w-full px-4 py-3 border border-slate-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all text-slate-700"
+            >
+              <option value="">Select level</option>
+              <option value="Level 100 / Year 1">Level 100 / Year 1</option>
+              <option value="Level 200 / Year 2">Level 200 / Year 2</option>
+              <option value="Level 300 / Year 3">Level 300 / Year 3</option>
+              <option value="Level 400 / Year 4">Level 400 / Year 4</option>
+              <option value="Level 500 / Year 5">Level 500 / Year 5</option>
+              <option value="Graduate">Graduate</option>
+              <option value="Post-Graduate">Post-Graduate</option>
+            </select>
           </div>
         </div>
 

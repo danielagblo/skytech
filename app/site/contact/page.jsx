@@ -1,10 +1,7 @@
-/* eslint-disable react-refresh/only-export-components */
-import Link from 'next/link';
-import fs from 'fs';
-import path from 'path';
+import dbConnect from '../../lib/mongodb';
+import TeamMember from '../../models/TeamMember';
 import ContactFormClient from '../../../components/ContactFormClient';
 import { getSettings } from '../../lib/settings';
-import resolveSharedData from '../../lib/sharedData';
 import { getPageContent } from '../../lib/pages';
 
 export const dynamic = 'force-dynamic';
@@ -14,22 +11,21 @@ export const metadata = {
   description: 'Contact Skytech Ghana for software development inquiries. Get in touch with our team today.',
 };
 
-function getTeam() {
+async function getTeam() {
   try {
-    const filePath = path.join(resolveSharedData(), 'team.json');
-    const data = fs.readFileSync(filePath, 'utf-8');
-    return JSON.parse(data);
+    await dbConnect();
+    return await TeamMember.find({}).lean();
   } catch (error) {
-    console.error('Failed to read team:', error);
+    console.error('Failed to fetch team from MongoDB:', error);
     return [];
   }
 }
 
 export default async function Contact() {
-  const settings = getSettings();
-  const teamMembers = getTeam();
+  const settings = await getSettings();
+  const teamMembers = await getTeam();
   const submitted = false;
-  const pages = getPageContent();
+  const pages = await getPageContent();
   const contactContent = pages.contact || {};
   const businessSchema = {
     '@context': 'https://schema.org',

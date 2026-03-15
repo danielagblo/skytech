@@ -1,6 +1,5 @@
-import fs from "fs";
-
-import resolveSharedData from "./sharedData";
+import dbConnect from "./mongodb";
+import Settings from "../models/Settings";
 
 export type SiteSettings = {
   siteName: string;
@@ -22,20 +21,19 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   pricingBookletUrl: "",
 };
 
-export function getSettings(): SiteSettings {
-  const filePath = resolveSharedData("settings.json");
+export async function getSettings(): Promise<SiteSettings> {
   try {
-    if (!fs.existsSync(filePath)) {
+    await dbConnect();
+    const settings = await Settings.findOne({}).lean();
+    if (!settings) {
       return { ...DEFAULT_SETTINGS };
     }
-    const raw = fs.readFileSync(filePath, "utf-8");
-    const parsed = JSON.parse(raw) as Partial<SiteSettings>;
     return {
       ...DEFAULT_SETTINGS,
-      ...parsed,
-    };
+      ...settings,
+    } as SiteSettings;
   } catch (error) {
-    console.error("Failed to read settings.json:", error);
+    console.error("Failed to fetch settings from MongoDB:", error);
     return { ...DEFAULT_SETTINGS };
   }
 }

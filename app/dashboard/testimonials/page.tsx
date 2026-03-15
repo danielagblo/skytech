@@ -14,6 +14,8 @@ export default function TestimonialsPage() {
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [isAdding, setIsAdding] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterRating, setFilterRating] = useState('All');
   const [formData, setFormData] = useState({
     author: '',
     company: '',
@@ -87,10 +89,22 @@ export default function TestimonialsPage() {
   };
 
   const handleDelete = (id: string) => {
+    if (!confirm('Are you sure you want to delete this testimonial?')) return;
     const newTestimonials = testimonials.filter(t => t.id !== id);
     setTestimonials(newTestimonials);
     saveTestimonials(newTestimonials);
   };
+
+  const filteredTestimonials = testimonials.filter(t => {
+    const matchesSearch = 
+      t.author.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      t.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      t.quote.toLowerCase().includes(searchTerm.toLowerCase());
+    
+    const matchesRating = filterRating === 'All' || t.rating === parseInt(filterRating);
+
+    return matchesSearch && matchesRating;
+  });
 
   return (
     <div className="space-y-8">
@@ -101,10 +115,50 @@ export default function TestimonialsPage() {
         </div>
         <button
           onClick={() => setIsAdding(!isAdding)}
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-semibold"
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-semibold shadow-sm transition-colors"
         >
           {isAdding ? 'Cancel' : '+ Add Testimonial'}
         </button>
+      </div>
+
+      {/* Filters Overlay */}
+      <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-4 md:space-y-0 md:flex md:gap-4 md:items-center">
+        <div className="flex-1 relative">
+          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">🔍</span>
+          <input
+            type="text"
+            placeholder="Search author, company, quote..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+        <div className="w-full md:w-48">
+          <label className="block text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wider">Rating</label>
+          <select
+            value={filterRating}
+            onChange={(e) => setFilterRating(e.target.value)}
+            className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+          >
+            <option value="All">All Ratings</option>
+            <option value="5">⭐⭐⭐⭐⭐ (5)</option>
+            <option value="4">⭐⭐⭐⭐ (4)</option>
+            <option value="3">⭐⭐⭐ (3)</option>
+            <option value="2">⭐⭐ (2)</option>
+            <option value="1">⭐ (1)</option>
+          </select>
+        </div>
+        { (searchTerm || filterRating !== 'All') && (
+          <button 
+            onClick={() => {
+              setSearchTerm('');
+              setFilterRating('All');
+            }}
+            className="text-sm text-blue-600 font-semibold hover:text-blue-700 whitespace-nowrap"
+          >
+            Clear Filters
+          </button>
+        )}
       </div>
 
       {(isAdding || editingId) && (
@@ -183,36 +237,42 @@ export default function TestimonialsPage() {
         </div>
       ) : (
         <div className="space-y-4">
-          {testimonials.map((testimonial) => (
-          <div key={testimonial.id} className="bg-white rounded-lg border border-slate-200 p-6 shadow-sm">
-            <div className="flex justify-between items-start mb-3">
-              <div>
-                <h3 className="font-bold text-slate-900">{testimonial.author}</h3>
-                <p className="text-sm text-slate-600">{testimonial.company}</p>
-              </div>
-              <div className="text-sm">
-                {Array(testimonial.rating)
-                  .fill('⭐')
-                  .join('')}
-              </div>
+          {filteredTestimonials.length === 0 ? (
+            <div className="bg-white rounded-lg border border-slate-200 shadow-sm p-8 text-center">
+              <p className="text-slate-600">No testimonials found matching your filters</p>
             </div>
-            <p className="text-slate-700 italic mb-4">"{testimonial.quote}"</p>
-            <div className="flex gap-2">
-              <button
-                onClick={() => handleEdit(testimonial)}
-                className="flex-1 px-3 py-2 bg-blue-600 text-white rounded text-sm hover:bg-blue-700"
-              >
-                Edit
-              </button>
-              <button
-                onClick={() => handleDelete(testimonial.id)}
-                className="flex-1 px-3 py-2 bg-red-600 text-white rounded text-sm hover:bg-red-700"
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-        ))}
+          ) : (
+            filteredTestimonials.map((testimonial) => (
+              <div key={testimonial.id} className="bg-white rounded-lg border border-slate-200 p-6 shadow-sm hover:shadow-md transition-shadow">
+                <div className="flex justify-between items-start mb-3">
+                  <div>
+                    <h3 className="font-bold text-slate-900">{testimonial.author}</h3>
+                    <p className="text-sm text-slate-600">{testimonial.company}</p>
+                  </div>
+                  <div className="text-sm">
+                    {Array(testimonial.rating)
+                      .fill('⭐')
+                      .join('')}
+                  </div>
+                </div>
+                <p className="text-slate-700 italic mb-4">"{testimonial.quote}"</p>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => handleEdit(testimonial)}
+                    className="flex-1 px-3 py-2 bg-blue-600 text-white rounded text-sm hover:bg-blue-700 transition-colors"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => handleDelete(testimonial.id)}
+                    className="flex-1 px-3 py-2 bg-red-600 text-white rounded text-sm hover:bg-red-700 transition-colors"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
+            ))
+          )}
         </div>
       )}
     </div>

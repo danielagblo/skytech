@@ -1,8 +1,8 @@
 import Link from 'next/link';
 import { getSettings } from '../app/lib/settings';
 
-export default function Footer({ settings }) {
-  const resolved = settings || getSettings();
+export default async function Footer({ settings }) {
+  const resolved = settings || (await getSettings());
   const {
     siteName,
     siteDescription,

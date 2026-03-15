@@ -1,8 +1,5 @@
-/* eslint-disable react-refresh/only-export-components */
-import Link from 'next/link';
-import fs from 'fs';
-import path from 'path';
-import resolveSharedData from '../../lib/sharedData';
+import dbConnect from '../../lib/mongodb';
+import ServiceModel from '../../models/Service';
 import { getPageContent } from '../../lib/pages';
 
 export const dynamic = 'force-dynamic';
@@ -12,20 +9,19 @@ export const metadata = {
   description: "We build websites and mobile apps. Simple, clear, and focused on results.",
 };
 
-function getServices() {
+async function getServices() {
   try {
-    const filePath = path.join(resolveSharedData(), 'services.json');
-    const data = fs.readFileSync(filePath, 'utf-8');
-    return JSON.parse(data);
+    await dbConnect();
+    return await ServiceModel.find({}).lean();
   } catch (error) {
-    console.error('Failed to read services:', error);
+    console.error('Failed to fetch services from MongoDB:', error);
     return [];
   }
 }
 
 export default async function Services() {
-  const services = getServices();
-  const pages = getPageContent();
+  const services = await getServices();
+  const pages = await getPageContent();
   const servicesContent = pages.services || {};
 return (
   <>

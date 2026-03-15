@@ -10,7 +10,7 @@ export const metadata = {
 export const dynamic = 'force-dynamic';
 
 export default async function InternshipPage() {
-  const pages = getPageContent();
+  const pages = await getPageContent();
   const internshipContent = pages.internship || {};
   return (
     <>

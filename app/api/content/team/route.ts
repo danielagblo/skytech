@@ -1,16 +1,12 @@
 import { NextResponse } from "next/server";
-import fs from "fs";
-import path from "path";
-
-import resolveSharedData from "../../../lib/sharedData";
-
-const DATA_DIR = resolveSharedData();
+import dbConnect from "../../../lib/mongodb";
+import TeamMember from "../../../models/TeamMember";
 
 export async function GET() {
   try {
-    const filePath = path.join(DATA_DIR, "team.json");
-    const data = fs.readFileSync(filePath, "utf-8");
-    return NextResponse.json(JSON.parse(data));
+    await dbConnect();
+    const team = await TeamMember.find({});
+    return NextResponse.json(team);
   } catch (error) {
     return NextResponse.json(
       { error: "Failed to read team data" },
@@ -22,8 +18,16 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const filePath = path.join(DATA_DIR, "team.json");
-    fs.writeFileSync(filePath, JSON.stringify(body, null, 2));
+    await dbConnect();
+    
+    if (Array.isArray(body)) {
+      await TeamMember.deleteMany({});
+      await TeamMember.insertMany(body);
+    } else {
+      await TeamMember.deleteMany({});
+      await TeamMember.create(body);
+    }
+    
     return NextResponse.json({ success: true });
   } catch (error) {
     return NextResponse.json(

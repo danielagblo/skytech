@@ -8,7 +8,7 @@ import { getPageContent } from '../../lib/pages';
 export const dynamic = 'force-dynamic';
 
 export default async function About() {
-  const pages = getPageContent();
+  const pages = await getPageContent();
   const aboutContent = pages.about || {};
   return (
     <>

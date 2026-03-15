@@ -20,6 +20,13 @@ export default function InternshipSubmissionsPage() {
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedSubmission, setSelectedSubmission] = useState<Submission | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterProgram, setFilterProgram] = useState('All');
+  const [filterLevel, setFilterLevel] = useState('All');
+  const [filterDuration, setFilterDuration] = useState('All');
+  const [filterStartDate, setFilterStartDate] = useState('All');
+  const [sortField, setSortField] = useState<string>('submittedAt');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
   useEffect(() => {
     fetchSubmissions();
@@ -37,6 +44,54 @@ export default function InternshipSubmissionsPage() {
     }
   };
 
+  const handleDelete = async (id: number) => {
+    if (!confirm('Are you sure you want to delete this application?')) return;
+
+    try {
+      const res = await fetch(`/api/content/internship-submissions?id=${id}`, {
+        method: 'DELETE',
+      });
+      if (res.ok) {
+        setSubmissions(submissions.filter((s) => s.id !== id));
+        if (selectedSubmission?.id === id) setSelectedSubmission(null);
+      } else {
+        alert('Failed to delete application');
+      }
+    } catch (error) {
+      console.error('Error deleting application:', error);
+      alert('Error deleting application');
+    }
+  };
+
+  const programs = ['All', ...Array.from(new Set(submissions.map(s => s.program).filter(Boolean))).sort()];
+  const levels = ['All', ...Array.from(new Set(submissions.map(s => s.level).filter(Boolean))).sort()];
+  const durations = ['All', ...Array.from(new Set(submissions.map(s => s.duration).filter(Boolean))).sort()];
+  const startDates = ['All', ...Array.from(new Set(submissions.map(s => s.startDate).filter(Boolean))).sort()];
+
+  const filteredSubmissions = submissions.filter(s => {
+    const matchesSearch = 
+      s.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      s.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      s.school.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      s.program.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (s.message && s.message.toLowerCase().includes(searchTerm.toLowerCase()));
+    
+    const matchesProgram = filterProgram === 'All' || s.program === filterProgram;
+    const matchesLevel = filterLevel === 'All' || s.level === filterLevel;
+    const matchesDuration = filterDuration === 'All' || s.duration === filterDuration;
+    const matchesStartDate = filterStartDate === 'All' || s.startDate === filterStartDate;
+
+    return matchesSearch && matchesProgram && matchesLevel && matchesDuration && matchesStartDate;
+  }).sort((a, b) => {
+    let comparison = 0;
+    const field = sortField as keyof Submission;
+    
+    if (a[field] < b[field]) comparison = -1;
+    if (a[field] > b[field]) comparison = 1;
+    
+    return sortOrder === 'asc' ? comparison : -comparison;
+  });
+
   if (loading) {
     return (
       <div className="flex justify-center items-center py-12">
@@ -52,13 +107,130 @@ export default function InternshipSubmissionsPage() {
         <p className="text-slate-600 mt-2">View and manage internship and attachment requests</p>
       </div>
 
-      {submissions.length === 0 ? (
+      {/* Filters & Search Section */}
+      <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-end">
+          {/* Search Bar */}
+          <div className="lg:col-span-5 relative">
+            <label className="block text-xs font-semibold text-slate-500 mb-2 uppercase tracking-wider">Search Applications</label>
+            <div className="relative">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">🔍</span>
+              <input
+                type="text"
+                placeholder="Name, email, school, program..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-10 pr-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-slate-50/50"
+              />
+            </div>
+          </div>
+
+          {/* Sort Controls */}
+          <div className="lg:col-span-4 flex gap-2 items-end">
+            <div className="flex-1">
+              <label className="block text-xs font-semibold text-slate-500 mb-2 uppercase tracking-wider">Sort By</label>
+              <select
+                value={sortField}
+                onChange={(e) => setSortField(e.target.value)}
+                className="w-full px-3 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm bg-slate-50/50"
+              >
+                <option value="submittedAt">Submission Date</option>
+                <option value="name">Name</option>
+                <option value="level">Level</option>
+                <option value="duration">Duration</option>
+                <option value="startDate">Start Date</option>
+              </select>
+            </div>
+            <button
+              onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
+              className="p-2.5 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors bg-white h-[42px] flex items-center justify-center min-w-[42px]"
+              title={sortOrder === 'asc' ? 'Ascending' : 'Descending'}
+            >
+              <span className="text-blue-600 font-bold">{sortOrder === 'asc' ? '↑' : '↓'}</span>
+            </button>
+          </div>
+
+          {/* Clear Button */}
+          <div className="lg:col-span-3 flex justify-end pb-1">
+            { (searchTerm || filterProgram !== 'All' || filterLevel !== 'All' || filterDuration !== 'All' || filterStartDate !== 'All' || sortField !== 'submittedAt' || sortOrder !== 'desc') && (
+              <button 
+                onClick={() => {
+                  setSearchTerm('');
+                  setFilterProgram('All');
+                  setFilterLevel('All');
+                  setFilterDuration('All');
+                  setFilterStartDate('All');
+                  setSortField('submittedAt');
+                  setSortOrder('desc');
+                }}
+                className="text-sm text-red-600 font-semibold hover:text-red-700 transition-colors flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-red-50"
+              >
+                <span>✕</span> Clear All Filters
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Filter Dropdowns Grid */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4 border-t border-slate-100">
+          <div>
+            <label className="block text-xs font-semibold text-slate-500 mb-2 uppercase tracking-wider">Program</label>
+            <select
+              value={filterProgram}
+              onChange={(e) => setFilterProgram(e.target.value)}
+              className="w-full px-3 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm bg-white"
+            >
+              {programs.map(p => (
+                <option key={p} value={p}>{p}</option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="block text-xs font-semibold text-slate-500 mb-2 uppercase tracking-wider">Level</label>
+            <select
+              value={filterLevel}
+              onChange={(e) => setFilterLevel(e.target.value)}
+              className="w-full px-3 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm bg-white"
+            >
+              {levels.map(l => (
+                <option key={l} value={l}>{l}</option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="block text-xs font-semibold text-slate-500 mb-2 uppercase tracking-wider">Duration</label>
+            <select
+              value={filterDuration}
+              onChange={(e) => setFilterDuration(e.target.value)}
+              className="w-full px-3 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm bg-white"
+            >
+              {durations.map(d => (
+                <option key={d} value={d}>{d}</option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="block text-xs font-semibold text-slate-500 mb-2 uppercase tracking-wider">Start Date</label>
+            <select
+              value={filterStartDate}
+              onChange={(e) => setFilterStartDate(e.target.value)}
+              className="w-full px-3 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm bg-white"
+            >
+              {startDates.map(sd => (
+                <option key={sd} value={sd}>{sd}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+      </div>
+
+      {filteredSubmissions.length === 0 ? (
         <div className="bg-white rounded-lg border border-slate-200 shadow-sm p-8 text-center">
-          <p className="text-slate-600">No applications yet</p>
+          <p className="text-slate-600">No applications found matching your filters</p>
         </div>
       ) : (
         <div className="grid gap-4">
-          {submissions.map((submission) => (
+          {filteredSubmissions.map((submission) => (
             <div
               key={submission.id}
               className="bg-white rounded-lg border border-slate-200 shadow-sm p-6 hover:shadow-md transition-shadow cursor-pointer"
@@ -70,10 +242,10 @@ export default function InternshipSubmissionsPage() {
                   <p className="text-sm text-slate-600 mt-1">{submission.school} · {submission.program}</p>
                   <div className="flex gap-4 mt-3 text-sm">
                     <span className="text-slate-600">
-                      📧 <a href={`mailto:${submission.email}`} className="text-blue-600 hover:underline">{submission.email}</a>
+                      📧 <a href={`mailto:${submission.email}`} className="text-blue-600 hover:underline" onClick={e => e.stopPropagation()}>{submission.email}</a>
                     </span>
                     <span className="text-slate-600">
-                      📱 <a href={`tel:${submission.phone}`} className="text-blue-600 hover:underline">{submission.phone}</a>
+                      📱 <a href={`tel:${submission.phone}`} className="text-blue-600 hover:underline" onClick={e => e.stopPropagation()}>{submission.phone}</a>
                     </span>
                   </div>
                 </div>
@@ -115,15 +287,26 @@ export default function InternshipSubmissionsPage() {
                     <a
                       href={`mailto:${submission.email}`}
                       className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-semibold text-sm"
+                      onClick={e => e.stopPropagation()}
                     >
                       Reply via Email
                     </a>
                     <a
                       href={`tel:${submission.phone}`}
                       className="px-4 py-2 bg-slate-200 text-slate-900 rounded-lg hover:bg-slate-300 font-semibold text-sm"
+                      onClick={e => e.stopPropagation()}
                     >
                       Call
                     </a>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDelete(submission.id);
+                      }}
+                      className="px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 font-semibold text-sm transition-colors border border-red-100"
+                    >
+                      Delete
+                    </button>
                   </div>
                 </div>
               )}

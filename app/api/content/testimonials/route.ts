@@ -1,16 +1,12 @@
 import { NextResponse } from "next/server";
-import fs from "fs";
-import path from "path";
-
-import resolveSharedData from "../../../lib/sharedData";
-
-const DATA_DIR = resolveSharedData();
+import dbConnect from "../../../lib/mongodb";
+import Testimonial from "../../../models/Testimonial";
 
 export async function GET() {
   try {
-    const filePath = path.join(DATA_DIR, "testimonials.json");
-    const data = fs.readFileSync(filePath, "utf-8");
-    return NextResponse.json(JSON.parse(data));
+    await dbConnect();
+    const testimonials = await Testimonial.find({});
+    return NextResponse.json(testimonials);
   } catch (error) {
     return NextResponse.json(
       { error: "Failed to read testimonials data" },
@@ -22,8 +18,16 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const filePath = path.join(DATA_DIR, "testimonials.json");
-    fs.writeFileSync(filePath, JSON.stringify(body, null, 2));
+    await dbConnect();
+    
+    if (Array.isArray(body)) {
+      await Testimonial.deleteMany({});
+      await Testimonial.insertMany(body);
+    } else {
+      await Testimonial.deleteMany({});
+      await Testimonial.create(body);
+    }
+    
     return NextResponse.json({ success: true });
   } catch (error) {
     return NextResponse.json(

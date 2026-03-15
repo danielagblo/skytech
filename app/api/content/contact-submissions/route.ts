@@ -1,18 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { readFile, writeFile, mkdir } from "fs/promises";
-import path from "path";
-import resolveSharedData from "../../../lib/sharedData";
-
-const SUBMISSIONS_FILE = resolveSharedData("contact-submissions.json");
-
-async function ensureSubmissionsFile() {
-  try {
-    await readFile(SUBMISSIONS_FILE);
-  } catch {
-    await mkdir(path.dirname(SUBMISSIONS_FILE), { recursive: true });
-    await writeFile(SUBMISSIONS_FILE, JSON.stringify([], null, 2));
-  }
-}
+import dbConnect from "../../../lib/mongodb";
+import ContactSubmission from "../../../models/ContactSubmission";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -26,7 +14,7 @@ export async function OPTIONS() {
 
 export async function POST(request: NextRequest) {
   try {
-    await ensureSubmissionsFile();
+    await dbConnect();
     const contentType = (
       request.headers.get("content-type") || ""
     ).toLowerCase();
@@ -40,14 +28,12 @@ export async function POST(request: NextRequest) {
     ) {
       const form = await request.formData();
       submission = {};
-      // Convert entries to an array to avoid TypeScript downlevel-iteration issues
       for (const [key, value] of Array.from(form.entries())) {
         if (typeof value === "string") submission[key] = value;
         else if (value instanceof File) submission[key] = value.name;
         else submission[key] = String(value);
       }
     } else {
-      // Fallback: try JSON parse but catch parsing errors
       try {
         submission = await request.json();
       } catch (e) {
@@ -58,22 +44,14 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Read existing submissions
-    const fileContent = await readFile(SUBMISSIONS_FILE, "utf-8");
-    const submissions = JSON.parse(fileContent);
-
-    // Add new submission with timestamp
-    submissions.push({
+    const newSubmission = await ContactSubmission.create({
       id: Date.now(),
-      submittedAt: new Date().toISOString(),
+      submittedAt: new Date(),
       ...submission,
     });
 
-    // Write back to file
-    await writeFile(SUBMISSIONS_FILE, JSON.stringify(submissions, null, 2));
-
     return NextResponse.json(
-      { success: true, id: submissions[submissions.length - 1].id },
+      { success: true, id: newSubmission.id },
       { headers: corsHeaders },
     );
   } catch (error) {
@@ -87,16 +65,42 @@ export async function POST(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   try {
-    await ensureSubmissionsFile();
-
-    const fileContent = await readFile(SUBMISSIONS_FILE, "utf-8");
-    const submissions = JSON.parse(fileContent);
+    await dbConnect();
+    const submissions = await ContactSubmission.find({}).sort({ submittedAt: -1 });
 
     return NextResponse.json(submissions, { headers: corsHeaders });
   } catch (error) {
     console.error("Failed to fetch submissions:", error);
     return NextResponse.json(
       { error: "Failed to fetch submissions" },
+      { status: 500, headers: corsHeaders },
+    );
+  }
+}
+
+export async function DELETE(request: NextRequest) {
+  try {
+    await dbConnect();
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get("id");
+
+    if (!id) {
+      return NextResponse.json(
+        { error: "Submission ID is required" },
+        { status: 400, headers: corsHeaders },
+      );
+    }
+
+    await ContactSubmission.deleteOne({ id: parseInt(id) });
+
+    return NextResponse.json(
+      { success: true },
+      { headers: corsHeaders },
+    );
+  } catch (error) {
+    console.error("Failed to delete submission:", error);
+    return NextResponse.json(
+      { error: "Failed to delete submission" },
       { status: 500, headers: corsHeaders },
     );
   }

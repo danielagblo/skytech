@@ -1,13 +1,14 @@
-import fs from "fs";
-import path from "path";
-import resolveSharedData from "./sharedData";
+import dbConnect from "./mongodb";
+import Page from "../models/Page";
 
 export type PageContent = Record<string, string>;
 
-export function getPageContent(): Record<string, PageContent> {
+export async function getPageContent(): Promise<Record<string, PageContent>> {
   try {
-    const filePath = path.join(resolveSharedData(), "pages.json");
-    if (!fs.existsSync(filePath)) {
+    await dbConnect();
+    const pageDoc = await Page.findOne({ name: "all_pages" }).lean();
+    
+    if (!pageDoc) {
       return {
         home: {},
         services: {},
@@ -15,10 +16,10 @@ export function getPageContent(): Record<string, PageContent> {
         about: {},
       };
     }
-    const data = fs.readFileSync(filePath, "utf-8");
-    return JSON.parse(data);
+    
+    return pageDoc.content as Record<string, PageContent>;
   } catch (error) {
-    console.error("Failed to read page content:", error);
+    console.error("Failed to read page content from MongoDB:", error);
     return {
       home: {},
       services: {},

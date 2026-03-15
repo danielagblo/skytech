@@ -15,6 +15,8 @@ export default function TeamPage() {
   const [team, setTeam] = useState<TeamMember[]>([]);
   const [isAdding, setIsAdding] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterRole, setFilterRole] = useState('All');
   const [formData, setFormData] = useState<Omit<TeamMember, 'id'> & { id?: string }>({
     name: '',
     role: '',
@@ -81,10 +83,24 @@ export default function TeamPage() {
   };
 
   const handleDelete = (id: string) => {
+    if (!confirm('Are you sure you want to remove this team member?')) return;
     const newTeam = team.filter(m => m.id !== id);
     setTeam(newTeam);
     saveTeam(newTeam);
   };
+
+  const roles = ['All', ...Array.from(new Set(team.map(m => m.role).filter(Boolean)))];
+
+  const filteredTeam = team.filter(member => {
+    const matchesSearch = 
+      member.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      member.role.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      member.focus.toLowerCase().includes(searchTerm.toLowerCase());
+    
+    const matchesRole = filterRole === 'All' || member.role === filterRole;
+
+    return matchesSearch && matchesRole;
+  });
 
   if (loading) {
     return (
@@ -106,10 +122,47 @@ export default function TeamPage() {
         </div>
         <button
           onClick={() => setIsAdding(!isAdding)}
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-semibold"
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-semibold shadow-sm transition-colors"
         >
           {isAdding ? 'Cancel' : '+ Add Member'}
         </button>
+      </div>
+
+      {/* Filters Overlay */}
+      <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-4 md:space-y-0 md:flex md:gap-4 md:items-center">
+        <div className="flex-1 relative">
+          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">🔍</span>
+          <input
+            type="text"
+            placeholder="Search name, role, focus..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+        <div className="w-full md:w-64">
+          <label className="block text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wider">Role</label>
+          <select
+            value={filterRole}
+            onChange={(e) => setFilterRole(e.target.value)}
+            className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+          >
+            {roles.map(role => (
+              <option key={role} value={role}>{role}</option>
+            ))}
+          </select>
+        </div>
+        { (searchTerm || filterRole !== 'All') && (
+          <button 
+            onClick={() => {
+              setSearchTerm('');
+              setFilterRole('All');
+            }}
+            className="text-sm text-blue-600 font-semibold hover:text-blue-700 whitespace-nowrap"
+          >
+            Clear Filters
+          </button>
+        )}
       </div>
 
       {(isAdding || editingId) && (
@@ -178,34 +231,40 @@ export default function TeamPage() {
         </div>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {team.map((member) => (
-          <div key={member.id} className="bg-white rounded-lg border border-slate-200 p-6 shadow-sm">
-            <img
-              src={member.avatar}
-              alt={member.name}
-              className="w-full h-40 object-cover rounded-lg mb-4"
-            />
-            <h3 className="font-bold text-slate-900">{member.name}</h3>
-            <p className="text-sm text-blue-600 font-semibold mt-1">{member.role}</p>
-            <p className="text-sm text-slate-600 mt-3">{member.focus}</p>
-            <div className="flex gap-2 mt-4">
-              <button
-                onClick={() => handleEdit(member)}
-                className="flex-1 px-3 py-2 bg-blue-600 text-white rounded text-sm hover:bg-blue-700"
-              >
-                Edit
-              </button>
-              <button
-                onClick={() => handleDelete(member.id)}
-                className="flex-1 px-3 py-2 bg-red-600 text-white rounded text-sm hover:bg-red-700"
-              >
-                Delete
-              </button>
+      {filteredTeam.length === 0 ? (
+        <div className="bg-white rounded-lg border border-slate-200 shadow-sm p-8 text-center">
+          <p className="text-slate-600">No team members found matching your filters</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredTeam.map((member) => (
+            <div key={member.id} className="bg-white rounded-lg border border-slate-200 p-6 shadow-sm hover:shadow-md transition-shadow">
+              <img
+                src={member.avatar}
+                alt={member.name}
+                className="w-full h-40 object-cover rounded-lg mb-4"
+              />
+              <h3 className="font-bold text-slate-900">{member.name}</h3>
+              <p className="text-sm text-blue-600 font-semibold mt-1">{member.role}</p>
+              <p className="text-sm text-slate-600 mt-3">{member.focus}</p>
+              <div className="flex gap-2 mt-4">
+                <button
+                  onClick={() => handleEdit(member)}
+                  className="flex-1 px-3 py-2 bg-blue-600 text-white rounded text-sm hover:bg-blue-700 transition-colors"
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={() => handleDelete(member.id)}
+                  className="flex-1 px-3 py-2 bg-red-600 text-white rounded text-sm hover:bg-red-700 transition-colors"
+                >
+                  Delete
+                </button>
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

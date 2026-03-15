@@ -1,10 +1,9 @@
-/* eslint-disable react-refresh/only-export-components */
 import Link from "next/link";
-import fs from 'fs';
-import path from 'path';
+import dbConnect from '../lib/mongodb';
+import Testimonial from '../models/Testimonial';
+import Service from '../models/Service';
 import PDFViewer from "../../components/PDFViewer";
 import { getSettings } from '../lib/settings';
-import resolveSharedData from '../lib/sharedData';
 import { getPageContent } from '../lib/pages';
 
 export const dynamic = 'force-dynamic';
@@ -15,34 +14,32 @@ export const metadata = {
     "Skytech Ghana builds websites and mobile apps for businesses. Simple, clear, and focused on results.",
 };
 
-function getTestimonials() {
+async function getTestimonials() {
   try {
-    const filePath = path.join(resolveSharedData(), 'testimonials.json');
-    const data = fs.readFileSync(filePath, 'utf-8');
-    return JSON.parse(data);
+    await dbConnect();
+    return await Testimonial.find({}).lean();
   } catch (error) {
-    console.error('Failed to read testimonials:', error);
+    console.error('Failed to fetch testimonials from MongoDB:', error);
     return [];
   }
 }
 
-function getServices() {
+async function getServices() {
   try {
-    const filePath = path.join(resolveSharedData(), 'services.json');
-    const data = fs.readFileSync(filePath, 'utf-8');
-    return JSON.parse(data);
+    await dbConnect();
+    return await Service.find({}).lean();
   } catch (error) {
-    console.error('Failed to read services:', error);
+    console.error('Failed to fetch services from MongoDB:', error);
     return [];
   }
 }
 
 export default async function Home() {
-  const testimonials = getTestimonials();
-  const settings = getSettings();
-  const services = getServices();
+  const testimonials = await getTestimonials();
+  const settings = await getSettings();
+  const services = await getServices();
   const pricingBookletUrl = settings.pricingBookletUrl || "";
-  const pages = getPageContent();
+  const pages = await getPageContent();
   const homeContent = pages.home || {};
   return (
     <>

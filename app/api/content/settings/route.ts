@@ -1,18 +1,13 @@
 import { NextResponse } from "next/server";
-import fs from "fs";
-import path from "path";
-
-import resolveSharedData from "../../../lib/sharedData";
-
-const DATA_DIR = resolveSharedData();
+import dbConnect from "../../../lib/mongodb";
+import Settings from "../../../models/Settings";
 
 export async function GET() {
   try {
-    const filePath = path.join(DATA_DIR, "settings.json");
-    if (!fs.existsSync(DATA_DIR)) {
-      fs.mkdirSync(DATA_DIR, { recursive: true });
-    }
-    if (!fs.existsSync(filePath)) {
+    await dbConnect();
+    let settings = await Settings.findOne({});
+    
+    if (!settings) {
       const defaultSettings = {
         contactEmail: "info@skytech.example",
         contactPhone: "+233 000 000 000",
@@ -20,10 +15,10 @@ export async function GET() {
         address: "",
         pricingBookletUrl: "",
       };
-      fs.writeFileSync(filePath, JSON.stringify(defaultSettings, null, 2));
+      settings = await Settings.create(defaultSettings);
     }
-    const data = fs.readFileSync(filePath, "utf-8");
-    return NextResponse.json(JSON.parse(data));
+    
+    return NextResponse.json(settings);
   } catch (error) {
     console.error("GET /api/content/settings error:", error);
     return NextResponse.json(
@@ -36,9 +31,15 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const filePath = path.join(DATA_DIR, "settings.json");
-    if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
-    fs.writeFileSync(filePath, JSON.stringify(body, null, 2));
+    await dbConnect();
+    
+    let settings = await Settings.findOne({});
+    if (settings) {
+      await Settings.findByIdAndUpdate(settings._id, body);
+    } else {
+      await Settings.create(body);
+    }
+    
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("POST /api/content/settings error:", error);
