@@ -64,11 +64,10 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all duration-200 ${
-                  isActive
-                    ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg shadow-blue-900/50 scale-105'
-                    : 'text-slate-300 hover:bg-slate-800/50 hover:text-white hover:translate-x-1'
-                }`}
+                className={`flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all duration-200 ${isActive
+                  ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg shadow-blue-900/50 scale-105'
+                  : 'text-slate-300 hover:bg-slate-800/50 hover:text-white hover:translate-x-1'
+                  }`}
               >
                 <span className="text-xl">{item.icon}</span>
                 <span className="font-semibold text-sm">{item.label}</span>
