@@ -10,6 +10,34 @@ interface Settings {
   whatsapp: string;
   address: string;
   pricingBookletUrl: string;
+  pricing: {
+    websitePackages: Array<{
+      name: string;
+      tagline: string;
+      timeline: string;
+      price: string;
+      badge?: string;
+      highlights: string[];
+    }>;
+    appPackages: Array<{
+      name: string;
+      tagline: string;
+      timeline: string;
+      price: string;
+      badge?: string;
+      highlights: string[];
+    }>;
+    seoGrowthPlan: {
+      name: string;
+      priceRange: string;
+      items: string[];
+    };
+  };
+  affiliateNetwork: {
+    multinational: Array<{ name: string; logoUrl: string }>;
+    local: Array<{ name: string; logoUrl: string }>;
+  };
+  awards: Array<{ title: string; subtitle: string }>;
 }
 
 export default function SettingsPage() {
@@ -21,6 +49,13 @@ export default function SettingsPage() {
     whatsapp: '',
     address: '',
     pricingBookletUrl: '',
+    pricing: {
+      websitePackages: [],
+      appPackages: [],
+      seoGrowthPlan: { name: '', priceRange: '', items: [] },
+    },
+    affiliateNetwork: { multinational: [], local: [] },
+    awards: [],
   });
   const [isSaved, setIsSaved] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -34,7 +69,16 @@ export default function SettingsPage() {
     try {
       const res = await fetch('/api/content/settings');
       const data = await res.json();
-      setSettings(data);
+      setSettings((prev) => ({
+        ...prev,
+        ...data,
+        pricing: data?.pricing || prev.pricing,
+        affiliateNetwork: {
+          multinational: data?.affiliateNetwork?.multinational || prev.affiliateNetwork.multinational,
+          local: data?.affiliateNetwork?.local || prev.affiliateNetwork.local,
+        },
+        awards: data?.awards || prev.awards,
+      }));
     } catch (error) {
       console.error('Failed to fetch settings:', error);
     } finally {
@@ -45,6 +89,161 @@ export default function SettingsPage() {
   const handleChange = (key: keyof Settings, value: string) => {
     setSettings({ ...settings, [key]: value });
     setIsSaved(false);
+  };
+
+  const updatePricingPackage = (
+    group: 'websitePackages' | 'appPackages',
+    index: number,
+    patch: Partial<{
+      name: string;
+      tagline: string;
+      timeline: string;
+      price: string;
+      badge?: string;
+      highlights: string[];
+    }>,
+  ) => {
+    setSettings((prev) => ({
+      ...prev,
+      pricing: {
+        ...prev.pricing,
+        [group]: prev.pricing[group].map((p, i) => (i === index ? { ...p, ...patch } : p)),
+      },
+    }));
+    setIsSaved(false);
+  };
+
+  const addPricingPackage = (group: 'websitePackages' | 'appPackages') => {
+    setSettings((prev) => ({
+      ...prev,
+      pricing: {
+        ...prev.pricing,
+        [group]: [
+          ...prev.pricing[group],
+          { name: '', tagline: '', timeline: '', price: '', badge: '', highlights: [] },
+        ],
+      },
+    }));
+    setIsSaved(false);
+  };
+
+  const removePricingPackage = (group: 'websitePackages' | 'appPackages', index: number) => {
+    setSettings((prev) => ({
+      ...prev,
+      pricing: {
+        ...prev.pricing,
+        [group]: prev.pricing[group].filter((_, i) => i !== index),
+      },
+    }));
+    setIsSaved(false);
+  };
+
+  const updateSeoPlan = (patch: Partial<Settings['pricing']['seoGrowthPlan']>) => {
+    setSettings((prev) => ({
+      ...prev,
+      pricing: {
+        ...prev.pricing,
+        seoGrowthPlan: { ...prev.pricing.seoGrowthPlan, ...patch },
+      },
+    }));
+    setIsSaved(false);
+  };
+
+  const updateAffiliate = (
+    group: 'multinational' | 'local',
+    index: number,
+    patch: Partial<{ name: string; logoUrl: string }>,
+  ) => {
+    const next = {
+      ...settings,
+      affiliateNetwork: {
+        ...settings.affiliateNetwork,
+        [group]: settings.affiliateNetwork[group].map((item, i) =>
+          i === index ? { ...item, ...patch } : item,
+        ),
+      },
+    };
+    setSettings(next);
+    setIsSaved(false);
+  };
+
+  const addAffiliate = (group: 'multinational' | 'local') => {
+    setSettings((prev) => ({
+      ...prev,
+      affiliateNetwork: {
+        ...prev.affiliateNetwork,
+        [group]: [...prev.affiliateNetwork[group], { name: '', logoUrl: '' }],
+      },
+    }));
+    setIsSaved(false);
+  };
+
+  const removeAffiliate = (group: 'multinational' | 'local', index: number) => {
+    setSettings((prev) => ({
+      ...prev,
+      affiliateNetwork: {
+        ...prev.affiliateNetwork,
+        [group]: prev.affiliateNetwork[group].filter((_, i) => i !== index),
+      },
+    }));
+    setIsSaved(false);
+  };
+
+  const updateAward = (
+    index: number,
+    patch: Partial<{ title: string; subtitle: string }>,
+  ) => {
+    setSettings((prev) => ({
+      ...prev,
+      awards: prev.awards.map((a, i) => (i === index ? { ...a, ...patch } : a)),
+    }));
+    setIsSaved(false);
+  };
+
+  const addAward = () => {
+    setSettings((prev) => ({
+      ...prev,
+      awards: [...prev.awards, { title: '', subtitle: '' }],
+    }));
+    setIsSaved(false);
+  };
+
+  const removeAward = (index: number) => {
+    setSettings((prev) => ({
+      ...prev,
+      awards: prev.awards.filter((_, i) => i !== index),
+    }));
+    setIsSaved(false);
+  };
+
+  const uploadPartnerLogo = async (
+    group: 'multinational' | 'local',
+    index: number,
+    file: File,
+  ) => {
+    setUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('folder', 'partners');
+
+      const res = await fetch('/api/content/upload-image', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await res.json();
+      if (data?.url) {
+        updateAffiliate(group, index, { logoUrl: data.url });
+      } else {
+        alert(data?.error || 'Failed to upload image');
+      }
+    } catch (e) {
+      console.error('Failed to upload image:', e);
+      alert('Failed to upload image');
+    } finally {
+      setUploading(false);
+    }
   };
 
   const handleSave = async () => {
@@ -155,6 +354,158 @@ export default function SettingsPage() {
         <hr className="border-slate-200" />
 
         <div>
+          <h2 className="text-lg font-bold text-slate-900 mb-1">Pricing (Editable)</h2>
+          <p className="text-sm text-slate-600 mb-4">
+            Manage package pricing and included features shown on the public homepage.
+          </p>
+
+          {(['websitePackages', 'appPackages'] as const).map((group) => (
+            <div key={group} className="mb-10">
+              <div className="flex items-center justify-between gap-4 mb-3">
+                <h3 className="text-sm font-bold text-slate-900">
+                  {group === 'websitePackages' ? 'Website packages' : 'Mobile app packages'}
+                </h3>
+                <button
+                  type="button"
+                  onClick={() => addPricingPackage(group)}
+                  className="px-3 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-900 text-sm font-semibold"
+                >
+                  + Add package
+                </button>
+              </div>
+
+              {settings.pricing?.[group]?.length ? (
+                <div className="space-y-3">
+                  {settings.pricing[group].map((pkg, index) => (
+                    <div key={`${group}-${index}`} className="rounded-xl border border-slate-200 p-4 space-y-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-xs font-semibold text-slate-700 mb-1">Name</label>
+                          <input
+                            value={pkg.name || ''}
+                            onChange={(e) => updatePricingPackage(group, index, { name: e.target.value })}
+                            className="w-full px-4 py-2 border border-slate-300 rounded-lg"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-semibold text-slate-700 mb-1">Tagline</label>
+                          <input
+                            value={pkg.tagline || ''}
+                            onChange={(e) => updatePricingPackage(group, index, { tagline: e.target.value })}
+                            className="w-full px-4 py-2 border border-slate-300 rounded-lg"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-semibold text-slate-700 mb-1">Timeline</label>
+                          <input
+                            value={pkg.timeline || ''}
+                            onChange={(e) => updatePricingPackage(group, index, { timeline: e.target.value })}
+                            className="w-full px-4 py-2 border border-slate-300 rounded-lg"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-semibold text-slate-700 mb-1">Price</label>
+                          <input
+                            value={pkg.price || ''}
+                            onChange={(e) => updatePricingPackage(group, index, { price: e.target.value })}
+                            className="w-full px-4 py-2 border border-slate-300 rounded-lg"
+                            placeholder="GHS 0"
+                          />
+                        </div>
+                        <div className="md:col-span-2">
+                          <label className="block text-xs font-semibold text-slate-700 mb-1">Badge (optional)</label>
+                          <input
+                            value={pkg.badge || ''}
+                            onChange={(e) => updatePricingPackage(group, index, { badge: e.target.value })}
+                            className="w-full px-4 py-2 border border-slate-300 rounded-lg"
+                            placeholder="Most popular"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-semibold text-slate-700 mb-1">
+                          Included features (one per line)
+                        </label>
+                        <textarea
+                          value={(pkg.highlights || []).join('\n')}
+                          onChange={(e) =>
+                            updatePricingPackage(group, index, {
+                              highlights: e.target.value
+                                .split('\n')
+                                .map((s) => s.trim())
+                                .filter(Boolean),
+                            })
+                          }
+                          className="w-full px-4 py-2 border border-slate-300 rounded-lg font-mono text-sm"
+                          rows={6}
+                        />
+                      </div>
+
+                      <div className="flex justify-end">
+                        <button
+                          type="button"
+                          onClick={() => removePricingPackage(group, index)}
+                          className="px-3 py-2 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 text-sm font-semibold"
+                        >
+                          Remove package
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-sm text-slate-600 rounded-lg border border-dashed border-slate-300 p-4">
+                  No packages yet. Click “Add package” to begin.
+                </div>
+              )}
+            </div>
+          ))}
+
+          <div className="rounded-xl border border-slate-200 p-4 space-y-4">
+            <h3 className="text-sm font-bold text-slate-900">SEO growth plan</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">Name</label>
+                <input
+                  value={settings.pricing.seoGrowthPlan?.name || ''}
+                  onChange={(e) => updateSeoPlan({ name: e.target.value })}
+                  className="w-full px-4 py-2 border border-slate-300 rounded-lg"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">Price range</label>
+                <input
+                  value={settings.pricing.seoGrowthPlan?.priceRange || ''}
+                  onChange={(e) => updateSeoPlan({ priceRange: e.target.value })}
+                  className="w-full px-4 py-2 border border-slate-300 rounded-lg"
+                />
+              </div>
+              <div className="md:col-span-2">
+                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  Items (one per line)
+                </label>
+                <textarea
+                  value={(settings.pricing.seoGrowthPlan?.items || []).join('\n')}
+                  onChange={(e) =>
+                    updateSeoPlan({
+                      items: e.target.value
+                        .split('\n')
+                        .map((s) => s.trim())
+                        .filter(Boolean),
+                    })
+                  }
+                  className="w-full px-4 py-2 border border-slate-300 rounded-lg font-mono text-sm"
+                  rows={5}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <hr className="border-slate-200" />
+
+        <div>
           <h2 className="text-lg font-bold text-slate-900 mb-4">Pricing Booklet</h2>
           <div className="space-y-4">
             <div>
@@ -181,6 +532,169 @@ export default function SettingsPage() {
               )}
             </div>
           </div>
+        </div>
+
+        <hr className="border-slate-200" />
+
+        <div>
+          <h2 className="text-lg font-bold text-slate-900 mb-1">Affiliate Network</h2>
+          <p className="text-sm text-slate-600 mb-4">
+            Add partner logos to showcase trust (like the “Affiliate Network” section on Atlas).
+          </p>
+
+          {(['multinational', 'local'] as const).map((group) => (
+            <div key={group} className="mb-8">
+              <div className="flex items-center justify-between gap-4 mb-3">
+                <h3 className="text-sm font-bold text-slate-900 capitalize">
+                  {group === 'multinational' ? 'Multinational partners' : 'Local partners'}
+                </h3>
+                <button
+                  type="button"
+                  onClick={() => addAffiliate(group)}
+                  className="px-3 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-900 text-sm font-semibold"
+                >
+                  + Add partner
+                </button>
+              </div>
+
+              {settings.affiliateNetwork?.[group]?.length ? (
+                <div className="space-y-3">
+                  {settings.affiliateNetwork[group].map((partner, index) => (
+                    <div
+                      key={`${group}-${index}`}
+                      className="grid grid-cols-1 md:grid-cols-[1fr,1fr,auto] gap-3 items-end rounded-lg border border-slate-200 p-4"
+                    >
+                      <div>
+                        <label className="block text-xs font-semibold text-slate-700 mb-1">
+                          Partner name
+                        </label>
+                        <input
+                          type="text"
+                          value={partner.name || ''}
+                          onChange={(e) => updateAffiliate(group, index, { name: e.target.value })}
+                          className="w-full px-4 py-2 border border-slate-300 rounded-lg"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold text-slate-700 mb-1">
+                          Logo URL
+                        </label>
+                        <input
+                          type="url"
+                          value={partner.logoUrl || ''}
+                          onChange={(e) => updateAffiliate(group, index, { logoUrl: e.target.value })}
+                          className="w-full px-4 py-2 border border-slate-300 rounded-lg"
+                          placeholder="/uploads/partners/..."
+                        />
+                        <div className="mt-2 flex items-center gap-3">
+                          <input
+                            type="file"
+                            accept="image/*,.svg"
+                            disabled={uploading}
+                            onChange={(e) => {
+                              const file = e.target.files?.[0];
+                              if (!file) return;
+                              uploadPartnerLogo(group, index, file);
+                              e.currentTarget.value = '';
+                            }}
+                            className="w-full px-4 py-2 border border-slate-300 rounded-lg file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-slate-100 file:text-slate-900 hover:file:bg-slate-200"
+                          />
+                          {partner.logoUrl ? (
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img
+                              src={partner.logoUrl}
+                              alt={partner.name || 'Partner logo'}
+                              className="h-10 w-auto max-w-[140px] object-contain rounded bg-white border border-slate-100 px-2"
+                            />
+                          ) : null}
+                        </div>
+                      </div>
+                      <div className="flex md:justify-end">
+                        <button
+                          type="button"
+                          onClick={() => removeAffiliate(group, index)}
+                          className="px-3 py-2 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 text-sm font-semibold"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-sm text-slate-600 rounded-lg border border-dashed border-slate-300 p-4">
+                  No partners yet. Click “Add partner” to begin.
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+
+        <hr className="border-slate-200" />
+
+        <div>
+          <h2 className="text-lg font-bold text-slate-900 mb-1">Awards</h2>
+          <p className="text-sm text-slate-600 mb-4">
+            Add awards/certifications to strengthen credibility.
+          </p>
+
+          <div className="flex items-center justify-between gap-4 mb-3">
+            <div />
+            <button
+              type="button"
+              onClick={addAward}
+              className="px-3 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-900 text-sm font-semibold"
+            >
+              + Add award
+            </button>
+          </div>
+
+          {settings.awards?.length ? (
+            <div className="space-y-3">
+              {settings.awards.map((award, index) => (
+                <div
+                  key={`award-${index}`}
+                  className="grid grid-cols-1 md:grid-cols-[1fr,1fr,auto] gap-3 items-end rounded-lg border border-slate-200 p-4"
+                >
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 mb-1">
+                      Title
+                    </label>
+                    <input
+                      type="text"
+                      value={award.title || ''}
+                      onChange={(e) => updateAward(index, { title: e.target.value })}
+                      className="w-full px-4 py-2 border border-slate-300 rounded-lg"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 mb-1">
+                      Subtitle
+                    </label>
+                    <input
+                      type="text"
+                      value={award.subtitle || ''}
+                      onChange={(e) => updateAward(index, { subtitle: e.target.value })}
+                      className="w-full px-4 py-2 border border-slate-300 rounded-lg"
+                    />
+                  </div>
+                  <div className="flex md:justify-end">
+                    <button
+                      type="button"
+                      onClick={() => removeAward(index)}
+                      className="px-3 py-2 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 text-sm font-semibold"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-sm text-slate-600 rounded-lg border border-dashed border-slate-300 p-4">
+              No awards yet. Click “Add award” to begin.
+            </div>
+          )}
         </div>
 
         <hr className="border-slate-200" />

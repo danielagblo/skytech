@@ -9,6 +9,34 @@ export type SiteSettings = {
   whatsapp: string;
   address: string;
   pricingBookletUrl: string;
+  pricing: {
+    websitePackages: Array<{
+      name: string;
+      tagline: string;
+      timeline: string;
+      price: string;
+      badge?: string;
+      highlights: string[];
+    }>;
+    appPackages: Array<{
+      name: string;
+      tagline: string;
+      timeline: string;
+      price: string;
+      badge?: string;
+      highlights: string[];
+    }>;
+    seoGrowthPlan: {
+      name: string;
+      priceRange: string;
+      items: string[];
+    };
+  };
+  affiliateNetwork: {
+    multinational: Array<{ name: string; logoUrl: string }>;
+    local: Array<{ name: string; logoUrl: string }>;
+  };
+  awards: Array<{ title: string; subtitle: string }>;
 };
 
 export const DEFAULT_SETTINGS: SiteSettings = {
@@ -19,6 +47,16 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   whatsapp: "+233 20 123 4567",
   address: "Tech Hub, San Francisco, CA 94105, USA",
   pricingBookletUrl: "",
+  pricing: {
+    websitePackages: [],
+    appPackages: [],
+    seoGrowthPlan: { name: "", priceRange: "", items: [] },
+  },
+  affiliateNetwork: {
+    multinational: [],
+    local: [],
+  },
+  awards: [],
 };
 
 export async function getSettings(): Promise<SiteSettings> {
