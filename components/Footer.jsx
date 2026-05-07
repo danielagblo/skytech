@@ -10,8 +10,9 @@ export default async function Footer({ settings }) {
     contactPhone,
     address,
   } = resolved;
+  const year = new Date().getFullYear();
   return (
-    <footer className="relative overflow-hidden bg-slate-950 text-slate-200 py-16 px-4 mt-20">
+    <footer className="relative overflow-hidden bg-slate-950 text-slate-200 py-16 px-4 mt-16">
       <div className="absolute inset-0 opacity-60" aria-hidden>
         <div className="absolute -left-24 top-10 h-56 w-56 rounded-full bg-blue-600 blur-3xl" />
         <div className="absolute right-0 bottom-0 h-64 w-64 rounded-full bg-cyan-400 blur-3xl" />
@@ -37,8 +38,8 @@ export default async function Footer({ settings }) {
             <ul className="space-y-2 text-sm">
               <li><Link href="/site/about" className="hover:text-white transition-colors">About Us</Link></li>
               <li><Link href="/site/services" className="hover:text-white transition-colors">Services</Link></li>
-              <li><a href="#" className="hover:text-white transition-colors">Case Studies</a></li>
               <li><Link href="/site/contact" className="hover:text-white transition-colors">Contact</Link></li>
+              <li><Link href="/site/internship" className="hover:text-white transition-colors">Internship</Link></li>
             </ul>
           </div>
 
@@ -46,10 +47,10 @@ export default async function Footer({ settings }) {
           <div>
             <h4 className="text-white font-semibold mb-4">Services</h4>
             <ul className="space-y-2 text-sm">
-              <li><a href="#" className="hover:text-white transition-colors">Websites</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Mobile Apps</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Fix & Improve</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Simple Automation</a></li>
+              <li><Link href="/site/services" className="hover:text-white transition-colors">Website Design</Link></li>
+              <li><Link href="/site/services" className="hover:text-white transition-colors">Mobile App Development</Link></li>
+              <li><Link href="/site/services" className="hover:text-white transition-colors">SEO & Growth</Link></li>
+              <li><Link href="/site/contact" className="hover:text-white transition-colors">Support & Maintenance</Link></li>
             </ul>
           </div>
 
@@ -70,20 +71,18 @@ export default async function Footer({ settings }) {
                 <span>{address}</span>
               </p>
             )}
-            <div className="flex items-center gap-4 pt-2 text-sm">
-              <a href="#" className="hover:text-white transition-colors">LinkedIn</a>
-              <a href="#" className="hover:text-white transition-colors">Twitter</a>
-              <a href="#" className="hover:text-white transition-colors">GitHub</a>
+            <div className="pt-3">
+              <Link href="/site/contact" className="inline-flex btn-primary px-5 py-2 rounded-2xl">
+                Start a project
+              </Link>
             </div>
           </div>
         </div>
 
         <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row items-center justify-between text-xs text-slate-400 gap-4">
-          <p>© 2025 Skytech Ghana. All rights reserved.</p>
+          <p>© {year} {siteName}. All rights reserved.</p>
           <div className="flex items-center gap-6">
-            <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
-            <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
-            <a href="#" className="hover:text-white transition-colors">Cookie Policy</a>
+            <span className="text-slate-500">Built for speed & SEO</span>
           </div>
         </div>
       </div>
