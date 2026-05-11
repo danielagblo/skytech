@@ -1,12 +1,20 @@
+"use client";
+import React, { useState } from "react";
 import PDFViewer from "../../../components/PDFViewer";
 import Link from "next/link";
 
-export const metadata = {
-  title: "Investment Tiers & Strategy | Skytech Ghana",
-  description: "Transparent, value-based pricing architectures for high-performance web and mobile solutions.",
-};
-
 export default function PricingPage() {
+  const [activeCategory, setActiveCategory] = useState("web");
+
+  const categories = [
+    { id: "web", label: "Web Development" },
+    { id: "mobile", label: "Mobile Apps" },
+    { id: "marketing", label: "SEO & Growth" },
+    { id: "branding", label: "Creative Identity" },
+  ];
+
+  const currentPackages = pricingData[activeCategory] || [];
+
   return (
     <main className="min-h-screen bg-white">
       {/* Hero Section (The Investment Manifesto) */}
@@ -25,48 +33,72 @@ export default function PricingPage() {
               <span className="text-blue-600 font-black">Zero Surprises.</span>
             </h1>
             <p className="text-xl text-slate-400 leading-relaxed font-medium max-w-2xl">
-              We provide fixed-price engineering solutions and dedicated team models designed for long-term scalability and radical transparency.
+              From startups to global enterprises, we provide fixed-price engineering solutions designed for long-term scalability.
             </p>
           </div>
         </div>
       </section>
 
-      {/* Pricing Grid (The Rate Card) */}
+      {/* Category Tabs */}
+      <div className="bg-slate-50 border-b border-slate-100 sticky top-[72px] z-30">
+        <div className="section-shell">
+          <div className="flex overflow-x-auto no-scrollbar gap-2 py-4">
+            {categories.map((cat) => (
+              <button
+                key={cat.id}
+                onClick={() => setActiveCategory(cat.id)}
+                className={`whitespace-nowrap px-6 py-3 rounded-full text-sm font-black uppercase tracking-widest transition-all ${
+                  activeCategory === cat.id
+                    ? "bg-blue-600 text-white shadow-lg shadow-blue-600/20"
+                    : "bg-white text-slate-400 hover:text-slate-600 border border-slate-200"
+                }`}
+              >
+                {cat.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Pricing Grid */}
       <section className="py-24 bg-white">
         <div className="section-shell space-y-20">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {packages.map((pkg, idx) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {currentPackages.map((pkg, idx) => (
               <div 
                 key={pkg.name} 
-                className={`group relative p-10 rounded-[2.5rem] border transition-all duration-500 flex flex-col ${
+                className={`group relative p-8 rounded-[2rem] border transition-all duration-500 flex flex-col ${
                   pkg.featured 
                     ? "bg-slate-950 text-white border-blue-600/30 shadow-2xl shadow-blue-600/10 scale-105 z-10" 
-                    : "bg-slate-50 border-slate-100 hover:bg-white hover:shadow-2xl"
+                    : "bg-white border-slate-100 hover:border-blue-600/20 hover:shadow-2xl"
                 }`}
               >
                 {pkg.featured && (
-                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-blue-600 text-white text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-full shadow-lg shadow-blue-600/40">
-                    Most Popular Architecture
+                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-blue-600 text-white text-[9px] font-black uppercase tracking-widest px-4 py-2 rounded-full shadow-lg shadow-blue-600/40">
+                    Recommended Architecture
                   </div>
                 )}
                 
                 <div className="space-y-2 mb-8">
-                  <span className={`text-[10px] font-black uppercase tracking-widest ${pkg.featured ? "text-blue-400" : "text-blue-600"}`}>
-                    {pkg.timeline} Timeline
+                  <span className={`text-[9px] font-black uppercase tracking-widest ${pkg.featured ? "text-blue-400" : "text-blue-600"}`}>
+                    {pkg.tier} Tier
                   </span>
-                  <h3 className="text-2xl font-black tracking-tight">{pkg.name}</h3>
+                  <h3 className="text-xl font-black tracking-tight leading-tight h-12 flex items-center">
+                    {pkg.name}
+                  </h3>
                   <div className="pt-4 flex items-baseline gap-1">
-                    <span className={`text-sm font-bold ${pkg.featured ? "text-blue-400/50" : "text-slate-400"}`}>GHS</span>
-                    <span className="text-4xl font-black tracking-tighter">{pkg.price}</span>
+                    <span className={`text-xs font-bold ${pkg.featured ? "text-blue-400/50" : "text-slate-400"}`}>GHS</span>
+                    <span className="text-3xl font-black tracking-tighter">{pkg.price}</span>
+                    {pkg.interval && <span className="text-xs font-medium opacity-60">/{pkg.interval}</span>}
                   </div>
                 </div>
 
                 <div className="space-y-6 flex-grow">
-                   <p className={`text-xs font-black uppercase tracking-widest ${pkg.featured ? "text-slate-400" : "text-slate-500"}`}>Technical Deliverables</p>
-                   <ul className="space-y-4">
+                   <p className={`text-[10px] font-black uppercase tracking-widest ${pkg.featured ? "text-slate-400" : "text-slate-500"}`}>Technical Deliverables</p>
+                   <ul className="space-y-3">
                       {pkg.highlights.map((item) => (
-                        <li key={item} className="flex items-start gap-3 text-sm font-medium">
-                          <svg className={`w-4 h-4 flex-shrink-0 ${pkg.featured ? "text-blue-400" : "text-blue-600"}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <li key={item} className="flex items-start gap-3 text-xs font-medium">
+                          <svg className={`w-3.5 h-3.5 mt-0.5 flex-shrink-0 ${pkg.featured ? "text-blue-400" : "text-blue-600"}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                           </svg>
                           <span className={pkg.featured ? "text-slate-300" : "text-slate-600"}>{item}</span>
@@ -75,10 +107,10 @@ export default function PricingPage() {
                    </ul>
                 </div>
 
-                <div className="mt-10">
+                <div className="mt-8">
                   <Link 
                     href="/site/contact" 
-                    className={`w-full inline-flex justify-center items-center px-6 py-4 rounded-2xl font-black text-sm transition-all ${
+                    className={`w-full inline-flex justify-center items-center px-6 py-4 rounded-xl font-black text-xs transition-all ${
                       pkg.featured 
                         ? "bg-blue-600 text-white hover:bg-white hover:text-slate-900" 
                         : "bg-slate-900 text-white hover:bg-blue-600"
@@ -97,14 +129,14 @@ export default function PricingPage() {
               <span className="text-blue-600 text-[10px] font-black uppercase tracking-[0.3em]">Technical Deep-Dive</span>
               <h2 className="text-3xl font-black text-slate-900">Download the Full Prospectus.</h2>
               <p className="text-slate-500 max-w-xl leading-relaxed">
-                Need a granular breakdown of our methodologies, security protocols, and long-term support plans? Access our interactive 2024 pricing and strategy guide.
+                Need a granular breakdown of our methodologies, security protocols, and long-term support plans? Access our latest pricing and strategy guide.
               </p>
             </div>
             
             <div className="flex flex-col items-center gap-6">
               <PDFViewer src="/static/pricing.pdf" label="Open Detailed Strategy Guide" />
               <p className="text-[10px] text-slate-400 uppercase tracking-widest font-black">
-                Secure PDF • 2.4 MB • Updated May 2024
+                Secure PDF • 19.3 MB • Updated May 2024
               </p>
             </div>
           </div>
@@ -133,44 +165,181 @@ export default function PricingPage() {
   );
 }
 
-const packages = [
-  {
-    name: "Standard Business Architecture",
-    timeline: "3–8 Weeks",
-    price: "2,500",
-    featured: false,
-    highlights: [
-      "Modern Responsive System Architecture",
-      "Advanced SEO Infrastructure",
-      "WhatsApp & Real-time Integration",
-      "Secured Cloud Hosting (12 Months)",
-      "Technical Maintenance Pipeline"
-    ]
-  },
-  {
-    name: "Advanced Growth Platform",
-    timeline: "2–3 Months",
-    price: "6,500",
-    featured: true,
-    highlights: [
-      "10–12 Page High-Performance System",
-      "Enterprise SEO Engine & Strategy",
-      "Proprietary CMS Integration",
-      "Rigorous Security Hardening",
-      "Global Search Visibility Audit"
-    ]
-  },
-  {
-    name: "Enterprise Digital Ecosystem",
-    timeline: "3–6 Months",
-    price: "25,000",
-    featured: false,
-    highlights: [
-      "Headless Commerce / Booking Hub",
-      "Multi-Gateway Payment Protocols",
-      "Forensic Stock & API Management",
-      "Secure Admin Technical Dashboard",
-      "Global Schema & Data Optimization"
-    ]
-  }
-];
+const pricingData = {
+  web: [
+    {
+      name: "Basic Website Package",
+      tier: "Startup",
+      price: "2,500",
+      highlights: [
+        "5-6 Page Responsive Site",
+        "Basic SEO Optimization",
+        "WhatsApp Integration",
+        "1 Business Email Account",
+        "12 Months Free Hosting & SSL",
+        "6 Months Technical Support"
+      ]
+    },
+    {
+      name: "Standard Business Package",
+      tier: "Growth",
+      price: "6,500",
+      featured: true,
+      highlights: [
+        "10-12 High-Performance Pages",
+        "Advanced SEO Engine",
+        "Custom Contact Forms",
+        "CMS/Blog Integration",
+        "Google Business Profile Optimization",
+        "Analytics Dashboard Access"
+      ]
+    },
+    {
+      name: "E-commerce/Booking Package",
+      tier: "Retail",
+      price: "25,000",
+      highlights: [
+        "Full Online Store / Booking Hub",
+        "Payment Gateway (Visa/Momo)",
+        "Automated Stock Management",
+        "Abandoned Cart Recovery",
+        "5 Premium Business Emails",
+        "Advanced Schema Optimization"
+      ]
+    },
+    {
+      name: "Premium Corporate Package",
+      tier: "Enterprise",
+      price: "45,000",
+      highlights: [
+        "Unlimited System Pages",
+        "Custom API/CRM Integrations",
+        "Global SEO & Multilingual Support",
+        "10 Premium Business Emails",
+        "Dedicated Account Manager",
+        "Lifetime Security Updates"
+      ]
+    }
+  ],
+  mobile: [
+    {
+      name: "Business Growth App",
+      tier: "Standard",
+      price: "24,000",
+      highlights: [
+        "Android & iOS (8-12 Screens)",
+        "Integrated Payment Gateway",
+        "Real-time Push Notifications",
+        "Centralized Admin Panel",
+        "App Store Optimization (ASO)"
+      ]
+    },
+    {
+      name: "Enterprise App Suite",
+      tier: "Advanced",
+      price: "80,000",
+      featured: true,
+      highlights: [
+        "Full-Stack Dev (up to 25 Screens)",
+        "Real-time Data Synchronization",
+        "AWS/GCP Scalable Infrastructure",
+        "Biometric/2FA Security",
+        "6 Months Intensive Maintenance"
+      ]
+    },
+    {
+      name: "Marketplace & Fintech",
+      tier: "Elite",
+      price: "120,000",
+      highlights: [
+        "Multi-Vendor Ecosystem Architecture",
+        "In-App Digital Wallets",
+        "Live GPS Logistics Tracking",
+        "Bank-Grade Data Encryption",
+        "Vendor Management Portal",
+        "24/7 Premium Support Line"
+      ]
+    }
+  ],
+  marketing: [
+    {
+      name: "Silver SEO Plan",
+      tier: "Essential",
+      price: "1,500",
+      interval: "mo",
+      highlights: [
+        "Comprehensive Keyword Research",
+        "On-Page Technical SEO",
+        "Monthly Performance Reports",
+        "Local Search Optimization",
+        "Meta Data Hardening"
+      ]
+    },
+    {
+      name: "Gold SEO Plan",
+      tier: "Professional",
+      price: "3,500",
+      interval: "mo",
+      featured: true,
+      highlights: [
+        "In-depth Competitor Analysis",
+        "High-Authority Backlink Building",
+        "Content Marketing Strategy",
+        "Bi-Weekly Strategy Reviews",
+        "Conversion Rate Optimization"
+      ]
+    },
+    {
+      name: "Platinum SEO Plan",
+      tier: "Dominance",
+      price: "7,500",
+      interval: "mo",
+      highlights: [
+        "Full Digital Presence Management",
+        "4 Authority Blog Posts / Month",
+        "Complete Technical SEO Audits",
+        "Weekly Dedicated Strategy Calls",
+        "Omni-channel Growth Consulting"
+      ]
+    }
+  ],
+  branding: [
+    {
+      name: "Starter Branding",
+      tier: "Identity",
+      price: "1,200",
+      highlights: [
+        "Custom Logo (2 Design Concepts)",
+        "Professional Business Cards",
+        "Social Media Profile Assets",
+        "Basic Color Palette",
+        "Typography Selection"
+      ]
+    },
+    {
+      name: "Business Identity",
+      tier: "Corporate",
+      price: "3,500",
+      featured: true,
+      highlights: [
+        "Custom Logo (4 Design Concepts)",
+        "Comprehensive Brand Guidelines",
+        "10 Custom Social Media Templates",
+        "Full Company Profile Design",
+        "Stationery System Design"
+      ]
+    },
+    {
+      name: "Master Enterprise",
+      tier: "Elite",
+      price: "8,000",
+      highlights: [
+        "Custom UI/UX Design System",
+        "Professional Logo Animation",
+        "Full Marketing Collateral Suite",
+        "Brand Voice & Messaging Guide",
+        "High-Res Source Deliverables"
+      ]
+    }
+  ]
+};
