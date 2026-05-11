@@ -23,34 +23,43 @@ export default async function Footer({ settings }) {
           {/* Brand */}
           <div className="space-y-4">
             <h3 className="text-white text-2xl font-bold tracking-tight">{siteName}</h3>
-            <p className="text-sm text-slate-300/90">
-              {siteDescription}
+            <p className="text-sm text-slate-300/90 leading-relaxed">
+              Engineering high-performance digital ecosystems and mobile experiences for the next generation of global business.
             </p>
-            <div className="flex items-center gap-2 text-xs uppercase tracking-[0.12em] text-blue-200">
-              <span className="h-1.5 w-1.5 rounded-full bg-blue-400" />
-              Clear and honest work
+            <div className="space-y-2">
+              <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.15em] text-blue-200">
+                <span className="h-1.5 w-1.5 rounded-full bg-blue-400" />
+                Clear and honest work
+              </div>
+              <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.15em] text-cyan-200">
+                <span className="h-1.5 w-1.5 rounded-full bg-cyan-400" />
+                Performance-First Engineering
+              </div>
             </div>
           </div>
 
-          {/* Company */}
+          {/* Quick Links */}
           <div>
-            <h4 className="text-white font-semibold mb-4">Company</h4>
+            <h4 className="text-white font-semibold mb-4">Quick Links</h4>
             <ul className="space-y-2 text-sm">
-              <li><Link href="/site/about" className="hover:text-white transition-colors">About Us</Link></li>
-              <li><Link href="/site/services" className="hover:text-white transition-colors">Services</Link></li>
-              <li><Link href="/site/contact" className="hover:text-white transition-colors">Contact</Link></li>
-              <li><Link href="/site/internship" className="hover:text-white transition-colors">Internship</Link></li>
+              <li><Link href="/site/about" className="hover:text-white transition-colors">About Skytech</Link></li>
+              <li><Link href="/site/services" className="hover:text-white transition-colors">Our Services</Link></li>
+              <li><Link href="/site/gallery" className="hover:text-white transition-colors">Project Gallery</Link></li>
+              <li><Link href="/site/blog" className="hover:text-white transition-colors">Tech Blog</Link></li>
+              <li><Link href="/site/contact" className="hover:text-white transition-colors">Contact Us</Link></li>
             </ul>
           </div>
 
-          {/* Services */}
+          {/* Support */}
+          {/* Inquiries */}
           <div>
-            <h4 className="text-white font-semibold mb-4">Services</h4>
+            <h4 className="text-white font-semibold mb-4">Inquiries</h4>
             <ul className="space-y-2 text-sm">
-              <li><Link href="/site/services" className="hover:text-white transition-colors">Website Design</Link></li>
-              <li><Link href="/site/services" className="hover:text-white transition-colors">Mobile App Development</Link></li>
-              <li><Link href="/site/services" className="hover:text-white transition-colors">SEO & Growth</Link></li>
-              <li><Link href="/site/contact" className="hover:text-white transition-colors">Support & Maintenance</Link></li>
+              <li><Link href="/site/faqs" className="hover:text-white transition-colors">Common Questions</Link></li>
+              <li><Link href="/site/contact" className="hover:text-white transition-colors">Project Inquiry</Link></li>
+              <li><Link href="/site/internship" className="hover:text-white transition-colors">Careers</Link></li>
+              <li><Link href="/site/seo" className="hover:text-white transition-colors">Free Forensic Audit</Link></li>
+              <li><Link href="/site/contact" className="hover:text-white transition-colors">Partner with Us</Link></li>
             </ul>
           </div>
 
@@ -59,18 +68,16 @@ export default async function Footer({ settings }) {
             <h4 className="text-white font-semibold mb-4">Get in Touch</h4>
             <p className="flex items-center gap-2">
               <span className="text-blue-300">●</span>
-              <a href={`mailto:${contactEmail}`} className="hover:text-white transition-colors">{contactEmail}</a>
+              <a href="mailto:hello@skytech.com" className="hover:text-white transition-colors">hello@skytech.com</a>
             </p>
             <p className="flex items-center gap-2">
               <span className="text-blue-300">●</span>
-              <a href={`tel:${contactPhone.replace(/\s/g, '')}`} className="hover:text-white transition-colors">{contactPhone}</a>
+              <a href="tel:+2330552892433" className="hover:text-white transition-colors">+233 055 289 2433</a>
             </p>
-            {address && (
-              <p className="flex items-center gap-2 text-slate-300/90">
-                <span className="text-blue-300">●</span>
-                <span>{address}</span>
-              </p>
-            )}
+            <p className="flex items-center gap-2 text-slate-300/90">
+              <span className="text-blue-300">●</span>
+              <span>Nii Ankrah Road - Dnor Plaza Spintex</span>
+            </p>
             <div className="pt-3">
               <Link href="/site/contact" className="inline-flex btn-primary px-5 py-2 rounded-2xl">
                 Start a project
@@ -81,8 +88,11 @@ export default async function Footer({ settings }) {
 
         <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row items-center justify-between text-xs text-slate-400 gap-4">
           <p>© {year} {siteName}. All rights reserved.</p>
-          <div className="flex items-center gap-6">
-            <span className="text-slate-500">Built for speed & SEO</span>
+          <div className="flex items-center gap-8">
+            <a href="#" className="hover:text-white transition-colors">LinkedIn</a>
+            <a href="#" className="hover:text-white transition-colors">Twitter</a>
+            <a href="#" className="hover:text-white transition-colors">GitHub</a>
+            <span className="text-slate-500 ml-4">Built for speed & SEO</span>
           </div>
         </div>
       </div>
