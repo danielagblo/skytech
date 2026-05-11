@@ -5,19 +5,19 @@ export function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
   // Admin routes - let Next.js handle these normally
+  // Allow common static file types and system routes to bypass redirection
+  const isStaticAsset = /\.(png|jpg|jpeg|gif|svg|ico|webmanifest|pdf|txt)$/.test(pathname);
+  
   if (
+    isStaticAsset ||
     pathname.startsWith("/api") ||
     pathname.startsWith("/_next") ||
     pathname.startsWith("/site") ||
     pathname.startsWith("/login") ||
     pathname.startsWith("/static") ||
     pathname.startsWith("/images") ||
-    pathname.startsWith("/uploads") ||
-    pathname.startsWith("/favicon.ico") ||
-    pathname === "/icon.png" ||
-    pathname === "/bricskylogo.png"
+    pathname.startsWith("/uploads")
   ) {
-    // allow public and asset routes through; dashboard is protected below
     return NextResponse.next();
   }
   // Protect dashboard routes: require an admin_session cookie
