@@ -1,3 +1,4 @@
+import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import dbConnect from '../lib/mongodb';
@@ -309,15 +310,15 @@ export default async function Home() {
 
         <div className="section-shell relative space-y-16 pt-20">
           <div className="space-y-10 max-w-4xl">
-            <div className="inline-flex items-center gap-2 rounded-full bg-white/5 border border-white/10 px-4 py-2 backdrop-blur-md">
-              <span className="flex h-2 w-2 rounded-full bg-blue-500 animate-pulse" />
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/70">
-                Precision • Performance • Growth
+            <div className="inline-flex items-center gap-2 rounded-full bg-white/5 border border-white/10 px-3 py-1 backdrop-blur-md">
+              <span className="flex h-1.5 w-1.5 rounded-full bg-blue-500 animate-pulse" />
+              <span className="text-[8.65px] sm:text-[9px] font-black uppercase tracking-[0.15em] sm:tracking-[0.2em] text-white/70">
+                No 1# website development company in Ghana.
               </span>
             </div>
 
             <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black leading-[1.05] tracking-tight bg-gradient-to-br from-white via-white to-white/60 bg-clip-text text-transparent">
-              Architecting High-Performance Digital Solutions.
+              Software solutions & IT installations.
             </h1>
 
             <p className="text-base sm:text-lg text-slate-300 max-w-2xl leading-relaxed font-medium">
@@ -345,34 +346,47 @@ export default async function Home() {
         </div>
       </section>
 
+      {/* Affiliate Network (Dynamic Marquee) */}
+      <section className="relative bg-white py-12 border-b border-slate-100 overflow-hidden">
+        {/* Corner Badge */}
+        <div className="absolute top-0 left-0 bg-blue-600 text-white px-5 py-2 text-[11px] font-black uppercase tracking-[0.2em] shadow-lg z-10 rounded-br-lg">
+          Affiliate Network
+        </div>
+
+        <div className="relative flex items-center">
+          {/* Marquee Container */}
+          <div className="flex w-full overflow-hidden">
+            <div className="flex animate-marquee items-center gap-16 whitespace-nowrap py-4">
+              {[...Array(3)].map((_, i) => (
+                <React.Fragment key={i}>
+                  {[
+                    '/images/logo.png', '/images/logo.webp', '/images/favicon.png', '/images/logo-transparent.png',
+                    ...(affiliateNetwork.multinational || []).map(p => p.logoUrl),
+                    ...(affiliateNetwork.local || []).map(p => p.logoUrl)
+                  ].map((logo, idx) => (
+                    <div key={`${i}-${idx}`} className="flex-shrink-0">
+                      <Image
+                        src={logo}
+                        alt="Partner Logo"
+                        width={160}
+                        height={80}
+                        className="h-10 sm:h-12 w-auto object-contain"
+                      />
+                    </div>
+                  ))}
+                </React.Fragment>
+              ))}
+            </div>
+          </div>
+          
+          {/* Gradient Overlays for smooth edges */}
+          <div className="pointer-events-none absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-white to-transparent z-10" />
+          <div className="pointer-events-none absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-white to-transparent z-10" />
+        </div>
+      </section>
+
       {/* Animated Stats Bar */}
       <AnimatedStats stats={stats} />
-
-      {/* Affiliate network (trust first) */}
-      {allPartners.length ? (
-        <section className="bg-slate-950 text-white py-14 border-t border-white/5">
-          <div className="section-shell space-y-6">
-            <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
-              <div className="space-y-2 max-w-2xl">
-                <span className="pill bg-white/10 text-white border border-white/10 text-[10px] uppercase tracking-widest">
-                  Affiliate network
-                </span>
-                <h2 className="text-2xl font-black tracking-tight text-white/90">
-                  Trusted by top teams
-                </h2>
-              </div>
-              <Link
-                href="/site/contact"
-                className="text-sm font-bold text-white/60 hover:text-white transition-colors"
-              >
-                Become a partner →
-              </Link>
-            </div>
-
-            <LogoMarquee partners={allPartners} />
-          </div>
-        </section>
-      ) : null}
 
       {/* Why Skytech (Atlas Style) */}
       <WhyChooseUsSection />

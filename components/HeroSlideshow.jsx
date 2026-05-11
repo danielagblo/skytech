@@ -32,7 +32,7 @@ export default function HeroSlideshow() {
             style={{
               backgroundImage: `url(${img})`,
               backgroundSize: 'cover',
-              backgroundPosition: 'center',
+              backgroundPosition: 'center 20%',
               animation: idx === currentIndex ? 'kenburns 15s ease-out forwards' : 'none',
             }}
           />

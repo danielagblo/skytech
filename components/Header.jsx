@@ -36,20 +36,20 @@ export default function Header({ siteName = "Skytech Ghana" }) {
   return (
     <header
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${(isScrolled || !isHomePage || isOpen)
-          ? "bg-white border-b border-slate-200/60 shadow-lg py-1"
-          : "bg-transparent py-4"
+        ? "bg-white border-b border-slate-200/60 shadow-lg py-1"
+        : "bg-transparent py-4"
         }`}
     >
       <nav className="section-shell flex items-center justify-between">
         {/* Logo */}
         <Link href="/site" className="flex items-center gap-3 focus-ring rounded-xl flex-shrink-0">
-          <span className={`relative overflow-hidden rounded-xl ring-1 transition-all duration-300 ${(isScrolled || !isHomePage || isOpen) ? "h-8 w-8 bg-slate-950 ring-slate-900/10" : "h-10 w-10 bg-white ring-white/10"
+          <span className={`relative overflow-hidden rounded-xl transition-all duration-300 ${(isScrolled || !isHomePage || isOpen) ? "h-8 w-8" : "h-10 w-10"
             }`}>
             <Image
-              src="/bricskylogo.png"
+              src="/skytechlogoonly.png"
               alt={`${siteName} logo`}
               fill
-              className="object-contain p-1.5"
+              className="object-cover"
               priority
             />
           </span>
@@ -97,12 +97,12 @@ export default function Header({ siteName = "Skytech Ghana" }) {
           {/* Mobile Menu Button */}
           <button
             aria-label="Toggle navigation menu"
-            className="lg:hidden flex flex-col space-y-1 focus-ring rounded-xl px-3 py-3"
+            className="lg:hidden group flex flex-col items-end space-y-1.5 focus-ring rounded-xl p-2 transition-colors hover:bg-white/10"
             onClick={() => setIsOpen(!isOpen)}
           >
-            <span className={`w-7 h-0.5 transition-all ${(isScrolled || !isHomePage || isOpen) ? 'bg-slate-900' : 'bg-white'} ${isOpen ? 'rotate-45 translate-y-2' : ''}`}></span>
-            <span className={`w-7 h-0.5 transition-all ${(isScrolled || !isHomePage || isOpen) ? 'bg-slate-900' : 'bg-white'} ${isOpen ? 'opacity-0' : ''}`}></span>
-            <span className={`w-7 h-0.5 transition-all ${(isScrolled || !isHomePage || isOpen) ? 'bg-slate-900' : 'bg-white'} ${isOpen ? '-rotate-45 -translate-y-2' : ''}`}></span>
+            <span className={`h-0.5 rounded-full transition-all duration-300 ${(isScrolled || !isHomePage || isOpen) ? 'bg-slate-900' : 'bg-white'} ${isOpen ? 'w-7 rotate-45 translate-y-2' : 'w-7'}`}></span>
+            <span className={`h-0.5 rounded-full transition-all duration-300 ${(isScrolled || !isHomePage || isOpen) ? 'bg-slate-900' : 'bg-white'} ${isOpen ? 'opacity-0' : 'w-5'}`}></span>
+            <span className={`h-0.5 rounded-full transition-all duration-300 ${(isScrolled || !isHomePage || isOpen) ? 'bg-slate-900' : 'bg-white'} ${isOpen ? 'w-7 -rotate-45 -translate-y-2' : 'w-7'}`}></span>
           </button>
         </div>
       </nav>
@@ -115,7 +115,7 @@ export default function Header({ siteName = "Skytech Ghana" }) {
             <Link href="/site" className="flex items-center gap-3" onClick={() => setIsOpen(false)}>
               <span className="relative h-8 w-8 bg-slate-950 rounded-xl overflow-hidden ring-1 ring-slate-900/10">
                 <Image
-                  src="/bricskylogo.png"
+                  src="/skytechlogoonly.png"
                   alt={`${siteName} logo`}
                   fill
                   className="object-contain p-1.5"
@@ -125,7 +125,7 @@ export default function Header({ siteName = "Skytech Ghana" }) {
                 {siteName}
               </span>
             </Link>
-            
+
             <button
               onClick={() => setIsOpen(false)}
               className="p-3 bg-slate-50 rounded-2xl text-slate-900 active:scale-90 transition-all"
@@ -156,7 +156,7 @@ export default function Header({ siteName = "Skytech Ghana" }) {
                 {item.label}
               </Link>
             ))}
-            
+
             <div className="pt-8 mt-4 border-t border-slate-100">
               <Link
                 href="/site/contact"
@@ -167,7 +167,7 @@ export default function Header({ siteName = "Skytech Ghana" }) {
               </Link>
             </div>
           </div>
-          
+
           {/* Footer Info in Menu */}
           <div className="py-6 border-t border-slate-50 text-center">
             <p className="text-slate-400 text-sm font-medium">Engineering Ghana's Digital Future</p>
