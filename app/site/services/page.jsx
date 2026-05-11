@@ -5,8 +5,8 @@ import { getPageContent } from '../../lib/pages';
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
-  title: 'Services - Skytech Ghana Website & App Development',
-  description: "We build websites and mobile apps. Simple, clear, and focused on results.",
+  title: 'Strategic Engineering Services - Skytech Ghana',
+  description: "Architecting high-performance digital ecosystems, enterprise-grade mobile applications, and secure fintech infrastructures for global brands.",
 };
 
 async function getServices() {
@@ -23,44 +23,57 @@ export default async function Services() {
   const services = await getServices();
   const pages = await getPageContent();
   const servicesContent = pages.services || {};
-return (
-  <>
-      {/* Hero Section */}
-      <section className="relative overflow-hidden bg-slate-950 text-white py-24 px-4">
-        <div className="absolute inset-0" aria-hidden>
-          <div className="absolute left-10 -top-10 h-72 w-72 rounded-full bg-blue-600/40 blur-3xl" />
-          <div className="absolute right-0 bottom-0 h-80 w-80 rounded-full bg-cyan-400/40 blur-3xl" />
+  return (
+    <main className="min-h-screen">
+      {/* Hero Section (The Capability Statement) */}
+      <section className="relative overflow-hidden bg-slate-950 text-white py-32 px-4">
+        <div className="absolute inset-0" aria-hidden="true">
+          <div className="absolute left-10 -top-10 h-[500px] w-[500px] bg-blue-600/10 rounded-full blur-[120px]" />
+          <div className="absolute right-0 bottom-0 h-[500px] w-[500px] bg-cyan-400/10 rounded-full blur-[120px]" />
         </div>
-        <div className="section-shell relative space-y-6">
-          <span className="pill">Services</span>
-          <h1 className="text-4xl sm:text-5xl font-extrabold leading-tight max-w-3xl">{servicesContent.heroTitle || "We build websites and mobile apps."}</h1>
-          <p className="text-lg text-white/85 max-w-3xl">{servicesContent.heroSubtitle || "We plan, design, build, and launch. Then we support you after launch."}</p>
-          <div className="flex flex-wrap gap-3 text-sm">
+        
+        <div className="section-shell relative space-y-10">
+          <span className="pill border-blue-600/20 text-blue-400 bg-blue-600/10 uppercase tracking-[0.2em] text-[10px] font-black">Our Capabilities</span>
+          <div className="max-w-4xl space-y-6">
+            <h1 className="text-5xl md:text-7xl font-black leading-[1.1] tracking-tight">
+              {servicesContent.heroTitle || "Engineering high-performance digital ecosystems."}
+            </h1>
+            <p className="text-xl md:text-2xl text-slate-400 leading-relaxed font-medium">
+              {servicesContent.heroSubtitle || "We architect, deploy, and scale. Our engineering standards prioritize bank-grade security and native performance across every platform."}
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-3 pt-6 border-t border-white/5">
             {capabilities.map((cap) => (
-              <span key={cap} className="rounded-full bg-white/10 px-4 py-2 border border-white/15">{cap}</span>
+              <span key={cap} className="px-5 py-2 rounded-full bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-widest text-blue-200">
+                {cap}
+              </span>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Who We Work For */}
-      <section className="py-16 bg-gradient-to-b from-slate-950 to-white">
-        <div className="section-shell space-y-8">
+      {/* Strategic Verticals (Who We Serve) */}
+      <section className="py-24 bg-white border-b border-slate-100">
+        <div className="section-shell space-y-16">
           <div className="text-center max-w-3xl mx-auto space-y-4">
-            <span className="pill">Who we serve</span>
-            <h2 className="text-3xl font-extrabold text-white">Who we help</h2>
-            <p className="text-white/85">We help startups and growing businesses.</p>
+            <span className="text-blue-600 text-[10px] font-black uppercase tracking-[0.3em]">Strategic Verticals</span>
+            <h2 className="text-4xl md:text-5xl font-black text-slate-900 leading-tight">Industries We Modernize.</h2>
+            <p className="text-lg text-slate-600 leading-relaxed">
+              We specialize in sectors that demand technical rigor, high availability, and absolute data integrity.
+            </p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {whoWeWorkFor.map((item) => (
-              <div key={item.name} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition">
-                <div className="text-3xl mb-3">{item.icon}</div>
-                <h3 className="font-bold text-slate-900 mb-2">{item.name}</h3>
-                <p className="text-sm text-slate-600 mb-3">{item.description}</p>
-                <div className="flex flex-wrap gap-2">
+              <div key={item.name} className="group p-8 rounded-[2rem] bg-slate-50/50 border border-slate-100 hover:bg-white hover:shadow-2xl transition-all duration-500">
+                <div className="mb-6 w-12 h-12 rounded-xl bg-blue-600/5 flex items-center justify-center text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-all">
+                  {item.icon}
+                </div>
+                <h3 className="text-lg font-black text-slate-900 mb-3">{item.name}</h3>
+                <p className="text-sm text-slate-500 mb-6 leading-relaxed line-clamp-2">{item.description}</p>
+                <div className="flex flex-wrap gap-2 pt-4 border-t border-slate-100">
                   {item.types.map((type) => (
-                    <span key={type} className="inline-flex items-center gap-1 text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded-full">
-                      <span className="text-xs">{type === 'Web' ? '🌐' : '📱'}</span>
+                    <span key={type} className="text-[9px] font-black uppercase tracking-widest text-blue-600/60">
                       {type}
                     </span>
                   ))}
@@ -71,48 +84,59 @@ return (
         </div>
       </section>
 
-      {/* Services Grid */}
-      <section className="py-20 bg-white">
-        <div className="section-shell space-y-12">
+      {/* Service Architectures (The Grid) */}
+      <section className="py-24 bg-slate-50">
+        <div className="section-shell space-y-16">
           <div className="text-center max-w-3xl mx-auto space-y-4">
-            <span className="pill">What we do</span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900">{servicesContent.whatWeDoTitle || "We handle the full job."}</h2>
-            <p className="text-slate-600">{servicesContent.whatWeDoSubtitle || "You get a clear plan, a simple timeline, and a lead to guide the work."}</p>
+            <span className="pill bg-white border-slate-200 text-slate-500 uppercase tracking-widest text-[9px] font-black">Our Service Stack</span>
+            <h2 className="text-4xl font-black text-slate-900 leading-tight">{servicesContent.whatWeDoTitle || "Full-Lifecycle Engineering."}</h2>
+            <p className="text-lg text-slate-600">{servicesContent.whatWeDoSubtitle || "We handle everything from initial system architecture to long-term infrastructure maintenance."}</p>
           </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {services.map((service) => (
-              <div key={service.id} className="rounded-3xl border border-slate-100 bg-slate-50 p-8 shadow-sm hover:-translate-y-1 transition">
-                <div className="flex items-center justify-between mb-4">
-                  <span className="text-3xl">{service.icon}</span>
+              <div key={service.id} className="group p-10 rounded-[2.5rem] bg-white border border-slate-100 hover:shadow-2xl transition-all duration-500">
+                <div className="flex items-start justify-between mb-8">
+                  <span className="text-4xl filter grayscale group-hover:grayscale-0 transition-all">{service.icon}</span>
+                  <span className="h-2 w-2 rounded-full bg-blue-600 opacity-0 group-hover:opacity-100 transition-opacity" />
                 </div>
-                <h3 className="text-2xl font-bold text-slate-900 mb-3">{service.title}</h3>
-                <p className="text-slate-600 mb-5 leading-relaxed">{service.description}</p>
+                <h3 className="text-2xl font-black text-slate-900 mb-4">{service.title}</h3>
+                <p className="text-slate-500 leading-relaxed mb-6">{service.description}</p>
+                <div className="pt-6 border-t border-slate-50 flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-blue-600">
+                  <span>View Technical Specs</span>
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Engagement Models */}
-      <section className="py-20 bg-slate-50">
-        <div className="section-shell space-y-12">
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-            <div className="space-y-3">
-              <span className="pill">Engagement models</span>
-              <h2 className="text-3xl font-extrabold text-slate-900">{servicesContent.engagementTitle || "Choose how we work together."}</h2>
-              <p className="text-slate-600 max-w-2xl">{servicesContent.engagementSubtitle || "Pick what fits your budget and timeline."}</p>
+      {/* Engagement Architectures */}
+      <section className="py-24 bg-white">
+        <div className="section-shell space-y-16">
+          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 border-b border-slate-100 pb-10">
+            <div className="space-y-4">
+              <span className="text-blue-600 text-[10px] font-black uppercase tracking-[0.3em]">Collaboration Models</span>
+              <h2 className="text-4xl font-black text-slate-900 leading-tight">{servicesContent.engagementTitle || "Tactical Engagement Models."}</h2>
             </div>
+            <p className="text-slate-600 max-w-xl text-sm leading-relaxed">
+              We offer structured engagement paths designed to align with your organization's technical velocity and budgetary goals.
+            </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {engagements.map((item) => (
-              <div key={item.title} className="rounded-3xl bg-white border border-slate-100 p-6 shadow-sm">
-                <h3 className="text-xl font-bold text-slate-900 mb-2">{item.title}</h3>
-                <p className="text-slate-600 text-sm mb-4 leading-relaxed">{item.description}</p>
-                <ul className="space-y-2 text-sm text-slate-600">
+              <div key={item.title} className="group p-8 rounded-[2rem] bg-slate-50/50 border border-slate-100 hover:bg-white hover:shadow-2xl transition-all">
+                <h3 className="text-xl font-black text-slate-900 mb-4">{item.title}</h3>
+                <p className="text-sm text-slate-500 mb-8 leading-relaxed italic">"{item.description}"</p>
+                <ul className="space-y-4">
                   {item.items.map((line) => (
-                    <li key={line} className="flex items-start gap-2">
-                      <span className="mt-1 h-2 w-2 rounded-full bg-blue-500" />
-                      <span>{line}</span>
+                    <li key={line} className="flex items-center gap-3 text-xs font-bold text-slate-800">
+                      <span className="h-1.5 w-1.5 rounded-full bg-blue-600" />
+                      {line}
                     </li>
                   ))}
                 </ul>
@@ -122,113 +146,153 @@ return (
         </div>
       </section>
 
-      {/* Tech Stack */}
-      <section className="py-16 bg-white">
-        <div className="section-shell space-y-8">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <div className="space-y-2">
-              <span className="pill">Tech stack</span>
-              <h2 className="text-2xl font-extrabold text-slate-900">Tools we use</h2>
-            </div>
-            <p className="text-slate-600 max-w-xl">We choose tools that are reliable and easy to maintain.</p>
+      {/* Technical Infrastructure (Tech Stack) */}
+      <section className="py-24 bg-slate-50">
+        <div className="section-shell space-y-12">
+          <div className="text-center max-w-3xl mx-auto space-y-4">
+            <span className="pill bg-white border-slate-200 text-slate-500 uppercase tracking-widest text-[9px] font-black">Our Infrastructure</span>
+            <h2 className="text-4xl font-black text-slate-900 tracking-tight">Tools of the Trade.</h2>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
             {stack.map((tech) => (
-              <span key={tech} className="rounded-2xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-800 text-center">
+              <div key={tech} className="p-4 rounded-2xl bg-white border border-slate-100 text-[10px] font-black uppercase tracking-widest text-slate-500 text-center hover:border-blue-200 hover:text-blue-600 transition-all">
                 {tech}
-              </span>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="relative overflow-hidden py-16 bg-gradient-to-r from-blue-700 to-blue-500 text-white">
-        <div className="absolute inset-0" aria-hidden>
-          <div className="absolute -right-10 -top-16 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
-        </div>
-        <div className="section-shell relative text-center space-y-6">
-          <h2 className="text-3xl sm:text-4xl font-extrabold">{servicesContent.ctaTitle || "Need help with a website or app?"}</h2>
-          <p className="text-lg text-white/85 max-w-2xl mx-auto">{servicesContent.ctaSubtitle || "Tell us what you need. We will guide you step by step."}</p>
-          <div className="flex justify-center gap-4 flex-wrap">
-            <a href="/site/contact" className="btn-primary bg-white text-blue-700 hover:bg-blue-50 shadow-white/30">Talk to us</a>
-            <a href="/site/contact" className="btn-secondary border-white/60 text-white hover:bg-white/10">Send your idea</a>
+      {/* CTA Section (The Lead Path) */}
+      <section className="py-24 bg-slate-950 relative overflow-hidden">
+        <div className="absolute inset-0 bg-blue-600/5 blur-[120px]" />
+        <div className="section-shell relative z-10 text-center space-y-10">
+          <div className="space-y-4 max-w-3xl mx-auto">
+             <span className="pill border-blue-600/20 text-blue-400 bg-blue-600/10 uppercase tracking-[0.2em] text-[10px] font-black">Start the Process</span>
+             <h2 className="text-4xl md:text-6xl font-black text-white leading-tight">
+               {servicesContent.ctaTitle || "Ready to architect your digital future?"}
+             </h2>
+             <p className="text-xl text-slate-400 leading-relaxed">
+               {servicesContent.ctaSubtitle || "Tell us about your technical challenges. We'll provide a clear blueprint and the engineering power to execute it."}
+             </p>
+          </div>
+          
+          <div className="flex justify-center gap-4 flex-wrap pt-6">
+            <a href="/site/contact" className="px-10 py-5 bg-blue-600 text-white rounded-full font-black text-base hover:bg-blue-700 transition-all shadow-xl shadow-blue-600/20">
+              Technical Consultation
+            </a>
+            <a href="/site/contact" className="px-10 py-5 border-2 border-white/20 text-white rounded-full font-black text-base hover:bg-white/10 transition-all">
+              Request a Proposal
+            </a>
           </div>
         </div>
       </section>
-    </>
+    </main>
   );
 }
 
 const engagements = [
   {
-    title: 'Team with you',
-    description: 'A small team works with your team every week.',
-    items: ['Weekly updates', 'Clear plan', 'Shared tools']
+    title: 'Dedicated Engineering Squads',
+    description: 'A specialized team of senior engineers deeply integrated into your weekly development cycle.',
+    items: ['Direct Lead Communication', 'Agile Velocity Tracking', 'Infrastructure Ownership']
   },
   {
-    title: 'Fixed project',
-    description: 'We agree on the work and finish by the date.',
-    items: ['Clear scope', 'Simple milestones', 'On-time delivery']
+    title: 'Fixed-Scope Technical Delivery',
+    description: 'A surgical approach to product development with defined milestones and guaranteed delivery timelines.',
+    items: ['Defined Architectural Scope', 'Milestone-Based Releases', 'Hard-Deadline Commitment']
   },
   {
-    title: 'Review & advice',
-    description: 'We check your app and tell you what to improve.',
-    items: ['Speed checks', 'Cost checks', 'Security checks']
+    title: 'Infrastructure & Security Audits',
+    description: 'A forensic deep-dive into your existing systems to identify performance bottlenecks and security vulnerabilities.',
+    items: ['Performance Stress-Testing', 'Cost Optimization Analysis', 'Hardening & Compliance']
   },
 ];
 
 const stack = ['React / Next.js', 'Node.js', 'TypeScript', 'Python', 'Flutter', 'PostgreSQL', 'MongoDB', 'AWS', 'Azure', 'DigitalOcean', 'Linode', 'Railway', 'Kubernetes', 'Docker', 'Terraform', 'Kafka'];
 
-const capabilities = ['Websites', 'Mobile apps', 'Cloud', 'Data', 'Design'];
+const capabilities = ['Enterprise Architectures', 'Native Performance Apps', 'Cloud Infrastructure', 'Data Engineering', 'Product Strategy'];
 
 const whoWeWorkFor = [
   {
-    name: 'Software companies',
-    description: 'Businesses that sell software',
-    icon: '🚀',
+    name: 'Enterprise SaaS',
+    description: 'Scalable cloud platforms and multi-tenant software systems.',
+    icon: (
+      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+      </svg>
+    ),
     types: ['Web', 'Mobile']
   },
   {
-    name: 'Online stores',
-    description: 'Shops and marketplaces',
-    icon: '🛍️',
+    name: 'Modern E-commerce',
+    description: 'High-conversion marketplaces and headless commerce solutions.',
+    icon: (
+      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+      </svg>
+    ),
     types: ['Web', 'Mobile']
   },
   {
-    name: 'Payments',
-    description: 'Money and payment apps',
-    icon: '💳',
+    name: 'Fintech & Payments',
+    description: 'Secure transaction processing and financial data architectures.',
+    icon: (
+      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+      </svg>
+    ),
     types: ['Web', 'Mobile']
   },
   {
-    name: 'Health',
-    description: 'Health and medical platforms',
-    icon: '⚕️',
+    name: 'HealthTech',
+    description: 'Privacy-compliant medical platforms and diagnostic tools.',
+    icon: (
+      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+      </svg>
+    ),
     types: ['Web', 'Mobile']
   },
   {
-    name: 'Logistics',
-    description: 'Delivery and tracking tools',
-    icon: '📦',
+    name: 'Logistics & Fleet',
+    description: 'Real-time tracking systems and supply chain automation.',
+    icon: (
+      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0zM13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" />
+      </svg>
+    ),
     types: ['Web', 'Mobile']
   },
   {
-    name: 'Real estate',
-    description: 'Property and housing tools',
-    icon: '🏠',
+    name: 'PropTech',
+    description: 'Advanced real estate management and listing platforms.',
+    icon: (
+      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+      </svg>
+    ),
     types: ['Web', 'Mobile']
   },
   {
-    name: 'Business tools',
-    description: 'Internal tools for teams',
-    icon: '💼',
+    name: 'Enterprise Internal',
+    description: 'High-performance internal tools and workflow automation.',
+    icon: (
+      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+      </svg>
+    ),
     types: ['Web']
   },
   {
-    name: 'Education',
-    description: 'Learning apps and platforms',
-    icon: '📚',
+    name: 'EdTech',
+    description: 'LMS platforms and interactive learning ecosystems.',
+    icon: (
+      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5z" />
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+      </svg>
+    ),
     types: ['Web', 'Mobile']
   },
 ];
