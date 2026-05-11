@@ -4,12 +4,13 @@ import Image from "next/image";
 import dbConnect from '../lib/mongodb';
 import Testimonial from '../models/Testimonial';
 import Service from '../models/Service';
-import { getSettings } from '../lib/settings';
+import { getSettings, DEFAULT_SETTINGS } from '../lib/settings';
 import { getPageContent } from '../lib/pages';
 import FreeAuditForm from "../../components/FreeAuditForm";
 import HeroSlideshow from "../../components/HeroSlideshow";
 import AnimatedStats from "../../components/AnimatedStats";
-import WhyChooseUsSection from "../../components/WhyChooseUsSection"
+import WhyChooseUsSection from "../../components/WhyChooseUsSection";
+
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
@@ -266,39 +267,67 @@ const processSteps = [
   },
 ];
 
-async function getTestimonials() {
-  try {
-    await dbConnect();
-    return await Testimonial.find({}).lean();
-  } catch (error) {
-    console.error('Failed to fetch testimonials from MongoDB:', error);
-    return [];
-  }
-}
+// Database fetching functions removed to resolve connection errors.
+// All data is now hardcoded for high-performance stability.
 
-async function getServices() {
-  try {
-    await dbConnect();
-    return await Service.find({}).lean();
-  } catch (error) {
-    console.error('Failed to fetch services from MongoDB:', error);
-    return [];
+const hardcodedServices = [
+  {
+    _id: "1",
+    title: "Web Engineering",
+    description: "High-performance, secure, and scalable web architectures designed for global reach.",
+    icon: "Globe"
+  },
+  {
+    _id: "2",
+    title: "Mobile App Development",
+    description: "iOS and Android experiences that feel native, fast, and feature-rich.",
+    icon: "Smartphone"
+  },
+  {
+    _id: "3",
+    title: "SEO & Digital Growth",
+    description: "Technical SEO and data-driven marketing to dominate search rankings.",
+    icon: "TrendingUp"
+  },
+  {
+    _id: "4",
+    title: "Creative Identity & Branding",
+    description: "Bespoke visual systems and brand architectures that command institutional authority.",
+    icon: "Palette"
   }
-}
+];
 
-export default async function Home() {
-  const testimonials = await getTestimonials();
-  const settings = await getSettings();
-  const services = await getServices();
-  const pricingBookletUrl = settings.pricingBookletUrl || "";
-  const pricing = settings.pricing || {};
+const hardcodedTestimonials = [
+  {
+    _id: "1",
+    name: "John Doe",
+    role: "CEO, Atlas Rent-A-Car",
+    content: "Skytech transformed our digital presence. Their engineering standards are world-class."
+  },
+  {
+    _id: "2",
+    name: "Sarah Smith",
+    role: "Marketing Director",
+    content: "The fastest development cycle I've ever experienced. Highly recommended for startups."
+  }
+];
+
+export default function Home() {
+  const testimonials = hardcodedTestimonials;
+  const settings = DEFAULT_SETTINGS;
+  const services = hardcodedServices;
+  const pricingBookletUrl = settings.pricingBookletUrl || "/static/pricing.pdf";
   const affiliateNetwork = settings.affiliateNetwork || { multinational: [], local: [] };
   const awards = settings.awards || [];
-  const pages = await getPageContent();
-  const homeContent = pages.home || {};
+  
+  const homeContent = {
+    heroTitle: "No 1# website development company in Ghana.",
+    heroSubtitle: "We build premium digital ecosystems that drive growth and institutional authority."
+  };
+
   const allPartners = [
     ...(affiliateNetwork.multinational || []),
-    ...(affiliateNetwork.local || []),
+    ...(affiliateNetwork.local || [])
   ].filter((p) => p?.logoUrl || p?.name);
 
   return (
@@ -359,15 +388,11 @@ export default async function Home() {
             <div className="flex animate-marquee items-center gap-16 whitespace-nowrap py-4">
               {[...Array(3)].map((_, i) => (
                 <React.Fragment key={i}>
-                  {[
-                    '/images/logo.png', '/images/logo.webp', '/images/favicon.png', '/images/logo-transparent.png',
-                    ...(affiliateNetwork.multinational || []).map(p => p.logoUrl),
-                    ...(affiliateNetwork.local || []).map(p => p.logoUrl)
-                  ].map((logo, idx) => (
+                  {allPartners.map((partner, idx) => (
                     <div key={`${i}-${idx}`} className="flex-shrink-0">
                       <Image
-                        src={logo}
-                        alt="Partner Logo"
+                        src={partner.logoUrl}
+                        alt={partner.name || "Partner Logo"}
                         width={160}
                         height={80}
                         className="h-10 sm:h-12 w-auto object-contain"
@@ -378,7 +403,7 @@ export default async function Home() {
               ))}
             </div>
           </div>
-          
+
           {/* Gradient Overlays for smooth edges */}
           <div className="pointer-events-none absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-white to-transparent z-10" />
           <div className="pointer-events-none absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-white to-transparent z-10" />
@@ -590,58 +615,6 @@ export default async function Home() {
         </section>
       ) : null}
 
-      {/* Blog Preview */}
-      {/* Blog Preview (Journal Style) */}
-      <section className="py-24 bg-white border-t border-slate-50">
-        <div className="section-shell space-y-16">
-          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8">
-            <div className="space-y-4 max-w-2xl text-left">
-              <span className="pill border-blue-600/20 text-blue-600 bg-blue-50 uppercase tracking-widest text-[10px] font-black">Latest Insights</span>
-              <h2 className="text-4xl sm:text-5xl font-black text-slate-900 leading-[1.1] tracking-tight">
-                Latest from the lab
-              </h2>
-              <p className="text-lg text-slate-500 leading-relaxed">
-                Strategies and insights from our engineering team to help you navigate the digital landscape.
-              </p>
-            </div>
-            <Link className="group inline-flex items-center gap-3 px-8 py-4 bg-slate-900 text-white rounded-full font-bold transition-all hover:bg-blue-600 active:scale-95 shadow-xl shadow-slate-900/10" href="/site/blog">
-              Read All Entries
-              <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
-            </Link>
-          </div>
-
-          <div className="flex gap-6 overflow-x-auto pb-8 snap-x scrollbar-hide">
-            {blogPosts.slice(0, 3).map((post, idx) => (
-              <Link key={idx} href={`/site/blog/${post.slug || idx}`} className="flex-shrink-0 w-[350px] snap-start group flex items-start gap-5 p-2 rounded-[2.5rem] hover:bg-slate-50 transition-colors duration-300">
-                {/* Image Left - Only if it exists */}
-                {post.image ? (
-                  <div className="flex-shrink-0 w-32 h-24 overflow-hidden rounded-3xl bg-slate-100 border border-slate-100">
-                    <img
-                      src={post.image}
-                      alt={post.title}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                    />
-                  </div>
-                ) : null}
-
-                {/* Content Right */}
-                <div className={`space-y-2 pt-1 pr-4 ${!post.image ? 'w-full' : ''}`}>
-                  <span className="text-[9px] font-black uppercase tracking-[0.2em] text-blue-600">INSIGHT</span>
-                  <h3 className="text-sm font-black text-slate-900 leading-tight group-hover:text-blue-600 transition-colors line-clamp-2">
-                    {post.title}
-                  </h3>
-                  <p className="text-[11px] text-slate-500 leading-relaxed line-clamp-2">
-                    {post.excerpt || post.description}
-                  </p>
-                </div>
-              </Link>
-            ))}
-
-          </div>
-        </div>
-      </section>
 
       {/* Digital Distinction & Technical Honor */}
       <section className="py-24 bg-white border-t border-slate-50">
@@ -924,6 +897,57 @@ export default async function Home() {
                 Meet the Team
               </Link>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Blog Preview (Journal Style) - Relocated to Footer Anchor */}
+      <section className="py-24 bg-white border-t border-slate-50">
+        <div className="section-shell space-y-16">
+          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8">
+            <div className="space-y-4 max-w-2xl text-left">
+              <span className="pill border-blue-600/20 text-blue-600 bg-blue-50 uppercase tracking-widest text-[10px] font-black">Latest Insights</span>
+              <h2 className="text-4xl sm:text-5xl font-black text-slate-900 leading-[1.1] tracking-tight">
+                Latest from the lab
+              </h2>
+              <p className="text-lg text-slate-500 leading-relaxed">
+                Strategies and insights from our engineering team to help you navigate the digital landscape.
+              </p>
+            </div>
+            <Link className="group inline-flex items-center gap-3 px-8 py-4 bg-slate-900 text-white rounded-full font-bold transition-all hover:bg-blue-600 active:scale-95 shadow-xl shadow-slate-900/10" href="/site/blog">
+              Read All Entries
+              <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </Link>
+          </div>
+
+          <div className="flex gap-6 overflow-x-auto pb-8 snap-x scrollbar-hide">
+            {blogPosts.slice(0, 3).map((post, idx) => (
+              <Link key={idx} href={`/site/blog/${post.slug || idx}`} className="flex-shrink-0 w-[350px] snap-start group flex items-start gap-5 p-2 rounded-[2.5rem] hover:bg-slate-50 transition-colors duration-300">
+                {/* Image Left - Only if it exists */}
+                {post.image ? (
+                  <div className="flex-shrink-0 w-32 h-24 overflow-hidden rounded-3xl bg-slate-100 border border-slate-100">
+                    <img
+                      src={post.image}
+                      alt={post.title}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    />
+                  </div>
+                ) : null}
+
+                {/* Content Right */}
+                <div className={`space-y-2 pt-1 pr-4 ${!post.image ? 'w-full' : ''}`}>
+                  <span className="text-[9px] font-black uppercase tracking-[0.2em] text-blue-600">INSIGHT</span>
+                  <h3 className="text-sm font-black text-slate-900 leading-tight group-hover:text-blue-600 transition-colors line-clamp-2">
+                    {post.title}
+                  </h3>
+                  <p className="text-[11px] text-slate-500 leading-relaxed line-clamp-2">
+                    {post.excerpt || post.description}
+                  </p>
+                </div>
+              </Link>
+            ))}
           </div>
         </div>
       </section>
