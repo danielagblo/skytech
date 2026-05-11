@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import dbConnect from '../lib/mongodb';
 import Testimonial from '../models/Testimonial';
 import Service from '../models/Service';
@@ -649,7 +650,14 @@ export default async function Home() {
                 <div className="absolute inset-0 flex items-center justify-center p-8">
                   <div className="w-full h-full bg-blue-50/50 rounded-full flex items-center justify-center border border-blue-100 shadow-inner relative overflow-hidden group">
                     <div className="absolute inset-0 bg-gradient-to-tr from-blue-600/5 to-cyan-400/5 group-hover:opacity-100 transition-opacity" />
-                    <span className="text-5xl filter drop-shadow-lg">🏅</span>
+                    <div className="relative w-48 h-48 md:w-64 md:h-64 transition-transform duration-700 group-hover:scale-110 mix-blend-multiply">
+                      <Image
+                        src="/images/awards.png"
+                        alt="Skytech Engineering Award"
+                        fill
+                        className="object-contain"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
