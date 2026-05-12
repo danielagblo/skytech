@@ -20,9 +20,7 @@ export const metadata = {
 const stats = [
   { label: "Projects delivered", value: "180+" },
   { label: "Countries Served", value: "12+" },
-  { label: "Happy Clients", value: "95%" },
   { label: "System Uptime", value: "99.9%" },
-  { label: "Industries Covered", value: "15+" },
   { label: "Support Response", value: "<15m" },
 ];
 
