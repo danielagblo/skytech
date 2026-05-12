@@ -28,10 +28,13 @@ export async function saveBlogPost(data: any) {
   try {
     await dbConnect();
     const { _id, ...updateData } = data;
+    console.log("Saving blog post. ID:", _id);
 
     if (_id) {
+      console.log("Updating existing post...");
       await BlogPost.findByIdAndUpdate(_id, updateData);
     } else {
+      console.log("Creating new post...");
       // Auto-generate slug if not provided
       if (!updateData.slug) {
         updateData.slug = updateData.title

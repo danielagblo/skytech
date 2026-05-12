@@ -5,8 +5,9 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
 export async function generateMetadata({ params }) {
+  const { slug } = await params;
   await dbConnect();
-  const post = await BlogPost.findOne({ slug: params.slug }).lean();
+  const post = await BlogPost.findOne({ slug }).lean();
   if (!post) return { title: 'Post Not Found' };
 
   return {
@@ -16,15 +17,16 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function BlogPostPage({ params }) {
+  const { slug } = await params;
   await dbConnect();
-  const post = await BlogPost.findOne({ slug: params.slug }).lean();
+  const post = await BlogPost.findOne({ slug }).lean();
 
   if (!post) {
     notFound();
   }
 
   // Simple Lexical JSON to HTML/JSX Renderer
-  const renderContent = (contentJson: string) => {
+  const renderContent = (contentJson) => {
     try {
       const state = JSON.parse(contentJson);
       return renderNode(state.root);
@@ -33,42 +35,44 @@ export default async function BlogPostPage({ params }) {
     }
   };
 
-  const renderNode = (node: any): React.ReactNode => {
+  const renderNode = (node, index) => {
     if (!node) return null;
+
+    const key = `${node.type}-${index}`;
 
     switch (node.type) {
       case 'root':
-        return <div className="space-y-6">{node.children.map(renderNode)}</div>;
+        return <div key={key} className="space-y-6">{node.children.map(renderNode)}</div>;
       case 'paragraph':
         return (
-          <p className="text-lg text-slate-700 leading-relaxed">
+          <p key={key} className="text-lg text-slate-700 leading-relaxed">
             {node.children.map(renderNode)}
           </p>
         );
       case 'text':
         let text = node.text;
-        if (node.format & 1) text = <strong key={Math.random()}>{text}</strong>; // Bold
-        if (node.format & 2) text = <em key={Math.random()}>{text}</em>; // Italic
-        return <span key={Math.random()}>{text}</span>;
+        if (node.format & 1) text = <strong key={`${key}-bold`}>{text}</strong>; // Bold
+        if (node.format & 2) text = <em key={`${key}-italic`}>{text}</em>; // Italic
+        return <span key={key}>{text}</span>;
       case 'heading':
-        const Tag = node.tag as any;
+        const Tag = node.tag;
         return (
-          <Tag className="text-3xl font-black text-slate-900 tracking-tight mt-12 mb-6">
+          <Tag key={key} className="text-3xl font-black text-slate-900 tracking-tight mt-12 mb-6">
             {node.children.map(renderNode)}
           </Tag>
         );
       case 'list':
         const ListTag = node.tag === 'ol' ? 'ol' : 'ul';
         return (
-          <ListTag className={`ml-8 mb-6 space-y-3 ${node.tag === 'ol' ? 'list-decimal' : 'list-disc'}`}>
+          <ListTag key={key} className={`ml-8 mb-6 space-y-3 ${node.tag === 'ol' ? 'list-decimal' : 'list-disc'}`}>
             {node.children.map(renderNode)}
           </ListTag>
         );
       case 'listitem':
-        return <li className="text-slate-700">{node.children.map(renderNode)}</li>;
+        return <li key={key} className="text-slate-700">{node.children.map(renderNode)}</li>;
       case 'link':
         return (
-          <a href={node.url} className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">
+          <a key={key} href={node.url} className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">
             {node.children.map(renderNode)}
           </a>
         );

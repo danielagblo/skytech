@@ -31,6 +31,18 @@ export default function BlogForm({ post }: { post?: any }) {
     setLoading(false);
   };
 
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const title = e.target.value;
+    const generatedSlug = title
+      .toLowerCase()
+      .trim()
+      .replace(/[^\w\s-]/g, '')
+      .replace(/[\s_-]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+    
+    setFormData({ ...formData, title, slug: generatedSlug });
+  };
+
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -82,7 +94,7 @@ export default function BlogForm({ post }: { post?: any }) {
               <input
                 type="text"
                 value={formData.title}
-                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                onChange={handleTitleChange}
                 className="w-full text-2xl font-bold border-none focus:ring-0 p-0 placeholder:text-slate-200"
                 placeholder="Enter a captivating title..."
                 required
@@ -92,6 +104,7 @@ export default function BlogForm({ post }: { post?: any }) {
             <div className="space-y-2">
               <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Content</label>
               <LexicalEditor 
+                key={formData._id || 'new'}
                 value={formData.content} 
                 onChange={(json) => setFormData({ ...formData, content: json })} 
               />

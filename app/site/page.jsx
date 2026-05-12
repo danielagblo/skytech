@@ -346,6 +346,8 @@ export default async function Home() {
             className="object-cover opacity-100 transition-transform duration-[20s] scale-110 hover:scale-100"
             priority
           />
+          {/* Subtle Contrast Overlay for Text Clarity (Not Obvious) */}
+          <div className="absolute inset-0 bg-gradient-to-r from-white/40 via-white/10 to-transparent pointer-events-none" />
         </div>
 
         <div className="relative z-10 pt-20 pl-4 sm:pl-10 lg:pl-20">
@@ -535,6 +537,16 @@ export default async function Home() {
             <p className="text-lg text-slate-600">
               Our pricing is transparent and based on real deliverables. Choose the package that fits your stage.
             </p>
+            <div className="flex flex-wrap justify-center gap-3 pt-6">
+               <div className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-slate-900 text-white text-[9px] font-black uppercase tracking-widest shadow-xl shadow-slate-900/10">
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse" />
+                  Maintenance Covers All Site Offers
+               </div>
+               <div className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-white border border-slate-200 text-slate-600 text-[9px] font-black uppercase tracking-widest shadow-sm">
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-600" />
+                  Lowest Rates in Ghana • Beat any Quote
+               </div>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

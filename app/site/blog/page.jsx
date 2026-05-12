@@ -8,7 +8,7 @@ export const metadata = {
 
 export default async function BlogPage() {
   const allPosts = await getBlogPosts();
-  const posts = allPosts.filter((p: any) => p.published);
+  const posts = allPosts.filter((p) => p.published);
   const featuredPost = posts[0];
   const gridPosts = posts.slice(1);
 
@@ -47,7 +47,7 @@ export default async function BlogPage() {
               <div className="flex items-center gap-6 pt-4">
                 <Link href={`/site/blog/${featuredPost.slug}`} className="btn-primary px-8 py-4">Read Article</Link>
                 <span className="text-slate-400 text-xs font-black uppercase tracking-widest">
-                  {new Date(featuredPost.createdAt).toLocaleDateString()}
+                  {new Date(featuredPost.createdAt).toLocaleDateString('en-US')}
                 </span>
               </div>
             </div>
@@ -60,7 +60,7 @@ export default async function BlogPage() {
 
         {/* Blog Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-          {gridPosts.map((post: any) => (
+          {gridPosts.map((post) => (
             <article key={post._id} className="group space-y-5">
               <div className="aspect-[16/10] overflow-hidden rounded-3xl bg-slate-100 border border-slate-200 relative">
                 {post.coverImage ? (
@@ -81,7 +81,7 @@ export default async function BlogPage() {
                     {post.category}
                   </span>
                   <span className="text-xs text-slate-400">
-                    {new Date(post.createdAt).toLocaleDateString()}
+                    {new Date(post.createdAt).toLocaleDateString('en-US')}
                   </span>
                 </div>
                 <h3 className="text-2xl font-bold text-slate-900 group-hover:text-blue-600 transition-colors line-clamp-2">
