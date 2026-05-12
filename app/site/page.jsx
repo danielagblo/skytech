@@ -19,10 +19,10 @@ export const metadata = {
 
 const stats = [
   { label: "Projects delivered", value: "180+" },
-  { label: "Avg. faster to MVP", value: "3x" },
-  { label: "Client NPS", value: "72" },
+  { label: "Countries Served", value: "12+" },
+  { label: "Happy Clients", value: "95%" },
   { label: "System Uptime", value: "99.9%" },
-  { label: "Active Tech Stacks", value: "12+" },
+  { label: "Industries Covered", value: "15+" },
   { label: "Support Response", value: "<15m" },
 ];
 
