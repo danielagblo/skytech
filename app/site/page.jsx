@@ -342,7 +342,7 @@ export default async function Home() {
           <div className="flex items-center justify-start min-h-[70vh]">
             <div className="max-w-6xl space-y-12 text-left flex flex-col items-start">
               <div className="space-y-8">
-                <h1 className="text-5xl lg:text-7xl leading-[1.1] tracking-tight text-white font-light">
+                <h1 className="text-4xl lg:text-6xl leading-[1.1] tracking-tight text-white font-light">
                   World Class <br />
                   <span className="font-extrabold text-white">Software solutions</span> <br />
                   for all <span className="font-extrabold text-blue-400">businesses.</span>
@@ -396,7 +396,7 @@ export default async function Home() {
       {/* Affiliate Network (Dynamic Marquee) */}
       <section className="relative bg-white py-12 border-b border-slate-100 overflow-hidden">
         {/* Corner Badge */}
-        <div className="absolute top-0 left-0 bg-blue-600 text-white px-5 py-2 text-[11px] font-black uppercase tracking-[0.2em] shadow-lg z-10 rounded-br-lg">
+        <div className="absolute top-0 left-0 bg-blue-600 text-white px-5 py-2 text-[11px] font-extrabold uppercase tracking-[0.2em] shadow-lg z-10 rounded-br-lg">
           Affiliate Network
         </div>
 
@@ -437,10 +437,10 @@ export default async function Home() {
           {/* Top Header Split */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-6">
-              <span className="text-blue-600 text-[10px] font-black uppercase tracking-[0.3em]">Engineering Distinction</span>
-              <h2 className="text-5xl md:text-6xl font-black text-slate-900 leading-[1.1] tracking-tight">
+              <span className="text-blue-600 text-[10px] font-extrabold uppercase tracking-[0.3em]">Engineering Distinction</span>
+              <h2 className="text-5xl md:text-6xl font-extrabold text-slate-900 leading-[1.1] tracking-tight">
                 Recognized for <br />
-                <span className="text-blue-600 font-black">Technical</span> Excellence
+                <span className="text-blue-600 font-extrabold">Technical</span> Excellence
               </h2>
               <p className="text-lg text-slate-500 leading-relaxed max-w-xl">
                 Our commitment to bank-grade security and precision engineering has made us the trusted partner for Ghana's most ambitious digital projects.
@@ -505,8 +505,8 @@ export default async function Home() {
                   {award.icon}
                 </div>
                 <div className="space-y-4">
-                  <span className="text-[9px] font-black uppercase tracking-[0.2em] text-blue-600/60">{award.category}</span>
-                  <h3 className="text-xl font-black text-slate-900 leading-tight">
+                  <span className="text-[9px] font-extrabold uppercase tracking-[0.2em] text-blue-600/60">{award.category}</span>
+                  <h3 className="text-xl font-extrabold text-slate-900 leading-tight">
                     {award.title}
                   </h3>
                   <p className="text-sm text-slate-500 leading-relaxed">
@@ -524,7 +524,7 @@ export default async function Home() {
         <div className="section-shell space-y-16">
           <div className="text-center max-w-3xl mx-auto space-y-4">
             <span className="pill">Pricing</span>
-            <h2 className="text-4xl sm:text-5xl font-black text-slate-900 leading-[1.1]">
+            <h2 className="text-4xl sm:text-5xl font-extrabold text-slate-900 leading-[1.1]">
               Simple Rate Card. <br />
               <span className="text-blue-600">Zero Surprises.</span>
             </h2>
@@ -532,11 +532,11 @@ export default async function Home() {
               Our pricing is transparent and based on real deliverables. Choose the package that fits your stage.
             </p>
             <div className="flex flex-wrap justify-center gap-3 pt-6">
-               <div className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-slate-900 text-white text-[9px] font-black uppercase tracking-widest shadow-xl shadow-slate-900/10">
+               <div className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-slate-900 text-white text-[9px] font-extrabold uppercase tracking-widest shadow-xl shadow-slate-900/10">
                   <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse" />
                   Maintenance Covers All Site Offers
                </div>
-               <div className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-white border border-slate-200 text-slate-600 text-[9px] font-black uppercase tracking-widest shadow-sm">
+               <div className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-white border border-slate-200 text-slate-600 text-[9px] font-extrabold uppercase tracking-widest shadow-sm">
                   <span className="w-1.5 h-1.5 rounded-full bg-blue-600" />
                   Lowest rates compared to others like WopeDigital.com
                </div>
@@ -554,27 +554,27 @@ export default async function Home() {
                   >
                     {/* Featured Badge */}
                     {(pkg.featured || idx === 1) && (
-                      <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-blue-600 text-white text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-full shadow-lg shadow-blue-600/40">
+                      <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-blue-600 text-white text-[10px] font-extrabold uppercase tracking-widest px-4 py-2 rounded-full shadow-lg shadow-blue-600/40">
                         Most Popular
                       </div>
                     )}
 
                     <div className={`space-y-2 mb-8 ${pkg.featured || idx === 1 ? 'text-white' : 'text-slate-900'}`}>
-                      <span className={`text-[10px] font-black uppercase tracking-widest ${pkg.featured || idx === 1 ? 'text-blue-400' : 'text-blue-600'}`}>
+                      <span className={`text-[10px] font-extrabold uppercase tracking-widest ${pkg.featured || idx === 1 ? 'text-blue-400' : 'text-blue-600'}`}>
                         {pkg.interval || "3–8 weeks"} timeline
                       </span>
-                      <h3 className="text-2xl font-black tracking-tight">{pkg.name}</h3>
+                      <h3 className="text-2xl font-extrabold tracking-tight">{pkg.name}</h3>
                       <div className="pt-4 flex flex-col">
                         <div className="flex items-baseline gap-1">
                           <span className={`text-sm font-bold ${pkg.featured || idx === 1 ? 'text-blue-400/50' : 'text-slate-400'}`}>GHS</span>
-                          <span className="text-4xl font-black">{pkg.price}</span>
+                          <span className="text-4xl font-extrabold">{pkg.price}</span>
                         </div>
                         <div className="flex items-baseline gap-1 opacity-60">
                           <span className="text-[10px] font-bold">USD</span>
-                          <span className="text-lg font-black">~${pkg.usd}</span>
+                          <span className="text-lg font-extrabold">~${pkg.usd}</span>
                         </div>
                         {pkg.renewal && (
-                          <div className={`mt-2 text-[9px] font-black uppercase tracking-wider py-1.5 px-3 rounded-lg w-fit ${pkg.featured || idx === 1 ? 'bg-white/10 text-blue-300' : 'bg-slate-50 text-slate-500 border border-slate-100'
+                          <div className={`mt-2 text-[9px] font-extrabold uppercase tracking-wider py-1.5 px-3 rounded-lg w-fit ${pkg.featured || idx === 1 ? 'bg-white/10 text-blue-300' : 'bg-slate-50 text-slate-500 border border-slate-100'
                             }`}>
                             Renew: GHS {pkg.renewal} yearly
                           </div>
@@ -611,7 +611,7 @@ export default async function Home() {
               </div>
 
               <div className="text-center pt-16">
-                <Link href="/site/pricing" className="inline-flex items-center gap-2 text-sm font-black uppercase tracking-widest text-blue-600 hover:gap-3 transition-all">
+                <Link href="/site/pricing" className="inline-flex items-center gap-2 text-sm font-extrabold uppercase tracking-widest text-blue-600 hover:gap-3 transition-all">
                   Not what you're looking for? View full catalog
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
@@ -629,8 +629,8 @@ export default async function Home() {
           <div className="section-shell space-y-12">
             {/* Centered Header */}
             <div className="text-center max-w-3xl mx-auto space-y-4 mb-16">
-              <span className="pill border-blue-600/20 text-blue-600 bg-blue-50 uppercase tracking-widest text-[10px] font-black">Capabilities</span>
-              <h2 className="text-4xl sm:text-5xl font-black text-slate-900 leading-[1.1] tracking-tight">
+              <span className="pill border-blue-600/20 text-blue-600 bg-blue-50 uppercase tracking-widest text-[10px] font-extrabold">Capabilities</span>
+              <h2 className="text-4xl sm:text-5xl font-extrabold text-slate-900 leading-[1.1] tracking-tight">
                 {homeContent.servicesSectionTitle || "Engineering the digital products of tomorrow."}
               </h2>
               <p className="text-lg text-slate-500 leading-relaxed max-w-2xl mx-auto">
@@ -665,7 +665,7 @@ export default async function Home() {
                   </div>
 
                   <div className="space-y-3">
-                    <h3 className="text-xl font-black text-slate-900 tracking-tight leading-tight group-hover:text-blue-600 transition-colors">
+                    <h3 className="text-xl font-extrabold text-slate-900 tracking-tight leading-tight group-hover:text-blue-600 transition-colors">
                       {service.title}
                     </h3>
                     <p className="text-slate-500 text-xs leading-relaxed min-h-[60px]">
@@ -674,7 +674,7 @@ export default async function Home() {
                   </div>
 
                   <div className="mt-8 pt-6 border-t border-slate-50 w-full flex justify-center">
-                    <Link href={`/site/services#${service._id}`} className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-blue-600 group-hover:gap-3 transition-all">
+                    <Link href={`/site/services#${service._id}`} className="inline-flex items-center gap-2 text-[10px] font-extrabold uppercase tracking-widest text-blue-600 group-hover:gap-3 transition-all">
                       View Architecture
                       <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
@@ -703,7 +703,7 @@ export default async function Home() {
           <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8">
             <div className="space-y-4 max-w-2xl">
               <span className="pill">Portfolio</span>
-              <h2 className="text-4xl sm:text-5xl font-black text-slate-900 leading-tight">
+              <h2 className="text-4xl sm:text-5xl font-extrabold text-slate-900 leading-tight">
                 Our Work in Action
               </h2>
               <p className="text-lg text-slate-600">
@@ -718,10 +718,10 @@ export default async function Home() {
           <div className="grid grid-cols-1 md:grid-cols-3 md:grid-rows-2 gap-6 h-[800px] md:h-[600px]">
             <div className="md:col-span-2 md:row-span-2 relative group overflow-hidden rounded-[2.5rem] bg-slate-900">
               <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/20 to-transparent z-10" />
-              <div className="absolute inset-0 flex items-center justify-center text-slate-800 font-black text-2xl uppercase tracking-[0.2em] -rotate-12 opacity-5">Project Featured</div>
+              <div className="absolute inset-0 flex items-center justify-center text-slate-800 font-extrabold text-2xl uppercase tracking-[0.2em] -rotate-12 opacity-5">Project Featured</div>
               <div className="absolute bottom-0 left-0 right-0 p-10 z-20">
                 <span className="pill bg-blue-600 text-white border-none mb-4">Enterprise App</span>
-                <h3 className="text-3xl font-black text-white">Advanced Logistics Platform</h3>
+                <h3 className="text-3xl font-extrabold text-white">Advanced Logistics Platform</h3>
               </div>
             </div>
             <div className="relative group overflow-hidden rounded-[2.5rem] bg-slate-200">
@@ -799,10 +799,10 @@ export default async function Home() {
         <div className="pt-24 space-y-12">
           <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 border-b border-slate-100 pb-8">
             <div className="space-y-4 text-left">
-              <span className="pill border-blue-600/20 text-blue-600 bg-blue-50 uppercase tracking-widest text-[10px] font-black">Support</span>
-              <h2 className="text-3xl font-black text-slate-900 tracking-tight">Common Questions</h2>
+              <span className="pill border-blue-600/20 text-blue-600 bg-blue-50 uppercase tracking-widest text-[10px] font-bold">Support</span>
+              <h2 className="text-3xl font-bold text-slate-900 tracking-tight">Common Questions</h2>
             </div>
-            <Link href="/site/faqs" className="text-blue-600 text-xs font-black uppercase tracking-widest hover:gap-2 flex items-center gap-1 transition-all">
+            <Link href="/site/faqs" className="text-blue-600 text-xs font-extrabold uppercase tracking-widest hover:gap-2 flex items-center gap-1 transition-all">
               Full FAQ Center
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
@@ -814,12 +814,12 @@ export default async function Home() {
             {faqsPreview.map((faq, idx) => (
               <div key={idx} className="flex-shrink-0 w-[350px] snap-start flex items-start gap-4 p-6 rounded-3xl bg-white border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
                 {/* Icon Left */}
-                <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 font-black text-sm">
+                <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 font-extrabold text-sm">
                   ?
                 </div>
                 {/* Content Right */}
                 <div className="space-y-2">
-                  <h3 className="text-sm font-black text-slate-900 leading-tight">
+                  <h3 className="text-sm font-extrabold text-slate-900 leading-tight">
                     {faq.question}
                   </h3>
                   <p className="text-[11px] text-slate-500 leading-relaxed line-clamp-3">
@@ -839,10 +839,10 @@ export default async function Home() {
         <div className="section-shell">
           <div className="rounded-[2.5rem] bg-slate-50 border border-slate-100 p-10 lg:p-16 text-center space-y-8">
             <div className="space-y-3 max-w-3xl mx-auto">
-              <span className="pill border-blue-600/20 text-blue-600 bg-blue-50 uppercase tracking-widest text-[9px] font-black">
+              <span className="pill border-blue-600/20 text-blue-600 bg-blue-50 uppercase tracking-widest text-[9px] font-bold">
                 Next Steps
               </span>
-              <h2 className="text-3xl md:text-5xl font-black text-slate-900 leading-tight tracking-tight">
+              <h2 className="text-3xl md:text-5xl font-extrabold text-slate-900 leading-tight tracking-tight">
                 {homeContent.ctaTitle || "Engineering excellence delivered with precision."}
               </h2>
               <p className="text-base text-slate-500 max-w-2xl mx-auto">
@@ -853,13 +853,13 @@ export default async function Home() {
             <div className="flex flex-wrap justify-center gap-4">
               <Link
                 href="/site/contact"
-                className="inline-flex items-center gap-3 px-8 py-4 bg-blue-600 text-white rounded-full font-black text-base hover:bg-blue-700 transition-all shadow-lg shadow-blue-600/15"
+                className="inline-flex items-center gap-3 px-8 py-4 bg-blue-600 text-white rounded-full font-extrabold text-base hover:bg-blue-700 transition-all shadow-lg shadow-blue-600/15"
               >
                 Start Your Project
               </Link>
               <Link
                 href="/site/about"
-                className="inline-flex items-center gap-3 px-8 py-4 border-2 border-slate-200 text-slate-900 rounded-full font-black text-base hover:bg-slate-50 transition-all"
+                className="inline-flex items-center gap-3 px-8 py-4 border-2 border-slate-200 text-slate-900 rounded-full font-extrabold text-base hover:bg-slate-50 transition-all"
               >
                 Meet the Team
               </Link>
@@ -873,8 +873,8 @@ export default async function Home() {
         <div className="section-shell space-y-16">
           <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8">
             <div className="space-y-4 max-w-2xl text-left">
-              <span className="pill border-blue-600/20 text-blue-600 bg-blue-50 uppercase tracking-widest text-[10px] font-black">Latest Insights</span>
-              <h2 className="text-4xl sm:text-5xl font-black text-slate-900 leading-[1.1] tracking-tight">
+              <span className="pill border-blue-600/20 text-blue-600 bg-blue-50 uppercase tracking-widest text-[10px] font-bold">Latest Insights</span>
+              <h2 className="text-4xl sm:text-5xl font-extrabold text-slate-900 leading-[1.1] tracking-tight">
                 Latest from the lab
               </h2>
               <p className="text-lg text-slate-500 leading-relaxed">
@@ -905,10 +905,10 @@ export default async function Home() {
 
                 {/* Content Right */}
                 <div className={`space-y-2 pt-1 pr-4 ${!post.coverImage ? 'w-full' : ''}`}>
-                  <span className="text-[9px] font-black uppercase tracking-[0.2em] text-blue-600">
+                  <span className="text-[9px] font-extrabold uppercase tracking-[0.2em] text-blue-600">
                     {post.category || 'INSIGHT'}
                   </span>
-                  <h3 className="text-sm font-black text-slate-900 leading-tight group-hover:text-blue-600 transition-colors line-clamp-2">
+                  <h3 className="text-sm font-extrabold text-slate-900 leading-tight group-hover:text-blue-600 transition-colors line-clamp-2">
                     {post.title}
                   </h3>
                   <p className="text-[11px] text-slate-500 leading-relaxed line-clamp-2">

@@ -11,10 +11,10 @@ export const s3Client = new S3Client({
   forcePathStyle: true, // Often needed for custom endpoints
 });
 
-export async function processAndUpload(file: File) {
+export async function processAndUpload(file: File, folder: string = "hero") {
   const buffer = Buffer.from(await file.arrayBuffer());
   const filename = `${Date.now()}-${file.name.replace(/\s+/g, "-")}.webp`;
-  const key = `hero/${filename}`;
+  const key = `${folder}/${filename}`;
 
   // 1. Optimize with Sharp (Hero specific settings)
   const optimizedBuffer = await sharp(buffer)

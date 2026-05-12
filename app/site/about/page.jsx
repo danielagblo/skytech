@@ -88,10 +88,11 @@ export default function About() {
 
         <div className="section-shell relative z-10 space-y-8">
           <div className="space-y-6">
-            <span className="pill border-blue-600/20 text-blue-600 bg-blue-50 uppercase tracking-[0.2em] text-[8px] font-black w-fit">OUR STORY</span>
+            <span className="pill border-blue-600/20 text-blue-600 bg-blue-50 uppercase tracking-[0.2em] text-[8px] font-bold w-fit">OUR STORY</span>
             <div className="max-w-4xl space-y-4">
-              <h1 className="text-4xl md:text-6xl lg:text-7xl font-black leading-[1.05] tracking-tighter text-slate-900">
-                {aboutContent.heroTitle}
+              <h1 className="text-4xl lg:text-6xl leading-[1.05] tracking-tighter text-slate-900 font-light">
+                We build <span className="font-extrabold text-blue-600">websites and apps</span> <br />
+                that help your <span className="font-extrabold text-slate-950">business grow.</span>
               </h1>
               <p className="text-lg md:text-xl text-slate-500 leading-relaxed font-medium max-w-2xl">
                 {aboutContent.heroSubtitle}

@@ -25,6 +25,7 @@ export default function Header({ siteName = "Skytech Ghana" }) {
     { href: "/site/case-studies", label: "Case Studies" },
     { href: "/site/pricing", label: "Pricing" },
     { href: "/site/blog", label: "Blog" },
+    { href: "/site/gallery", label: "Gallery" },
     { href: "/site/faqs", label: "FAQs" },
     { href: "/site/internship", label: "Internship" },
   ];

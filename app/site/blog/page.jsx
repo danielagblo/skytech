@@ -17,8 +17,8 @@ export default async function BlogPage() {
       <div className="section-shell space-y-12">
         <div className="max-w-3xl space-y-4">
           <span className="pill">Insights</span>
-          <h1 className="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight">
-            The Digital Edge
+          <h1 className="text-4xl lg:text-5xl leading-tight text-slate-900 font-light">
+            The <span className="font-extrabold text-blue-600">Digital Edge</span>
           </h1>
           <p className="text-lg text-slate-600">
             Expert advice on building, scaling, and optimizing your digital products.
@@ -37,8 +37,8 @@ export default async function BlogPage() {
             )}
             <div className="absolute inset-0 bg-gradient-to-t from-white via-white/40 to-transparent z-10" />
             <div className="relative z-20 max-w-2xl space-y-4">
-              <span className="pill border-blue-600/20 text-blue-600 bg-blue-50 uppercase tracking-[0.2em] text-[10px] font-black w-fit">Featured Insight</span>
-              <h2 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tighter leading-[1.05]">
+              <span className="pill border-blue-600/20 text-blue-600 bg-blue-50 uppercase tracking-[0.2em] text-[10px] font-bold w-fit">Featured Insight</span>
+              <h2 className="text-3xl md:text-5xl font-extrabold text-slate-900 tracking-tighter leading-[1.05]">
                 {featuredPost.title}
               </h2>
               <p className="text-slate-700 text-lg hidden md:block leading-relaxed font-medium line-clamp-2">
@@ -46,7 +46,7 @@ export default async function BlogPage() {
               </p>
               <div className="flex items-center gap-6 pt-4">
                 <Link href={`/site/blog/${featuredPost.slug}`} className="btn-primary px-8 py-4">Read Article</Link>
-                <span className="text-slate-400 text-xs font-black uppercase tracking-widest">
+                <span className="text-slate-400 text-xs font-bold uppercase tracking-widest">
                   {new Date(featuredPost.createdAt).toLocaleDateString('en-US')}
                 </span>
               </div>

@@ -40,10 +40,12 @@ export default async function Contact() {
           <div className="absolute right-0 bottom-0 h-80 w-80 rounded-full bg-cyan-400/5 blur-3xl" />
         </div>
         <div className="section-shell relative space-y-6">
-          <span className="pill border-blue-600/20 text-blue-600 bg-blue-50 uppercase tracking-[0.2em] text-[10px] font-black">Contact</span>
-          <h1 className="text-4xl sm:text-5xl font-black leading-tight max-w-3xl text-slate-900">{contactContent.heroTitle || "Tell us what you want to build."}</h1>
+          <span className="pill border-blue-600/20 text-blue-600 bg-blue-50 uppercase tracking-[0.2em] text-[10px] font-bold">Contact</span>
+          <h1 className="text-4xl lg:text-5xl leading-tight max-w-3xl text-slate-900 font-light">
+            Tell us what you <span className="font-extrabold text-blue-600">want to build.</span>
+          </h1>
           <p className="text-lg text-slate-500 max-w-3xl font-medium">{contactContent.heroSubtitle || "We will reply fast and guide you step by step."}</p>
-          <div className="flex flex-wrap gap-4 text-[10px] font-black uppercase tracking-widest text-slate-400">
+          <div className="flex flex-wrap gap-4 text-[10px] font-bold uppercase tracking-widest text-slate-400">
             <span className="rounded-full bg-slate-50 px-4 py-2 border border-slate-100">Reply in 24 hours</span>
             <span className="rounded-full bg-slate-50 px-4 py-2 border border-slate-100">Remote team</span>
           </div>

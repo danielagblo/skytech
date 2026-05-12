@@ -22,23 +22,17 @@ export default async function Services() {
           <div className="absolute left-10 -top-10 h-[500px] w-[500px] bg-blue-600/5 rounded-full blur-[120px]" />
           <div className="absolute right-0 bottom-0 h-[500px] w-[500px] bg-cyan-400/5 rounded-full blur-[120px]" />
         </div>
-        
+
         <div className="section-shell relative space-y-10">
-          <span className="pill border-blue-600/20 text-blue-600 bg-blue-50 uppercase tracking-[0.2em] text-[10px] font-black">Our Capabilities</span>
+          <span className="pill border-blue-600/20 text-blue-600 bg-blue-50 uppercase tracking-[0.2em] text-[10px] font-bold">Our Capabilities</span>
           <div className="max-w-4xl space-y-6">
-            <h1 className="text-5xl md:text-7xl font-black leading-[1.1] tracking-tight">
-              {servicesContent.heroTitle || "Engineering high-performance digital ecosystems."}
+            <h1 className="text-4xl lg:text-6xl leading-[1.1] tracking-tight text-slate-900 font-light">
+              Engineering <span className="font-extrabold text-blue-600">high-performance</span> <br />
+              <span className="font-extrabold text-slate-950">digital ecosystems.</span>
             </h1>
             <p className="text-xl md:text-2xl text-slate-500 leading-relaxed font-medium">
               {servicesContent.heroSubtitle || "We architect, deploy, and scale. Our engineering standards prioritize bank-grade security and native performance across every platform."}
             </p>
-          </div>
-          <div className="flex flex-wrap gap-3 pt-6 border-t border-slate-100">
-            {capabilities.map((cap) => (
-              <span key={cap} className="px-5 py-2 rounded-full bg-slate-50 border border-slate-200 text-[10px] font-black uppercase tracking-widest text-slate-600">
-                {cap}
-              </span>
-            ))}
           </div>
         </div>
       </section>
@@ -47,20 +41,20 @@ export default async function Services() {
       <section className="py-24 bg-white border-b border-slate-100">
         <div className="section-shell space-y-16">
           <div className="text-center max-w-3xl mx-auto space-y-4">
-            <span className="text-blue-600 text-[10px] font-black uppercase tracking-[0.3em]">Strategic Verticals</span>
-            <h2 className="text-4xl md:text-5xl font-black text-slate-900 leading-tight">Industries We Modernize.</h2>
+            <span className="text-blue-600 text-[10px] font-bold uppercase tracking-[0.3em]">Strategic Verticals</span>
+            <h2 className="text-4xl md:text-5xl font-extrabold text-slate-900 leading-tight">Industries We Modernize.</h2>
             <p className="text-lg text-slate-600 leading-relaxed">
               We specialize in sectors that demand technical rigor, high availability, and absolute data integrity.
             </p>
           </div>
-          
+
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {whoWeWorkFor.map((item) => (
               <div key={item.name} className="group p-8 rounded-[2rem] bg-slate-50/50 border border-slate-100 hover:bg-white hover:shadow-2xl transition-all duration-500">
                 <div className="mb-6 w-12 h-12 rounded-xl bg-blue-600/5 flex items-center justify-center text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-all">
                   {item.icon}
                 </div>
-                <h3 className="text-lg font-black text-slate-900 mb-3">{item.name}</h3>
+                <h3 className="text-lg font-bold text-slate-900 mb-3">{item.name}</h3>
                 <p className="text-sm text-slate-500 mb-6 leading-relaxed">{item.description}</p>
                 <div className="flex flex-wrap gap-2 pt-4 border-t border-slate-100">
                   {item.types.map((type) => (
@@ -79,11 +73,11 @@ export default async function Services() {
       <section className="py-24 bg-slate-50">
         <div className="section-shell space-y-16">
           <div className="text-center max-w-3xl mx-auto space-y-4">
-            <span className="pill bg-white border-slate-200 text-slate-500 uppercase tracking-widest text-[9px] font-black">Our Service Stack</span>
-            <h2 className="text-4xl font-black text-slate-900 leading-tight">{servicesContent.whatWeDoTitle || "Full-Lifecycle Engineering."}</h2>
+            <span className="pill bg-white border-slate-200 text-slate-500 uppercase tracking-widest text-[9px] font-bold">Our Service Stack</span>
+            <h2 className="text-4xl font-extrabold text-slate-900 leading-tight">{servicesContent.whatWeDoTitle || "Full-Lifecycle Engineering."}</h2>
             <p className="text-lg text-slate-600">{servicesContent.whatWeDoSubtitle || "We handle everything from initial system architecture to long-term infrastructure maintenance."}</p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {services.map((service) => (
               <div key={service.id} className="group p-10 rounded-[2.5rem] bg-white border border-slate-100 hover:shadow-2xl transition-all duration-500">
@@ -91,7 +85,7 @@ export default async function Services() {
                   <span className="text-4xl filter grayscale group-hover:grayscale-0 transition-all">{service.icon}</span>
                   <span className="h-2 w-2 rounded-full bg-blue-600 opacity-0 group-hover:opacity-100 transition-opacity" />
                 </div>
-                <h3 className="text-2xl font-black text-slate-900 mb-4">{service.title}</h3>
+                <h3 className="text-2xl font-extrabold text-slate-900 mb-4">{service.title}</h3>
                 <p className="text-slate-500 leading-relaxed mb-6">{service.description}</p>
                 <div className="pt-6 border-t border-slate-50 flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-blue-600">
                   <span>View Technical Specs</span>
@@ -117,7 +111,7 @@ export default async function Services() {
               We offer structured engagement paths designed to align with your organization's technical velocity and budgetary goals.
             </p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {engagements.map((item) => (
               <div key={item.title} className="group p-8 rounded-[2rem] bg-slate-50/50 border border-slate-100 hover:bg-white hover:shadow-2xl transition-all">
@@ -168,15 +162,15 @@ export default async function Services() {
         <div className="absolute inset-0 bg-blue-600/5 blur-[120px]" />
         <div className="section-shell relative z-10 text-center space-y-10">
           <div className="space-y-4 max-w-3xl mx-auto">
-             <span className="pill border-blue-600/20 text-blue-400 bg-blue-600/10 uppercase tracking-[0.2em] text-[10px] font-black">Start the Process</span>
-             <h2 className="text-4xl md:text-6xl font-black text-white leading-tight">
-               {servicesContent.ctaTitle || "Ready to architect your digital future?"}
-             </h2>
-             <p className="text-xl text-slate-400 leading-relaxed">
-               {servicesContent.ctaSubtitle || "Tell us about your technical challenges. We'll provide a clear blueprint and the engineering power to execute it."}
-             </p>
+            <span className="pill border-blue-600/20 text-blue-400 bg-blue-600/10 uppercase tracking-[0.2em] text-[10px] font-black">Start the Process</span>
+            <h2 className="text-4xl md:text-6xl font-black text-white leading-tight">
+              {servicesContent.ctaTitle || "Ready to architect your digital future?"}
+            </h2>
+            <p className="text-xl text-slate-400 leading-relaxed">
+              {servicesContent.ctaSubtitle || "Tell us about your technical challenges. We'll provide a clear blueprint and the engineering power to execute it."}
+            </p>
           </div>
-          
+
           <div className="flex justify-center gap-4 flex-wrap pt-6">
             <a href="/site/contact" className="px-10 py-5 bg-blue-600 text-white rounded-full font-black text-base hover:bg-blue-700 transition-all shadow-xl shadow-blue-600/20">
               Technical Consultation
@@ -231,8 +225,6 @@ const stack = [
   { name: 'Arkesel', icon: '/images/arkesel.png' },
   { name: 'Lexical', icon: 'https://lexical.dev/img/logo.svg' },
 ];
-
-const capabilities = ['Enterprise Architectures', 'Native Performance Apps', 'Cloud Infrastructure', 'Data Engineering', 'Product Strategy'];
 
 const whoWeWorkFor = [
   {

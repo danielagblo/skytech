@@ -20,8 +20,11 @@ export default async function InternshipPage() {
           <div className="absolute right-0 bottom-0 h-80 w-80 rounded-full bg-cyan-400/5 blur-3xl" />
         </div>
         <div className="section-shell relative space-y-6">
-          <span className="pill border-blue-600/20 text-blue-600 bg-blue-50 uppercase tracking-[0.2em] text-[10px] font-black">Internship / Attachment</span>
-          <h1 className="text-4xl sm:text-5xl font-black leading-tight max-w-3xl text-slate-900">{internshipContent.heroTitle || "Apply for an internship or attachment."}</h1>
+          <span className="pill border-blue-600/20 text-blue-600 bg-blue-50 uppercase tracking-[0.2em] text-[10px] font-bold">Internship / Attachment</span>
+          <h1 className="text-4xl lg:text-5xl leading-tight max-w-3xl text-slate-900 font-light">
+            Apply for an <span className="font-extrabold text-blue-600">internship</span> <br />
+            or <span className="font-extrabold text-slate-950">attachment.</span>
+          </h1>
           <p className="text-lg text-slate-500 max-w-3xl font-medium">{internshipContent.heroSubtitle || "Fill the form below. We will review your request and contact you."}</p>
         </div>
       </section>
