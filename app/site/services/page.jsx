@@ -70,7 +70,7 @@ export default async function Services() {
                   {item.icon}
                 </div>
                 <h3 className="text-lg font-black text-slate-900 mb-3">{item.name}</h3>
-                <p className="text-sm text-slate-500 mb-6 leading-relaxed line-clamp-2">{item.description}</p>
+                <p className="text-sm text-slate-500 mb-6 leading-relaxed">{item.description}</p>
                 <div className="flex flex-wrap gap-2 pt-4 border-t border-slate-100">
                   {item.types.map((type) => (
                     <span key={type} className="text-[9px] font-black uppercase tracking-widest text-blue-600/60">
@@ -153,10 +153,19 @@ export default async function Services() {
             <span className="pill bg-white border-slate-200 text-slate-500 uppercase tracking-widest text-[9px] font-black">Our Infrastructure</span>
             <h2 className="text-4xl font-black text-slate-900 tracking-tight">Tools of the Trade.</h2>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-4">
             {stack.map((tech) => (
-              <div key={tech} className="p-4 rounded-2xl bg-white border border-slate-100 text-[10px] font-black uppercase tracking-widest text-slate-500 text-center hover:border-blue-200 hover:text-blue-600 transition-all">
-                {tech}
+              <div key={tech.name} className="group p-6 rounded-2xl bg-white border border-slate-100 flex flex-col items-center justify-center gap-4 hover:border-blue-200 hover:shadow-xl hover:shadow-blue-600/5 transition-all duration-500">
+                <div className="relative w-10 h-10 transition-all duration-500 group-hover:scale-110">
+                  <img
+                    src={tech.icon}
+                    alt={tech.name}
+                    className="w-full h-full object-contain transition-all duration-500"
+                  />
+                </div>
+                <span className="text-[9px] font-black uppercase tracking-widest text-slate-400 group-hover:text-blue-600 transition-colors">
+                  {tech.name}
+                </span>
               </div>
             ))}
           </div>
@@ -209,7 +218,28 @@ const engagements = [
   },
 ];
 
-const stack = ['React / Next.js', 'Node.js', 'TypeScript', 'Python', 'Flutter', 'PostgreSQL', 'MongoDB', 'AWS', 'Azure', 'DigitalOcean', 'Linode', 'Railway', 'Kubernetes', 'Docker', 'Terraform', 'Kafka'];
+const stack = [
+  { name: 'Next.js', icon: 'https://skillicons.dev/icons?i=nextjs' },
+  { name: 'React', icon: 'https://skillicons.dev/icons?i=react' },
+  { name: 'Node.js', icon: 'https://skillicons.dev/icons?i=nodejs' },
+  { name: 'TypeScript', icon: 'https://skillicons.dev/icons?i=ts' },
+  { name: 'Python', icon: 'https://skillicons.dev/icons?i=py' },
+  { name: 'Flutter', icon: 'https://skillicons.dev/icons?i=flutter' },
+  { name: 'PostgreSQL', icon: 'https://skillicons.dev/icons?i=postgres' },
+  { name: 'MongoDB', icon: 'https://skillicons.dev/icons?i=mongodb' },
+  { name: 'AWS', icon: 'https://skillicons.dev/icons?i=aws' },
+  { name: 'Azure', icon: 'https://skillicons.dev/icons?i=azure' },
+  { name: 'DigitalOcean', icon: '/images/digital oceans.png' },
+  { name: 'Kubernetes', icon: 'https://cdn.simpleicons.org/kubernetes/326CE5' },
+  { name: 'Docker', icon: 'https://skillicons.dev/icons?i=docker' },
+  { name: 'Terraform', icon: 'https://skillicons.dev/icons?i=terraform' },
+  { name: 'Kafka', icon: 'https://skillicons.dev/icons?i=kafka' },
+  { name: 'Linode', icon: '/images/linode.png' },
+  { name: 'Railway', icon: 'https://cdn.simpleicons.org/railway/131415' },
+  { name: 'GitHub', icon: 'https://skillicons.dev/icons?i=github' },
+  { name: 'Arkesel', icon: '/images/arkesel.png' },
+  { name: 'Lexical', icon: 'https://lexical.dev/img/logo.svg' },
+];
 
 const capabilities = ['Enterprise Architectures', 'Native Performance Apps', 'Cloud Infrastructure', 'Data Engineering', 'Product Strategy'];
 
