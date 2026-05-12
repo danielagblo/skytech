@@ -14,15 +14,15 @@ export default async function InternshipPage() {
   const internshipContent = pages.internship || {};
   return (
     <>
-      <section className="relative overflow-hidden bg-slate-950 text-white py-24 px-4">
+      <section className="relative overflow-hidden bg-white text-slate-900 py-24 px-4 border-b border-slate-100">
         <div className="absolute inset-0" aria-hidden>
-          <div className="absolute -left-10 top-0 h-72 w-72 rounded-full bg-blue-600/40 blur-3xl" />
-          <div className="absolute right-0 bottom-0 h-80 w-80 rounded-full bg-cyan-400/40 blur-3xl" />
+          <div className="absolute -left-10 top-0 h-72 w-72 rounded-full bg-blue-600/5 blur-3xl" />
+          <div className="absolute right-0 bottom-0 h-80 w-80 rounded-full bg-cyan-400/5 blur-3xl" />
         </div>
         <div className="section-shell relative space-y-6">
-          <span className="pill">Internship / Attachment</span>
-          <h1 className="text-4xl sm:text-5xl font-extrabold leading-tight max-w-3xl">{internshipContent.heroTitle || "Apply for an internship or attachment."}</h1>
-          <p className="text-lg text-white/85 max-w-3xl">{internshipContent.heroSubtitle || "Fill the form below. We will review your request and contact you."}</p>
+          <span className="pill border-blue-600/20 text-blue-600 bg-blue-50 uppercase tracking-[0.2em] text-[10px] font-black">Internship / Attachment</span>
+          <h1 className="text-4xl sm:text-5xl font-black leading-tight max-w-3xl text-slate-900">{internshipContent.heroTitle || "Apply for an internship or attachment."}</h1>
+          <p className="text-lg text-slate-500 max-w-3xl font-medium">{internshipContent.heroSubtitle || "Fill the form below. We will review your request and contact you."}</p>
         </div>
       </section>
 

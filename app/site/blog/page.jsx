@@ -20,19 +20,19 @@ export default function BlogPage() {
         </div>
 
         {/* Featured Post */}
-        <div className="relative group overflow-hidden rounded-[2.5rem] bg-slate-900 aspect-[21/9] flex items-end p-8 md:p-16 border border-slate-800">
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent z-10" />
+        <div className="relative group overflow-hidden rounded-[2.5rem] bg-slate-50 aspect-[21/9] flex items-end p-8 md:p-16 border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-700">
+            <div className="absolute inset-0 bg-gradient-to-t from-white via-white/40 to-transparent z-10" />
             <div className="relative z-20 max-w-2xl space-y-4">
-                <span className="pill bg-blue-600 text-white border-none">Featured</span>
-                <h2 className="text-3xl md:text-5xl font-bold text-white tracking-tight leading-tight">
-                    Why Core Web Vitals are the New SEO Standard in 2024
+                <span className="pill border-blue-600/20 text-blue-600 bg-blue-50 uppercase tracking-[0.2em] text-[10px] font-black w-fit">Featured Insight</span>
+                <h2 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tighter leading-[1.05]">
+                    Why Core Web Vitals are the <br /> New SEO Standard in 2024
                 </h2>
-                <p className="text-white/70 text-lg hidden md:block">
+                <p className="text-slate-500 text-lg hidden md:block leading-relaxed font-medium">
                     Google's latest algorithm updates prioritize user experience more than ever. Learn how to optimize for speed, stability, and responsiveness.
                 </p>
-                <div className="flex items-center gap-4 pt-4">
-                    <Link href="#" className="btn-primary">Read Article</Link>
-                    <span className="text-white/50 text-sm">12 min read • May 10, 2024</span>
+                <div className="flex items-center gap-6 pt-4">
+                    <Link href="#" className="btn-primary px-8 py-4">Read Article</Link>
+                    <span className="text-slate-400 text-xs font-black uppercase tracking-widest">12 min read • May 10, 2024</span>
                 </div>
             </div>
         </div>

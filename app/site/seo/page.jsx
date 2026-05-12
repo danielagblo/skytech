@@ -35,13 +35,13 @@ export default function SEOPage() {
       </section>
 
       {/* Stats / Results */}
-      <section className="py-16 bg-slate-950 text-white">
+      <section className="py-16 bg-slate-50 border-y border-slate-100">
         <div className="section-shell grid grid-cols-1 md:grid-cols-3 gap-12">
             {seoStats.map((stat, idx) => (
                 <div key={idx} className="text-center space-y-2">
-                    <p className="text-5xl font-black text-blue-400">{stat.value}</p>
-                    <p className="text-slate-400 font-semibold uppercase tracking-wider text-sm">{stat.label}</p>
-                    <p className="text-slate-500 text-xs">{stat.detail}</p>
+                    <p className="text-5xl font-black text-blue-600">{stat.value}</p>
+                    <p className="text-slate-900 font-black uppercase tracking-[0.2em] text-[10px]">{stat.label}</p>
+                    <p className="text-slate-500 text-xs font-medium">{stat.detail}</p>
                 </div>
             ))}
         </div>
@@ -52,7 +52,7 @@ export default function SEOPage() {
         <div className="section-shell space-y-20">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                 <div className="space-y-6">
-                    <h2 className="text-4xl font-extrabold text-slate-900 leading-tight">
+                    <h2 className="text-4xl font-black text-slate-900 leading-tight">
                         Why SEO is the most powerful growth lever for your business.
                     </h2>
                     <p className="text-lg text-slate-600 leading-relaxed">
@@ -61,12 +61,12 @@ export default function SEOPage() {
                     <ul className="space-y-4">
                         {benefits.map((benefit, idx) => (
                             <li key={idx} className="flex items-start gap-4">
-                                <div className="mt-1 h-6 w-6 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 shrink-0">
+                                <div className="mt-1 h-6 w-6 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 shrink-0 border border-blue-100">
                                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                                     </svg>
                                 </div>
-                                <span className="text-slate-700 font-medium">{benefit}</span>
+                                <span className="text-slate-700 font-semibold">{benefit}</span>
                             </li>
                         ))}
                     </ul>
@@ -102,29 +102,29 @@ export default function SEOPage() {
       </section>
 
       {/* Audit Tool Section */}
-      <section className="py-24 bg-slate-950 relative overflow-hidden border-t border-white/5">
-        <div className="absolute inset-0 bg-blue-600/5 blur-[120px]" />
+      <section className="py-24 bg-white relative overflow-hidden border-t border-slate-100">
+        <div className="absolute inset-0 bg-blue-600/5 blur-[120px] pointer-events-none" />
         <div className="section-shell relative">
-          <div className="max-w-5xl mx-auto rounded-[3rem] border border-white/10 bg-white/[0.03] backdrop-blur-2xl p-12 lg:p-16 shadow-2xl">
+          <div className="max-w-5xl mx-auto rounded-[3rem] border border-slate-200 bg-white shadow-2xl p-12 lg:p-16">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
               <div className="space-y-6 text-left">
-                <span className="pill bg-blue-600/20 text-blue-400 border-blue-600/20">Free Performance Audit</span>
-                <h2 className="text-4xl font-black text-white leading-tight">
+                <span className="pill border-blue-600/20 text-blue-600 bg-blue-50 uppercase tracking-[0.2em] text-[10px] font-black">Free Performance Audit</span>
+                <h2 className="text-4xl font-black text-slate-900 leading-tight">
                   Analyze Your Edge. <br /> Get a Forensic SEO Audit.
                 </h2>
-                <p className="text-slate-400 text-lg leading-relaxed">
+                <p className="text-slate-500 text-lg leading-relaxed font-medium">
                   Is your site working for you or against you? We'll identify exactly where you're losing revenue and how to fix it in 60 seconds.
                 </p>
                 <div className="grid grid-cols-2 gap-4 pt-4">
                   {['Core Web Vitals', 'On‑page SEO', 'Conversion Fixes', 'Quick Wins'].map(tag => (
-                    <div key={tag} className="flex items-center gap-3 text-xs font-bold text-white/40 uppercase tracking-widest">
-                      <span className="h-1.5 w-1.5 rounded-full bg-blue-500" />
+                    <div key={tag} className="flex items-center gap-3 text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                      <span className="h-2 w-2 rounded-full bg-blue-600" />
                       {tag}
                     </div>
                   ))}
                 </div>
               </div>
-              <div className="bg-white/5 rounded-3xl p-8 border border-white/10">
+              <div className="bg-slate-50 rounded-3xl p-8 border border-slate-100">
                 <FreeAuditForm />
               </div>
             </div>

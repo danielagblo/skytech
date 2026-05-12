@@ -31,19 +31,17 @@ export default function Header({ siteName = "Skytech Ghana" }) {
 
   const isActive = (href) => pathname === href;
 
-  const isHomePage = pathname === "/site";
-
   return (
     <header
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${(isScrolled || !isHomePage || isOpen)
-        ? "bg-white border-b border-slate-200/60 shadow-lg py-1"
-        : "bg-transparent py-4"
+      className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${(isScrolled || isOpen)
+        ? "bg-white border-b border-slate-200/60 shadow-lg py-2"
+        : "bg-transparent py-6"
         }`}
     >
-      <nav className="section-shell flex items-center justify-between">
+      <nav className="max-w-[1600px] mx-auto px-6 lg:px-12 flex items-center justify-between">
         {/* Logo */}
         <Link href="/site" className="flex items-center gap-3 focus-ring rounded-xl flex-shrink-0">
-          <span className={`relative overflow-hidden rounded-xl transition-all duration-300 ${(isScrolled || !isHomePage || isOpen) ? "h-8 w-8" : "h-10 w-10"
+          <span className={`relative overflow-hidden rounded-xl transition-all duration-300 ${(isScrolled || isOpen) ? "h-9 w-9" : "h-11 w-11"
             }`}>
             <Image
               src="/skytechlogoonly.png"
@@ -54,12 +52,10 @@ export default function Header({ siteName = "Skytech Ghana" }) {
             />
           </span>
           <span className="leading-tight">
-            <span className={`block text-base sm:text-lg font-extrabold tracking-tight whitespace-nowrap transition-colors ${(isScrolled || !isHomePage || isOpen) ? "text-slate-900" : "text-white"
-              }`}>
+            <span className={`block text-base sm:text-lg font-extrabold tracking-tight whitespace-nowrap transition-colors text-slate-900`}>
               {siteName}
             </span>
-            <span className={`hidden sm:block text-xs font-semibold transition-colors ${(isScrolled || !isHomePage || isOpen) ? "text-slate-500" : "text-white/70"
-              }`}>
+            <span className={`hidden sm:block text-xs font-semibold transition-colors text-slate-500`}>
               Web • Mobile • SEO
             </span>
           </span>
@@ -74,8 +70,8 @@ export default function Header({ siteName = "Skytech Ghana" }) {
               className={[
                 "px-3 py-2 rounded-xl transition-all duration-300 focus-ring",
                 isActive(item.href)
-                  ? ((isScrolled || !isHomePage || isOpen) ? "text-blue-700 bg-blue-50" : "text-white bg-white/10")
-                  : ((isScrolled || !isHomePage || isOpen) ? "text-slate-700 hover:text-blue-700 hover:bg-slate-50" : "text-white/80 hover:text-white hover:bg-white/5"),
+                  ? "text-blue-700 bg-blue-50"
+                  : "text-slate-700 hover:text-blue-700 hover:bg-slate-50",
               ].join(" ")}
             >
               {item.label}
@@ -97,12 +93,12 @@ export default function Header({ siteName = "Skytech Ghana" }) {
           {/* Mobile Menu Button */}
           <button
             aria-label="Toggle navigation menu"
-            className="lg:hidden group flex flex-col items-end space-y-1.5 focus-ring rounded-xl p-2 transition-colors hover:bg-white/10"
+            className="lg:hidden group flex flex-col items-end space-y-1.5 focus-ring rounded-xl p-2 transition-colors hover:bg-black/5"
             onClick={() => setIsOpen(!isOpen)}
           >
-            <span className={`h-0.5 rounded-full transition-all duration-300 ${(isScrolled || !isHomePage || isOpen) ? 'bg-slate-900' : 'bg-white'} ${isOpen ? 'w-7 rotate-45 translate-y-2' : 'w-7'}`}></span>
-            <span className={`h-0.5 rounded-full transition-all duration-300 ${(isScrolled || !isHomePage || isOpen) ? 'bg-slate-900' : 'bg-white'} ${isOpen ? 'opacity-0' : 'w-5'}`}></span>
-            <span className={`h-0.5 rounded-full transition-all duration-300 ${(isScrolled || !isHomePage || isOpen) ? 'bg-slate-900' : 'bg-white'} ${isOpen ? 'w-7 -rotate-45 -translate-y-2' : 'w-7'}`}></span>
+            <span className={`h-0.5 rounded-full transition-all duration-300 bg-slate-900 ${isOpen ? 'w-7 rotate-45 translate-y-2' : 'w-7'}`}></span>
+            <span className={`h-0.5 rounded-full transition-all duration-300 bg-slate-900 ${isOpen ? 'opacity-0' : 'w-5'}`}></span>
+            <span className={`h-0.5 rounded-full transition-all duration-300 bg-slate-900 ${isOpen ? 'w-7 -rotate-45 -translate-y-2' : 'w-7'}`}></span>
           </button>
         </div>
       </nav>

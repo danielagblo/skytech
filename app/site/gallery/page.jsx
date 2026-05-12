@@ -53,12 +53,12 @@ export default function GalleryPage() {
           ))}
         </div>
 
-        <div className="rounded-3xl bg-slate-900 p-12 text-center space-y-6">
-          <h2 className="text-3xl font-bold text-white">Ready to start your project?</h2>
-          <p className="text-white/70 max-w-2xl mx-auto">
+        <div className="rounded-[3rem] bg-slate-50 border border-slate-100 p-12 text-center space-y-6 shadow-sm">
+          <h2 className="text-3xl font-black text-slate-900">Ready to start your project?</h2>
+          <p className="text-slate-500 max-w-2xl mx-auto font-medium">
             Let's build something world-class together. We're currently taking on new projects for the upcoming quarter.
           </p>
-          <Link href="/site/contact" className="btn-primary bg-white text-slate-900 hover:bg-slate-100">
+          <Link href="/site/contact" className="inline-flex items-center gap-3 px-10 py-5 bg-blue-600 text-white rounded-full font-black text-base hover:bg-blue-700 transition-all shadow-xl shadow-blue-600/10">
             Get a Free Proposal
           </Link>
         </div>

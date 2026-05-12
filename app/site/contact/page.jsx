@@ -45,18 +45,18 @@ export default async function Contact() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(businessSchema) }}
       />
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-slate-950 text-white py-24 px-4">
+      <section className="relative overflow-hidden bg-white text-slate-900 py-24 px-4 border-b border-slate-100">
         <div className="absolute inset-0" aria-hidden>
-          <div className="absolute left-10 -top-10 h-72 w-72 rounded-full bg-blue-600/40 blur-3xl" />
-          <div className="absolute right-0 bottom-0 h-80 w-80 rounded-full bg-cyan-400/40 blur-3xl" />
+          <div className="absolute left-10 -top-10 h-72 w-72 rounded-full bg-blue-600/5 blur-3xl" />
+          <div className="absolute right-0 bottom-0 h-80 w-80 rounded-full bg-cyan-400/5 blur-3xl" />
         </div>
         <div className="section-shell relative space-y-6">
-          <span className="pill">Contact</span>
-          <h1 className="text-4xl sm:text-5xl font-extrabold leading-tight max-w-3xl">{contactContent.heroTitle || "Tell us what you want to build."}</h1>
-          <p className="text-lg text-white/85 max-w-3xl">{contactContent.heroSubtitle || "We will reply fast and guide you step by step."}</p>
-          <div className="flex flex-wrap gap-4 text-sm text-white/80">
-            <span className="rounded-full bg-white/10 px-4 py-2 border border-white/15">Reply in 24 hours</span>
-            <span className="rounded-full bg-white/10 px-4 py-2 border border-white/15">Remote team</span>
+          <span className="pill border-blue-600/20 text-blue-600 bg-blue-50 uppercase tracking-[0.2em] text-[10px] font-black">Contact</span>
+          <h1 className="text-4xl sm:text-5xl font-black leading-tight max-w-3xl text-slate-900">{contactContent.heroTitle || "Tell us what you want to build."}</h1>
+          <p className="text-lg text-slate-500 max-w-3xl font-medium">{contactContent.heroSubtitle || "We will reply fast and guide you step by step."}</p>
+          <div className="flex flex-wrap gap-4 text-[10px] font-black uppercase tracking-widest text-slate-400">
+            <span className="rounded-full bg-slate-50 px-4 py-2 border border-slate-100">Reply in 24 hours</span>
+            <span className="rounded-full bg-slate-50 px-4 py-2 border border-slate-100">Remote team</span>
           </div>
         </div>
       </section>

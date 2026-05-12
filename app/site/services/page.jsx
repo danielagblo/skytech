@@ -26,25 +26,25 @@ export default async function Services() {
   return (
     <main className="min-h-screen">
       {/* Hero Section (The Capability Statement) */}
-      <section className="relative overflow-hidden bg-slate-950 text-white py-32 px-4">
+      <section className="relative overflow-hidden bg-white text-slate-900 py-32 px-4 border-b border-slate-100">
         <div className="absolute inset-0" aria-hidden="true">
-          <div className="absolute left-10 -top-10 h-[500px] w-[500px] bg-blue-600/10 rounded-full blur-[120px]" />
-          <div className="absolute right-0 bottom-0 h-[500px] w-[500px] bg-cyan-400/10 rounded-full blur-[120px]" />
+          <div className="absolute left-10 -top-10 h-[500px] w-[500px] bg-blue-600/5 rounded-full blur-[120px]" />
+          <div className="absolute right-0 bottom-0 h-[500px] w-[500px] bg-cyan-400/5 rounded-full blur-[120px]" />
         </div>
         
         <div className="section-shell relative space-y-10">
-          <span className="pill border-blue-600/20 text-blue-400 bg-blue-600/10 uppercase tracking-[0.2em] text-[10px] font-black">Our Capabilities</span>
+          <span className="pill border-blue-600/20 text-blue-600 bg-blue-50 uppercase tracking-[0.2em] text-[10px] font-black">Our Capabilities</span>
           <div className="max-w-4xl space-y-6">
             <h1 className="text-5xl md:text-7xl font-black leading-[1.1] tracking-tight">
               {servicesContent.heroTitle || "Engineering high-performance digital ecosystems."}
             </h1>
-            <p className="text-xl md:text-2xl text-slate-400 leading-relaxed font-medium">
+            <p className="text-xl md:text-2xl text-slate-500 leading-relaxed font-medium">
               {servicesContent.heroSubtitle || "We architect, deploy, and scale. Our engineering standards prioritize bank-grade security and native performance across every platform."}
             </p>
           </div>
-          <div className="flex flex-wrap gap-3 pt-6 border-t border-white/5">
+          <div className="flex flex-wrap gap-3 pt-6 border-t border-slate-100">
             {capabilities.map((cap) => (
-              <span key={cap} className="px-5 py-2 rounded-full bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-widest text-blue-200">
+              <span key={cap} className="px-5 py-2 rounded-full bg-slate-50 border border-slate-200 text-[10px] font-black uppercase tracking-widest text-slate-600">
                 {cap}
               </span>
             ))}
