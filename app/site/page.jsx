@@ -346,24 +346,25 @@ export default async function Home() {
             className="object-cover opacity-100 transition-transform duration-[20s] scale-110 hover:scale-100"
             priority
           />
-          {/* Spotlight Overlay: High clarity for text, 100% clarity for the rest of the image */}
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_50%,rgba(255,255,255,0.8)_0%,rgba(255,255,255,0.3)_30%,transparent_60%)] pointer-events-none z-0" />
+          {/* Dark Overlay for White Text Contrast */}
+          <div className="absolute inset-0 bg-slate-900/40 z-0 pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-900/60 via-transparent to-transparent z-0 pointer-events-none" />
         </div>
 
         <div className="relative z-10 pt-20 pl-4 sm:pl-10 lg:pl-20">
           <div className="flex items-center min-h-[70vh]">
             <div className="max-w-6xl space-y-10">
-              <div className="inline-flex items-center gap-2 rounded-full bg-blue-50 border border-blue-100 px-3 py-1 backdrop-blur-md">
-                <span className="flex h-1.5 w-1.5 rounded-full bg-blue-600 animate-pulse"></span>
-                <span className="text-[8.65px] sm:text-[9px] font-black uppercase tracking-[0.15em] sm:tracking-[0.2em] text-blue-600">
+              <div className="inline-flex items-center gap-2 rounded-full bg-white/10 border border-white/20 px-3 py-1 backdrop-blur-md">
+                <span className="flex h-1.5 w-1.5 rounded-full bg-blue-400 animate-pulse"></span>
+                <span className="text-[8.65px] sm:text-[9px] font-bold uppercase tracking-[0.2em] text-white">
                   No 1# website development company in Ghana.
                 </span>
               </div>
               <div className="space-y-6">
-                <h1 className="text-5xl lg:text-7xl font-black leading-[1.1] tracking-tight text-slate-950">
+                <h1 className="text-5xl lg:text-7xl leading-[1.1] tracking-tight text-white font-light">
                   World Class <br />
-                  Software solutions <br />
-                  <span className="text-blue-700">for all businesses.</span>
+                  <span className="font-extrabold text-white">Software solutions</span> <br />
+                  for all <span className="font-extrabold text-blue-400">businesses.</span>
                 </h1>
                 <div className="inline-block px-4 py-2 rounded-xl bg-white/40 backdrop-blur-md border border-white/60 shadow-sm">
                   <p className="text-xs sm:text-sm text-slate-900 leading-relaxed font-bold tracking-tight">
