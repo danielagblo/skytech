@@ -346,8 +346,8 @@ export default async function Home() {
             className="object-cover opacity-100 transition-transform duration-[20s] scale-110 hover:scale-100"
             priority
           />
-          {/* Subtle Contrast Overlay for Text Clarity (Not Obvious) */}
-          <div className="absolute inset-0 bg-gradient-to-r from-white/40 via-white/10 to-transparent pointer-events-none" />
+          {/* Spotlight Overlay: High clarity for text, 100% clarity for the rest of the image */}
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_50%,rgba(255,255,255,0.8)_0%,rgba(255,255,255,0.3)_30%,transparent_60%)] pointer-events-none z-0" />
         </div>
 
         <div className="relative z-10 pt-20 pl-4 sm:pl-10 lg:pl-20">
@@ -360,10 +360,10 @@ export default async function Home() {
                 </span>
               </div>
               <div className="space-y-6">
-                <h1 className="text-5xl lg:text-7xl font-black leading-[1.1] tracking-tight text-slate-900">
+                <h1 className="text-5xl lg:text-7xl font-black leading-[1.1] tracking-tight text-slate-950">
                   World Class <br />
                   Software solutions <br />
-                  <span className="text-blue-600">for all businesses.</span>
+                  <span className="text-blue-700">for all businesses.</span>
                 </h1>
                 <div className="inline-block px-4 py-2 rounded-xl bg-white/40 backdrop-blur-md border border-white/60 shadow-sm">
                   <p className="text-xs sm:text-sm text-slate-900 leading-relaxed font-bold tracking-tight">
