@@ -9,6 +9,7 @@ export default function Header({ siteName = "Skytech Ghana" }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
+  const isHome = pathname === '/site';
 
   useEffect(() => {
     const handleScroll = () => {
@@ -64,8 +65,8 @@ export default function Header({ siteName = "Skytech Ghana" }) {
               className={[
                 "px-3 py-2 rounded-xl transition-all duration-300 focus-ring",
                 isActive(item.href)
-                  ? (isScrolled ? "text-blue-700 bg-blue-50" : "text-white bg-white/10")
-                  : (isScrolled ? "text-slate-700 hover:text-blue-700 hover:bg-slate-50" : "text-white/80 hover:text-white hover:bg-white/10"),
+                  ? (isHome && !isScrolled ? "text-white bg-white/10" : "text-blue-700 bg-blue-50")
+                  : (isHome && !isScrolled ? "text-white/80 hover:text-white hover:bg-white/10" : "text-slate-700 hover:text-blue-700 hover:bg-slate-50"),
               ].join(" ")}
             >
               {item.label}
@@ -90,9 +91,9 @@ export default function Header({ siteName = "Skytech Ghana" }) {
             className="lg:hidden group flex flex-col items-end space-y-1.5 focus-ring rounded-xl p-2 transition-colors hover:bg-black/5"
             onClick={() => setIsOpen(!isOpen)}
           >
-            <span className={`h-0.5 rounded-full transition-all duration-300 ${isScrolled || isOpen ? 'bg-slate-900' : 'bg-white'} ${isOpen ? 'w-7 rotate-45 translate-y-2' : 'w-7'}`}></span>
-            <span className={`h-0.5 rounded-full transition-all duration-300 ${isScrolled || isOpen ? 'bg-slate-900' : 'bg-white'} ${isOpen ? 'opacity-0' : 'w-5'}`}></span>
-            <span className={`h-0.5 rounded-full transition-all duration-300 ${isScrolled || isOpen ? 'bg-slate-900' : 'bg-white'} ${isOpen ? 'w-7 -rotate-45 -translate-y-2' : 'w-7'}`}></span>
+            <span className={`h-0.5 rounded-full transition-all duration-300 ${isHome && !isScrolled && !isOpen ? 'bg-white' : 'bg-slate-900'} ${isOpen ? 'w-7 rotate-45 translate-y-2' : 'w-7'}`}></span>
+            <span className={`h-0.5 rounded-full transition-all duration-300 ${isHome && !isScrolled && !isOpen ? 'bg-white' : 'bg-slate-900'} ${isOpen ? 'opacity-0' : 'w-5'}`}></span>
+            <span className={`h-0.5 rounded-full transition-all duration-300 ${isHome && !isScrolled && !isOpen ? 'bg-white' : 'bg-slate-900'} ${isOpen ? 'w-7 -rotate-45 -translate-y-2' : 'w-7'}`}></span>
           </button>
         </div>
       </nav>

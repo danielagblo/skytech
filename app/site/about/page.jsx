@@ -86,15 +86,15 @@ export default function About() {
           <div className="absolute inset-0 bg-gradient-to-b from-white via-white/40 to-white" />
         </div>
 
-        <div className="section-shell relative z-10 space-y-8">
-          <div className="space-y-6">
+        <div className="section-shell relative z-10 space-y-8 flex flex-col items-center text-center">
+          <div className="space-y-6 flex flex-col items-center">
             <span className="pill border-blue-600/20 text-blue-600 bg-blue-50 uppercase tracking-[0.2em] text-[8px] font-bold w-fit">OUR STORY</span>
             <div className="max-w-4xl space-y-4">
               <h1 className="text-4xl lg:text-6xl leading-[1.05] tracking-tighter text-slate-900 font-light">
                 We build <span className="font-extrabold text-blue-600">websites and apps</span> <br />
                 that help your <span className="font-extrabold text-slate-950">business grow.</span>
               </h1>
-              <p className="text-lg md:text-xl text-slate-500 leading-relaxed font-medium max-w-2xl">
+              <p className="text-lg md:text-xl text-slate-500 leading-relaxed font-medium max-w-2xl mx-auto">
                 {aboutContent.heroSubtitle}
               </p>
             </div>
