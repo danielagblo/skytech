@@ -1,6 +1,8 @@
 import { getHeroData } from "../../lib/hero";
 import HeroForm from "./HeroForm";
 
+export const dynamic = "force-dynamic";
+
 export default async function DashboardHeroPage() {
   const heroData = await getHeroData();
   

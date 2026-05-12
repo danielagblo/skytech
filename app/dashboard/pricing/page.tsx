@@ -1,6 +1,8 @@
 import { getPricing } from "../../lib/pricing";
 import PricingManager from "./PricingManager";
 
+export const dynamic = "force-dynamic";
+
 export default async function DashboardPricingPage() {
   const pricingData = await getPricing();
   

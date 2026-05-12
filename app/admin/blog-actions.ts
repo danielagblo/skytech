@@ -5,15 +5,25 @@ import { revalidatePath } from "next/cache";
 import { processAndUpload } from "../lib/s3";
 
 export async function getBlogPosts() {
-  await dbConnect();
-  const posts = await BlogPost.find({}).sort({ createdAt: -1 }).lean();
-  return JSON.parse(JSON.stringify(posts));
+  try {
+    await dbConnect();
+    const posts = await BlogPost.find({}).sort({ createdAt: -1 }).lean();
+    return JSON.parse(JSON.stringify(posts));
+  } catch (error) {
+    console.error("Failed to fetch blog posts from MongoDB:", error);
+    return [];
+  }
 }
 
 export async function getBlogPostById(id: string) {
-  await dbConnect();
-  const post = await BlogPost.findById(id).lean();
-  return post ? JSON.parse(JSON.stringify(post)) : null;
+  try {
+    await dbConnect();
+    const post = await BlogPost.findById(id).lean();
+    return post ? JSON.parse(JSON.stringify(post)) : null;
+  } catch (error) {
+    console.error(`Failed to fetch blog post ${id} from MongoDB:`, error);
+    return null;
+  }
 }
 
 export async function deleteBlogPost(id: string) {

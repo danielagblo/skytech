@@ -2,6 +2,8 @@ import React from 'react';
 import Link from 'next/link';
 import { getBlogPosts, deleteBlogPost } from '../../admin/blog-actions';
 
+export const dynamic = "force-dynamic";
+
 export default async function BlogDashboard() {
   const posts = await getBlogPosts();
 
