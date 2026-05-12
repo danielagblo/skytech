@@ -544,7 +544,7 @@ export default async function Home() {
                </div>
                <div className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-white border border-slate-200 text-slate-600 text-[9px] font-black uppercase tracking-widest shadow-sm">
                   <span className="w-1.5 h-1.5 rounded-full bg-blue-600" />
-                  Lowest Rates in Ghana • Beat any Quote
+                  Lowest rates compared to others like WopeDigital.com
                </div>
             </div>
           </div>
