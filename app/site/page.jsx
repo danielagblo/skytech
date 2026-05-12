@@ -4,6 +4,7 @@ import Image from "next/image";
 import { getHeroData } from '../lib/hero';
 import { getSettings, DEFAULT_SETTINGS } from '../lib/settings';
 import { getPricing } from '../lib/pricing';
+import { getBlogPosts } from '../admin/blog-actions';
 import FreeAuditForm from "../../components/FreeAuditForm";
 import HeroSlideshow from "../../components/HeroSlideshow";
 import AnimatedStats from "../../components/AnimatedStats";
@@ -24,23 +25,6 @@ const stats = [
   { label: "Support Response", value: "<15m" },
 ];
 
-const blogPosts = [
-  {
-    title: "Why Core Web Vitals are the New SEO Standard",
-    category: "SEO",
-    excerpt: "Learn how to optimize for speed, stability, and responsiveness to rank higher.",
-  },
-  {
-    title: "The Rise of Progressive Web Apps in Africa",
-    category: "Technology",
-    excerpt: "Why PWAs are the perfect solution for markets with varying internet connectivity.",
-  },
-  {
-    title: "Mastering Color Theory in Modern Web Design",
-    category: "Design",
-    excerpt: "How to use color to evoke emotion and establish brand identity.",
-  },
-];
 
 const faqsPreview = [
   {
@@ -325,6 +309,9 @@ export default async function Home() {
   const services = hardcodedServices;
   const pricingBookletUrl = settings.pricingBookletUrl || "/static/pricing.pdf";
 
+  const allPosts = await getBlogPosts();
+  const latestPosts = allPosts.filter(p => p.published).slice(0, 3);
+
   const hero = {
     title: "World Class Software solutions for all businesses.",
     subtitle: "No 1# website development company in Ghana.",
@@ -346,41 +333,46 @@ export default async function Home() {
             className="object-cover opacity-100 transition-transform duration-[20s] scale-110 hover:scale-100"
             priority
           />
-          {/* Dark Overlay for White Text Contrast */}
+          {/* Dark Overlay - Left Aligned Gradient */}
           <div className="absolute inset-0 bg-slate-900/40 z-0 pointer-events-none" />
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-900/60 via-transparent to-transparent z-0 pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-900/80 via-transparent to-transparent z-0 pointer-events-none" />
         </div>
 
-        <div className="relative z-10 pt-20 pl-4 sm:pl-10 lg:pl-20">
-          <div className="flex items-center min-h-[70vh]">
-            <div className="max-w-6xl space-y-10">
-              <div className="inline-flex items-center gap-2 rounded-full bg-white/10 border border-white/20 px-3 py-1 backdrop-blur-md">
-                <span className="flex h-1.5 w-1.5 rounded-full bg-blue-400 animate-pulse"></span>
-                <span className="text-[8.65px] sm:text-[9px] font-bold uppercase tracking-[0.2em] text-white">
-                  No 1# website development company in Ghana.
-                </span>
-              </div>
-              <div className="space-y-6">
+        <div className="relative z-10 pt-20 pl-4 sm:pl-8 lg:pl-16 w-full">
+          <div className="flex items-center justify-start min-h-[70vh]">
+            <div className="max-w-6xl space-y-12 text-left flex flex-col items-start">
+              <div className="space-y-8">
                 <h1 className="text-5xl lg:text-7xl leading-[1.1] tracking-tight text-white font-light">
                   World Class <br />
                   <span className="font-extrabold text-white">Software solutions</span> <br />
                   for all <span className="font-extrabold text-blue-400">businesses.</span>
                 </h1>
-                <div className="inline-block px-4 py-2 rounded-xl bg-white/40 backdrop-blur-md border border-white/60 shadow-sm">
-                  <p className="text-xs sm:text-sm text-slate-900 leading-relaxed font-bold tracking-tight">
-                    Get a website that ranks No. 1 on Google.
-                  </p>
+
+                {/* Unified Tag Unit */}
+                <div className="inline-flex flex-col items-start rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 shadow-xl overflow-hidden">
+                  <div className="flex items-center gap-2 px-4 py-2 bg-white/5 border-b border-white/10 w-full">
+                    <span className="flex h-1.5 w-1.5 rounded-full bg-blue-400 animate-pulse"></span>
+                    <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-white/70">
+                      No 1# website development company in Ghana.
+                    </span>
+                  </div>
+                  <div className="px-5 py-3">
+                    <p className="text-sm sm:text-base text-white font-bold tracking-tight">
+                      Get a website that ranks No. 1 on Google.
+                    </p>
+                  </div>
                 </div>
               </div>
-              <div className="flex flex-wrap gap-6 pt-6">
+
+              <div className="flex flex-wrap justify-start gap-6 pt-4">
                 <Link
-                  className="btn-primary px-10 py-5 text-base font-bold rounded-full shadow-2xl shadow-blue-600/20"
+                  className="btn-primary px-10 py-5 text-base font-bold rounded-full shadow-2xl shadow-blue-600/20 active:scale-95 transition-all"
                   href="/site/contact"
                 >
                   Start Your Project
                 </Link>
                 <Link
-                  className="btn-secondary bg-white/80 border-slate-200 text-slate-900 hover:bg-white px-10 py-5 text-base font-bold rounded-full backdrop-blur-md transition-all"
+                  className="btn-secondary bg-white text-blue-600 border-none hover:bg-slate-50 px-10 py-5 text-base font-bold rounded-full shadow-lg transition-all active:scale-95"
                   href="/site/pricing"
                 >
                   View Rate Card
@@ -389,10 +381,11 @@ export default async function Home() {
             </div>
           </div>
 
-          {/* Scroll Indicator (Centered Anchor) */}
-          <div className="absolute bottom-10 left-0 right-0 flex justify-center px-4">
-            <div className="animate-bounce text-slate-300">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          {/* Bouncing Scroll Arrow - Centered at Bottom */}
+          <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2">
+            <div className="w-px h-12 bg-gradient-to-b from-white/0 via-white/40 to-white/0" />
+            <div className="animate-bounce">
+              <svg className="w-6 h-6 text-white opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
               </svg>
             </div>
@@ -897,13 +890,13 @@ export default async function Home() {
           </div>
 
           <div className="flex gap-6 overflow-x-auto pb-8 snap-x scrollbar-hide">
-            {blogPosts.slice(0, 3).map((post, idx) => (
-              <Link key={idx} href={`/site/blog/${post.slug || idx}`} className="flex-shrink-0 w-[350px] snap-start group flex items-start gap-5 p-2 rounded-[2.5rem] hover:bg-slate-50 transition-colors duration-300">
+            {latestPosts.map((post, idx) => (
+              <Link key={post._id || idx} href={`/site/blog/${post.slug}`} className="flex-shrink-0 w-[350px] snap-start group flex items-start gap-5 p-2 rounded-[2.5rem] hover:bg-slate-50 transition-colors duration-300">
                 {/* Image Left - Only if it exists */}
-                {post.image ? (
+                {post.coverImage ? (
                   <div className="flex-shrink-0 w-32 h-24 overflow-hidden rounded-3xl bg-slate-100 border border-slate-100">
                     <img
-                      src={post.image}
+                      src={post.coverImage}
                       alt={post.title}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                     />
@@ -911,13 +904,15 @@ export default async function Home() {
                 ) : null}
 
                 {/* Content Right */}
-                <div className={`space-y-2 pt-1 pr-4 ${!post.image ? 'w-full' : ''}`}>
-                  <span className="text-[9px] font-black uppercase tracking-[0.2em] text-blue-600">INSIGHT</span>
+                <div className={`space-y-2 pt-1 pr-4 ${!post.coverImage ? 'w-full' : ''}`}>
+                  <span className="text-[9px] font-black uppercase tracking-[0.2em] text-blue-600">
+                    {post.category || 'INSIGHT'}
+                  </span>
                   <h3 className="text-sm font-black text-slate-900 leading-tight group-hover:text-blue-600 transition-colors line-clamp-2">
                     {post.title}
                   </h3>
                   <p className="text-[11px] text-slate-500 leading-relaxed line-clamp-2">
-                    {post.excerpt || post.description}
+                    {post.excerpt}
                   </p>
                 </div>
               </Link>

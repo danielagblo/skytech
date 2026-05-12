@@ -40,26 +40,19 @@ export default function Header({ siteName = "Skytech Ghana" }) {
     >
       <nav className="max-w-[1600px] mx-auto px-6 lg:px-12 flex items-center justify-between">
         {/* Logo */}
-        <Link href="/site" className="flex items-center gap-3 focus-ring rounded-xl flex-shrink-0">
-          <span className={`relative overflow-hidden rounded-xl bg-slate-950 transition-all duration-300 ${(isScrolled || isOpen) ? "h-9 w-9 p-1.5" : "h-11 w-11 p-2"
-            }`}>
-            <Image
-              src="/skytechlogoonly.png"
-              alt={`${siteName} logo`}
-              fill
-              className="object-contain"
-              priority
-            />
-          </span>
-          <span className="leading-tight">
-            <span className={`block text-base sm:text-lg font-extrabold tracking-tight whitespace-nowrap transition-colors text-slate-900`}>
-              {siteName}
-            </span>
-            <span className={`hidden sm:block text-xs font-semibold transition-colors text-slate-500`}>
-              Web • Mobile • SEO
-            </span>
-          </span>
-        </Link>
+        <div className="flex-shrink-0 w-24 lg:w-32 h-10 flex items-center relative">
+          <Link href="/site" className="absolute top-1/2 -translate-y-1/2 left-0 focus-ring rounded-xl group z-[60]">
+            <div className={`relative transition-all duration-500 group-hover:scale-110 ${(isScrolled || isOpen) ? "h-20 w-20" : "h-32 w-32"}`}>
+              <Image
+                src="/try.png"
+                alt={`${siteName} logo`}
+                fill
+                className="object-contain drop-shadow-sm"
+                priority
+              />
+            </div>
+          </Link>
+        </div>
 
         {/* Desktop Menu */}
         <div className="hidden lg:flex items-center gap-2 text-sm font-semibold">
@@ -70,8 +63,8 @@ export default function Header({ siteName = "Skytech Ghana" }) {
               className={[
                 "px-3 py-2 rounded-xl transition-all duration-300 focus-ring",
                 isActive(item.href)
-                  ? "text-blue-700 bg-blue-50"
-                  : "text-slate-700 hover:text-blue-700 hover:bg-slate-50",
+                  ? (isScrolled ? "text-blue-700 bg-blue-50" : "text-white bg-white/10")
+                  : (isScrolled ? "text-slate-700 hover:text-blue-700 hover:bg-slate-50" : "text-white/80 hover:text-white hover:bg-white/10"),
               ].join(" ")}
             >
               {item.label}
@@ -96,9 +89,9 @@ export default function Header({ siteName = "Skytech Ghana" }) {
             className="lg:hidden group flex flex-col items-end space-y-1.5 focus-ring rounded-xl p-2 transition-colors hover:bg-black/5"
             onClick={() => setIsOpen(!isOpen)}
           >
-            <span className={`h-0.5 rounded-full transition-all duration-300 bg-slate-900 ${isOpen ? 'w-7 rotate-45 translate-y-2' : 'w-7'}`}></span>
-            <span className={`h-0.5 rounded-full transition-all duration-300 bg-slate-900 ${isOpen ? 'opacity-0' : 'w-5'}`}></span>
-            <span className={`h-0.5 rounded-full transition-all duration-300 bg-slate-900 ${isOpen ? 'w-7 -rotate-45 -translate-y-2' : 'w-7'}`}></span>
+            <span className={`h-0.5 rounded-full transition-all duration-300 ${isScrolled || isOpen ? 'bg-slate-900' : 'bg-white'} ${isOpen ? 'w-7 rotate-45 translate-y-2' : 'w-7'}`}></span>
+            <span className={`h-0.5 rounded-full transition-all duration-300 ${isScrolled || isOpen ? 'bg-slate-900' : 'bg-white'} ${isOpen ? 'opacity-0' : 'w-5'}`}></span>
+            <span className={`h-0.5 rounded-full transition-all duration-300 ${isScrolled || isOpen ? 'bg-slate-900' : 'bg-white'} ${isOpen ? 'w-7 -rotate-45 -translate-y-2' : 'w-7'}`}></span>
           </button>
         </div>
       </nav>
@@ -111,7 +104,7 @@ export default function Header({ siteName = "Skytech Ghana" }) {
             <Link href="/site" className="flex items-center gap-3" onClick={() => setIsOpen(false)}>
               <span className="relative h-8 w-8 bg-slate-950 rounded-xl overflow-hidden ring-1 ring-slate-900/10">
                 <Image
-                  src="/skytechlogoonly.png"
+                  src="/try.png"
                   alt={`${siteName} logo`}
                   fill
                   className="object-contain p-1.5"
