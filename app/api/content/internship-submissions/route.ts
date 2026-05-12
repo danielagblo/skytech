@@ -25,7 +25,6 @@ export async function POST(request: NextRequest) {
       contentType.includes("multipart/form-data")
     ) {
       const form = await request.formData();
-      submission = {};
       for (const [key, value] of Array.from(form.entries())) {
         if (typeof value === "string") submission[key] = value;
         else if (value instanceof File) submission[key] = value.name;
@@ -42,14 +41,13 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    const newSubmission = await InternshipSubmission.create({
-      id: Date.now(),
-      submittedAt: new Date(),
+    const newEntry = await InternshipSubmission.create({
       ...submission,
+      submittedAt: new Date(),
     });
 
     return NextResponse.json(
-      { success: true, id: newSubmission.id },
+      { success: true, id: newEntry._id },
       { headers: corsHeaders },
     );
   } catch (error) {
@@ -64,9 +62,15 @@ export async function POST(request: NextRequest) {
 export async function GET() {
   try {
     await dbConnect();
-    const submissions = await InternshipSubmission.find({}).sort({ submittedAt: -1 });
+    const submissions = await InternshipSubmission.find({}).sort({ submittedAt: -1 }).lean();
+    
+    // Map _id to id for frontend compatibility
+    const formattedSubmissions = submissions.map((s: any) => ({
+      ...s,
+      id: s._id.toString(),
+    }));
 
-    return NextResponse.json(submissions, { headers: corsHeaders });
+    return NextResponse.json(formattedSubmissions, { headers: corsHeaders });
   } catch (error) {
     console.error("Failed to fetch submissions:", error);
     return NextResponse.json(
@@ -89,7 +93,7 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
-    await InternshipSubmission.deleteOne({ id: parseInt(id) });
+    await InternshipSubmission.findByIdAndDelete(id);
 
     return NextResponse.json(
       { success: true },

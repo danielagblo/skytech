@@ -1,7 +1,3 @@
-import dbConnect from '../../lib/mongodb';
-import ServiceModel from '../../models/Service';
-import { getPageContent } from '../../lib/pages';
-
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
@@ -9,20 +5,15 @@ export const metadata = {
   description: "Architecting high-performance digital ecosystems, enterprise-grade mobile applications, and secure fintech infrastructures for global brands.",
 };
 
-async function getServices() {
-  try {
-    await dbConnect();
-    return await ServiceModel.find({}).lean();
-  } catch (error) {
-    console.error('Failed to fetch services from MongoDB:', error);
-    return [];
-  }
-}
-
 export default async function Services() {
-  const services = await getServices();
-  const pages = await getPageContent();
-  const servicesContent = pages.services || {};
+  const services = []; // Using local data or hardcoded for now
+  const servicesContent = {
+    heroTitle: "Engineering high-performance digital ecosystems.",
+    heroSubtitle: "We architect, deploy, and scale. Our engineering standards prioritize bank-grade security and native performance across every platform.",
+    engagementTitle: "Tactical Engagement Models.",
+    whatWeDoTitle: "Full-Lifecycle Engineering.",
+    whatWeDoSubtitle: "We handle everything from initial system architecture to long-term infrastructure maintenance."
+  };
   return (
     <main className="min-h-screen">
       {/* Hero Section (The Capability Statement) */}

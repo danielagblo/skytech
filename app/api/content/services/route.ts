@@ -1,13 +1,18 @@
 import { NextResponse } from "next/server";
-import dbConnect from "../../../lib/mongodb";
-import Service from "../../../models/Service";
+import fs from "fs";
+import { resolveSharedData } from "../../../lib/sharedData";
 
 export async function GET() {
   try {
-    await dbConnect();
-    const services = await Service.find({});
-    return NextResponse.json(services);
+    const filePath = resolveSharedData("services.json");
+    if (!fs.existsSync(filePath)) {
+      return NextResponse.json([]);
+    }
+    
+    const data = fs.readFileSync(filePath, "utf8");
+    return NextResponse.json(JSON.parse(data));
   } catch (error) {
+    console.error("Failed to read services data from file:", error);
     return NextResponse.json(
       { error: "Failed to read services data" },
       { status: 500 },
@@ -18,22 +23,13 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    await dbConnect();
+    const filePath = resolveSharedData("services.json");
     
-    // If body is an array, we replace all services
-    if (Array.isArray(body)) {
-      await Service.deleteMany({});
-      const services = await Service.insertMany(body);
-      return NextResponse.json({ success: true, count: services.length });
-    } else {
-      // If it's a single object, maybe update or create?
-      // Based on original code, it was replacing the whole file content.
-      // So deleteMany + insertMany is the equivalent of writeFileSync with the whole array.
-      await Service.deleteMany({});
-      const service = await Service.create(body);
-      return NextResponse.json({ success: true });
-    }
+    fs.writeFileSync(filePath, JSON.stringify(body, null, 2));
+    
+    return NextResponse.json({ success: true });
   } catch (error) {
+    console.error("Failed to save services data to file:", error);
     return NextResponse.json(
       { error: "Failed to save services data" },
       { status: 500 },

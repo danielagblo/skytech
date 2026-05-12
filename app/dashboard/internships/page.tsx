@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 
 interface Submission {
-  id: number;
+  id: string;
   name: string;
   email: string;
   phone: string;
@@ -36,7 +36,7 @@ export default function InternshipSubmissionsPage() {
     try {
       const res = await fetch('/api/content/internship-submissions');
       const data = await res.json();
-      setSubmissions(data.reverse());
+      setSubmissions(data); // Already sorted by API
     } catch (error) {
       console.error('Failed to fetch submissions:', error);
     } finally {
@@ -44,7 +44,7 @@ export default function InternshipSubmissionsPage() {
     }
   };
 
-  const handleDelete = async (id: number) => {
+  const handleDelete = async (id: string) => {
     if (!confirm('Are you sure you want to delete this application?')) return;
 
     try {

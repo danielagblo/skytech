@@ -1,8 +1,7 @@
-import dbConnect from '../../lib/mongodb';
-import TeamMember from '../../models/TeamMember';
 import ContactFormClient from '../../../components/ContactFormClient';
 import { getSettings } from '../../lib/settings';
 import { getPageContent } from '../../lib/pages';
+import { getTeam } from '../../lib/team';
 
 export const dynamic = 'force-dynamic';
 
@@ -10,16 +9,6 @@ export const metadata = {
   title: 'Contact Skytech Ghana - Get In Touch',
   description: 'Contact Skytech Ghana for software development inquiries. Get in touch with our team today.',
 };
-
-async function getTeam() {
-  try {
-    await dbConnect();
-    return await TeamMember.find({}).lean();
-  } catch (error) {
-    console.error('Failed to fetch team from MongoDB:', error);
-    return [];
-  }
-}
 
 export default async function Contact() {
   const settings = await getSettings();

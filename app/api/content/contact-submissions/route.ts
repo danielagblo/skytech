@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import dbConnect from "../../../lib/mongodb";
-import ContactSubmission from "../../../models/ContactSubmission";
+import fs from "fs";
+import { resolveSharedData } from "../../../lib/sharedData";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -14,7 +14,6 @@ export async function OPTIONS() {
 
 export async function POST(request: NextRequest) {
   try {
-    await dbConnect();
     const contentType = (
       request.headers.get("content-type") || ""
     ).toLowerCase();
@@ -44,14 +43,27 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    const newSubmission = await ContactSubmission.create({
+    const filePath = resolveSharedData("contact-submissions.json");
+    let submissions: any[] = [];
+    if (fs.existsSync(filePath)) {
+      try {
+        submissions = JSON.parse(fs.readFileSync(filePath, "utf8"));
+      } catch (e) {
+        submissions = [];
+      }
+    }
+
+    const newEntry = {
       id: Date.now(),
       submittedAt: new Date(),
       ...submission,
-    });
+    };
+
+    submissions.push(newEntry);
+    fs.writeFileSync(filePath, JSON.stringify(submissions, null, 2));
 
     return NextResponse.json(
-      { success: true, id: newSubmission.id },
+      { success: true, id: newEntry.id },
       { headers: corsHeaders },
     );
   } catch (error) {
@@ -65,8 +77,13 @@ export async function POST(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   try {
-    await dbConnect();
-    const submissions = await ContactSubmission.find({}).sort({ submittedAt: -1 });
+    const filePath = resolveSharedData("contact-submissions.json");
+    if (!fs.existsSync(filePath)) {
+      return NextResponse.json([], { headers: corsHeaders });
+    }
+    
+    const submissions = JSON.parse(fs.readFileSync(filePath, "utf8"));
+    submissions.sort((a: any, b: any) => new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime());
 
     return NextResponse.json(submissions, { headers: corsHeaders });
   } catch (error) {
@@ -80,7 +97,6 @@ export async function GET(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   try {
-    await dbConnect();
     const { searchParams } = new URL(request.url);
     const id = searchParams.get("id");
 
@@ -91,7 +107,12 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
-    await ContactSubmission.deleteOne({ id: parseInt(id) });
+    const filePath = resolveSharedData("contact-submissions.json");
+    if (fs.existsSync(filePath)) {
+      let submissions = JSON.parse(fs.readFileSync(filePath, "utf8"));
+      submissions = submissions.filter((s: any) => s.id !== parseInt(id));
+      fs.writeFileSync(filePath, JSON.stringify(submissions, null, 2));
+    }
 
     return NextResponse.json(
       { success: true },

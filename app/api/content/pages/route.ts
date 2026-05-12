@@ -1,13 +1,11 @@
 import { NextResponse } from "next/server";
-import dbConnect from "../../../lib/mongodb";
-import Page from "../../../models/Page";
+import fs from "fs";
+import { resolveSharedData } from "../../../lib/sharedData";
 
 export async function GET() {
   try {
-    await dbConnect();
-    const pageDoc = await Page.findOne({ name: "all_pages" });
-    
-    if (!pageDoc) {
+    const filePath = resolveSharedData("pages.json");
+    if (!fs.existsSync(filePath)) {
       return NextResponse.json({
         home: {},
         services: {},
@@ -16,9 +14,10 @@ export async function GET() {
       });
     }
     
-    return NextResponse.json(pageDoc.content);
+    const data = fs.readFileSync(filePath, "utf8");
+    return NextResponse.json(JSON.parse(data));
   } catch (error) {
-    console.error("Failed to read pages data:", error);
+    console.error("Failed to read pages data from file:", error);
     return NextResponse.json(
       { error: "Failed to read pages data" },
       { status: 500 },
@@ -29,17 +28,13 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    await dbConnect();
+    const filePath = resolveSharedData("pages.json");
     
-    await Page.findOneAndUpdate(
-      { name: "all_pages" },
-      { content: body },
-      { upsert: true },
-    );
+    fs.writeFileSync(filePath, JSON.stringify(body, null, 2));
     
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Failed to save pages data:", error);
+    console.error("Failed to save pages data to file:", error);
     return NextResponse.json(
       { error: "Failed to save pages data" },
       { status: 500 },

@@ -35,20 +35,12 @@ const SettingsSchema = new mongoose.Schema({
       items: [String],
     },
   },
-  affiliateNetwork: {
-    multinational: [
-      {
-        name: String,
-        logoUrl: String,
-      },
-    ],
-    local: [
-      {
-        name: String,
-        logoUrl: String,
-      },
-    ],
-  },
+  partners: [
+    {
+      name: String,
+      logoUrl: String,
+    },
+  ],
   awards: [
     {
       title: String,

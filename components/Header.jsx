@@ -41,13 +41,13 @@ export default function Header({ siteName = "Skytech Ghana" }) {
       <nav className="max-w-[1600px] mx-auto px-6 lg:px-12 flex items-center justify-between">
         {/* Logo */}
         <Link href="/site" className="flex items-center gap-3 focus-ring rounded-xl flex-shrink-0">
-          <span className={`relative overflow-hidden rounded-xl transition-all duration-300 ${(isScrolled || isOpen) ? "h-9 w-9" : "h-11 w-11"
+          <span className={`relative overflow-hidden rounded-xl bg-slate-950 transition-all duration-300 ${(isScrolled || isOpen) ? "h-9 w-9 p-1.5" : "h-11 w-11 p-2"
             }`}>
             <Image
               src="/skytechlogoonly.png"
               alt={`${siteName} logo`}
               fill
-              className="object-cover"
+              className="object-contain"
               priority
             />
           </span>

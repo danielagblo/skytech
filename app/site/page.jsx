@@ -1,11 +1,9 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import dbConnect from '../lib/mongodb';
-import Testimonial from '../models/Testimonial';
-import Service from '../models/Service';
+import { getHeroData } from '../lib/hero';
 import { getSettings, DEFAULT_SETTINGS } from '../lib/settings';
-import { getPageContent } from '../lib/pages';
+import { getPricing } from '../lib/pricing';
 import FreeAuditForm from "../../components/FreeAuditForm";
 import HeroSlideshow from "../../components/HeroSlideshow";
 import AnimatedStats from "../../components/AnimatedStats";
@@ -300,35 +298,42 @@ const hardcodedServices = [
 const hardcodedTestimonials = [
   {
     _id: "1",
-    name: "John Doe",
-    role: "CEO, Atlas Rent-A-Car",
-    content: "Skytech transformed our digital presence. Their engineering standards are world-class."
+    author: "John Doe",
+    company: "CEO, Atlas Rent-A-Car",
+    quote: "Skytech transformed our digital presence. Their engineering standards are world-class."
   },
   {
     _id: "2",
-    name: "Sarah Smith",
-    role: "Marketing Director",
-    content: "The fastest development cycle I've ever experienced. Highly recommended for startups."
+    author: "Sarah Smith",
+    company: "Marketing Director",
+    quote: "The fastest development cycle I've ever experienced. Highly recommended for startups."
   }
 ];
 
-export default function Home() {
-  const testimonials = hardcodedTestimonials;
-  const settings = DEFAULT_SETTINGS;
-  const services = hardcodedServices;
-  const pricingBookletUrl = settings.pricingBookletUrl || "/static/pricing.pdf";
-  const affiliateNetwork = settings.affiliateNetwork || { multinational: [], local: [] };
-  const awards = settings.awards || [];
-
+export default async function Home() {
+  const heroData = await getHeroData();
+  const pricingData = await getPricing();
+  const webPricing = pricingData.find(c => c.category === 'web') || { packages: [] };
+  const pricing = webPricing.packages.slice(0, 3); // Get first 3 packages
   const homeContent = {
-    heroTitle: "No 1# website development company in Ghana.",
-    heroSubtitle: "We build premium digital ecosystems that drive growth and institutional authority."
+    servicesSectionTitle: "Engineering the digital products of tomorrow.",
+    servicesSubtitle: "From high-performance architecture to forensic product optimization, we build systems that scale.",
+    ctaTitle: "Engineering excellence delivered with precision.",
+    ctaSubtitle: "Tell us about your project. We'll provide a clear roadmap and the technical power to bring it to life."
   };
 
-  const allPartners = [
-    ...(affiliateNetwork.multinational || []),
-    ...(affiliateNetwork.local || [])
-  ].filter((p) => p?.logoUrl || p?.name);
+  const testimonials = hardcodedTestimonials;
+  const settings = await getSettings();
+  const services = hardcodedServices;
+  const pricingBookletUrl = settings.pricingBookletUrl || "/static/pricing.pdf";
+
+  const hero = {
+    title: "World Class Software solutions for all businesses.",
+    subtitle: "No 1# website development company in Ghana.",
+    imageUrl: heroData?.imageUrl || "/images/hero-3.png"
+  };
+
+  const allPartners = (settings.partners || []).filter((p) => p?.logoUrl || p?.name);
 
   return (
     <>
@@ -337,7 +342,7 @@ export default function Home() {
         {/* Singular Background Asset - Full Clarity */}
         <div className="absolute inset-0 z-0">
           <Image
-            src="/images/hero-3.png"
+            src={hero.imageUrl}
             alt="Skytech Tech Infrastructure"
             fill
             className="object-cover opacity-100 transition-transform duration-[20s] scale-110 hover:scale-100"
@@ -349,31 +354,34 @@ export default function Home() {
           <div className="flex items-center min-h-[70vh]">
             <div className="max-w-6xl space-y-10">
               <div className="inline-flex items-center gap-2 rounded-full bg-blue-50 border border-blue-100 px-3 py-1 backdrop-blur-md">
-                <span className="flex h-1.5 w-1.5 rounded-full bg-blue-600 animate-pulse" />
+                <span className="flex h-1.5 w-1.5 rounded-full bg-blue-600 animate-pulse"></span>
                 <span className="text-[8.65px] sm:text-[9px] font-black uppercase tracking-[0.15em] sm:tracking-[0.2em] text-blue-600">
                   No 1# website development company in Ghana.
                 </span>
               </div>
-
               <div className="space-y-6">
                 <h1 className="text-5xl lg:text-7xl font-black leading-[1.1] tracking-tight text-slate-900">
                   World Class <br />
                   Software solutions <br />
                   <span className="text-blue-600">for all businesses.</span>
                 </h1>
-
                 <div className="inline-block px-4 py-2 rounded-xl bg-white/40 backdrop-blur-md border border-white/60 shadow-sm">
                   <p className="text-xs sm:text-sm text-slate-900 leading-relaxed font-bold tracking-tight">
                     Get a website that ranks No. 1 on Google.
                   </p>
                 </div>
               </div>
-
               <div className="flex flex-wrap gap-6 pt-6">
-                <Link href="/site/contact" className="btn-primary px-10 py-5 text-base font-bold rounded-full shadow-2xl shadow-blue-600/20">
+                <Link
+                  className="btn-primary px-10 py-5 text-base font-bold rounded-full shadow-2xl shadow-blue-600/20"
+                  href="/site/contact"
+                >
                   Start Your Project
                 </Link>
-                <Link href="/site/pricing" className="btn-secondary bg-white/80 border-slate-200 text-slate-900 hover:bg-white px-10 py-5 text-base font-bold rounded-full backdrop-blur-md transition-all">
+                <Link
+                  className="btn-secondary bg-white/80 border-slate-200 text-slate-900 hover:bg-white px-10 py-5 text-base font-bold rounded-full backdrop-blur-md transition-all"
+                  href="/site/pricing"
+                >
                   View Rate Card
                 </Link>
               </div>
@@ -532,141 +540,83 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Plan 1: Basic */}
-            <div className="group relative bg-white rounded-[2.5rem] border border-slate-100 p-10 shadow-sm hover:shadow-2xl hover:shadow-blue-500/5 transition-all duration-500 flex flex-col">
-              <div className="space-y-2 mb-8">
-                <span className="text-[10px] font-black uppercase tracking-widest text-blue-600">3–8 weeks timeline</span>
-                <h3 className="text-2xl font-black text-slate-900 tracking-tight">Basic Website Package</h3>
-                <div className="pt-4 flex flex-col">
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-sm font-bold text-slate-400">GHS</span>
-                    <span className="text-4xl font-black text-slate-900">2,500</span>
+                {pricing.map((pkg, idx) => (
+                  <div
+                    key={pkg.name}
+                    className={`group relative rounded-[2.5rem] p-10 transition-all duration-500 flex flex-col ${pkg.featured || idx === 1
+                        ? "bg-slate-900 border-blue-600/30 shadow-2xl shadow-blue-500/10 scale-105 z-10"
+                        : "bg-white border-slate-100 shadow-sm hover:shadow-2xl hover:shadow-blue-500/5"
+                      }`}
+                  >
+                    {/* Featured Badge */}
+                    {(pkg.featured || idx === 1) && (
+                      <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-blue-600 text-white text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-full shadow-lg shadow-blue-600/40">
+                        Most Popular
+                      </div>
+                    )}
+
+                    <div className={`space-y-2 mb-8 ${pkg.featured || idx === 1 ? 'text-white' : 'text-slate-900'}`}>
+                      <span className={`text-[10px] font-black uppercase tracking-widest ${pkg.featured || idx === 1 ? 'text-blue-400' : 'text-blue-600'}`}>
+                        {pkg.interval || "3–8 weeks"} timeline
+                      </span>
+                      <h3 className="text-2xl font-black tracking-tight">{pkg.name}</h3>
+                      <div className="pt-4 flex flex-col">
+                        <div className="flex items-baseline gap-1">
+                          <span className={`text-sm font-bold ${pkg.featured || idx === 1 ? 'text-blue-400/50' : 'text-slate-400'}`}>GHS</span>
+                          <span className="text-4xl font-black">{pkg.price}</span>
+                        </div>
+                        <div className="flex items-baseline gap-1 opacity-60">
+                          <span className="text-[10px] font-bold">USD</span>
+                          <span className="text-lg font-black">~${pkg.usd}</span>
+                        </div>
+                        {pkg.renewal && (
+                          <div className={`mt-2 text-[9px] font-black uppercase tracking-wider py-1.5 px-3 rounded-lg w-fit ${pkg.featured || idx === 1 ? 'bg-white/10 text-blue-300' : 'bg-slate-50 text-slate-500 border border-slate-100'
+                            }`}>
+                            Renew: GHS {pkg.renewal} yearly
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="space-y-4 flex-grow">
+                      <ul className="space-y-3">
+                        {pkg.highlights.map((item) => (
+                          <li key={item} className={`flex items-center gap-3 text-sm ${pkg.featured || idx === 1 ? 'text-blue-100/70' : 'text-slate-600'}`}>
+                            <svg className={`w-4 h-4 ${pkg.featured || idx === 1 ? 'text-blue-400' : 'text-blue-600'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                            </svg>
+                            {item}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    <div className="mt-10">
+                      <Link
+                        href="/site/contact"
+                        className={`w-full inline-flex justify-center items-center px-6 py-4 rounded-2xl font-bold transition-all ${pkg.featured || idx === 1
+                            ? 'bg-blue-600 text-white hover:bg-white hover:text-slate-900'
+                            : 'bg-slate-50 text-slate-900 group-hover:bg-blue-600 group-hover:text-white'
+                          }`}
+                      >
+                        Get Started
+                      </Link>
+                    </div>
                   </div>
-                  <div className="flex items-baseline gap-1 opacity-60">
-                    <span className="text-[10px] font-bold">USD</span>
-                    <span className="text-lg font-black">~$175</span>
-                  </div>
-                  <div className="mt-2 text-[9px] font-black uppercase tracking-wider py-1.5 px-3 rounded-lg w-fit bg-slate-50 text-slate-500 border border-slate-100">
-                    Renew: GHS 1,000 / $69 yearly
-                  </div>
-                </div>
+                ))}
               </div>
 
-              <div className="space-y-4 flex-grow">
-                <ul className="space-y-3">
-                  {["5–6 page modern responsive website", "Basic SEO setup", "WhatsApp chat integration", "1 business email", "Free hosting for 12 months (Bonus)"].map((item) => (
-                    <li key={item} className="flex items-center gap-3 text-sm text-slate-600">
-                      <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                      </svg>
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="mt-10">
-                <Link href="/site/contact" className="w-full inline-flex justify-center items-center px-6 py-4 bg-slate-50 text-slate-900 rounded-2xl font-bold group-hover:bg-blue-600 group-hover:text-white transition-all">
-                  Get Started
+              <div className="text-center pt-16">
+                <Link href="/site/pricing" className="inline-flex items-center gap-2 text-sm font-black uppercase tracking-widest text-blue-600 hover:gap-3 transition-all">
+                  Not what you're looking for? View full catalog
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
                 </Link>
               </div>
-            </div>
 
-            {/* Plan 2: Standard */}
-            <div className="group relative bg-slate-900 rounded-[2.5rem] border border-blue-600/30 p-10 shadow-2xl shadow-blue-500/10 transition-all duration-500 flex flex-col scale-105 z-10">
-              <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-blue-600 text-white text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-full shadow-lg shadow-blue-600/40">
-                Most Popular
-              </div>
-              <div className="space-y-2 mb-8 text-white">
-                <span className="text-[10px] font-black uppercase tracking-widest text-blue-400">2–3 months timeline</span>
-                <h3 className="text-2xl font-black text-white tracking-tight">Standard Business Package</h3>
-                <div className="pt-4 flex flex-col text-white">
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-sm font-bold text-blue-400/50">GHS</span>
-                    <span className="text-4xl font-black text-white">6,500</span>
-                  </div>
-                  <div className="flex items-baseline gap-1 opacity-60">
-                    <span className="text-[10px] font-bold">USD</span>
-                    <span className="text-lg font-black">~$450</span>
-                  </div>
-                  <div className="mt-2 text-[9px] font-black uppercase tracking-wider py-1.5 px-3 rounded-lg w-fit bg-white/10 text-blue-300">
-                    Renew: GHS 1,500 / $105 yearly
-                  </div>
-                </div>
-              </div>
 
-              <div className="space-y-4 flex-grow">
-                <ul className="space-y-3">
-                  {["10–12 pages", "Advanced SEO Engine", "Blog with admin access (CMS)", "Security hardening", "Google Business Profile (Bonus)"].map((item) => (
-                    <li key={item} className="flex items-center gap-3 text-sm text-blue-100/70">
-                      <svg className="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                      </svg>
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="mt-10">
-                <Link href="/site/contact" className="w-full inline-flex justify-center items-center px-6 py-4 bg-blue-600 text-white rounded-2xl font-bold hover:bg-white hover:text-slate-900 transition-all">
-                  Start Growth
-                </Link>
-              </div>
-            </div>
-
-            {/* Plan 3: E-commerce */}
-            <div className="group relative bg-white rounded-[2.5rem] border border-slate-100 p-10 shadow-sm hover:shadow-2xl hover:shadow-blue-500/5 transition-all duration-500 flex flex-col">
-              <div className="space-y-2 mb-8">
-                <span className="text-[10px] font-black uppercase tracking-widest text-blue-600">3–6 months timeline</span>
-                <h3 className="text-2xl font-black text-slate-900 tracking-tight">E-commerce/Booking</h3>
-                <div className="pt-4 flex flex-col">
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-sm font-bold text-slate-400">GHS</span>
-                    <span className="text-4xl font-black text-slate-900">25,000</span>
-                  </div>
-                  <div className="flex items-baseline gap-1 opacity-60">
-                    <span className="text-[10px] font-bold">USD</span>
-                    <span className="text-lg font-black">~$1,725</span>
-                  </div>
-                  <div className="mt-2 text-[9px] font-black uppercase tracking-wider py-1.5 px-3 rounded-lg w-fit bg-slate-50 text-slate-500 border border-slate-100">
-                    Renew: GHS 5,000 / $345 yearly
-                  </div>
-                </div>
-              </div>
-
-              <div className="space-y-4 flex-grow">
-                <ul className="space-y-3">
-                  {["Full online store / booking system", "Payment integrations (Visa, Momo)", "Stock & coupon management", "Secure admin dashboard", "Advanced SEO + schema"].map((item) => (
-                    <li key={item} className="flex items-center gap-3 text-sm text-slate-600">
-                      <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                      </svg>
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="mt-10">
-                <Link href="/site/contact" className="w-full inline-flex justify-center items-center px-6 py-4 bg-slate-50 text-slate-900 rounded-2xl font-bold group-hover:bg-blue-600 group-hover:text-white transition-all">
-                  Build Store
-                </Link>
-              </div>
-            </div>
           </div>
-
-          <div className="text-center pt-16">
-            <Link href="/site/pricing" className="inline-flex items-center gap-2 text-sm font-black uppercase tracking-widest text-blue-600 hover:gap-3 transition-all">
-              Not what you're looking for? View full catalog
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
-            </Link>
-          </div>
-
-
-        </div>
       </section>
 
       {/* Capabilities (Services) */}
@@ -688,7 +638,7 @@ export default function Home() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {services.slice(0, 4).map((service) => (
                 <div
-                  key={service.id}
+                  key={service._id}
                   className="group relative rounded-[2.5rem] border border-slate-100 bg-white p-8 shadow-sm hover:shadow-2xl hover:shadow-blue-500/5 hover:-translate-y-2 transition-all duration-500 overflow-hidden flex flex-col items-center text-center"
                 >
                   {/* Icon Area */}
@@ -720,7 +670,7 @@ export default function Home() {
                   </div>
 
                   <div className="mt-8 pt-6 border-t border-slate-50 w-full flex justify-center">
-                    <Link href={`/site/services#${service.id}`} className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-blue-600 group-hover:gap-3 transition-all">
+                    <Link href={`/site/services#${service._id}`} className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-blue-600 group-hover:gap-3 transition-all">
                       View Architecture
                       <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
@@ -811,7 +761,7 @@ export default function Home() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {testimonials.map((item) => (
                 <div
-                  key={item.id}
+                  key={item._id}
                   className="rounded-3xl border border-slate-100 bg-slate-50 p-6 shadow-sm"
                 >
                   <p className="text-slate-700 leading-relaxed mb-6">
