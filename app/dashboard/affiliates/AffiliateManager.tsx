@@ -1,31 +1,29 @@
 "use client";
 
 import React, { useState } from "react";
-import { updateSettingsAction, uploadPartnerLogoAction } from "../../admin/actions";
-import { SiteSettings } from "../../lib/settings";
+import { updateAffiliatesAction, uploadPartnerLogoAction } from "../../admin/actions";
+import { IAffiliate } from "../../lib/affiliates";
 
-export default function AffiliateManager({ initialSettings }: { initialSettings: SiteSettings }) {
-  const [settings, setSettings] = useState(initialSettings);
+export default function AffiliateManager({ initialAffiliates }: { initialAffiliates: IAffiliate[] }) {
+  const [affiliates, setAffiliates] = useState<IAffiliate[]>(initialAffiliates);
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState<string | null>(null);
   const [message, setMessage] = useState("");
 
   const handleAdd = () => {
-    const newSettings = { ...settings };
-    newSettings.partners.push({ name: "", logoUrl: "" });
-    setSettings(newSettings);
+    setAffiliates([...affiliates, { name: "", logoUrl: "" }]);
   };
 
   const handleDelete = (index: number) => {
-    const newSettings = { ...settings };
-    newSettings.partners.splice(index, 1);
-    setSettings(newSettings);
+    const newAffiliates = [...affiliates];
+    newAffiliates.splice(index, 1);
+    setAffiliates(newAffiliates);
   };
 
-  const handleInputChange = (index: number, field: string, value: string) => {
-    const newSettings = { ...settings };
-    (newSettings.partners[index] as any)[field] = value;
-    setSettings(newSettings);
+  const handleInputChange = (index: number, field: keyof IAffiliate, value: string) => {
+    const newAffiliates = [...affiliates];
+    (newAffiliates[index] as any)[field] = value;
+    setAffiliates(newAffiliates);
   };
 
   const handleFileUpload = async (index: number, file: File) => {
@@ -45,7 +43,7 @@ export default function AffiliateManager({ initialSettings }: { initialSettings:
   async function handleSave() {
     setLoading(true);
     setMessage("");
-    const result = await updateSettingsAction({ partners: settings.partners });
+    const result = await updateAffiliatesAction(affiliates);
     if (result.success) {
       setMessage("Partner Network synchronized successfully.");
     } else {
@@ -80,7 +78,7 @@ export default function AffiliateManager({ initialSettings }: { initialSettings:
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {settings.partners.map((partner, pIdx) => (
+          {affiliates.map((partner, pIdx) => (
             <div key={pIdx} className="bg-white rounded-[2rem] border border-slate-200 p-6 shadow-sm space-y-4 group">
               <div className="flex justify-between items-start">
                 <div className="w-full">

@@ -5,6 +5,7 @@ import { getPricing, savePricing } from "../lib/pricing";
 import { revalidatePath } from "next/cache";
 
 import { getSettings, saveSettings, SiteSettings } from "../lib/settings";
+import { saveAffiliates, IAffiliate } from "../lib/affiliates";
 
 export async function updateHomeHero(formData: FormData) {
   try {
@@ -79,6 +80,18 @@ export async function updateSettingsAction(settings: Partial<SiteSettings>) {
     return { success: true };
   } catch (error: any) {
     console.error("Settings update error:", error);
+    return { success: false, error: error.message };
+  }
+}
+
+export async function updateAffiliatesAction(affiliates: IAffiliate[]) {
+  try {
+    await saveAffiliates(affiliates);
+    revalidatePath("/");
+    revalidatePath("/dashboard/affiliates");
+    return { success: true };
+  } catch (error: any) {
+    console.error("Affiliates update error:", error);
     return { success: false, error: error.message };
   }
 }

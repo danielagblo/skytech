@@ -39,17 +39,16 @@ const s3Client = new S3Client({
   forcePathStyle: true,
 });
 
-// Settings Schema
-const SettingsSchema = new mongoose.Schema({
-  partners: [
-    {
-      name: String,
-      logoUrl: String,
-    },
-  ],
-}, { strict: false });
+// Affiliate Schema
+const AffiliateSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  logoUrl: { type: String, required: true },
+  order: { type: Number, default: 0 },
+  createdAt: { type: Date, default: Date.now },
+});
 
-const Settings = mongoose.models.Settings || mongoose.model("Settings", SettingsSchema);
+const Affiliate = mongoose.models.Affiliate || mongoose.model("Affiliate", AffiliateSchema);
+
 
 const partnersToSeed = [
   { name: "Atlas Rent-A-Car", file: "Logo-DPCrdneV.png" },
@@ -105,12 +104,9 @@ async function seed() {
     }
 
     if (seededPartners.length > 0) {
-      await Settings.findOneAndUpdate(
-        {},
-        { partners: seededPartners },
-        { upsert: true, new: true }
-      );
-      console.log(`Successfully seeded ${seededPartners.length} partners to MongoDB and S3.`);
+      await Affiliate.deleteMany({});
+      await Affiliate.insertMany(seededPartners.map((p, idx) => ({ ...p, order: idx })));
+      console.log(`Successfully seeded ${seededPartners.length} partners to the dedicated Affiliate collection.`);
     } else {
       console.log("No partners found to seed.");
     }

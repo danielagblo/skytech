@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { getHeroData } from '../lib/hero';
 import { getSettings, DEFAULT_SETTINGS } from '../lib/settings';
+import { getAffiliates } from '../lib/affiliates';
 import { getPricing } from '../lib/pricing';
 import { getBlogPosts } from '../admin/blog-actions';
 import FreeAuditForm from "../../components/FreeAuditForm";
@@ -317,7 +318,8 @@ export default async function Home() {
     imageUrl: heroData?.imageUrl || "/images/hero-3.png"
   };
 
-  const allPartners = (settings.partners || []).filter((p) => p?.logoUrl || p?.name);
+  const partnersData = await getAffiliates();
+  const allPartners = (partnersData || []).filter((p) => p?.logoUrl || p?.name);
 
   return (
     <>

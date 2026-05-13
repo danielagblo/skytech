@@ -36,7 +36,7 @@ export async function saveHeroData(hero: Partial<HeroData>): Promise<void> {
     await Hero.findOneAndUpdate(
       {},
       { ...hero, updatedAt: new Date() },
-      { upsert: true, new: true }
+      { upsert: true, returnDocument: 'after' }
     );
   } catch (error) {
     console.error("Failed to save hero data to MongoDB:", error);

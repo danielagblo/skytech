@@ -59,7 +59,7 @@ export async function savePricing(pricing: PricingCategory[]): Promise<void> {
       await Pricing.findOneAndUpdate(
         { category: cat.category },
         cat,
-        { upsert: true, new: true }
+        { upsert: true, returnDocument: 'after' }
       );
     }
   } catch (error) {

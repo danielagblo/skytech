@@ -1,6 +1,3 @@
-import dbConnect from "./mongodb";
-import Settings from "../models/Settings";
-
 export type SiteSettings = {
   siteName: string;
   siteDescription: string;
@@ -32,7 +29,6 @@ export type SiteSettings = {
       items: string[];
     };
   };
-  partners: Array<{ name: string; logoUrl: string }>;
   awards: Array<{ title: string; subtitle: string }>;
 };
 
@@ -49,7 +45,6 @@ export const DEFAULT_SETTINGS: SiteSettings = {
     appPackages: [],
     seoGrowthPlan: { name: "", priceRange: "", items: [] },
   },
-  partners: [],
   awards: [
     { title: "Best Web Development Agency 2023", subtitle: "Ghana Tech Awards" },
     { title: "Innovation in Mobile Apps", subtitle: "Digital Excellence Forum" }
@@ -57,27 +52,10 @@ export const DEFAULT_SETTINGS: SiteSettings = {
 };
 
 export async function getSettings(): Promise<SiteSettings> {
-  try {
-    await dbConnect();
-    const settings = await Settings.findOne().lean();
-    if (!settings) {
-      return DEFAULT_SETTINGS;
-    }
-    // Merge with defaults to ensure all fields exist
-    return { ...DEFAULT_SETTINGS, ...settings } as SiteSettings;
-  } catch (error) {
-    console.error("Error fetching settings:", error);
-    return DEFAULT_SETTINGS;
-  }
+  return DEFAULT_SETTINGS;
 }
 
 export async function saveSettings(settings: Partial<SiteSettings>): Promise<void> {
-  try {
-    await dbConnect();
-    await Settings.findOneAndUpdate({}, settings, { upsert: true, new: true });
-  } catch (error) {
-    console.error("Error saving settings:", error);
-    throw error;
-  }
+  // Settings are now hardcoded and not saved to MongoDB
+  return;
 }
-
