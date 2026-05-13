@@ -13,6 +13,12 @@ export async function getAffiliates(): Promise<IAffiliate[]> {
   try {
     await dbConnect();
     const affiliates = await Affiliate.find({}).sort({ order: 1, createdAt: -1 }).lean();
+    
+    if (!affiliates || affiliates.length === 0) {
+      console.log("No affiliates found in database.");
+      return [];
+    }
+
     return JSON.parse(JSON.stringify(affiliates));
   } catch (error) {
     console.error("Error fetching affiliates:", error);
