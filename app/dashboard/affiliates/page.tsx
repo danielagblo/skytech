@@ -2,6 +2,9 @@ import React from "react";
 import AffiliateManager from "./AffiliateManager";
 import { getAffiliates } from "../../lib/affiliates";
 
+export const dynamic = 'force-dynamic';
+
+
 export default async function AffiliateDashboardPage() {
   const affiliates = await getAffiliates();
 

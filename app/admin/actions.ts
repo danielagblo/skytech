@@ -23,10 +23,16 @@ export async function updateHomeHero(formData: FormData) {
     }
 
 
+    const title = formData.get("title") as string;
+    const subtitle = formData.get("subtitle") as string;
+
     await saveHeroData({ 
+      title,
+      subtitle,
       imageUrl, 
       updatedAt: new Date() 
     });
+
 
     revalidatePath("/");
     return { success: true, imageUrl };
