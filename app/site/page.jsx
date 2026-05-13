@@ -5,8 +5,10 @@ import Image from "next/image";
 import { getHeroData } from '../lib/hero';
 import { getSettings, DEFAULT_SETTINGS } from '../lib/settings';
 import { getAffiliates } from '../lib/affiliates';
+import { getTestimonials } from '../lib/testimonials';
 import { getPricing } from '../lib/pricing';
 import { getBlogPosts } from '../admin/blog-actions';
+
 import FreeAuditForm from "../../components/FreeAuditForm";
 import HeroSlideshow from "../../components/HeroSlideshow";
 import AnimatedStats from "../../components/AnimatedStats";

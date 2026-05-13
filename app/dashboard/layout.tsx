@@ -13,8 +13,10 @@ const navItems = [
   { href: '/dashboard/internships', label: 'Internships', icon: '🎓' },
   { href: '/dashboard/affiliates', label: 'Affiliates', icon: '🤝' },
   { href: '/dashboard/testimonials', label: 'Testimonials', icon: '💬' },
+  { href: '/dashboard/team', label: 'Team', icon: '👥' },
   { href: '/dashboard/blog', label: 'Blog', icon: '📝' },
 ];
+
 
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {

@@ -7,6 +7,8 @@ import { revalidatePath } from "next/cache";
 import { getSettings, saveSettings, SiteSettings } from "../lib/settings";
 import { saveAffiliates, IAffiliate } from "../lib/affiliates";
 import { saveTestimonials, ITestimonial } from "../lib/testimonials";
+import { saveTeamMembers, ITeamMember } from "../lib/team";
+
 
 export async function updateHomeHero(formData: FormData) {
   try {
@@ -119,3 +121,16 @@ export async function updateTestimonialsAction(testimonials: ITestimonial[]) {
     return { success: false, error: error.message };
   }
 }
+
+export async function updateTeamAction(members: ITeamMember[]) {
+  try {
+    await saveTeamMembers(members);
+    revalidatePath("/site/about");
+    revalidatePath("/dashboard/team");
+    return { success: true };
+  } catch (error: any) {
+    console.error("Team update error:", error);
+    return { success: false, error: error.message };
+  }
+}
+

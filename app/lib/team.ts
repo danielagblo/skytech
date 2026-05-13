@@ -1,40 +1,39 @@
-import fs from "fs";
-import { resolveSharedData } from "./sharedData";
+import dbConnect from "./mongodb";
 
-export interface TeamMember {
-  id: string;
+import TeamMember from "../models/TeamMember";
+
+export interface ITeamMember {
+  _id?: string;
   name: string;
   role: string;
-  focus: string;
-  avatar: string;
+  bio: string;
+  imageUrl?: string;
+  order?: number;
 }
 
-const DEFAULT_TEAM: TeamMember[] = [
-  {
-    id: "1",
-    name: "Lead Engineer",
-    role: "Fullstack Architect",
-    focus: "Technical delivery and system architecture.",
-    avatar: "/images/team/placeholder.jpg",
-  }
-];
-
-export async function getTeam(): Promise<TeamMember[]> {
+export async function getTeamMembers(): Promise<ITeamMember[]> {
   try {
-    const filePath = resolveSharedData("team.json");
-    if (!fs.existsSync(filePath)) {
-      return DEFAULT_TEAM;
-    }
-    
-    const data = fs.readFileSync(filePath, "utf8");
-    return JSON.parse(data);
+    await dbConnect();
+    const members = await TeamMember.find({}).sort({ order: 1 }).lean();
+    return JSON.parse(JSON.stringify(members));
   } catch (error) {
-    console.error("Failed to read team data from local file:", error);
-    return DEFAULT_TEAM;
+    console.error("Error fetching team members:", error);
+    return [];
   }
 }
 
-export async function saveTeam(team: TeamMember[]): Promise<void> {
-  const filePath = resolveSharedData("team.json");
-  fs.writeFileSync(filePath, JSON.stringify(team, null, 2));
+export async function saveTeamMembers(members: ITeamMember[]): Promise<void> {
+  try {
+    await dbConnect();
+    await TeamMember.deleteMany({});
+    if (members.length > 0) {
+      await TeamMember.insertMany(members.map((m, idx) => ({
+        ...m,
+        order: idx
+      })));
+    }
+  } catch (error) {
+    console.error("Error saving team members:", error);
+    throw error;
+  }
 }
