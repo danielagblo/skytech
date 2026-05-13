@@ -46,7 +46,7 @@ export default function Header({ siteName = "Skytech Ghana" }) {
           <Link href="/site" className="absolute top-1/2 -translate-y-1/2 left-0 focus-ring rounded-xl group z-[60]">
             <div className={`relative transition-all duration-500 group-hover:scale-110 ${(isScrolled || isOpen) ? "h-20 w-20" : "h-32 w-32"}`}>
               <Image
-                src="/try.png"
+                src={(isHome && !isScrolled) ? "/try1.png" : "/try.png"}
                 alt={`${siteName} logo`}
                 fill
                 className="object-contain drop-shadow-sm"
@@ -106,7 +106,7 @@ export default function Header({ siteName = "Skytech Ghana" }) {
             <Link href="/site" className="flex items-center gap-3" onClick={() => setIsOpen(false)}>
               <span className="relative h-8 w-8 bg-slate-950 rounded-xl overflow-hidden ring-1 ring-slate-900/10">
                 <Image
-                  src="/try.png"
+                  src={(isHome && !isScrolled) ? "/try1.png" : "/try.png"}
                   alt={`${siteName} logo`}
                   fill
                   className="object-contain p-1.5"

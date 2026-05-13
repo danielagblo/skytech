@@ -70,53 +70,53 @@ export default function DashboardPage() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           <Link
-            href="/dashboard/pages"
+            href="/dashboard/hero"
             className="group p-6 border-2 border-slate-200 rounded-xl hover:border-blue-500 hover:shadow-lg transition-all duration-200 hover:-translate-y-1 bg-gradient-to-br from-white to-blue-50/30"
           >
-            <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center text-2xl mb-4 shadow-sm group-hover:shadow-md transition-shadow">📄</div>
-            <div className="font-bold text-slate-900 text-lg group-hover:text-blue-600 transition-colors">Edit Pages</div>
-            <p className="text-sm text-slate-600 mt-2">Update page content and SEO</p>
-            <div className="mt-4 text-xs text-blue-600 font-semibold opacity-0 group-hover:opacity-100 transition-opacity">→ Go to Pages</div>
+            <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center text-2xl mb-4 shadow-sm group-hover:shadow-md transition-shadow">🖼️</div>
+            <div className="font-bold text-slate-900 text-lg group-hover:text-blue-600 transition-colors">Home Hero</div>
+            <p className="text-sm text-slate-600 mt-2">Manage homepage hero assets</p>
+            <div className="mt-4 text-xs text-blue-600 font-semibold opacity-0 group-hover:opacity-100 transition-opacity">→ Go to Hero</div>
+          </Link>
+
+          <Link
+            href="/dashboard/gallery"
+            className="group p-6 border-2 border-slate-200 rounded-xl hover:border-purple-500 hover:shadow-lg transition-all duration-200 hover:-translate-y-1 bg-gradient-to-br from-white to-purple-50/30"
+          >
+            <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center text-2xl mb-4 shadow-sm group-hover:shadow-md transition-shadow">📸</div>
+            <div className="font-bold text-slate-900 text-lg group-hover:text-purple-600 transition-colors">Gallery</div>
+            <p className="text-sm text-slate-600 mt-2">Manage project gallery</p>
+            <div className="mt-4 text-xs text-purple-600 font-semibold opacity-0 group-hover:opacity-100 transition-opacity">→ Go to Gallery</div>
+          </Link>
+
+          <Link
+            href="/dashboard/pricing"
+            className="group p-6 border-2 border-slate-200 rounded-xl hover:border-emerald-500 hover:shadow-lg transition-all duration-200 hover:-translate-y-1 bg-gradient-to-br from-white to-emerald-50/30"
+          >
+            <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl flex items-center justify-center text-2xl mb-4 shadow-sm group-hover:shadow-md transition-shadow">💰</div>
+            <div className="font-bold text-slate-900 text-lg group-hover:text-emerald-600 transition-colors">Pricing</div>
+            <p className="text-sm text-slate-600 mt-2">Update rate card and packages</p>
+            <div className="mt-4 text-xs text-emerald-600 font-semibold opacity-0 group-hover:opacity-100 transition-opacity">→ Go to Pricing</div>
+          </Link>
+
+          <Link
+            href="/dashboard/blog"
+            className="group p-6 border-2 border-slate-200 rounded-xl hover:border-amber-500 hover:shadow-lg transition-all duration-200 hover:-translate-y-1 bg-gradient-to-br from-white to-amber-50/30"
+          >
+            <div className="w-12 h-12 bg-gradient-to-br from-amber-500 to-amber-600 rounded-xl flex items-center justify-center text-2xl mb-4 shadow-sm group-hover:shadow-md transition-shadow">📝</div>
+            <div className="font-bold text-slate-900 text-lg group-hover:text-amber-600 transition-colors">Blog</div>
+            <p className="text-sm text-slate-600 mt-2">Manage blog posts</p>
+            <div className="mt-4 text-xs text-amber-600 font-semibold opacity-0 group-hover:opacity-100 transition-opacity">→ Go to Blog</div>
           </Link>
 
           <Link
             href="/dashboard/team"
-            className="group p-6 border-2 border-slate-200 rounded-xl hover:border-purple-500 hover:shadow-lg transition-all duration-200 hover:-translate-y-1 bg-gradient-to-br from-white to-purple-50/30"
-          >
-            <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center text-2xl mb-4 shadow-sm group-hover:shadow-md transition-shadow">👥</div>
-            <div className="font-bold text-slate-900 text-lg group-hover:text-purple-600 transition-colors">Manage Team</div>
-            <p className="text-sm text-slate-600 mt-2">Add or edit team members</p>
-            <div className="mt-4 text-xs text-purple-600 font-semibold opacity-0 group-hover:opacity-100 transition-opacity">→ Go to Team</div>
-          </Link>
-
-          <Link
-            href="/dashboard/services"
-            className="group p-6 border-2 border-slate-200 rounded-xl hover:border-emerald-500 hover:shadow-lg transition-all duration-200 hover:-translate-y-1 bg-gradient-to-br from-white to-emerald-50/30"
-          >
-            <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl flex items-center justify-center text-2xl mb-4 shadow-sm group-hover:shadow-md transition-shadow">⚙️</div>
-            <div className="font-bold text-slate-900 text-lg group-hover:text-emerald-600 transition-colors">Services</div>
-            <p className="text-sm text-slate-600 mt-2">Manage service offerings</p>
-            <div className="mt-4 text-xs text-emerald-600 font-semibold opacity-0 group-hover:opacity-100 transition-opacity">→ Go to Services</div>
-          </Link>
-
-          <Link
-            href="/dashboard/testimonials"
-            className="group p-6 border-2 border-slate-200 rounded-xl hover:border-amber-500 hover:shadow-lg transition-all duration-200 hover:-translate-y-1 bg-gradient-to-br from-white to-amber-50/30"
-          >
-            <div className="w-12 h-12 bg-gradient-to-br from-amber-500 to-amber-600 rounded-xl flex items-center justify-center text-2xl mb-4 shadow-sm group-hover:shadow-md transition-shadow">⭐</div>
-            <div className="font-bold text-slate-900 text-lg group-hover:text-amber-600 transition-colors">Testimonials</div>
-            <p className="text-sm text-slate-600 mt-2">Add client testimonials</p>
-            <div className="mt-4 text-xs text-amber-600 font-semibold opacity-0 group-hover:opacity-100 transition-opacity">→ Go to Testimonials</div>
-          </Link>
-
-          <Link
-            href="/dashboard/settings"
             className="group p-6 border-2 border-slate-200 rounded-xl hover:border-slate-500 hover:shadow-lg transition-all duration-200 hover:-translate-y-1 bg-gradient-to-br from-white to-slate-50/30"
           >
-            <div className="w-12 h-12 bg-gradient-to-br from-slate-500 to-slate-600 rounded-xl flex items-center justify-center text-2xl mb-4 shadow-sm group-hover:shadow-md transition-shadow">🔧</div>
-            <div className="font-bold text-slate-900 text-lg group-hover:text-slate-600 transition-colors">Settings</div>
-            <p className="text-sm text-slate-600 mt-2">Site-wide configuration</p>
-            <div className="mt-4 text-xs text-slate-600 font-semibold opacity-0 group-hover:opacity-100 transition-opacity">→ Go to Settings</div>
+            <div className="w-12 h-12 bg-gradient-to-br from-slate-500 to-slate-600 rounded-xl flex items-center justify-center text-2xl mb-4 shadow-sm group-hover:shadow-md transition-shadow">👥</div>
+            <div className="font-bold text-slate-900 text-lg group-hover:text-slate-600 transition-colors">Team</div>
+            <p className="text-sm text-slate-600 mt-2">Manage team members</p>
+            <div className="mt-4 text-xs text-slate-600 font-semibold opacity-0 group-hover:opacity-100 transition-opacity">→ Go to Team</div>
           </Link>
 
           <Link

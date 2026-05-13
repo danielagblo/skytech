@@ -4,6 +4,8 @@ import BlogPost from '../../../models/BlogPost';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   await dbConnect();

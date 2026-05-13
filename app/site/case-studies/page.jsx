@@ -8,6 +8,8 @@ export const metadata = {
 
 import { getProjects } from "../../lib/projects";
 
+export const dynamic = "force-dynamic";
+
 export default async function CaseStudiesPage() {
   const projects = await getProjects();
   

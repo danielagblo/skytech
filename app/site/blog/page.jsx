@@ -6,6 +6,8 @@ export const metadata = {
   description: "Insights on web design, mobile development, and SEO growth.",
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function BlogPage() {
   const allPosts = await getBlogPosts();
   const posts = allPosts.filter((p) => p.published);

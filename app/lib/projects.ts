@@ -2,8 +2,8 @@ import dbConnect from './mongodb';
 import Project from '../models/Project';
 
 export async function getProjects() {
-  await dbConnect();
   try {
+    await dbConnect();
     const projects = await Project.find({}).sort({ order: 1, createdAt: -1 });
     return JSON.parse(JSON.stringify(projects));
   } catch (error) {

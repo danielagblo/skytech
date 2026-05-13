@@ -65,35 +65,10 @@ export const DEFAULT_SETTINGS: SiteSettings = {
 };
 
 export async function getSettings(): Promise<SiteSettings> {
-  try {
-    await dbConnect();
-    const settings = await Settings.findOne({}).lean();
-    if (!settings) return DEFAULT_SETTINGS;
-    
-    // Ensure nested objects exist
-    return {
-      ...DEFAULT_SETTINGS,
-      ...JSON.parse(JSON.stringify(settings)),
-      pricing: settings.pricing || DEFAULT_SETTINGS.pricing,
-      partners: settings.partners || DEFAULT_SETTINGS.partners,
-      awards: settings.awards || DEFAULT_SETTINGS.awards,
-    };
-  } catch (error) {
-    console.error("Failed to fetch settings from MongoDB:", error);
-    return DEFAULT_SETTINGS;
-  }
+  return DEFAULT_SETTINGS;
 }
 
 export async function saveSettings(settings: Partial<SiteSettings>): Promise<void> {
-  try {
-    await dbConnect();
-    await Settings.findOneAndUpdate(
-      {},
-      { ...settings },
-      { upsert: true, new: true }
-    );
-  } catch (error) {
-    console.error("Failed to save settings to MongoDB:", error);
-    throw error;
-  }
+  // Settings are now hardcoded and not saved to MongoDB
+  return;
 }
