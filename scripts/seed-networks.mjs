@@ -81,7 +81,7 @@ async function uploadToS3(filePath, partnerName) {
     ContentType: "image/webp",
   }));
 
-  return `${NEXT_PUBLIC_BASE_URL}/api/images/${key}`;
+  return `/api/images/${key}`;
 }
 
 async function seed() {

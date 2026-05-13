@@ -63,7 +63,7 @@ export async function uploadPartnerLogoAction(formData: FormData) {
     const file = formData.get("file") as File;
     if (!file || file.size === 0) throw new Error("No file provided");
     
-    const imageUrl = await processAndUpload(file);
+    const imageUrl = await processAndUpload(file, "partners");
     return { success: true, imageUrl };
   } catch (error: any) {
     console.error("Partner logo upload error:", error);

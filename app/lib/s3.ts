@@ -31,5 +31,5 @@ export async function processAndUpload(file: File, folder: string = "hero") {
   }));
 
   // 3. Return the Proxy URL
-  return `${process.env.NEXT_PUBLIC_BASE_URL}/api/images/${key}`;
+  return `/api/images/${key}`;
 }
