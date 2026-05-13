@@ -393,39 +393,41 @@ export default async function Home() {
       </section>
 
       {/* Affiliate Network (Dynamic Marquee) */}
-      <section className="relative bg-white py-12 border-b border-slate-100 overflow-hidden">
-        {/* Corner Badge */}
-        <div className="absolute top-0 left-0 bg-blue-600 text-white px-5 py-2 text-[11px] font-extrabold uppercase tracking-[0.2em] shadow-lg z-10 rounded-br-lg">
-          Affiliate Network
-        </div>
-
-        <div className="relative flex items-center">
-          {/* Marquee Container */}
-          <div className="flex w-full overflow-hidden">
-            <div className="flex animate-marquee items-center gap-16 whitespace-nowrap py-4">
-              {[...Array(3)].map((_, i) => (
-                <React.Fragment key={i}>
-                  {allPartners.map((partner, idx) => (
-                    <div key={`${i}-${idx}`} className="flex-shrink-0">
-                      <Image
-                        src={partner.logoUrl}
-                        alt={partner.name || "Partner Logo"}
-                        width={160}
-                        height={80}
-                        className="h-10 sm:h-12 w-auto object-contain"
-                      />
-                    </div>
-                  ))}
-                </React.Fragment>
-              ))}
-            </div>
+      {allPartners.length > 0 && (
+        <section className="relative bg-white py-12 border-b border-slate-100 overflow-hidden">
+          {/* Corner Badge */}
+          <div className="absolute top-0 left-0 bg-blue-600 text-white px-5 py-2 text-[11px] font-extrabold uppercase tracking-[0.2em] shadow-lg z-10 rounded-br-lg">
+            Affiliate Network
           </div>
 
-          {/* Gradient Overlays for smooth edges */}
-          <div className="pointer-events-none absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-white to-transparent z-10" />
-          <div className="pointer-events-none absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-white to-transparent z-10" />
-        </div>
-      </section>
+          <div className="relative flex items-center">
+            {/* Marquee Container */}
+            <div className="flex w-full overflow-hidden">
+              <div className="flex animate-marquee items-center gap-16 whitespace-nowrap py-4">
+                {[...Array(3)].map((_, i) => (
+                  <React.Fragment key={i}>
+                    {allPartners.map((partner, idx) => (
+                      <div key={`${i}-${idx}`} className="flex-shrink-0">
+                        <Image
+                          src={partner.logoUrl}
+                          alt={partner.name || "Partner Logo"}
+                          width={160}
+                          height={80}
+                          className="h-10 sm:h-12 w-auto object-contain"
+                        />
+                      </div>
+                    ))}
+                  </React.Fragment>
+                ))}
+              </div>
+            </div>
+
+            {/* Gradient Overlays for smooth edges */}
+            <div className="pointer-events-none absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-white to-transparent z-10" />
+            <div className="pointer-events-none absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-white to-transparent z-10" />
+          </div>
+        </section>
+      )}
 
       {/* Animated Stats Bar */}
       <AnimatedStats stats={stats} />

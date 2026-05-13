@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "npm run seed && npm run seed-networks && next start",
+    "start": "npm run seed-networks && next start",
     "lint": "next lint",
     "seed": "npx tsx scripts/seed-pricing.mjs",
     "seed-networks": "npx tsx scripts/seed-networks.mjs"
