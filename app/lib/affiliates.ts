@@ -40,14 +40,17 @@ export async function saveAffiliates(affiliates: IAffiliate[]): Promise<void> {
       }
     }
 
+    const validAffiliates = affiliates.filter(a => a.name.trim());
+
     await Affiliate.deleteMany({});
-    if (affiliates.length > 0) {
-      await Affiliate.insertMany(affiliates.map((a, idx) => ({
+    if (validAffiliates.length > 0) {
+      await Affiliate.insertMany(validAffiliates.map((a, idx) => ({
         name: a.name,
         logoUrl: a.logoUrl,
         order: idx
       })));
     }
+
   } catch (error) {
     console.error("Error saving affiliates:", error);
     throw error;

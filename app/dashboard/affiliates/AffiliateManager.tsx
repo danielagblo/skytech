@@ -41,6 +41,13 @@ export default function AffiliateManager({ initialAffiliates }: { initialAffilia
   };
 
   async function handleSave() {
+    // Basic validation
+    const hasEmptyNames = affiliates.some(a => !a.name.trim());
+    if (hasEmptyNames) {
+      setMessage("Error: All partners must have a name before saving.");
+      return;
+    }
+
     setLoading(true);
     setMessage("");
     const result = await updateAffiliatesAction(affiliates);
@@ -51,6 +58,7 @@ export default function AffiliateManager({ initialAffiliates }: { initialAffilia
     }
     setLoading(false);
   }
+
 
   return (
     <div className="space-y-10">
