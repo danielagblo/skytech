@@ -1,7 +1,7 @@
 import ContactFormClient from '../../../components/ContactFormClient';
 import { getSettings } from '../../lib/settings';
 import { getPageContent } from '../../lib/pages';
-import { getTeam } from '../../lib/team';
+import { getTeamMembers } from '../../lib/team';
 
 export const dynamic = 'force-dynamic';
 
@@ -12,7 +12,8 @@ export const metadata = {
 
 export default async function Contact() {
   const settings = await getSettings();
-  const teamMembers = await getTeam();
+  const teamMembers = await getTeamMembers();
+
   const submitted = false;
   const pages = await getPageContent();
   const contactContent = pages.contact || {};
@@ -139,14 +140,20 @@ export default async function Contact() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {teamMembers.map((person) => (
-              <div key={person.id} className="rounded-3xl bg-white border border-slate-100 p-6 shadow-sm">
+              <div key={person._id} className="rounded-3xl bg-white border border-slate-100 p-6 shadow-sm">
                 <div className="flex items-center gap-4 mb-3">
-                  <img
-                    src={person.avatar}
-                    alt={person.name}
-                    className="h-12 w-12 rounded-full object-cover border border-slate-100"
-                    loading="lazy"
-                  />
+                  {person.imageUrl ? (
+                    <img
+                      src={person.imageUrl}
+                      alt={person.name}
+                      className="h-12 w-12 rounded-full object-cover border border-slate-100"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div className="h-12 w-12 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 font-bold text-lg border border-blue-100">
+                      {person.name.charAt(0)}
+                    </div>
+                  )}
                   <div className="flex-1">
                     <p className="text-lg font-bold text-slate-900">{person.name}</p>
                     <span className="inline-flex items-center rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700 mt-1">
@@ -154,9 +161,10 @@ export default async function Contact() {
                     </span>
                   </div>
                 </div>
-                <p className="text-sm text-slate-600 mb-3">{person.focus}</p>
+                <p className="text-sm text-slate-600 mb-3 line-clamp-2">{person.bio}</p>
               </div>
             ))}
+
           </div>
         </div>
       </section>
