@@ -2,7 +2,7 @@
 import dbConnect from "../lib/mongodb";
 import BlogPost from "../models/BlogPost";
 import { revalidatePath } from "next/cache";
-import { processAndUpload } from "../lib/s3";
+import { deleteFromS3, processAndUpload } from "../lib/s3";
 
 export async function getBlogPosts() {
   try {
@@ -28,6 +28,10 @@ export async function getBlogPostById(id: string) {
 
 export async function deleteBlogPost(id: string) {
   await dbConnect();
+  const post = await BlogPost.findById(id);
+  if (post?.coverImage) {
+    await deleteFromS3(post.coverImage);
+  }
   await BlogPost.findByIdAndDelete(id);
   revalidatePath("/dashboard/blog");
   revalidatePath("/site/blog");

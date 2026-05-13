@@ -3,7 +3,7 @@
 import dbConnect from "../lib/mongodb";
 import Project from "../models/Project";
 import { revalidatePath } from "next/cache";
-import { processAndUpload } from "../lib/s3";
+import { deleteFromS3, processAndUpload } from "../lib/s3";
 
 export async function getProjects() {
   await dbConnect();
@@ -61,7 +61,12 @@ export async function updateProject(id: string, formData: FormData) {
 
 export async function deleteProject(id: string) {
   await dbConnect();
+  const project = await Project.findById(id);
+  if (project?.image) {
+    await deleteFromS3(project.image);
+  }
   await Project.findByIdAndDelete(id);
   revalidatePath("/site/gallery");
   revalidatePath("/dashboard/gallery");
 }
+

@@ -1,4 +1,4 @@
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import { S3Client, PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
 import sharp from "sharp";
 
 export const s3Client = new S3Client({
@@ -33,3 +33,21 @@ export async function processAndUpload(file: File, folder: string = "hero") {
   // 3. Return the Proxy URL
   return `/api/images/${key}`;
 }
+
+export async function deleteFromS3(url: string) {
+  if (!url || !url.includes("/api/images/")) return;
+
+  try {
+    // Extract key from /api/images/[key]
+    const key = url.split("/api/images/")[1];
+    
+    await s3Client.send(new DeleteObjectCommand({
+      Bucket: process.env.S3_BUCKET || "",
+      Key: key,
+    }));
+    console.log(`Deleted S3 object: ${key}`);
+  } catch (error) {
+    console.error("Failed to delete from S3:", error);
+  }
+}
+

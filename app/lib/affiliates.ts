@@ -1,5 +1,6 @@
 import dbConnect from "./mongodb";
 import Affiliate from "../models/Affiliate";
+import { deleteFromS3 } from "./s3";
 
 export interface IAffiliate {
   _id?: string;
@@ -22,8 +23,17 @@ export async function getAffiliates(): Promise<IAffiliate[]> {
 export async function saveAffiliates(affiliates: IAffiliate[]): Promise<void> {
   try {
     await dbConnect();
-    // For simplicity, we'll replace the whole set, or you could do individual upserts.
-    // Given the small number of partners, replacing is often easier for a "sync" operation.
+    
+    // Cleanup orphaned images
+    const existing = await Affiliate.find({}).lean();
+    const newUrls = new Set(affiliates.map(a => a.logoUrl));
+    
+    for (const item of existing) {
+      if (item.logoUrl && !newUrls.has(item.logoUrl)) {
+        await deleteFromS3(item.logoUrl);
+      }
+    }
+
     await Affiliate.deleteMany({});
     if (affiliates.length > 0) {
       await Affiliate.insertMany(affiliates.map((a, idx) => ({
@@ -37,3 +47,4 @@ export async function saveAffiliates(affiliates: IAffiliate[]): Promise<void> {
     throw error;
   }
 }
+

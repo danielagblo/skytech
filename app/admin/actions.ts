@@ -1,5 +1,5 @@
-"use server"
-import { processAndUpload } from "../lib/s3";
+"use server";
+import { processAndUpload, deleteFromS3 } from "../lib/s3";
 import { getHeroData, saveHeroData } from "../lib/hero";
 import { getPricing, savePricing } from "../lib/pricing";
 import { revalidatePath } from "next/cache";
@@ -10,11 +10,17 @@ import { saveAffiliates, IAffiliate } from "../lib/affiliates";
 export async function updateHomeHero(formData: FormData) {
   try {
     const imageFile = formData.get("image");
-    let imageUrl = formData.get("currentImageUrl") as string;
+    const currentImageUrl = formData.get("currentImageUrl") as string;
+    let imageUrl = currentImageUrl;
 
     if (imageFile && (imageFile as any).size > 0 && typeof imageFile !== 'string') {
+      // Delete old image if it exists
+      if (currentImageUrl) {
+        await deleteFromS3(currentImageUrl);
+      }
       imageUrl = await processAndUpload(imageFile as any);
     }
+
 
     await saveHeroData({ 
       imageUrl, 
@@ -76,7 +82,7 @@ export async function updateSettingsAction(settings: Partial<SiteSettings>) {
   try {
     await saveSettings(settings);
     revalidatePath("/");
-    revalidatePath("/dashboard/settings");
+    revalidatePath("/");
     return { success: true };
   } catch (error: any) {
     console.error("Settings update error:", error);
