@@ -6,6 +6,7 @@ import { revalidatePath } from "next/cache";
 
 import { getSettings, saveSettings, SiteSettings } from "../lib/settings";
 import { saveAffiliates, IAffiliate } from "../lib/affiliates";
+import { saveTestimonials, ITestimonial } from "../lib/testimonials";
 
 export async function updateHomeHero(formData: FormData) {
   try {
@@ -98,6 +99,17 @@ export async function updateAffiliatesAction(affiliates: IAffiliate[]) {
     return { success: true };
   } catch (error: any) {
     console.error("Affiliates update error:", error);
+    return { success: false, error: error.message };
+  }
+}
+export async function updateTestimonialsAction(testimonials: ITestimonial[]) {
+  try {
+    await saveTestimonials(testimonials);
+    revalidatePath("/");
+    revalidatePath("/dashboard/testimonials");
+    return { success: true };
+  } catch (error: any) {
+    console.error("Testimonials update error:", error);
     return { success: false, error: error.message };
   }
 }
