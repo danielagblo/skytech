@@ -27,11 +27,15 @@ export async function saveTeamMembers(members: ITeamMember[]): Promise<void> {
     await dbConnect();
     await TeamMember.deleteMany({});
     if (members.length > 0) {
-      await TeamMember.insertMany(members.map((m, idx) => ({
-        ...m,
-        order: idx
-      })));
+      await TeamMember.insertMany(members.map((m, idx) => {
+        const { _id, ...memberData } = m;
+        return {
+          ...memberData,
+          order: idx
+        };
+      }));
     }
+
   } catch (error) {
     console.error("Error saving team members:", error);
     throw error;

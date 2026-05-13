@@ -32,7 +32,10 @@ export default function TeamManager({ initialMembers }: { initialMembers: ITeamM
   }
 
   const handleAdd = () => {
-    if (!formData.name || !formData.role) return;
+    if (!formData.name.trim() || !formData.role.trim()) {
+      setMessage('Error: Name and Role are required.');
+      return;
+    }
     const newMembers = [...members, { ...formData, _id: Date.now().toString() }];
     setMembers(newMembers);
     handleSave(newMembers);
@@ -42,6 +45,10 @@ export default function TeamManager({ initialMembers }: { initialMembers: ITeamM
 
   const handleUpdate = () => {
     if (!editingId) return;
+    if (!formData.name.trim() || !formData.role.trim()) {
+      setMessage('Error: Name and Role are required.');
+      return;
+    }
     const newMembers = members.map(m => m._id === editingId ? { ...m, ...formData } : m);
     setMembers(newMembers);
     handleSave(newMembers);
@@ -49,6 +56,7 @@ export default function TeamManager({ initialMembers }: { initialMembers: ITeamM
     setFormData({ name: '', role: '', bio: '', imageUrl: '' });
     setIsAdding(false);
   };
+
 
   const handleDelete = (id: string | undefined) => {
     if (!id || !confirm('Delete this team member?')) return;
@@ -80,11 +88,18 @@ export default function TeamManager({ initialMembers }: { initialMembers: ITeamM
           <p className="text-slate-500">Manage your core engineering and executive team.</p>
         </div>
         <button
-          onClick={() => setIsAdding(!isAdding)}
+          onClick={() => {
+            if (isAdding) {
+              setEditingId(null);
+              setFormData({ name: '', role: '', bio: '', imageUrl: '' });
+            }
+            setIsAdding(!isAdding);
+          }}
           className="px-8 py-3 bg-blue-600 text-white rounded-full font-bold shadow-lg hover:bg-blue-700 transition-all"
         >
           {isAdding ? 'Cancel' : '+ Add Member'}
         </button>
+
       </div>
 
       {message && (
