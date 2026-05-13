@@ -277,20 +277,7 @@ const hardcodedServices = [
   }
 ];
 
-const hardcodedTestimonials = [
-  {
-    _id: "1",
-    author: "John Doe",
-    company: "CEO, Atlas Rent-A-Car",
-    quote: "Skytech transformed our digital presence. Their engineering standards are world-class."
-  },
-  {
-    _id: "2",
-    author: "Sarah Smith",
-    company: "Marketing Director",
-    quote: "The fastest development cycle I've ever experienced. Highly recommended for startups."
-  }
-];
+
 
 export default async function Home() {
   const heroData = await getHeroData();
@@ -304,10 +291,14 @@ export default async function Home() {
     ctaSubtitle: "Tell us about your project. We'll provide a clear roadmap and the technical power to bring it to life."
   };
 
-  const testimonials = hardcodedTestimonials;
+  const testimonialsData = await getTestimonials();
+  const testimonials = testimonialsData.length > 0 ? testimonialsData : [];
+
+  
   const settings = await getSettings();
   const services = hardcodedServices;
   const pricingBookletUrl = settings.pricingBookletUrl || "/static/pricing.pdf";
+
 
   const allPosts = await getBlogPosts();
   const latestPosts = allPosts.filter(p => p.published).slice(0, 3);
