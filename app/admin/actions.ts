@@ -8,6 +8,7 @@ import { getSettings, saveSettings, SiteSettings } from "../lib/settings";
 import { saveAffiliates, IAffiliate } from "../lib/affiliates";
 import { saveTestimonials, ITestimonial } from "../lib/testimonials";
 import { saveTeamMembers, ITeamMember } from "../lib/team";
+import { saveFAQs, IFAQ } from "../lib/faqs";
 
 
 export async function updateHomeHero(formData: FormData) {
@@ -130,6 +131,19 @@ export async function updateTeamAction(members: ITeamMember[]) {
     return { success: true };
   } catch (error: any) {
     console.error("Team update error:", error);
+    return { success: false, error: error.message };
+  }
+}
+
+export async function updateFAQsAction(faqs: IFAQ[]) {
+  try {
+    const result = await saveFAQs(faqs);
+    revalidatePath("/");
+    revalidatePath("/site/faqs");
+    revalidatePath("/dashboard/faqs");
+    return { success: true, faqs: result.faqs };
+  } catch (error: any) {
+    console.error("FAQs update error:", error);
     return { success: false, error: error.message };
   }
 }

@@ -8,6 +8,8 @@ import { getAffiliates } from '../lib/affiliates';
 import { getTestimonials } from '../lib/testimonials';
 import { getPricing } from '../lib/pricing';
 import { getBlogPosts } from '../admin/blog-actions';
+import { getProjects } from '../lib/projects';
+import { getFAQs } from '../lib/faqs';
 
 import FreeAuditForm from "../../components/FreeAuditForm";
 import HeroSlideshow from "../../components/HeroSlideshow";
@@ -21,31 +23,14 @@ export const metadata = {
 };
 
 const stats = [
-  { label: "Projects delivered", value: "180+" },
-  { label: "Countries Served", value: "12+" },
-  { label: "System Uptime", value: "99.9%" },
-  { label: "Support Response", value: "<15m" },
+  { label: "10 years on the Ghanaian market", value: "10+" },
+  { label: "Satisfied customers", value: "100+" },
+  { label: "Unique projects and still counting", value: "150+" },
+  { label: "Continental experience", value: "03+" },
 ];
 
 
-const faqsPreview = [
-  {
-    question: "How long does a typical project take?",
-    answer: "A Basic Website usually takes 3-8 weeks, while complex apps can take 3-6 months.",
-  },
-  {
-    question: "Do you offer post-launch support?",
-    answer: "Yes, we provide 1 to 6 months of dedicated support depending on your package.",
-  },
-  {
-    question: "Do I own the source code?",
-    answer: "Absolutely. Once final payment is made, you own full IP rights to all custom work.",
-  },
-  {
-    question: "Can we start with a small MVP?",
-    answer: "Yes, we specialize in helping startups launch fast with focused, scalable products.",
-  },
-];
+
 
 const websitePackages = [
   {
@@ -296,7 +281,7 @@ export default async function Home() {
   const testimonialsData = await getTestimonials();
   const testimonials = testimonialsData.length > 0 ? testimonialsData : [];
 
-  
+
   const settings = await getSettings();
   const services = hardcodedServices;
   const pricingBookletUrl = settings.pricingBookletUrl || "/static/pricing.pdf";
@@ -304,6 +289,12 @@ export default async function Home() {
 
   const allPosts = await getBlogPosts();
   const latestPosts = allPosts.filter(p => p.published).slice(0, 3);
+
+  const projects = await getProjects();
+  const galleryProjects = projects.slice(0, 3);
+
+  const faqs = await getFAQs();
+  const faqsPreview = faqs.slice(0, 5);
 
   const hero = {
     title: "World Class Software solutions for all businesses.",
@@ -619,122 +610,80 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Capabilities (Services) */}
-      {services?.length ? (
-        <section className="py-24 bg-white relative overflow-hidden">
-          <div className="section-shell space-y-12">
-            {/* Centered Header */}
-            <div className="text-center max-w-3xl mx-auto space-y-4 mb-16">
-              <span className="pill border-blue-600/20 text-blue-600 bg-blue-50 uppercase tracking-widest text-[10px] font-extrabold">Capabilities</span>
-              <h2 className="text-4xl sm:text-5xl font-extrabold text-slate-900 leading-[1.1] tracking-tight">
-                {homeContent.servicesSectionTitle || "Engineering the digital products of tomorrow."}
-              </h2>
-              <p className="text-lg text-slate-500 leading-relaxed max-w-2xl mx-auto">
-                {homeContent.servicesSubtitle || "From high-performance architecture to forensic product optimization, we build systems that scale."}
-              </p>
-            </div>
 
-            {/* Capabilities Grid (Perfect Four) */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {services.slice(0, 4).map((service) => (
-                <div
-                  key={service._id}
-                  className="group relative rounded-[2.5rem] border border-slate-100 bg-white p-8 shadow-sm hover:shadow-2xl hover:shadow-blue-500/5 hover:-translate-y-2 transition-all duration-500 overflow-hidden flex flex-col items-center text-center"
-                >
-                  {/* Icon Area */}
-                  <div className="mb-6 w-14 h-14 rounded-2xl bg-slate-50 flex items-center justify-center text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-all duration-500 shadow-inner">
-                    <div className="w-7 h-7">
-                      {service.title.toLowerCase().includes('web') ? (
-                        <svg className="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
-                        </svg>
-                      ) : service.title.toLowerCase().includes('mobile') ? (
-                        <svg className="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                        </svg>
-                      ) : (
-                        <svg className="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                        </svg>
-                      )}
-                    </div>
-                  </div>
-
-                  <div className="space-y-3">
-                    <h3 className="text-xl font-extrabold text-slate-900 tracking-tight leading-tight group-hover:text-blue-600 transition-colors">
-                      {service.title}
-                    </h3>
-                    <p className="text-slate-500 text-xs leading-relaxed min-h-[60px]">
-                      {service.description}
-                    </p>
-                  </div>
-
-                  <div className="mt-8 pt-6 border-t border-slate-50 w-full flex justify-center">
-                    <Link href={`/site/services#${service._id}`} className="inline-flex items-center gap-2 text-[10px] font-extrabold uppercase tracking-widest text-blue-600 group-hover:gap-3 transition-all">
-                      View Architecture
-                      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                      </svg>
-                    </Link>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div className="text-center">
-              <Link className="group inline-flex items-center gap-3 px-8 py-4 bg-slate-900 text-white rounded-full font-bold transition-all hover:bg-blue-600 active:scale-95 shadow-xl shadow-slate-900/10" href="/site/services">
-                Explore All Capabilities
-                <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
+      {/* Gallery Bento Grid */}
+      {galleryProjects.length >= 3 && (
+        <section className="py-24 bg-slate-50">
+          <div className="section-shell space-y-16">
+            <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8">
+              <div className="space-y-4 max-w-2xl">
+                <span className="pill">Portfolio</span>
+                <h2 className="text-4xl sm:text-5xl font-extrabold text-slate-900 leading-tight">
+                  Our Work in Action
+                </h2>
+                <p className="text-lg text-slate-600">
+                  A showcase of recent websites and apps we've launched for our partners.
+                </p>
+              </div>
+              <Link className="btn-secondary px-8 py-3 rounded-full" href="/site/gallery">
+                View full gallery
               </Link>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 md:grid-rows-2 gap-6 h-[800px] md:h-[600px]">
+              <div className="md:col-span-2 md:row-span-2 relative group overflow-hidden rounded-[2.5rem] bg-slate-900">
+                {galleryProjects[0].image ? (
+                  <Image
+                    src={galleryProjects[0].image}
+                    alt={galleryProjects[0].title}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-700"
+                  />
+                ) : (
+                  <div className="absolute inset-0 flex items-center justify-center text-slate-800 font-extrabold text-2xl uppercase tracking-[0.2em] -rotate-12 opacity-5">Project Featured</div>
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/20 to-transparent z-10" />
+                <div className="absolute bottom-0 left-0 right-0 p-10 z-20">
+                  <span className="pill bg-blue-600 text-white border-none mb-4">{galleryProjects[0].category}</span>
+                  <h3 className="text-3xl font-extrabold text-white">{galleryProjects[0].title}</h3>
+                </div>
+              </div>
+
+              <div className="relative group overflow-hidden rounded-[2.5rem] bg-slate-200">
+                {galleryProjects[1].image && (
+                  <Image
+                    src={galleryProjects[1].image}
+                    alt={galleryProjects[1].title}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-700"
+                  />
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent z-10" />
+                <div className="absolute bottom-0 left-0 right-0 p-6 z-20">
+                  <span className="text-[10px] font-bold text-white/80 uppercase tracking-widest mb-1 block">{galleryProjects[1].category}</span>
+                  <h3 className="text-lg font-bold text-white">{galleryProjects[1].title}</h3>
+                </div>
+              </div>
+
+              <div className="relative group overflow-hidden rounded-[2.5rem] bg-blue-600">
+                {galleryProjects[2].image && (
+                  <Image
+                    src={galleryProjects[2].image}
+                    alt={galleryProjects[2].title}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-700"
+                  />
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent z-10" />
+                <div className="absolute bottom-0 left-0 right-0 p-6 z-20">
+                  <span className="text-[10px] font-bold text-white/80 uppercase tracking-widest mb-1 block">{galleryProjects[2].category}</span>
+                  <h3 className="text-lg font-bold text-white">{galleryProjects[2].title}</h3>
+                </div>
+              </div>
             </div>
           </div>
         </section>
-      ) : null}
-
-      {/* Gallery Bento Grid */}
-      <section className="py-24 bg-slate-50">
-        <div className="section-shell space-y-16">
-          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8">
-            <div className="space-y-4 max-w-2xl">
-              <span className="pill">Portfolio</span>
-              <h2 className="text-4xl sm:text-5xl font-extrabold text-slate-900 leading-tight">
-                Our Work in Action
-              </h2>
-              <p className="text-lg text-slate-600">
-                A showcase of recent websites and apps we've launched for our partners.
-              </p>
-            </div>
-            <Link className="btn-secondary px-8 py-3 rounded-full" href="/site/gallery">
-              View full gallery
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 md:grid-rows-2 gap-6 h-[800px] md:h-[600px]">
-            <div className="md:col-span-2 md:row-span-2 relative group overflow-hidden rounded-[2.5rem] bg-slate-900">
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/20 to-transparent z-10" />
-              <div className="absolute inset-0 flex items-center justify-center text-slate-800 font-extrabold text-2xl uppercase tracking-[0.2em] -rotate-12 opacity-5">Project Featured</div>
-              <div className="absolute bottom-0 left-0 right-0 p-10 z-20">
-                <span className="pill bg-blue-600 text-white border-none mb-4">Enterprise App</span>
-                <h3 className="text-3xl font-extrabold text-white">Advanced Logistics Platform</h3>
-              </div>
-            </div>
-            <div className="relative group overflow-hidden rounded-[2.5rem] bg-slate-200">
-              <div className="absolute inset-0 flex items-center justify-center text-slate-400 font-bold text-sm uppercase tracking-widest">E-commerce</div>
-              <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-slate-900/40 to-transparent">
-                <h3 className="text-lg font-bold text-white">Modern Retail Site</h3>
-              </div>
-            </div>
-            <div className="relative group overflow-hidden rounded-[2.5rem] bg-blue-600">
-              <div className="absolute inset-0 flex items-center justify-center text-blue-500 font-bold text-sm uppercase tracking-widest">Web Application</div>
-              <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-slate-900/40 to-transparent">
-                <h3 className="text-lg font-bold text-white">Fintech Dashboard</h3>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      )}
 
 
 

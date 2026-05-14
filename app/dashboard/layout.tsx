@@ -15,6 +15,7 @@ const navItems = [
   { href: '/dashboard/testimonials', label: 'Testimonials', icon: '💬' },
   { href: '/dashboard/team', label: 'Team', icon: '👥' },
   { href: '/dashboard/blog', label: 'Blog', icon: '📝' },
+  { href: '/dashboard/faqs', label: 'FAQs', icon: '❓' },
 ];
 
 
