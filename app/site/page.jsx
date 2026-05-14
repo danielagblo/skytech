@@ -271,12 +271,6 @@ export default async function Home() {
   const pricingData = await getPricing();
   const webPricing = pricingData.find(c => c.category === 'web') || { packages: [] };
   const pricing = webPricing.packages.slice(0, 3); // Get first 3 packages
-  const homeContent = {
-    servicesSectionTitle: "Engineering the digital products of tomorrow.",
-    servicesSubtitle: "From high-performance architecture to forensic product optimization, we build systems that scale.",
-    ctaTitle: "Engineering excellence delivered with precision.",
-    ctaSubtitle: "Tell us about your project. We'll provide a clear roadmap and the technical power to bring it to life."
-  };
 
   const testimonialsData = await getTestimonials();
   const testimonials = testimonialsData.length > 0 ? testimonialsData : [];
@@ -777,41 +771,6 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* CTA Section */}
-
-      {/* Final CTA Section (Surgical Compact) */}
-      <section className="py-12 bg-white">
-        <div className="section-shell">
-          <div className="rounded-[2.5rem] bg-slate-50 border border-slate-100 p-10 lg:p-16 text-center space-y-8">
-            <div className="space-y-3 max-w-3xl mx-auto">
-              <span className="pill border-blue-600/20 text-blue-600 bg-blue-50 uppercase tracking-widest text-[9px] font-bold">
-                Next Steps
-              </span>
-              <h2 className="text-3xl md:text-5xl font-extrabold text-slate-900 leading-tight tracking-tight">
-                {homeContent.ctaTitle || "Engineering excellence delivered with precision."}
-              </h2>
-              <p className="text-base text-slate-500 max-w-2xl mx-auto">
-                {homeContent.ctaSubtitle || "Tell us about your project. We'll provide a clear roadmap and the technical power to bring it to life."}
-              </p>
-            </div>
-
-            <div className="flex flex-wrap justify-center gap-4">
-              <Link
-                href="/site/contact"
-                className="inline-flex items-center gap-3 px-8 py-4 bg-blue-600 text-white rounded-full font-extrabold text-base hover:bg-blue-700 transition-all shadow-lg shadow-blue-600/15"
-              >
-                Start Your Project
-              </Link>
-              <Link
-                href="/site/about"
-                className="inline-flex items-center gap-3 px-8 py-4 border-2 border-slate-200 text-slate-900 rounded-full font-extrabold text-base hover:bg-slate-50 transition-all"
-              >
-                Meet the Team
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Blog Preview (Journal Style) - Relocated to Footer Anchor */}
       <section className="py-24 bg-white border-t border-slate-50">

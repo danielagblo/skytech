@@ -47,8 +47,8 @@ export default function PricingClient({ initialPricing }) {
                 key={cat.id}
                 onClick={() => setActiveCategory(cat.id)}
                 className={`whitespace-nowrap px-6 py-3 rounded-full text-sm font-extrabold uppercase tracking-widest transition-all ${activeCategory === cat.id
-                    ? "bg-blue-600 text-white shadow-lg shadow-blue-600/20"
-                    : "bg-white text-slate-400 hover:text-slate-600 border border-slate-200"
+                  ? "bg-blue-600 text-white shadow-lg shadow-blue-600/20"
+                  : "bg-white text-slate-400 hover:text-slate-600 border border-slate-200"
                   }`}
               >
                 {cat.label}
@@ -66,8 +66,8 @@ export default function PricingClient({ initialPricing }) {
               <div
                 key={pkg.name}
                 className={`group relative p-8 rounded-[2rem] border transition-all duration-500 flex flex-col ${pkg.featured
-                    ? "bg-slate-950 text-white border-blue-600/30 shadow-2xl shadow-blue-600/10 scale-105 z-10"
-                    : "bg-white border-slate-100 hover:border-blue-600/20 hover:shadow-2xl"
+                  ? "bg-slate-950 text-white border-blue-600/30 shadow-2xl shadow-blue-600/10 scale-105 z-10"
+                  : "bg-white border-slate-100 hover:border-blue-600/20 hover:shadow-2xl"
                   }`}
               >
                 {pkg.featured && (
@@ -119,8 +119,8 @@ export default function PricingClient({ initialPricing }) {
                   <Link
                     href="/site/contact"
                     className={`w-full inline-flex justify-center items-center px-6 py-4 rounded-xl font-extrabold text-xs transition-all ${pkg.featured
-                        ? "bg-blue-600 text-white hover:bg-white hover:text-slate-900"
-                        : "bg-slate-900 text-white hover:bg-blue-600"
+                      ? "bg-blue-600 text-white hover:bg-white hover:text-slate-900"
+                      : "bg-slate-900 text-white hover:bg-blue-600"
                       }`}
                   >
                     Initiate Project
@@ -128,24 +128,6 @@ export default function PricingClient({ initialPricing }) {
                 </div>
               </div>
             ))}
-          </div>
-
-          {/* Expert Resource (The Prospectus) */}
-          <div className="rounded-[3rem] border border-slate-100 bg-slate-50 p-12 md:p-16 flex flex-col md:flex-row items-center justify-between gap-12">
-            <div className="space-y-4 text-center md:text-left">
-              <span className="text-blue-600 text-[10px] font-extrabold uppercase tracking-[0.3em]">Technical Deep-Dive</span>
-              <h2 className="text-3xl font-extrabold text-slate-900">Download the Full Prospectus.</h2>
-              <p className="text-slate-500 max-w-xl leading-relaxed">
-                Need a granular breakdown of our methodologies, security protocols, and long-term support plans? Access our latest pricing and strategy guide.
-              </p>
-            </div>
-
-            <div className="flex flex-col items-center gap-6">
-              <PDFViewer src="/static/pricing.pdf" label="Open Detailed Strategy Guide" />
-              <p className="text-[10px] text-slate-400 uppercase tracking-widest font-extrabold">
-                Secure PDF • 19.3 MB • Updated May 2024
-              </p>
-            </div>
           </div>
         </div>
       </section>
