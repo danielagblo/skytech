@@ -13,6 +13,10 @@ const FAQSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  category: {
+    type: String,
+    default: 'General',
+  },
   published: {
     type: Boolean,
     default: true,

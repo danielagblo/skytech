@@ -14,6 +14,7 @@ import { getFAQs } from '../lib/faqs';
 import FreeAuditForm from "../../components/FreeAuditForm";
 import HeroSlideshow from "../../components/HeroSlideshow";
 import AnimatedStats from "../../components/AnimatedStats";
+import FAQAccordion from "../../components/FAQAccordion";
 import WhyChooseUsSection from "../../components/WhyChooseUsSection";
 
 export const metadata = {
@@ -733,40 +734,28 @@ export default async function Home() {
 
 
 
-      {/* FAQ Preview Section (Horizontal Rail) */}
-      <section className="section-shell space-y-16">
-        <div className="pt-24 space-y-12">
-          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 border-b border-slate-100 pb-8">
-            <div className="space-y-4 text-left">
-              <span className="pill border-blue-600/20 text-blue-600 bg-blue-50 uppercase tracking-widest text-[10px] font-bold">Support</span>
-              <h2 className="text-3xl font-bold text-slate-900 tracking-tight">Common Questions</h2>
-            </div>
-            <Link href="/site/faqs" className="text-blue-600 text-xs font-extrabold uppercase tracking-widest hover:gap-2 flex items-center gap-1 transition-all">
+      {/* FAQ Section */}
+      <section className="py-24 bg-white relative overflow-hidden">
+        <div className="section-shell space-y-16">
+          <div className="text-center space-y-4 max-w-3xl mx-auto">
+            <span className="pill">Support</span>
+            <h2 className="text-4xl sm:text-5xl font-extrabold text-slate-900 leading-tight tracking-tight">
+              Frequently Asked Questions
+            </h2>
+            <p className="text-lg text-slate-600">
+              Everything you need to know about our process, pricing, and services.
+            </p>
+          </div>
+
+          <FAQAccordion faqs={faqs} />
+
+          <div className="text-center">
+            <Link href="/site/faqs" className="group inline-flex items-center gap-2 text-sm font-extrabold uppercase tracking-widest text-blue-600 hover:gap-3 transition-all">
               Full FAQ Center
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>
             </Link>
-          </div>
-
-          <div className="flex gap-6 overflow-x-auto pb-8 snap-x scrollbar-hide">
-            {faqsPreview.map((faq, idx) => (
-              <div key={idx} className="flex-shrink-0 w-[350px] snap-start flex items-start gap-4 p-6 rounded-3xl bg-white border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
-                {/* Icon Left */}
-                <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 font-extrabold text-sm">
-                  ?
-                </div>
-                {/* Content Right */}
-                <div className="space-y-2">
-                  <h3 className="text-sm font-extrabold text-slate-900 leading-tight">
-                    {faq.question}
-                  </h3>
-                  <p className="text-[11px] text-slate-500 leading-relaxed line-clamp-3">
-                    {faq.answer}
-                  </p>
-                </div>
-              </div>
-            ))}
           </div>
         </div>
       </section>

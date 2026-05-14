@@ -5,6 +5,7 @@ export interface IFAQ {
   _id?: string;
   question: string;
   answer: string;
+  category?: string;
   order: number;
   published: boolean;
 }
