@@ -15,6 +15,7 @@ import FreeAuditForm from "../../components/FreeAuditForm";
 import HeroSlideshow from "../../components/HeroSlideshow";
 import AnimatedStats from "../../components/AnimatedStats";
 import FAQAccordion from "../../components/FAQAccordion";
+import TestimonialsSection from "../../components/TestimonialsSection";
 import WhyChooseUsSection from "../../components/WhyChooseUsSection";
 
 export const metadata = {
@@ -683,53 +684,9 @@ export default async function Home() {
 
 
       {/* Testimonials */}
-      {testimonials?.length ? (
-        <section className="py-20 bg-white">
-          <div className="section-shell space-y-10">
-            <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
-              <div className="space-y-3">
-                <span className="pill">Client outcomes</span>
-                <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900">
-                  What partners say about us
-                </h2>
-                <p className="text-slate-600 max-w-2xl">
-                  We build long-term partnerships anchored on transparency, speed,
-                  and quality.
-                </p>
-              </div>
-              <Link className="btn-secondary w-fit" href="/site/contact">
-                Get a proposal
-              </Link>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {testimonials.map((item) => (
-                <div
-                  key={item._id}
-                  className="rounded-3xl border border-slate-100 bg-slate-50 p-6 shadow-sm"
-                >
-                  <p className="text-slate-700 leading-relaxed mb-6">
-                    "{item.quote}"
-                  </p>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="font-semibold text-slate-900">
-                        {item.author}
-                      </p>
-                      <p className="text-sm text-slate-500">{item.company}</p>
-                    </div>
-                    <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-blue-700 border border-slate-100">
-                      {Array(item.rating || 5)
-                        .fill("⭐")
-                        .join("")}
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      ) : null}
+      {testimonials?.length > 0 && (
+        <TestimonialsSection testimonials={testimonials} />
+      )}
 
 
 
