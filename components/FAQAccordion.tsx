@@ -32,29 +32,35 @@ export default function FAQAccordion({ faqs }: { faqs: FAQ[] }) {
 
   return (
     <div className="relative">
-      {/* Background Decorative Elements */}
-      <div className="absolute -top-24 -left-24 w-96 h-96 bg-blue-100/40 rounded-full blur-3xl -z-10" />
-      <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-cyan-100/40 rounded-full blur-3xl -z-10" />
+      {/* Dynamic Background Decorative Blobs - Carefully placed to match image */}
+      <div className="absolute top-1/4 -left-32 w-[35rem] h-[35rem] bg-pink-100/40 rounded-full blur-[100px] -z-10" />
+      <div className="absolute top-0 right-0 w-[40rem] h-[40rem] bg-blue-100/30 rounded-full blur-[100px] -z-10" />
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[30rem] h-[30rem] bg-purple-100/20 rounded-full blur-[100px] -z-10" />
+      
+      {/* Floating accent dots from the image */}
+      <div className="absolute top-20 left-[15%] w-3 h-3 bg-blue-400/30 rounded-full blur-sm" />
+      <div className="absolute bottom-40 right-[10%] w-4 h-4 bg-cyan-400/20 rounded-full blur-sm" />
+      <div className="absolute top-1/2 right-12 w-2 h-2 bg-pink-400/20 rounded-full blur-xs" />
 
-      <div className="glass-panel rounded-[2.5rem] md:rounded-[3.5rem] p-4 md:p-10 border-slate-100/80 shadow-2xl shadow-blue-500/5 bg-white/70 backdrop-blur-xl">
-        <div className="flex flex-col lg:flex-row gap-10 md:gap-16">
-          {/* Categories Rail */}
-          <div className="lg:w-[35%] space-y-3">
+      <div className="bg-white rounded-[2.5rem] md:rounded-[3rem] p-8 md:p-16 shadow-[0_40px_100px_-20px_rgba(0,0,0,0.04)] border border-slate-100/50">
+        <div className="flex flex-col lg:flex-row gap-12 lg:gap-20">
+          {/* Categories Sidebar */}
+          <div className="lg:w-[35%] space-y-2">
             {categories.map((category) => (
               <button
                 key={category}
                 onClick={() => setActiveCategory(category)}
-                className={`w-full text-left px-8 py-6 rounded-2xl md:rounded-[2rem] transition-all duration-300 flex items-center justify-between group ${
+                className={`w-full text-left px-8 py-5 rounded-2xl transition-all duration-400 flex items-center justify-between group ${
                   activeCategory === category
-                    ? 'bg-white shadow-xl shadow-blue-500/10 border border-slate-100 translate-x-2'
-                    : 'text-slate-500 hover:bg-white/50 hover:translate-x-1'
+                    ? 'bg-white shadow-[0_15px_35px_-10px_rgba(0,0,0,0.06)] border border-slate-100 ring-1 ring-slate-100/50'
+                    : 'text-slate-400 hover:text-slate-600'
                 }`}
               >
-                <span className={`text-base font-bold transition-colors ${activeCategory === category ? 'text-slate-900' : 'group-hover:text-slate-700'}`}>
+                <span className={`text-base font-bold transition-colors duration-300 ${activeCategory === category ? 'text-slate-800' : ''}`}>
                   {category}
                 </span>
                 <svg 
-                  className={`w-5 h-5 transition-all duration-300 ${activeCategory === category ? 'text-blue-600 translate-x-0 opacity-100' : '-translate-x-4 opacity-0'}`} 
+                  className={`w-4 h-4 transition-all duration-300 ${activeCategory === category ? 'text-slate-400' : 'text-slate-300 group-hover:translate-x-1'}`} 
                   fill="none" 
                   stroke="currentColor" 
                   viewBox="0 0 24 24"
@@ -65,8 +71,8 @@ export default function FAQAccordion({ faqs }: { faqs: FAQ[] }) {
             ))}
           </div>
 
-          {/* Accordion Rail */}
-          <div className="lg:w-[65%] space-y-4">
+          {/* Accordion Content */}
+          <div className="lg:w-[65%] space-y-3">
             {currentFaqs.map((faq, idx) => (
               <AccordionItem key={idx} question={faq.question} answer={faq.answer} />
             ))}
@@ -81,28 +87,32 @@ function AccordionItem({ question, answer }: { question: string, answer: string 
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className={`rounded-2xl md:rounded-[2rem] border transition-all duration-500 ${isOpen ? 'border-blue-100 bg-white shadow-lg shadow-blue-500/5' : 'border-slate-50 bg-slate-50/30 hover:border-slate-200'}`}>
+    <div className={`rounded-2xl transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] ${
+      isOpen 
+        ? 'bg-white shadow-[0_20px_50px_-15px_rgba(0,0,0,0.08)] border border-slate-100' 
+        : 'bg-[#f8faff] border border-transparent hover:border-slate-200'
+    }`}>
       <button 
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full text-left px-8 py-7 md:px-10 flex items-center justify-between gap-6"
+        className="w-full text-left px-8 py-6 md:px-10 md:py-7 flex items-center justify-between gap-6"
       >
-        <span className={`text-base md:text-lg font-bold transition-colors duration-300 leading-tight ${isOpen ? 'text-slate-900' : 'text-slate-700'}`}>
+        <span className={`text-[15px] md:text-[17px] font-bold transition-colors duration-500 leading-snug ${isOpen ? 'text-slate-900' : 'text-slate-700'}`}>
           {question}
         </span>
-        <span className={`shrink-0 h-8 w-8 md:h-10 md:w-10 rounded-full flex items-center justify-center transition-all duration-500 ${isOpen ? 'bg-slate-900 text-white' : 'bg-white border border-slate-100 text-slate-400'}`}>
+        <span className={`shrink-0 transition-transform duration-500 ${isOpen ? 'rotate-0' : 'rotate-0'}`}>
           {isOpen ? (
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
+            <svg className="w-6 h-6 text-slate-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
           ) : (
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 6v12M6 12h12" />
+            <svg className="w-6 h-6 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v12M6 12h12" />
             </svg>
           )}
         </span>
       </button>
-      <div className={`overflow-hidden transition-all duration-500 ease-in-out ${isOpen ? 'max-h-[800px] opacity-100' : 'max-h-0 opacity-0'}`}>
-        <div className="px-8 pb-8 md:px-10 md:pb-10 text-slate-500 leading-relaxed text-sm md:text-base">
+      <div className={`overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] ${isOpen ? 'max-h-[800px] opacity-100' : 'max-h-0 opacity-0'}`}>
+        <div className="px-8 pb-8 md:px-10 md:pb-10 text-slate-500 leading-relaxed text-[14px] md:text-[15px]">
           {answer}
         </div>
       </div>

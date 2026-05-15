@@ -20,8 +20,8 @@ export default async function FAQPage() {
           <h1 className="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight">
             Frequently Asked Questions
           </h1>
-          <p className="text-lg text-slate-600">
-            Everything you need to know about our process, pricing, and services.
+          <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+            Our platform is built to help you work smarter, not harder. It adapts to your needs and supports your goals. Make the most of every feature.
           </p>
         </div>
 

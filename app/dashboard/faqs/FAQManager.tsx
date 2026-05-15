@@ -14,6 +14,7 @@ export default function FAQManager({ initialFAQs }: { initialFAQs: IFAQ[] }) {
   const [formData, setFormData] = useState({
     question: '',
     answer: '',
+    category: 'General Questions',
     order: 0,
     published: true
   });
@@ -40,7 +41,7 @@ export default function FAQManager({ initialFAQs }: { initialFAQs: IFAQ[] }) {
     const newFaqs = [...faqs, { ...formData, _id: Date.now().toString() }];
     setFaqs(newFaqs);
     handleSave(newFaqs);
-    setFormData({ question: '', answer: '', order: faqs.length + 1, published: true });
+    setFormData({ question: '', answer: '', category: 'General Questions', order: faqs.length + 1, published: true });
     setIsAdding(false);
   };
 
@@ -54,7 +55,7 @@ export default function FAQManager({ initialFAQs }: { initialFAQs: IFAQ[] }) {
     setFaqs(newFaqs);
     handleSave(newFaqs);
     setEditingId(null);
-    setFormData({ question: '', answer: '', order: 0, published: true });
+    setFormData({ question: '', answer: '', category: 'General Questions', order: 0, published: true });
     setIsAdding(false);
   };
 
@@ -83,7 +84,7 @@ export default function FAQManager({ initialFAQs }: { initialFAQs: IFAQ[] }) {
           onClick={() => {
             if (isAdding) {
               setEditingId(null);
-              setFormData({ question: '', answer: '', order: faqs.length, published: true });
+              setFormData({ question: '', answer: '', category: 'General Questions', order: faqs.length, published: true });
             }
             setIsAdding(!isAdding);
           }}
@@ -120,6 +121,16 @@ export default function FAQManager({ initialFAQs }: { initialFAQs: IFAQ[] }) {
                 onChange={e => setFormData({ ...formData, answer: e.target.value })}
                 className="w-full p-4 bg-slate-50 rounded-2xl border border-slate-100 focus:ring-2 focus:ring-blue-500 outline-none min-h-[120px]"
                 placeholder="A Basic Website usually takes 3-8 weeks..."
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Category</label>
+              <input
+                type="text"
+                value={formData.category}
+                onChange={e => setFormData({ ...formData, category: e.target.value })}
+                className="w-full p-4 bg-slate-50 rounded-2xl border border-slate-100 focus:ring-2 focus:ring-blue-500 outline-none"
+                placeholder="e.g., Support Team, General, Billing"
               />
             </div>
             <div className="flex items-center gap-6">
@@ -176,7 +187,7 @@ export default function FAQManager({ initialFAQs }: { initialFAQs: IFAQ[] }) {
                 <button
                   onClick={() => {
                     setEditingId(faq._id!);
-                    setFormData({ question: faq.question, answer: faq.answer, order: faq.order, published: faq.published });
+                    setFormData({ question: faq.question, answer: faq.answer, category: faq.category || 'General Questions', order: faq.order, published: faq.published });
                     setIsAdding(true);
                   }}
                   className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
