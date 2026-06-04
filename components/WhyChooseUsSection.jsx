@@ -1,6 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 const allFeatures = [
   {
@@ -88,11 +94,46 @@ const allFeatures = [
 
 export default function WhyChooseUsSection() {
   const [showAll, setShowAll] = useState(false);
+  const containerRef = useRef(null);
 
   const visibleFeatures = showAll ? allFeatures : allFeatures.slice(0, 6);
 
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const cards = el.querySelectorAll('.why-us-card');
+    const headerItems = el.querySelectorAll('.text-center > *');
+    if (cards.length === 0) return;
+
+    // Set initial GSAP states dynamically
+    gsap.set(cards, { opacity: 0, y: 20 });
+    gsap.set(headerItems, { opacity: 0, y: 30 });
+    
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: el,
+        start: 'top bottom-=250px',
+        toggleActions: 'play reverse play reverse',
+      }
+    });
+
+    tl.to(headerItems, { opacity: 1, y: 0, duration: 0.8, stagger: 0.15, ease: 'power3.out' })
+      .to(cards, {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        stagger: 0.1,
+        ease: 'power2.out',
+      }, '-=0.4');
+
+    return () => {
+      ScrollTrigger.getAll().forEach(t => t.kill());
+    };
+  }, [showAll]);
+
   return (
-    <section className="py-10 bg-slate-50 relative overflow-hidden border-b border-slate-100">
+    <section ref={containerRef} className="py-10 bg-slate-50 relative overflow-hidden border-b border-slate-100">
       <div className="section-shell space-y-6">
         <div className="text-center max-w-3xl mx-auto space-y-2">
           <span className="pill border-blue-600/20 text-blue-600 bg-blue-50">WHY CHOOSE US</span>
@@ -108,8 +149,7 @@ export default function WhyChooseUsSection() {
           {visibleFeatures.map((item, idx) => (
             <div
               key={item.title}
-              className="group flex items-start gap-6 p-8 rounded-[2rem] bg-white border border-slate-100 hover:border-blue-500/30 hover:shadow-2xl hover:shadow-blue-500/5 transition-all duration-300 animate-in fade-in slide-in-from-bottom-4"
-              style={{ animationDelay: `${idx * 100}ms` }}
+              className="group flex items-start gap-6 p-8 rounded-[2rem] bg-white border border-slate-100 hover:border-blue-500/30 hover:shadow-2xl hover:shadow-blue-500/5 transition-all duration-300 why-us-card"
             >
               <div className="flex-shrink-0 w-14 h-14 rounded-2xl bg-slate-50 flex items-center justify-center text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-all duration-500 shadow-sm">
                 {item.icon}
