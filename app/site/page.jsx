@@ -12,11 +12,15 @@ import { getProjects } from '../lib/projects';
 import { getFAQs } from '../lib/faqs';
 
 import FreeAuditForm from "../../components/FreeAuditForm";
+import AnimatedHero from "../../components/AnimatedHero";
 import HeroSlideshow from "../../components/HeroSlideshow";
 import AnimatedStats from "../../components/AnimatedStats";
 import FAQAccordion from "../../components/FAQAccordion";
 import TestimonialsSection from "../../components/TestimonialsSection";
 import WhyChooseUsSection from "../../components/WhyChooseUsSection";
+import EngineeringDistinction from "../../components/EngineeringDistinction";
+import AnimatedPricing from "../../components/AnimatedPricing";
+import LatestInsights from "../../components/LatestInsights";
 
 export const metadata = {
   title: "Skytech Ghana - Website & Mobile App Developers",
@@ -303,76 +307,11 @@ export default async function Home() {
 
   return (
     <>
-      {/* Hero Section (Total Asset Clarity - No Overlay) */}
-      <section className="relative overflow-hidden bg-white text-slate-900 min-h-screen flex items-center">
-        {/* Singular Background Asset - Full Clarity */}
-        <div className="absolute inset-0 z-0">
-          <Image
-            src={hero.imageUrl}
-            alt="Skytech Tech Infrastructure"
-            fill
-            className="object-cover opacity-100 transition-transform duration-[20s] scale-110 hover:scale-100"
-            priority
-          />
-          {/* Dark Overlay - Left Aligned Gradient */}
-          <div className="absolute inset-0 bg-slate-900/40 z-0 pointer-events-none" />
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-900/80 via-transparent to-transparent z-0 pointer-events-none" />
-        </div>
-
-        <div className="relative z-10 pt-20 pl-4 sm:pl-8 lg:pl-16 w-full">
-          <div className="flex items-center justify-start min-h-[70vh]">
-            <div className="max-w-6xl space-y-12 text-left flex flex-col items-start">
-              <div className="space-y-8">
-                <h1 className="text-4xl lg:text-6xl leading-[1.1] tracking-tight text-white font-light">
-                  World Class <br />
-                  <span className="font-extrabold text-white">Software solutions</span> <br />
-                  for all <span className="font-extrabold text-blue-400">businesses.</span>
-                </h1>
-
-                {/* Unified Tag Unit */}
-                <div className="inline-flex flex-col items-start rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 shadow-xl overflow-hidden">
-                  <div className="flex items-center gap-2 px-4 py-2 bg-white/5 border-b border-white/10 w-full">
-                    <span className="flex h-1.5 w-1.5 rounded-full bg-blue-400 animate-pulse"></span>
-                    <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-white/70">
-                      No 1# website development company in Ghana.
-                    </span>
-                  </div>
-                  <div className="px-5 py-3">
-                    <p className="text-sm sm:text-base text-white font-bold tracking-tight">
-                      Get a website that ranks No. 1 on Google.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex flex-wrap justify-start gap-6 pt-4">
-                <Link
-                  className="btn-primary px-10 py-5 text-base font-bold rounded-full shadow-2xl shadow-blue-600/20 active:scale-95 transition-all"
-                  href="/site/contact"
-                >
-                  Start Your Project
-                </Link>
-                <Link
-                  className="btn-secondary bg-white text-blue-600 border-none hover:bg-slate-50 px-10 py-5 text-base font-bold rounded-full shadow-lg transition-all active:scale-95"
-                  href="/site/pricing"
-                >
-                  View Rate Card
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          {/* Bouncing Scroll Arrow - Centered at Bottom */}
-          <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2">
-            <div className="w-px h-12 bg-gradient-to-b from-white/0 via-white/40 to-white/0" />
-            <div className="animate-bounce">
-              <svg className="w-6 h-6 text-white opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-              </svg>
-            </div>
-          </div>
-        </div>
-      </section>
+      <AnimatedHero
+        imageUrl={hero.imageUrl}
+        title={hero.title}
+        subtitle={hero.subtitle}
+      />
 
       {/* Affiliate Network (Dynamic Marquee) */}
       {allPartners.length > 0 && (
@@ -415,196 +354,10 @@ export default async function Home() {
       <AnimatedStats stats={stats} />
 
       {/* Digital Distinction & Technical Honor */}
-      <section className="py-24 bg-white border-t border-slate-50">
-        <div className="section-shell space-y-16">
-          {/* Top Header Split */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div className="space-y-6">
-              <span className="text-blue-600 text-[10px] font-extrabold uppercase tracking-[0.3em]">Engineering Distinction</span>
-              <h2 className="text-5xl md:text-6xl font-extrabold text-slate-900 leading-[1.1] tracking-tight">
-                Recognized for <br />
-                <span className="text-blue-600 font-extrabold">Technical</span> Excellence
-              </h2>
-              <p className="text-lg text-slate-500 leading-relaxed max-w-xl">
-                Our commitment to bank-grade security and precision engineering has made us the trusted partner for Ghana's most ambitious digital projects.
-              </p>
-            </div>
-            <div className="relative flex justify-center lg:justify-end">
-              <div className="relative w-72 h-72 md:w-96 md:h-96">
-                <div className="absolute inset-0 rounded-full border border-dashed border-blue-200/50 animate-spin-slow" />
-                <div className="absolute inset-0 flex items-center justify-center p-8">
-                  <div className="w-full h-full bg-blue-50/50 rounded-full flex items-center justify-center border border-blue-100 shadow-inner relative overflow-hidden group">
-                    <div className="absolute inset-0 bg-gradient-to-tr from-blue-600/5 to-cyan-400/5 group-hover:opacity-100 transition-opacity" />
-                    <div className="relative w-48 h-48 md:w-64 md:h-64 transition-transform duration-700 group-hover:scale-110 mix-blend-multiply">
-                      <Image
-                        src="/images/awards.png"
-                        alt="Skytech Engineering Award"
-                        fill
-                        className="object-contain"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Distinction Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              {
-                category: "Industry Excellence",
-                title: "Best Web & Mobile Development Agency 2023",
-                desc: "Recognized for outstanding technical delivery and high-performance product architectures across the West African region.",
-                icon: (
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
-                  </svg>
-                )
-              },
-              {
-                category: "Technical Distinction",
-                title: "Top-Rated Fintech & Banking Architecture",
-                desc: "Voted as the premier engineering partner for secure, scalable financial systems and real-time transaction processing.",
-                icon: (
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                  </svg>
-                )
-              },
-              {
-                category: "National Legacy",
-                title: "Ghana's Most Trusted Digital Partner 2022",
-                desc: "A prestigious national distinction cementing Skytech's status as the country's most reliable provider for enterprise software solutions.",
-                icon: (
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                  </svg>
-                )
-              }
-            ].map((award, idx) => (
-              <div key={idx} className="group p-10 rounded-[2.5rem] bg-slate-50/50 border border-slate-100 hover:bg-white hover:shadow-2xl hover:shadow-blue-600/5 transition-all duration-500">
-                <div className="mb-8 w-14 h-14 rounded-2xl bg-blue-600/10 flex items-center justify-center text-blue-600 transition-all group-hover:bg-blue-600 group-hover:text-white">
-                  {award.icon}
-                </div>
-                <div className="space-y-4">
-                  <span className="text-[9px] font-extrabold uppercase tracking-[0.2em] text-blue-600/60">{award.category}</span>
-                  <h3 className="text-xl font-extrabold text-slate-900 leading-tight">
-                    {award.title}
-                  </h3>
-                  <p className="text-sm text-slate-500 leading-relaxed">
-                    {award.desc}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <EngineeringDistinction />
 
       {/* Pricing booklet */}
-      <section className="py-24 bg-slate-50" id="pricing">
-        <div className="section-shell space-y-16">
-          <div className="text-center max-w-3xl mx-auto space-y-4">
-            <span className="pill">Pricing</span>
-            <h2 className="text-4xl sm:text-5xl font-extrabold text-slate-900 leading-[1.1]">
-              Simple Rate Card. <br />
-              <span className="text-blue-600">Zero Surprises.</span>
-            </h2>
-            <p className="text-lg text-slate-600">
-              Our pricing is transparent and based on real deliverables. Choose the package that fits your stage.
-            </p>
-            <div className="flex flex-wrap justify-center gap-3 pt-6">
-              <div className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-slate-900 text-white text-[9px] font-extrabold uppercase tracking-widest shadow-xl shadow-slate-900/10">
-                <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse" />
-                Maintenance Covers All Site Offers
-              </div>
-              <div className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-white border border-slate-200 text-slate-600 text-[9px] font-extrabold uppercase tracking-widest shadow-sm">
-                <span className="w-1.5 h-1.5 rounded-full bg-blue-600" />
-                Lowest rates compared to others like WopeDigital.com
-              </div>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {pricing.map((pkg, idx) => (
-              <div
-                key={pkg.name}
-                className={`group relative rounded-[2.5rem] p-10 transition-all duration-500 flex flex-col ${pkg.featured || idx === 1
-                  ? "bg-slate-900 border-blue-600/30 shadow-2xl shadow-blue-500/10 scale-105 z-10"
-                  : "bg-white border-slate-100 shadow-sm hover:shadow-2xl hover:shadow-blue-500/5"
-                  }`}
-              >
-                {/* Featured Badge */}
-                {(pkg.featured || idx === 1) && (
-                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-blue-600 text-white text-[10px] font-extrabold uppercase tracking-widest px-4 py-2 rounded-full shadow-lg shadow-blue-600/40">
-                    Most Popular
-                  </div>
-                )}
-
-                <div className={`space-y-2 mb-8 ${pkg.featured || idx === 1 ? 'text-white' : 'text-slate-900'}`}>
-                  <span className={`text-[10px] font-extrabold uppercase tracking-widest ${pkg.featured || idx === 1 ? 'text-blue-400' : 'text-blue-600'}`}>
-                    {pkg.interval || "3–8 weeks"} timeline
-                  </span>
-                  <h3 className="text-2xl font-extrabold tracking-tight">{pkg.name}</h3>
-                  <div className="pt-4 flex flex-col">
-                    <div className="flex items-baseline gap-1">
-                      <span className={`text-sm font-bold ${pkg.featured || idx === 1 ? 'text-blue-400/50' : 'text-slate-400'}`}>GHS</span>
-                      <span className="text-4xl font-extrabold">{pkg.price}</span>
-                    </div>
-                    <div className="flex items-baseline gap-1 opacity-60">
-                      <span className="text-[10px] font-bold">USD</span>
-                      <span className="text-lg font-extrabold">~${pkg.usd}</span>
-                    </div>
-                    {pkg.renewal && (
-                      <div className={`mt-2 text-[9px] font-extrabold uppercase tracking-wider py-1.5 px-3 rounded-lg w-fit ${pkg.featured || idx === 1 ? 'bg-white/10 text-blue-300' : 'bg-slate-50 text-slate-500 border border-slate-100'
-                        }`}>
-                        Renew: GHS {pkg.renewal} yearly
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                <div className="space-y-4 flex-grow">
-                  <ul className="space-y-3">
-                    {pkg.highlights.map((item) => (
-                      <li key={item} className={`flex items-center gap-3 text-sm ${pkg.featured || idx === 1 ? 'text-blue-100/70' : 'text-slate-600'}`}>
-                        <svg className={`w-4 h-4 ${pkg.featured || idx === 1 ? 'text-blue-400' : 'text-blue-600'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                        </svg>
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div className="mt-10">
-                  <Link
-                    href="/site/contact"
-                    className={`w-full inline-flex justify-center items-center px-6 py-4 rounded-2xl font-bold transition-all ${pkg.featured || idx === 1
-                      ? 'bg-blue-600 text-white hover:bg-white hover:text-slate-900'
-                      : 'bg-slate-50 text-slate-900 group-hover:bg-blue-600 group-hover:text-white'
-                      }`}
-                  >
-                    Get Started
-                  </Link>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="text-center pt-16">
-            <Link href="/site/pricing" className="inline-flex items-center gap-2 text-sm font-extrabold uppercase tracking-widest text-blue-600 hover:gap-3 transition-all">
-              Not what you're looking for? View full catalog
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
-            </Link>
-          </div>
-
-
-        </div>
-      </section>
+      <AnimatedPricing pricing={pricing} />
 
 
       {/* Gallery Bento Grid */}
@@ -717,59 +470,7 @@ export default async function Home() {
         </div>
       </section>
 
-
-      {/* Blog Preview (Journal Style) - Relocated to Footer Anchor */}
-      <section className="py-24 bg-white border-t border-slate-50">
-        <div className="section-shell space-y-16">
-          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8">
-            <div className="space-y-4 max-w-2xl text-left">
-              <span className="pill border-blue-600/20 text-blue-600 bg-blue-50 uppercase tracking-widest text-[10px] font-bold">Latest Insights</span>
-              <h2 className="text-4xl sm:text-5xl font-extrabold text-slate-900 leading-[1.1] tracking-tight">
-                Latest from the lab
-              </h2>
-              <p className="text-lg text-slate-500 leading-relaxed">
-                Strategies and insights from our engineering team to help you navigate the digital landscape.
-              </p>
-            </div>
-            <Link className="group inline-flex items-center gap-3 px-8 py-4 bg-slate-900 text-white rounded-full font-bold transition-all hover:bg-blue-600 active:scale-95 shadow-xl shadow-slate-900/10" href="/site/blog">
-              Read All Entries
-              <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
-            </Link>
-          </div>
-
-          <div className="flex gap-6 overflow-x-auto pb-8 snap-x scrollbar-hide">
-            {latestPosts.map((post, idx) => (
-              <Link key={post._id || idx} href={`/site/blog/${post.slug}`} className="flex-shrink-0 w-[350px] snap-start group flex items-start gap-5 p-2 rounded-[2.5rem] hover:bg-slate-50 transition-colors duration-300">
-                {/* Image Left - Only if it exists */}
-                {post.coverImage ? (
-                  <div className="flex-shrink-0 w-32 h-24 overflow-hidden rounded-3xl bg-slate-100 border border-slate-100">
-                    <img
-                      src={post.coverImage}
-                      alt={post.title}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                    />
-                  </div>
-                ) : null}
-
-                {/* Content Right */}
-                <div className={`space-y-2 pt-1 pr-4 ${!post.coverImage ? 'w-full' : ''}`}>
-                  <span className="text-[9px] font-extrabold uppercase tracking-[0.2em] text-blue-600">
-                    {post.category || 'INSIGHT'}
-                  </span>
-                  <h3 className="text-sm font-extrabold text-slate-900 leading-tight group-hover:text-blue-600 transition-colors line-clamp-2">
-                    {post.title}
-                  </h3>
-                  <p className="text-[11px] text-slate-500 leading-relaxed line-clamp-2">
-                    {post.excerpt}
-                  </p>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
+      <LatestInsights latestPosts={latestPosts} />
     </>
   );
 }

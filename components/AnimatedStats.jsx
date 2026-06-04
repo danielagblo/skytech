@@ -1,6 +1,12 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 const icons = {
   "10 years on the Ghanaian market": (
@@ -32,86 +38,99 @@ const icons = {
 };
 
 function Counter({ value, label, isLast }) {
-  const [count, setCount] = useState(0);
-  const countRef = useRef(null);
-  
   const numMatch = value.match(/^[<>]?([0-9.]+)/);
   const target = numMatch ? parseFloat(numMatch[1]) : 0;
   const suffix = value.replace(/^[<>]?[0-9.]+/, '');
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          let start = 0;
-          const duration = 2000;
-          const increment = target / (duration / 16);
-          
-          const timer = setInterval(() => {
-            start += increment;
-            if (start >= target) {
-              setCount(target);
-              clearInterval(timer);
-            } else {
-              setCount(target % 1 === 0 ? Math.floor(start) : parseFloat(start.toFixed(1)));
-            }
-          }, 16);
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    if (countRef.current) observer.observe(countRef.current);
-    return () => observer.disconnect();
-  }, [target]);
-
-  const displayCount = value.startsWith('0') && count < 10 && count >= 0 
-    ? `0${count}` 
-    : count;
+  const prefix = value.startsWith('0') ? '0' : '';
 
   return (
-    <div className="relative flex-1 flex flex-col items-center px-4">
-      <div ref={countRef} className="flex flex-col items-center">
-        {/* Icon */}
-        <div className="mb-6">
-          <div className="w-10 h-10">
-            {icons[label] || (
-              <svg className="w-full h-full" fill="none" stroke="#00AEEF" strokeWidth={1.5} viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-              </svg>
-            )}
-          </div>
-        </div>
-
+    <div className="relative flex-1 flex flex-col items-center px-4 stat-counter-item">
+      <div className="flex flex-col items-center text-center">
         {/* Value */}
-        <div className="flex items-start mb-1">
-          <span className="text-3xl lg:text-4xl font-black text-[#0B1521] tracking-tighter">
-            {displayCount}
+        <div className="flex items-baseline justify-center mb-2">
+          <span 
+            className="text-5xl md:text-6xl font-black text-[#0B1521] tracking-tight counter-value-num"
+            data-target={target}
+            data-prefix={prefix}
+          >
+            0
           </span>
-          <span className="text-lg lg:text-xl font-bold text-[#0B1521] mt-1">
+          <span className="text-2xl md:text-3xl font-extrabold text-[#0B1521] ml-0.5">
             {suffix}
           </span>
         </div>
         
         {/* Label */}
-        <p className="text-[10px] lg:text-[11px] text-[#4A5568] text-center font-medium max-w-[150px] leading-tight">
+        <p className="text-[11px] md:text-xs font-black uppercase tracking-[0.15em] text-[#0b172a]/80 text-center max-w-[180px] leading-snug">
           {label}
         </p>
       </div>
 
       {/* Vertical Divider */}
       {!isLast && (
-        <div className="hidden md:block absolute right-0 top-1/2 -translate-y-1/2 h-16 w-px bg-slate-100" />
+        <div className="hidden md:block absolute right-0 top-1/2 -translate-y-1/2 h-20 w-px bg-slate-100" />
       )}
     </div>
   );
 }
 
 export default function AnimatedStats({ stats }) {
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const items = el.querySelectorAll('.stat-counter-item');
+    if (items.length === 0) return;
+
+    // Set initial position for staggered slide up
+    gsap.set(items, { opacity: 0, y: 45 });
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: el,
+        start: 'top bottom-=250px',
+        toggleActions: 'play reverse play reverse',
+      }
+    });
+
+    items.forEach((item, idx) => {
+      const numEl = item.querySelector('.counter-value-num');
+      if (!numEl) return;
+
+      const targetVal = parseFloat(numEl.getAttribute('data-target')) || 0;
+      const prefix = numEl.getAttribute('data-prefix') || '';
+      const obj = { val: 0 };
+
+      // Slide up + Fade in and Count up in parallel, staggered one by one
+      tl.to(item, {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        ease: 'power3.out',
+      }, idx * 0.22); // staggered delay
+
+      tl.to(obj, {
+        val: targetVal,
+        duration: 1.5,
+        ease: 'power2.out',
+        onUpdate: () => {
+          const currentVal = targetVal % 1 === 0 ? Math.floor(obj.val) : obj.val.toFixed(1);
+          numEl.innerText = (prefix && currentVal < 10) ? `${prefix}${currentVal}` : currentVal;
+        }
+      }, idx * 0.22); // starts counting exactly as it begins to slide up
+    });
+
+    return () => {
+      ScrollTrigger.getAll().forEach(t => t.kill());
+    };
+  }, []);
+
   return (
-    <section className="bg-white py-20 relative overflow-hidden">
+    <section ref={containerRef} className="bg-white py-16 md:py-20 relative overflow-hidden">
       <div className="section-shell">
-        <div className="flex flex-col md:flex-row items-stretch justify-between gap-y-12 md:gap-y-0">
+        <div className="grid grid-cols-2 md:flex md:flex-row items-stretch justify-between gap-y-12 md:gap-y-0 gap-x-4">
           {stats.map((stat, idx) => (
             <Counter 
               key={stat.label} 

@@ -1,8 +1,14 @@
 import { ReactNode } from 'react';
 import Script from 'next/script';
+import { Outfit } from 'next/font/google';
 import './globals.css';
 import '../index.css';
 import AnalyticsTracker from '../components/AnalyticsTracker';
+
+const outfit = Outfit({
+  subsets: ['latin'],
+  variable: '--font-outfit',
+});
 
 export const metadata = {
   title: 'Skytech Ghana',
@@ -22,7 +28,7 @@ export const metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
-      <body suppressHydrationWarning>
+      <body className={outfit.className} suppressHydrationWarning>
         <AnalyticsTracker />
         {children}
 

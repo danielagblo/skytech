@@ -88,11 +88,11 @@ export default async function Footer({ settings }) {
 
         <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row items-center justify-between text-xs text-slate-400 gap-4">
           <p>© {year} {siteName}. All rights reserved.</p>
-          <div className="flex items-center gap-8">
+          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
             <a href="#" className="hover:text-white transition-colors">LinkedIn</a>
             <a href="#" className="hover:text-white transition-colors">Twitter</a>
             <a href="#" className="hover:text-white transition-colors">GitHub</a>
-            <span className="text-slate-500 ml-4">Built for speed & SEO</span>
+            <span className="text-slate-500 md:ml-4">Built for speed & SEO</span>
           </div>
         </div>
       </div>

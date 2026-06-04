@@ -1,3 +1,5 @@
+import ServicesClient from './ServicesClient';
+
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
@@ -6,7 +8,6 @@ export const metadata = {
 };
 
 export default async function Services() {
-  const services = []; // Using local data or hardcoded for now
   const servicesContent = {
     heroTitle: "Engineering high-performance digital ecosystems.",
     heroSubtitle: "We architect, deploy, and scale. Our engineering standards prioritize bank-grade security and native performance across every platform.",
@@ -14,174 +15,14 @@ export default async function Services() {
     whatWeDoTitle: "Full-Lifecycle Engineering.",
     whatWeDoSubtitle: "We handle everything from initial system architecture to long-term infrastructure maintenance."
   };
+
   return (
-    <main className="min-h-screen">
-      {/* Hero Section (The Capability Statement) */}
-      <section className="relative overflow-hidden bg-white text-slate-900 py-32 px-4 border-b border-slate-100">
-        <div className="absolute inset-0" aria-hidden="true">
-          <div className="absolute left-10 -top-10 h-[500px] w-[500px] bg-blue-600/5 rounded-full blur-[120px]" />
-          <div className="absolute right-0 bottom-0 h-[500px] w-[500px] bg-cyan-400/5 rounded-full blur-[120px]" />
-        </div>
-
-        <div className="section-shell relative space-y-10">
-          <span className="pill border-blue-600/20 text-blue-600 bg-blue-50 uppercase tracking-[0.2em] text-[10px] font-bold">Our Capabilities</span>
-          <div className="max-w-4xl space-y-6">
-            <h1 className="text-4xl lg:text-6xl leading-[1.1] tracking-tight text-slate-900 font-light">
-              Engineering <span className="font-extrabold text-blue-600">high-performance</span> <br />
-              <span className="font-extrabold text-slate-950">digital ecosystems.</span>
-            </h1>
-            <p className="text-xl md:text-2xl text-slate-500 leading-relaxed font-medium">
-              {servicesContent.heroSubtitle || "We architect, deploy, and scale. Our engineering standards prioritize bank-grade security and native performance across every platform."}
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Strategic Verticals (Who We Serve) */}
-      <section className="py-24 bg-white border-b border-slate-100">
-        <div className="section-shell space-y-16">
-          <div className="text-center max-w-3xl mx-auto space-y-4">
-            <span className="text-blue-600 text-[10px] font-bold uppercase tracking-[0.3em]">Strategic Verticals</span>
-            <h2 className="text-4xl md:text-5xl font-extrabold text-slate-900 leading-tight">Industries We Modernize.</h2>
-            <p className="text-lg text-slate-600 leading-relaxed">
-              We specialize in sectors that demand technical rigor, high availability, and absolute data integrity.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {whoWeWorkFor.map((item) => (
-              <div key={item.name} className="group p-8 rounded-[2rem] bg-slate-50/50 border border-slate-100 hover:bg-white hover:shadow-2xl transition-all duration-500">
-                <div className="mb-6 w-12 h-12 rounded-xl bg-blue-600/5 flex items-center justify-center text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-all">
-                  {item.icon}
-                </div>
-                <h3 className="text-lg font-bold text-slate-900 mb-3">{item.name}</h3>
-                <p className="text-sm text-slate-500 mb-6 leading-relaxed">{item.description}</p>
-                <div className="flex flex-wrap gap-2 pt-4 border-t border-slate-100">
-                  {item.types.map((type) => (
-                    <span key={type} className="text-[9px] font-black uppercase tracking-widest text-blue-600/60">
-                      {type}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Service Architectures (The Grid) */}
-      <section className="py-24 bg-slate-50">
-        <div className="section-shell space-y-16">
-          <div className="text-center max-w-3xl mx-auto space-y-4">
-            <span className="pill bg-white border-slate-200 text-slate-500 uppercase tracking-widest text-[9px] font-bold">Our Service Stack</span>
-            <h2 className="text-4xl font-extrabold text-slate-900 leading-tight">{servicesContent.whatWeDoTitle || "Full-Lifecycle Engineering."}</h2>
-            <p className="text-lg text-slate-600">{servicesContent.whatWeDoSubtitle || "We handle everything from initial system architecture to long-term infrastructure maintenance."}</p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {services.map((service) => (
-              <div key={service.id} className="group p-10 rounded-[2.5rem] bg-white border border-slate-100 hover:shadow-2xl transition-all duration-500">
-                <div className="flex items-start justify-between mb-8">
-                  <span className="text-4xl filter grayscale group-hover:grayscale-0 transition-all">{service.icon}</span>
-                  <span className="h-2 w-2 rounded-full bg-blue-600 opacity-0 group-hover:opacity-100 transition-opacity" />
-                </div>
-                <h3 className="text-2xl font-extrabold text-slate-900 mb-4">{service.title}</h3>
-                <p className="text-slate-500 leading-relaxed mb-6">{service.description}</p>
-                <div className="pt-6 border-t border-slate-50 flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-blue-600">
-                  <span>View Technical Specs</span>
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                  </svg>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Engagement Architectures */}
-      <section className="py-24 bg-white">
-        <div className="section-shell space-y-16">
-          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 border-b border-slate-100 pb-10">
-            <div className="space-y-4">
-              <span className="text-blue-600 text-[10px] font-black uppercase tracking-[0.3em]">Collaboration Models</span>
-              <h2 className="text-4xl font-black text-slate-900 leading-tight">{servicesContent.engagementTitle || "Tactical Engagement Models."}</h2>
-            </div>
-            <p className="text-slate-600 max-w-xl text-sm leading-relaxed">
-              We offer structured engagement paths designed to align with your organization's technical velocity and budgetary goals.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {engagements.map((item) => (
-              <div key={item.title} className="group p-8 rounded-[2rem] bg-slate-50/50 border border-slate-100 hover:bg-white hover:shadow-2xl transition-all">
-                <h3 className="text-xl font-black text-slate-900 mb-4">{item.title}</h3>
-                <p className="text-sm text-slate-500 mb-8 leading-relaxed italic">"{item.description}"</p>
-                <ul className="space-y-4">
-                  {item.items.map((line) => (
-                    <li key={line} className="flex items-center gap-3 text-xs font-bold text-slate-800">
-                      <span className="h-1.5 w-1.5 rounded-full bg-blue-600" />
-                      {line}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Technical Infrastructure (Tech Stack) */}
-      <section className="py-24 bg-slate-50">
-        <div className="section-shell space-y-12">
-          <div className="text-center max-w-3xl mx-auto space-y-4">
-            <span className="pill bg-white border-slate-200 text-slate-500 uppercase tracking-widest text-[9px] font-black">Our Infrastructure</span>
-            <h2 className="text-4xl font-black text-slate-900 tracking-tight">Tools of the Trade.</h2>
-          </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-4">
-            {stack.map((tech) => (
-              <div key={tech.name} className="group p-6 rounded-2xl bg-white border border-slate-100 flex flex-col items-center justify-center gap-4 hover:border-blue-200 hover:shadow-xl hover:shadow-blue-600/5 transition-all duration-500">
-                <div className="relative w-10 h-10 transition-all duration-500 group-hover:scale-110">
-                  <img
-                    src={tech.icon}
-                    alt={tech.name}
-                    className="w-full h-full object-contain transition-all duration-500"
-                  />
-                </div>
-                <span className="text-[9px] font-black uppercase tracking-widest text-slate-400 group-hover:text-blue-600 transition-colors">
-                  {tech.name}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section (The Lead Path) */}
-      <section className="py-24 bg-slate-950 relative overflow-hidden">
-        <div className="absolute inset-0 bg-blue-600/5 blur-[120px]" />
-        <div className="section-shell relative z-10 text-center space-y-10">
-          <div className="space-y-4 max-w-3xl mx-auto">
-            <span className="pill border-blue-600/20 text-blue-400 bg-blue-600/10 uppercase tracking-[0.2em] text-[10px] font-black">Start the Process</span>
-            <h2 className="text-4xl md:text-6xl font-black text-white leading-tight">
-              {servicesContent.ctaTitle || "Ready to architect your digital future?"}
-            </h2>
-            <p className="text-xl text-slate-400 leading-relaxed">
-              {servicesContent.ctaSubtitle || "Tell us about your technical challenges. We'll provide a clear blueprint and the engineering power to execute it."}
-            </p>
-          </div>
-
-          <div className="flex justify-center gap-4 flex-wrap pt-6">
-            <a href="/site/contact" className="px-10 py-5 bg-blue-600 text-white rounded-full font-black text-base hover:bg-blue-700 transition-all shadow-xl shadow-blue-600/20">
-              Technical Consultation
-            </a>
-            <a href="/site/contact" className="px-10 py-5 border-2 border-white/20 text-white rounded-full font-black text-base hover:bg-white/10 transition-all">
-              Request a Proposal
-            </a>
-          </div>
-        </div>
-      </section>
-    </main>
+    <ServicesClient
+      servicesContent={servicesContent}
+      whoWeWorkFor={whoWeWorkFor}
+      engagements={engagements}
+      stack={stack}
+    />
   );
 }
 

@@ -1,68 +1,124 @@
 "use client";
-import React, { useEffect, useRef, useState } from 'react';
-import Link from 'next/link';
+import React, { useEffect, useRef } from 'react';
 import Image from 'next/image';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import WhyChooseUsSection from '../../../components/WhyChooseUsSection';
 
-
-// Custom Hook for Scroll Reveal
-function useIntersectionObserver(options = {}) {
-  const [elements, setElements] = useState([]);
-  const [entries, setEntries] = useState([]);
-
-  const observer = useRef(null);
-
-  useEffect(() => {
-    if (elements.length > 0) {
-      observer.current = new IntersectionObserver((observedEntries) => {
-        setEntries(observedEntries);
-      }, options);
-
-      elements.forEach((element) => observer.current.observe(element));
-    }
-
-    return () => {
-      if (observer.current) observer.current.disconnect();
-    };
-  }, [elements, options]);
-
-  return [setElements, entries];
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
 }
 
 export default function About({ teamMembers }) {
-
-  const [setRevealRefs, revealEntries] = useIntersectionObserver({
-    threshold: 0.2,
-    rootMargin: "0px 0px -50px 0px"
-  });
-
-  const timelineRefs = useRef([]);
-  const [refCount, setRefCount] = useState(0);
+  const containerRef = useRef(null);
 
   useEffect(() => {
-    // Force a re-scan of the refs whenever the count changes or on mount
-    const validRefs = timelineRefs.current.filter(ref => ref !== null);
-    if (validRefs.length > 0) {
-      setRevealRefs(validRefs);
-    }
-  }, [setRevealRefs, refCount]);
+    const el = containerRef.current;
+    if (!el) return;
 
-  // Update ref count on mount to ensure a scan
-  useEffect(() => {
-    setRefCount(timelineRefs.current.filter(r => r !== null).length);
-  }, []);
+    // Elements
+    const heroElements = el.querySelectorAll('.about-hero-el');
+    const heroStats = el.querySelectorAll('.about-stat-card');
+    const methodHeader = el.querySelectorAll('.method-header > *');
+    const methodSteps = el.querySelectorAll('.method-step');
+    const historyHeader = el.querySelectorAll('.history-header > *');
+    const historyItems = el.querySelectorAll('.history-item');
+    const mindsHeader = el.querySelectorAll('.minds-header > *');
+    const mindsCards = el.querySelectorAll('.minds-card');
+    const teamHeader = el.querySelectorAll('.team-header > *');
+    const teamCards = el.querySelectorAll('.team-card');
 
-  // Track which items are visible
-  const [visibleItems, setVisibleItems] = useState({});
+    // Initial states
+    gsap.set(heroElements, { opacity: 0, y: 35 });
+    gsap.set(heroStats, { opacity: 0, y: 25 });
+    gsap.set(methodHeader, { opacity: 0, y: 35 });
+    gsap.set(methodSteps, { opacity: 0, y: 30 });
+    gsap.set(historyHeader, { opacity: 0, y: 35 });
+    gsap.set(mindsHeader, { opacity: 0, y: 35 });
+    gsap.set(mindsCards, { opacity: 0, y: 30 });
+    gsap.set(teamHeader, { opacity: 0, y: 35 });
+    gsap.set(teamCards, { opacity: 0, y: 30 });
 
-  useEffect(() => {
-    revealEntries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const id = entry.target.getAttribute('data-id');
-        setVisibleItems(prev => ({ ...prev, [id]: true }));
+    // Set initial states for timeline points
+    gsap.set('.history-item .history-year', { opacity: 0, x: -25 });
+    gsap.set('.history-item .history-node', { opacity: 0, scale: 0 });
+    gsap.set('.history-item .history-content', { opacity: 0, x: 25 });
+
+    // Timeline for hero entrance
+    const tlHero = gsap.timeline({ defaults: { ease: 'power3.out' } });
+    tlHero.to(heroElements, { opacity: 1, y: 0, duration: 0.8, stagger: 0.15, delay: 0.1 })
+           .to(heroStats, { opacity: 1, y: 0, duration: 0.8, stagger: 0.1 }, '-=0.5');
+
+    // Method animations
+    const tlMethod = gsap.timeline({
+      scrollTrigger: {
+        trigger: '.method-section',
+        start: 'top bottom-=200px',
+        toggleActions: 'play reverse play reverse',
       }
     });
-  }, [revealEntries]);
+    tlMethod.to(methodHeader, { opacity: 1, y: 0, duration: 0.8, stagger: 0.15, ease: 'power3.out' })
+            .to(methodSteps, { opacity: 1, y: 0, duration: 0.8, stagger: 0.15, ease: 'power2.out' }, '-=0.4');
+
+    // History Header Animation
+    gsap.to(historyHeader, {
+      opacity: 1,
+      y: 0,
+      duration: 0.8,
+      stagger: 0.15,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: '.history-section',
+        start: 'top bottom-=200px',
+        toggleActions: 'play reverse play reverse',
+      }
+    });
+
+    // History individual item animations
+    historyItems.forEach((item) => {
+      const year = item.querySelector('.history-year');
+      const node = item.querySelector('.history-node');
+      const content = item.querySelector('.history-content');
+
+      const tlItem = gsap.timeline({
+        scrollTrigger: {
+          trigger: item,
+          start: 'top bottom-=120px',
+          toggleActions: 'play reverse play reverse',
+        }
+      });
+
+      tlItem.to(node, { opacity: 1, scale: 1, duration: 0.6, ease: 'back.out(1.7)' })
+            .to(year, { opacity: 1, x: 0, duration: 0.5, ease: 'power2.out' }, '-=0.3')
+            .to(content, { opacity: 1, x: 0, duration: 0.6, ease: 'power2.out' }, '-=0.4');
+    });
+
+    // Minds animations
+    const tlMinds = gsap.timeline({
+      scrollTrigger: {
+        trigger: '.minds-section',
+        start: 'top bottom-=200px',
+        toggleActions: 'play reverse play reverse',
+      }
+    });
+    tlMinds.to(mindsHeader, { opacity: 1, y: 0, duration: 0.8, stagger: 0.15, ease: 'power3.out' })
+            .to(mindsCards, { opacity: 1, y: 0, duration: 1.0, stagger: 0.18, ease: 'power2.out' }, '-=0.4');
+
+    // Team animations
+    const tlTeam = gsap.timeline({
+      scrollTrigger: {
+        trigger: '.team-section',
+        start: 'top bottom-=200px',
+        toggleActions: 'play reverse play reverse',
+      }
+    });
+    tlTeam.to(teamHeader, { opacity: 1, y: 0, duration: 0.8, stagger: 0.15, ease: 'power3.out' })
+          .to(teamCards, { opacity: 1, y: 0, duration: 0.9, stagger: 0.15, ease: 'power2.out' }, '-=0.4');
+
+    return () => {
+      ScrollTrigger.getAll().forEach(t => t.kill());
+    };
+  }, []);
 
   const aboutContent = {
     heroTitle: "We build websites and apps that help your business grow.",
@@ -72,7 +128,7 @@ export default function About({ teamMembers }) {
   };
 
   return (
-    <main className="min-h-screen">
+    <main ref={containerRef} className="min-h-screen bg-white">
       {/* Hero Section (Precision Fold Fit - White Editorial) */}
       <section className="relative h-screen flex flex-col justify-center overflow-hidden bg-white text-slate-900 px-4">
         {/* Background Asset with Luminous Overlay */}
@@ -89,13 +145,13 @@ export default function About({ teamMembers }) {
 
         <div className="section-shell relative z-10 space-y-8 flex flex-col items-center text-center">
           <div className="space-y-6 flex flex-col items-center">
-            <span className="pill border-blue-600/20 text-blue-600 bg-blue-50 uppercase tracking-[0.2em] text-[8px] font-bold w-fit">OUR STORY</span>
+            <span className="pill border-blue-600/20 text-blue-600 bg-blue-50 uppercase tracking-[0.2em] text-[8px] font-bold w-fit about-hero-el">OUR STORY</span>
             <div className="max-w-4xl space-y-4">
-              <h1 className="text-4xl lg:text-6xl leading-[1.05] tracking-tighter text-slate-900 font-light">
+              <h1 className="text-4xl lg:text-6xl leading-[1.05] tracking-tighter text-slate-900 font-light about-hero-el">
                 We build <span className="font-extrabold text-blue-600">websites and apps</span> <br />
                 that help your <span className="font-extrabold text-slate-950">business grow.</span>
               </h1>
-              <p className="text-lg md:text-xl text-slate-500 leading-relaxed font-medium max-w-2xl mx-auto">
+              <p className="text-lg md:text-xl text-slate-500 leading-relaxed font-medium max-w-2xl mx-auto about-hero-el">
                 {aboutContent.heroSubtitle}
               </p>
             </div>
@@ -103,10 +159,10 @@ export default function About({ teamMembers }) {
 
           <div className="pt-8 border-t border-slate-100/30">
             <div className="flex flex-wrap md:flex-nowrap justify-center gap-4">
-              {aboutStats.map((stat, idx) => (
+              {aboutStats.map((stat) => (
                 <div
                   key={stat.label}
-                  className="group relative px-8 py-4 rounded-full bg-white/40 backdrop-blur-xl border border-white/60 shadow-sm hover:shadow-xl hover:bg-white/60 hover:-translate-y-1 transition-all duration-700 flex items-center gap-4 overflow-hidden"
+                  className="group relative px-8 py-4 rounded-full bg-white border border-slate-200/60 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-500 flex items-center gap-4 overflow-hidden about-stat-card"
                 >
                   {/* Subtle Accent Glow */}
                   <div className="absolute left-0 top-0 w-12 h-full bg-blue-600/5 blur-xl group-hover:bg-blue-600/10 transition-colors" />
@@ -130,10 +186,10 @@ export default function About({ teamMembers }) {
       {/* Why Skytech (Atlas Style) */}
       <WhyChooseUsSection />
 
-      {/* How we work (Methodology Relocated) */}
-      <section className="py-24 bg-white border-t border-slate-100">
+      {/* How we work */}
+      <section className="py-24 bg-white border-t border-slate-100 method-section">
         <div className="section-shell space-y-16">
-          <div className="text-center max-w-3xl mx-auto space-y-4">
+          <div className="text-center max-w-3xl mx-auto space-y-4 method-header">
             <span className="pill bg-blue-50 border-blue-100 text-blue-600 uppercase tracking-widest text-[9px] font-black">OUR METHOD</span>
             <h2 className="text-4xl font-black text-slate-900 tracking-tight">
               We plan, build, and launch.
@@ -146,7 +202,7 @@ export default function About({ teamMembers }) {
             {processSteps.map((step) => (
               <div
                 key={step.title}
-                className="group rounded-[2.5rem] bg-slate-50 border border-slate-100 p-10 hover:bg-white hover:shadow-2xl hover:shadow-blue-600/5 transition-all duration-500"
+                className="group rounded-[2.5rem] bg-slate-50 border border-slate-100 p-10 hover:bg-white hover:shadow-2xl hover:shadow-blue-600/5 transition-all duration-500 method-step"
               >
                 <div className="mb-6 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-600 text-base font-black text-white shadow-lg shadow-blue-600/20">
                   {step.number}
@@ -154,7 +210,7 @@ export default function About({ teamMembers }) {
                 <h3 className="text-xl font-black text-slate-900 mb-4 group-hover:text-blue-600 transition-colors">
                   {step.title}
                 </h3>
-                <p className="text-slate-500 text-sm leading-relaxed">
+                <p className="text-slate-505 text-sm leading-relaxed text-slate-500">
                   {step.description}
                 </p>
               </div>
@@ -164,10 +220,10 @@ export default function About({ teamMembers }) {
       </section>
 
 
-      {/* History Timeline (Clean Editorial Blue with Scroll Reveal) */}
-      <section className="py-32 bg-white relative">
+      {/* History Timeline */}
+      <section className="py-32 bg-white relative history-section">
         <div className="section-shell space-y-24">
-          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-12 border-b border-slate-100 pb-16">
+          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-12 border-b border-slate-100 pb-16 history-header">
             <div className="space-y-6">
               <span className="text-blue-600 text-[10px] font-black uppercase tracking-[0.5em]">OUR HISTORY</span>
               <h2 className="text-5xl md:text-7xl font-black text-slate-900 leading-tight tracking-tighter">
@@ -188,14 +244,11 @@ export default function About({ teamMembers }) {
               {timeline.map((item, idx) => (
                 <div
                   key={item.year}
-                  data-id={idx}
-                  ref={el => timelineRefs.current[idx] = el}
-                  className={`group relative flex items-start gap-8 md:gap-16 transition-all duration-1000 ease-out ${visibleItems[idx] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'
-                    }`}
+                  className="group relative flex items-start gap-8 md:gap-16 history-item"
                 >
                   {/* Year Label (Left) */}
                   <div className="w-[50px] md:w-[70px] pt-4">
-                    <span className="text-xl md:text-3xl font-black text-blue-600/40 tracking-tighter transition-all group-hover:text-blue-600 block origin-left">
+                    <span className="text-xl md:text-3xl font-black text-blue-600/40 tracking-tighter transition-all group-hover:text-blue-600 block origin-left history-year">
                       {item.year}
                     </span>
                   </div>
@@ -204,10 +257,8 @@ export default function About({ teamMembers }) {
                   <div className="relative z-10 pt-3">
                     <div className="relative flex items-center justify-center">
                       {/* Main Node Circle */}
-                      <div className={`relative w-10 h-10 md:w-14 md:h-14 rounded-full bg-white border-2 flex items-center justify-center transition-all duration-700 ${visibleItems[idx] ? 'border-blue-600 scale-100' : 'border-slate-100 scale-50'
-                        } group-hover:shadow-xl group-hover:shadow-blue-600/10`}>
-                        <div className={`w-5 h-5 md:w-6 md:h-6 transition-colors duration-700 ${visibleItems[idx] ? 'text-blue-600' : 'text-slate-300'
-                          }`}>
+                      <div className="relative w-10 h-10 md:w-14 md:h-14 rounded-full bg-white border-2 border-blue-600 flex items-center justify-center transition-all duration-700 group-hover:shadow-xl group-hover:shadow-blue-600/10 history-node">
+                        <div className="w-5 h-5 md:w-6 md:h-6 text-blue-600">
                           {idx === 0 ? (
                             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
                           ) : idx === 1 ? (
@@ -223,12 +274,12 @@ export default function About({ teamMembers }) {
                   </div>
 
                   {/* Content (Right) */}
-                  <div className="flex-grow pt-3">
+                  <div className="flex-grow pt-3 history-content">
                     <div className="max-w-2xl space-y-2">
                       <h3 className="text-xl md:text-3xl font-black text-slate-900 tracking-tight group-hover:text-blue-600 transition-colors">
                         {item.title}
                       </h3>
-                      <p className="text-slate-500 text-sm md:text-base leading-relaxed font-medium">
+                      <p className="text-sm md:text-base leading-relaxed text-slate-500 font-medium">
                         {item.detail}
                       </p>
                     </div>
@@ -240,10 +291,10 @@ export default function About({ teamMembers }) {
         </div>
       </section>
 
-      {/* Meet the Minds (Minimalist Avatar Design) */}
-      <section className="py-24 bg-white">
+      {/* Meet the Minds */}
+      <section className="py-24 bg-white minds-section animate-fix">
         <div className="section-shell space-y-20">
-          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-12">
+          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-12 minds-header">
             <div className="space-y-6">
               <span className="text-blue-600 text-[10px] font-black uppercase tracking-[0.4em]">MEET THE MINDS</span>
               <h2 className="text-5xl md:text-6xl font-black text-slate-900 leading-tight tracking-tighter">
@@ -257,47 +308,35 @@ export default function About({ teamMembers }) {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {teamMembers.map((member, idx) => {
-              const memberId = `member-${idx}`;
-              return (
-                <div
-                  key={member.name}
-                  data-id={memberId}
-                  ref={el => timelineRefs.current[20 + idx] = el}
-                  className={`group p-12 rounded-[3rem] bg-slate-50 border border-slate-100 hover:bg-white hover:shadow-2xl hover:shadow-blue-600/5 transition-all duration-700 ${visibleItems[memberId] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-                    }`}
-                  style={{ transitionDelay: `${idx * 150}ms` }}
-                >
-                  <div className="mb-8 w-16 h-16 rounded-2xl bg-blue-600/5 flex items-center justify-center text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-all overflow-hidden">
-                    {member.imageUrl ? (
-                      <img src={member.imageUrl} alt={member.name} className="w-full h-full object-cover" />
-                    ) : (
-                      <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                      </svg>
-                    )}
-                  </div>
-                  <h3 className="text-2xl font-extrabold text-slate-900 mb-2">{member.name}</h3>
-                  <p className="text-xs font-black text-blue-600 uppercase tracking-widest mb-6">{member.role}</p>
-                  <p className="text-slate-500 leading-relaxed font-medium">
-                    {member.bio}
-                  </p>
+            {teamMembers.map((member) => (
+              <div
+                key={member.name}
+                className="group p-12 rounded-[3rem] bg-slate-50 border border-slate-100 hover:bg-white hover:shadow-2xl hover:shadow-blue-600/5 transition-all duration-700 minds-card animate-fix-delay"
+              >
+                <div className="mb-8 w-16 h-16 rounded-2xl bg-blue-600/5 flex items-center justify-center text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-all overflow-hidden">
+                  {member.imageUrl ? (
+                    <img src={member.imageUrl} alt={member.name} className="w-full h-full object-cover" />
+                  ) : (
+                    <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                    </svg>
+                  )}
                 </div>
-              );
-            })}
+                <h3 className="text-2xl font-extrabold text-slate-900 mb-2">{member.name}</h3>
+                <p className="text-xs font-black text-blue-600 uppercase tracking-widest mb-6">{member.role}</p>
+                <p className="text-slate-505 leading-relaxed text-slate-500 font-medium">
+                  {member.bio}
+                </p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Team Section (Clean Editorial Design with Reveal) */}
-      <section className="py-32 bg-slate-50 border-t border-slate-100 relative overflow-hidden">
+      {/* Team Section */}
+      <section className="py-32 bg-slate-50 border-t border-slate-100 relative overflow-hidden team-section">
         <div className="section-shell grid grid-cols-1 lg:grid-cols-[1.1fr,0.9fr] gap-20 items-center relative z-10">
-          <div
-            data-id="team-header"
-            ref={el => timelineRefs.current[10] = el}
-            className={`space-y-10 transition-all duration-1000 ease-out ${visibleItems["team-header"] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-              }`}
-          >
+          <div className="space-y-10 team-header">
             <div className="space-y-6">
               <span className="text-blue-600 text-[10px] font-black uppercase tracking-[0.4em]">THE TEAM</span>
               <h2 className="text-5xl md:text-7xl font-black text-slate-900 leading-[1.05] tracking-tighter">
@@ -310,7 +349,7 @@ export default function About({ teamMembers }) {
             </div>
 
             <div className="flex flex-wrap gap-4">
-              {teamTraits.map((trait, idx) => (
+              {teamTraits.map((trait) => (
                 <span
                   key={trait}
                   className="px-6 py-3 rounded-full bg-white border border-slate-200 text-[10px] font-black uppercase tracking-widest text-slate-700 shadow-sm hover:border-blue-600 hover:text-blue-600 transition-all cursor-default"
@@ -322,27 +361,20 @@ export default function About({ teamMembers }) {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            {teamCards.map((card, idx) => {
-              const cardId = `team-card-${idx}`;
-              return (
-                <div
-                  key={card.title}
-                  data-id={cardId}
-                  ref={el => timelineRefs.current[11 + idx] = el}
-                  className={`group p-10 rounded-[2.5rem] bg-white border border-slate-200 hover:border-blue-600 hover:shadow-2xl hover:shadow-blue-600/5 transition-all duration-700 ${visibleItems[cardId] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'
-                    }`}
-                  style={{ transitionDelay: `${idx * 150}ms` }}
-                >
-                  <div className="mb-6 h-10 w-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-all">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-                    </svg>
-                  </div>
-                  <p className="text-[9px] font-black uppercase tracking-[0.3em] text-blue-600/60 mb-3">{card.title}</p>
-                  <p className="text-base text-slate-600 leading-relaxed font-medium">{card.copy}</p>
+            {teamCards.map((card) => (
+              <div
+                key={card.title}
+                className="group p-10 rounded-[2.5rem] bg-white border border-slate-200 hover:border-blue-600 hover:shadow-2xl hover:shadow-blue-600/5 transition-all duration-700 team-card"
+              >
+                <div className="mb-6 h-10 w-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-all">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                  </svg>
                 </div>
-              );
-            })}
+                <p className="text-[9px] font-black uppercase tracking-[0.3em] text-blue-600/60 mb-3">{card.title}</p>
+                <p className="text-base text-slate-600 leading-relaxed font-medium">{card.copy}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -350,35 +382,10 @@ export default function About({ teamMembers }) {
   );
 }
 
-const values = [
-  {
-    title: 'Strong Systems',
-    description: 'We build websites that are safe and can grow as your business gets bigger.',
-    icon: '🏗️'
-  },
-  {
-    title: 'Clear Talk',
-    description: 'Talk directly to our developers. No middleman, just clear updates every day.',
-    icon: '👁️'
-  },
-  {
-    title: 'Good Quality',
-    description: 'We test everything carefully to make sure it works perfectly for you.',
-    icon: '⚡'
-  }
-];
-
 const aboutStats = [
   { label: 'Work Finished', value: '180+' },
   { label: 'Lead Developers', value: '14' },
   { label: 'Types of Businesses', value: '8' },
-];
-
-const missionPoints = [
-  'Careful planning',
-  'Updates every week',
-  'Support after launch',
-  'High safety standards',
 ];
 
 const timeline = [
@@ -417,4 +424,3 @@ const processSteps = [
       "We launch, fix issues fast, and help you grow.",
   },
 ];
-

@@ -1,6 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 interface Testimonial {
   _id: string;
@@ -12,13 +18,41 @@ interface Testimonial {
 
 export default function TestimonialsSection({ testimonials }: { testimonials: Testimonial[] }) {
   const [showAll, setShowAll] = useState(false);
+  const sectionRef = useRef<HTMLDivElement>(null);
   
   const displayedTestimonials = showAll ? testimonials : testimonials.slice(0, 3);
 
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+
+    const cards = el.querySelectorAll('.testimonial-card');
+    const headerItems = el.querySelectorAll('.testimonials-header > *');
+
+    // Set initial states dynamically
+    gsap.set(cards, { opacity: 0, y: 30 });
+    gsap.set(headerItems, { opacity: 0, y: 35 });
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: el,
+        start: 'top bottom-=250px',
+        toggleActions: 'play reverse play reverse',
+      }
+    });
+
+    tl.to(headerItems, { opacity: 1, y: 0, duration: 0.8, stagger: 0.15, ease: 'power3.out' })
+      .to(cards, { opacity: 1, y: 0, duration: 1.1, stagger: 0.2, ease: 'power2.out' }, '-=0.4');
+
+    return () => {
+      ScrollTrigger.getAll().forEach(t => t.kill());
+    };
+  }, [showAll]);
+
   return (
-    <section className="py-20 bg-white">
+    <section ref={sectionRef} className="py-20 bg-white">
       <div className="section-shell space-y-10">
-        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
+        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4 testimonials-header">
           <div className="space-y-3">
             <span className="pill">Client outcomes</span>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900">
@@ -43,7 +77,7 @@ export default function TestimonialsSection({ testimonials }: { testimonials: Te
           {displayedTestimonials.map((item) => (
             <div
               key={item._id}
-              className="rounded-3xl border border-slate-100 bg-slate-50 p-6 shadow-sm hover:shadow-md transition-shadow"
+              className="rounded-3xl border border-slate-100 bg-slate-50 p-6 shadow-sm hover:shadow-md transition-shadow testimonial-card"
             >
               <p className="text-slate-700 leading-relaxed mb-6 italic">
                 "{item.quote}"

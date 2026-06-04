@@ -19,33 +19,35 @@ export default function HeroSlideshow() {
   }, []);
 
   return (
-    <div className="absolute inset-0 z-0 overflow-hidden bg-slate-950">
-      {images.map((img, idx) => (
-        <div
-          key={img}
-          className={`absolute inset-0 transition-opacity duration-[2000ms] ease-in-out ${
-            idx === currentIndex ? 'opacity-100' : 'opacity-0'
-          }`}
-        >
+    <div className="absolute inset-0 z-0 overflow-hidden bg-slate-950 w-full h-full">
+      {images.map((img, idx) => {
+        // Calculate wrapping sliding offset (-1, 0, or 1)
+        let offset = idx - currentIndex;
+        if (offset < -1) offset += images.length;
+        if (offset > 1) offset -= images.length;
+
+        return (
           <div
-            className="absolute inset-0"
+            key={img}
+            className="absolute inset-0 transition-transform duration-[1200ms] ease-[cubic-bezier(0.77,0,0.175,1)]"
             style={{
-              backgroundImage: `url(${img})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center 20%',
-              animation: idx === currentIndex ? 'kenburns 15s ease-out forwards' : 'none',
+              transform: `translateX(${offset * 100}%)`,
+              zIndex: idx === currentIndex ? 10 : 5,
             }}
-          />
-          {/* Overlay to ensure text readability */}
-          <div className="absolute inset-0 bg-slate-950/70" />
-        </div>
-      ))}
-      <style jsx>{`
-        @keyframes kenburns {
-          from { transform: scale(1); }
-          to { transform: scale(1.15); }
-        }
-      `}</style>
+          >
+            <div
+              className="absolute inset-0 bg-cover bg-center"
+              style={{
+                backgroundImage: `url(${img})`,
+                backgroundPosition: 'center 20%',
+              }}
+            />
+            {/* Overlay to ensure text readability */}
+            <div className="absolute inset-0 bg-slate-950/40 z-10 pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-r from-slate-950/80 via-transparent to-transparent z-10 pointer-events-none" />
+          </div>
+        );
+      })}
     </div>
   );
 }
