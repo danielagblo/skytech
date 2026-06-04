@@ -1,6 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 interface FAQ {
   question: string;
@@ -21,6 +27,46 @@ export default function FAQAccordion({ faqs }: { faqs: FAQ[] }) {
   const [activeCategory, setActiveCategory] = useState(categories[0] || 'General Questions');
 
   const currentFaqs = groupedFaqs[activeCategory] || [];
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const sidebarBtns = el.querySelectorAll('.faq-sidebar-btn');
+    const accordionItems = el.querySelectorAll('.faq-accordion-item');
+
+    gsap.set(sidebarBtns, { opacity: 0, x: -25 });
+    gsap.set(accordionItems, { opacity: 0, x: 25 });
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: el,
+        start: 'top bottom-=200px',
+        toggleActions: 'play reverse play reverse',
+      }
+    });
+
+    tl.to(sidebarBtns, { opacity: 1, x: 0, duration: 0.6, stagger: 0.1, ease: 'power2.out' })
+      .to(accordionItems, { opacity: 1, x: 0, duration: 0.8, stagger: 0.1, ease: 'power2.out' }, '-=0.4');
+
+    return () => {
+      ScrollTrigger.getAll().forEach(t => t.kill());
+    };
+  }, []);
+
+  // Stagger entry when switching active categories
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const accordionItems = el.querySelectorAll('.faq-accordion-item');
+    if (accordionItems.length > 0) {
+      gsap.fromTo(accordionItems, 
+        { opacity: 0, y: 15 },
+        { opacity: 1, y: 0, duration: 0.5, stagger: 0.08, ease: 'power2.out', overwrite: 'auto' }
+      );
+    }
+  }, [activeCategory]);
 
   if (faqs.length === 0) {
     return (
@@ -31,7 +77,7 @@ export default function FAQAccordion({ faqs }: { faqs: FAQ[] }) {
   }
 
   return (
-    <div className="relative">
+    <div ref={containerRef} className="relative">
       {/* Dynamic Background Decorative Blobs - Carefully placed to match image */}
       <div className="absolute top-1/4 -left-32 w-[35rem] h-[35rem] bg-pink-100/40 rounded-full blur-[100px] -z-10" />
       <div className="absolute top-0 right-0 w-[40rem] h-[40rem] bg-blue-100/30 rounded-full blur-[100px] -z-10" />
@@ -41,7 +87,7 @@ export default function FAQAccordion({ faqs }: { faqs: FAQ[] }) {
       <div className="absolute top-20 left-[15%] w-3 h-3 bg-blue-400/30 rounded-full blur-sm" />
       <div className="absolute bottom-40 right-[10%] w-4 h-4 bg-cyan-400/20 rounded-full blur-sm" />
       <div className="absolute top-1/2 right-12 w-2 h-2 bg-pink-400/20 rounded-full blur-xs" />
-
+ 
       <div className="bg-white rounded-[2.5rem] md:rounded-[3rem] p-8 md:p-16 shadow-[0_40px_100px_-20px_rgba(0,0,0,0.04)] border border-slate-100/50">
         <div className="flex flex-col lg:flex-row gap-12 lg:gap-20">
           {/* Categories Sidebar */}
@@ -50,7 +96,7 @@ export default function FAQAccordion({ faqs }: { faqs: FAQ[] }) {
               <button
                 key={category}
                 onClick={() => setActiveCategory(category)}
-                className={`w-full text-left px-8 py-5 rounded-2xl transition-all duration-400 flex items-center justify-between group ${
+                className={`w-full text-left px-8 py-5 rounded-2xl transition-all duration-400 flex items-center justify-between group faq-sidebar-btn ${
                   activeCategory === category
                     ? 'bg-white shadow-[0_15px_35px_-10px_rgba(0,0,0,0.06)] border border-slate-100 ring-1 ring-slate-100/50'
                     : 'text-slate-400 hover:text-slate-600'
@@ -70,11 +116,13 @@ export default function FAQAccordion({ faqs }: { faqs: FAQ[] }) {
               </button>
             ))}
           </div>
-
+ 
           {/* Accordion Content */}
           <div className="lg:w-[65%] space-y-3">
             {currentFaqs.map((faq, idx) => (
-              <AccordionItem key={idx} question={faq.question} answer={faq.answer} />
+              <div key={idx} className="faq-accordion-item">
+                <AccordionItem question={faq.question} answer={faq.answer} />
+              </div>
             ))}
           </div>
         </div>
