@@ -16,11 +16,18 @@
   }
 }
 
-html {
+/* html {
   scrollbar-gutter: stable;
-}
+} */
 
 body {
-
+  background-color: #f1f1f1;
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.subtitle {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 0.4rem;
+  margin-top: -7px;
 }
