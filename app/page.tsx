@@ -1,17 +1,11 @@
-import Image from "next/image";
-import bannerImage from "@/assets/images/bannerImage.png";
-
 export default function Home() {
   return (
     <>
-      <div className="relative h-[3000px] overflow-x-hidden">
-        <Image
-          src={bannerImage}
-          alt="Banner Image"
-          className="absolute top-0 left-0 w-screen h-auto -z-10"
-          loading="eager"
-          priority
-        />
+      <div className="bg-black h-screen w-screen text-white">
+        <p className="text-2xl text-medium mt-50">
+          Pages Implemented:<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Security Systems Page
+        </p>
       </div>
     </>
   );

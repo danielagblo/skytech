@@ -21,7 +21,9 @@ function CCTVSurveillance() {
       </button>
       {/* This is meant to be a vertical scroller with abut 5 images
           will have to ask boss for the other images and implement the 
-          scroller later */}
+          scroller later 
+          Image should also span full screen
+        */}
       <Image
         src={CCTVSurveillanceImage1}
         alt="CCTV Surveillance"

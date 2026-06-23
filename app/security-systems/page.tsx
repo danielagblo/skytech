@@ -10,7 +10,6 @@ import MobileTracking from "./MobileTracking";
 import HardwareProcurementAndSupply from "./HardwareProcurementAndSupply";
 
 import { useState } from "react";
-import { title } from "process";
 
 const cards = [
   {
