@@ -77,7 +77,7 @@ export default function Home() {
                 UKFlag,
                 nigeriaFlag
               ].map((flag, index) => (
-                <div className="w-9 h-9 rounded-full overflow-hidden">
+                <div key={index} className="w-9 h-9 rounded-full overflow-hidden">
                   <Image
                     key={index}
                     src={flag}

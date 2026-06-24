@@ -1,11 +1,14 @@
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import homeBannerImage from '@/assets/images/homePageBannerImage.png'
 import homeAward from '@/assets/images/homePageAward.png'
 import homeAward2 from '@/assets/images/homePageAward2.png'
-import { useRouter } from 'next/router'
 import StatsBanner from './StatsBanner'
 
 function LandingScreen() {
+
+  const router = useRouter();
+
   return (
     <div>
       <Image 
@@ -28,7 +31,7 @@ function LandingScreen() {
               <button 
                 className="uppercase bg-[#1E5AC8] py-2 px-3 rounded-xs hover:scale-97 active:scale-102"
                 onClick={()  => {
-                  useRouter().push("/contact")
+                  router.push("/contact")
                 }}
               >
                 Book a Meeting
@@ -36,7 +39,7 @@ function LandingScreen() {
               <button 
                 className="uppercase bg-white text-black py-2 px-3 rounded-xs hover:scale-97 active:scale-102"
                 onClick={() => {
-                  useRouter().push("/pricing")
+                  router.push("/pricing")
                 }}
             >
                 Pricing
