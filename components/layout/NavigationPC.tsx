@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import skytechLogo from "@/assets/images/skytechLogo.png"
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 
 const navigationLinks = [
   { name: "Home", href: "/" },
@@ -17,9 +17,10 @@ const navigationLinks = [
 function NavigationPC({ className }: { className?: string }) {
   
   const router = useRouter();
+  const currentPath = usePathname();
 
   return (
-    <div className={`${className ?? ""} flex items-center justify-between px-2`}>
+    <div className={`${className ?? ""} flex items-center justify-between px-2 mix-blend-difference`}>
       <Image
         src={skytechLogo}
         alt="SkyTech Logo"
@@ -27,10 +28,13 @@ function NavigationPC({ className }: { className?: string }) {
         onClick={() => router.push("/")}
       />
       <nav>
-        <ul className="flex flex-row items-center gap-6">
+        <ul className="flex mix-blend-difference text-white flex-row items-center gap-6">
           {navigationLinks.map((link) => (
             <li key={link.name}>
-              <a href={link.href} className="text-white hover:text-blue-300 whitespace-nowrap">
+              <a 
+                href={link.href} 
+                className={`whitespace-nowrap mix-blend-difference ${currentPath === link.href ? "underline underline-offset-10 font-bold decoration-2" : "hover:text-blue-300"}`}
+              >
                 {link.name}
               </a>
             </li>

@@ -31,3 +31,12 @@ body {
   margin-bottom: 0.4rem;
   margin-top: -7px;
 }
+
+a:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+button{
+  cursor: pointer;
+}
