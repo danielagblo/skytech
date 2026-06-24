@@ -29,9 +29,11 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-screen flex flex-col">
         <NavigationPC className="fixed top-10 left-0 z-10 w-screen py-1 bg-white/10 backdrop-blur-md" />
-        {children}
+        <main className="flex-1">
+          {children}
+        </main>
         <Footer className="mt-10 w-screen p-3" />
       </body>
     </html>

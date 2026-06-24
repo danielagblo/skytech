@@ -12,7 +12,7 @@ const navigationLinks = [
   { name: "Pricing", href: "/pricing" },
   { name: "Blog", href: "/blog" },
   { name: "Internship", href: "/internship" },
-  { name: "FAQs", href: "/faqs" },
+  { name: "Contact", href: "/contact" },
 ];
 function NavigationPC({ className }: { className?: string }) {
   
@@ -28,7 +28,7 @@ function NavigationPC({ className }: { className?: string }) {
         onClick={() => router.push("/")}
       />
       <nav>
-        <ul className="flex mix-blend-difference text-white flex-row items-center gap-6">
+        <ul className="flex mix-blend-difference text-white flex-row items-center gap-6 pr-4">
           {navigationLinks.map((link) => (
             <li key={link.name}>
               <a 

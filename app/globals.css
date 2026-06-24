@@ -16,10 +16,6 @@
   }
 }
 
-/* html {
-  scrollbar-gutter: stable;
-} */
-
 body {
   background-color: #f1f1f1;
   font-family: Arial, Helvetica, sans-serif;
@@ -39,4 +35,18 @@ a:hover {
 
 button{
   cursor: pointer;
+}
+
+@keyframes sponsor-scroll {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-sponsor-scroll {
+  animation: sponsor-scroll 60s linear infinite;
 }

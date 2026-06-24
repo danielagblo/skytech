@@ -7,8 +7,13 @@ const sponsorSizes = [
   "w-24 h-auto", 
   "w-16 h-auto",
   "w-28 h-auto",
+  "w-30 h-auto",
   "w-32 h-auto",
+  "w-16 h-auto",
   "w-20 h-auto",
+  "w-24 h-auto",
+  "w-20 h-auto",
+  "w-18 h-auto",
 ]
 
 function Footer( { className }: { className?: string } ) {
@@ -17,7 +22,7 @@ function Footer( { className }: { className?: string } ) {
       <div className="grid grid-cols-3 px-4 space-x-4 bg-white">
         {/* Will later make an array of sponsor images and loop over that */}
         <div className="flex flex-row flex-wrap items-center justify-start gap-x-2">
-        {Array.from({ length: 13 }).map((_, index) => (
+        {Array.from({ length: 15 }).map((_, index) => (
           <div key={index} className={`${sponsorSizes[index % sponsorSizes.length]} shrink-0`}>
             <Image
               src={sponsorImage}
