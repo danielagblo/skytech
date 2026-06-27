@@ -14,8 +14,36 @@ import kenyaFlag from "../assets/icons/KenyaFlag.svg";
 import USFlag from "../assets/icons/USFlag.svg";
 import UKFlag from "../assets/icons/UKFlag.svg";
 import nigeriaFlag from "../assets/icons/NigeriaFlag.svg";
+import PricingModel from "@/components/sections/PricingModel";
 
-
+const services = [
+  {
+    title: "website development",
+    list: [
+      "corporate business",
+      "e-commerce",
+      "blog content",
+      "e-learning"
+    ]
+  }, {
+    title: "mobile app development",
+    list: [
+      "corporate business",
+      "e-commerce",
+      "blog content",
+      "e-learning"
+    ]
+  }, {
+    title:"IT installations",
+    list: [
+      "POS (Point of Sale) systems",
+      "Wi-Fi Network Connection",
+      "CCTV surveillance systems",
+      "inverter & solar panel",
+      "door and alarm installation"
+    ]
+  }
+]
 
 export default function Home() {
   return (
@@ -91,7 +119,37 @@ export default function Home() {
         </div>
       </div>
 
-      incomplete pls
+
+      <div className="pt-15 px-6">
+        <p className="text-4xl uppercase">What services do we<br/> offer best</p>
+        <div className="grid grid-cols-3 gap-4 max-w-[3000px] items-start justify-center mt-8">
+          {
+            services.map((service, index) => (
+              <div key={index} className="bg-[#f6f6f6] relative pb-22.5 p-6 h-full border-t-5 border-[#1E5AC8]">
+                <p className="text-xl font-semibold uppercase">{service.title}</p>
+                <div className="pr-4">
+                  <hr className="text-[#1E5AC8]" />
+                  <ul className="mt-4 capitalize leading-7">
+                    {
+                      service.list.map((item, itemIndex) => (
+                        <li key={itemIndex}>{item}</li>
+                      ))
+                    }
+                  </ul>
+                </div>
+                <div 
+                  className="absolute bg-white bottom-5 border rounded-full py-2 px-3 border-[#1E5AC8] right-7 hover:bg-gray-100 cursor-pointer hover:scale-97 active:scale-102 transition-all duration-300"
+                  onClick={() => {}}
+                >
+                  &#10132;
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      <PricingModel />
     </div>
   );
 }
