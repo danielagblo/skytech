@@ -1,6 +1,7 @@
 import Image from "next/image"
 import sponsorImage from "@/assets/images/placeholderSponsor.png"
 import whatsAppIcon from "@/assets/icons/whatsappLogo.svg"
+import LetsTalkButton from "../ui/LetsTalkButton"
 
 const sponsorSizes = [
   "w-18 h-auto",
@@ -58,15 +59,7 @@ function Footer( { className }: { className?: string } ) {
           </div> */}
         </div>
         <div className="w-full h-full flex flex-col gap-2 items-center justify-center flex-1">
-          <button className="bg-[#f1f1f1] text-center rounded-xl py-2 px-3 hover:scale-97 active:scale-102 cursor-pointer transition-all duration-300 ease-in-out">
-            Click, let's talk!
-            <Image 
-              src={whatsAppIcon}
-              alt="WhatsApp Icon"
-              className="ml-2 mb-1 h-4 w-4 inline-block"
-            />
-            &nbsp;&nbsp;&#x276F;
-          </button>
+          <LetsTalkButton className="bg-[#f1f1f1]" />
           <a href="mailto:info@skytechghana.com" className="text-black hover:underline">
             info@skytechghana.com
           </a>

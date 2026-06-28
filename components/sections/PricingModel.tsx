@@ -3,6 +3,8 @@ import { useState } from "react";
 import Image from "next/image"
 
 import starsAndLinesSVG from "../../assets/icons/stars-line-svgrepo-com.svg";
+import PricingCards from "./PricingCards";
+import WhyYouNeedUs from "./WhyYouNeedUs";
 
 
 function PricingModel() {
@@ -53,13 +55,27 @@ function PricingModel() {
           </p>
         </div>
         <div className="flex flex-row gap-4 justify-end font-medium uppercase text-lg">
-          <p className="inline hover:underline underline-offset-4 text-gray-500 font-bold decoration-2 decoration-[#1E5AC8] cursor-pointer">GHC</p>
-          <p className="inline hover:underline underline-offset-4 text-gray-500 font-bold decoration-2 decoration-[#1E5AC8] cursor-pointer">USD</p>
+          <p 
+            className={"inline hover:underline underline-offset-4 text-gray-500 font-bold decoration-2 decoration-[#1E5AC8] cursor-pointer"
+              + (currency === "GHC" ? " text-[#1E5AC8] underline" : "")
+            }
+            onClick={() => setCurrency("GHC")}
+          >
+            GHC
+          </p>
+          <p 
+            className={"inline hover:underline underline-offset-4 text-gray-500 font-bold decoration-2 decoration-[#1E5AC8] cursor-pointer"
+              + (currency === "USD" ? " text-[#1E5AC8] underline" : "")
+            }
+            onClick={() => setCurrency("USD")}
+          >
+            USD
+          </p>
         </div>
       </div>
-      <div className="my-4 grid grid-cols-3 gap-4 max-w-[3000px] items-center justify-center">
-              
-      </div>
+
+      <PricingCards currency={currency} />
+      <WhyYouNeedUs />
     </div>
   )
 }
