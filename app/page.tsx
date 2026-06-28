@@ -7,7 +7,6 @@ import LandingScreen from "@/components/sections/home/LandingScreen";
 import SponsorCarousel from "@/components/sections/home/SponsorCarousel";
 import PricingModel from "@/components/sections/PricingModel";
 
-import awardImage from "../assets/images/homePageAward.png";
 import globeImage from "../assets/images/globeImage.png";
 import workWithUsImage from "../assets/images/workWithUs.png";
 
@@ -19,6 +18,7 @@ import nigeriaFlag from "../assets/icons/NigeriaFlag.svg";
 import LetsTalkButton from "@/components/ui/LetsTalkButton";
 import TestimonialsBanner from "@/components/sections/home/TestimonialsBanner";
 import FAQSection from "@/components/sections/FAQ";
+import AwardsStatement from "@/components/sections/AwardsStatement";
 
 const services = [
   {
@@ -51,7 +51,7 @@ const services = [
 
 export default function Home() {
   return (
-    <div className="">
+    <div>
       <div className="fixed top-0 w-screen z-20">
         <TopScrollingBanner />
       </div>
@@ -68,30 +68,7 @@ export default function Home() {
         <SponsorCarousel />
       </div>
 
-      <div className="flex flex-row items-center justify-between w-screen h-[55vh] bg-white">
-        <div className="w-[66vw] pl-6 pr-30">
-          <p className="subtitle">2+ TOP AWARDS</p>
-          <p className="text-4xl uppercase">Recognition for digital excellence</p>
-          <p className="mt-7 pr-10">
-            Our commitment to delivering exceptional digital business
-            development and other IT Services has made us an 
-            award-winning agency trusted by businesses worldwide.
-          </p>
-        </div>
-        <div className="w-[34vw] h-full flex flex-1 items-center justify-center pr-20">
-          <div className="bg-[#f7f7f7] rounded-full aspect-square p-8 flex items-center justify-center">
-            <div className="bg-white rounded-full aspect-square p-2">
-              <div className="border-2 border-[#d9d9d9]  rounded-full aspect-square">
-                <Image 
-                  src={awardImage}
-                  alt="Award"
-                  className="aspect-square object-contain -mt-8"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <AwardsStatement />
 
       <div className="relative w-screen h-[42.5vh] overflow-hidden">
         <Image
