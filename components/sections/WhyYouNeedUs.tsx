@@ -18,7 +18,7 @@ function WhyYouNeedUs() {
       <div className="bg-[#f7f7f7] pt-26 pb-10 -mt-40 w-full flex flex-row items-stretch justify-center">
         <div className='w-full flex flex-col gap-4 items-center justify-center pl-10 pr-4'>
           <div className='w-full flex flex-row gap-4 items-center justify-center'>
-            <div className='bg-[#00FFF2] w-full rounded-2xl px-2 py-3'>
+            <div className='bg-[#00FFF2] w-full rounded-2xl p-3'>
               <p className='font-semibold text-xl mb-2 capitalize'>8yrs Of Proven Expertise</p>
               <p className='text-lg'>
                 Nearly a decade of hands-on 
@@ -27,7 +27,7 @@ function WhyYouNeedUs() {
                 web solutions across borders.
               </p>
             </div>
-            <div className='bg-[#6878B1] w-full rounded-2xl px-2 py-3 text-white'>
+            <div className='bg-[#6878B1] w-full rounded-2xl p-3 text-white'>
               <p className='font-semibold text-xl mb-2 capitalize'>Our relationship with you</p>
               <p className='text-lg'>
                 We plug in like your internal
@@ -37,7 +37,7 @@ function WhyYouNeedUs() {
               </p>
             </div>
           </div>
-          <div className='bg-[#FF6B6B] w-full rounded-2xl px-2 py-3 text-white'>
+          <div className='bg-[#FF6B6B] w-full rounded-2xl p-3 text-white'>
               <p className='font-semibold text-xl mb-2 capitalize'>Complimentary Maintenance</p>
               <p className='text-lg'>
                 Enjoy peace of mind with free ongoing maintenance to ensure your platforms stay secure, updated, and 
@@ -46,7 +46,7 @@ function WhyYouNeedUs() {
             </div>
         </div>
         <div className='w-full flex flex-col h-full gap-2 pr-10'>
-          <div className='bg-[#F7CF94] w-full rounded-2xl px-2 py-3 h-55'>
+          <div className='bg-[#F7CF94] w-full rounded-2xl p-3 h-55'>
               <p className='font-semibold text-xl mb-2 capitalize'>Teamwork</p>
               <p className='text-2xl'>
                 We integrate seamlessly with 
@@ -55,7 +55,7 @@ function WhyYouNeedUs() {
                 goals.
               </p>
             </div>
-          <div className='w-full text-2xl rounded-2xl px-2 py-3'>
+          <div className='w-full text-2xl rounded-2xl p-3'>
             Risk Reduction, 100% Transparancy
           </div>
         </div>
