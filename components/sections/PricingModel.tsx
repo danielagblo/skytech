@@ -13,7 +13,7 @@ function PricingModel() {
   const [serviceType, setServiceType] = useState<"Website" | "Mobile App">("Website");
 
   return (
-    <div>
+    <div className="bg-white">
       <div className="p-6">
         <div className="grid grid-cols-2 gap-4 max-w-[3000px] items-center justify-center mt-8">
           <div>

@@ -15,7 +15,7 @@ function WhyYouNeedUs() {
           <span className="text-4xl font-outline font-semibold tracking-widest"> you need us</span>
         </h1>
       </div>
-      <div className="bg-[#f7f7f7] pt-26 -mt-40 w-full flex flex-row items-stretch justify-center">
+      <div className="bg-[#f7f7f7] pt-26 pb-10 -mt-40 w-full flex flex-row items-stretch justify-center">
         <div className='w-full flex flex-col gap-4 items-center justify-center pl-10 pr-4'>
           <div className='w-full flex flex-row gap-4 items-center justify-center'>
             <div className='bg-[#00FFF2] w-full rounded-2xl px-2 py-3'>
@@ -56,7 +56,7 @@ function WhyYouNeedUs() {
               </p>
             </div>
           <div className='w-full text-2xl rounded-2xl px-2 py-3'>
-            Risk Reduction, 100% Transperancy
+            Risk Reduction, 100% Transparancy
           </div>
         </div>
       </div>

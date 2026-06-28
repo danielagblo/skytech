@@ -20,7 +20,7 @@ const sponsorSizes = [
 function Footer( { className }: { className?: string } ) {
   return (
     <div>
-      <div className="grid grid-cols-3 px-4 space-x-4 bg-white">
+      <div className="grid grid-cols-3 px-4 space-x-4 bg-[#f9f9f9]">
         {/* Will later make an array of sponsor images and loop over that */}
         <div className="flex flex-row flex-wrap items-center justify-start gap-x-2">
         {Array.from({ length: 15 }).map((_, index) => (
