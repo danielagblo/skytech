@@ -1,7 +1,13 @@
+'use client'
+
+import PricingModel from "@/components/sections/PricingModel";
+import WhyYouNeedUs from "@/components/sections/WhyYouNeedUs"
+
 function WebSolutionsPage() {
   return (
     <div>
-      web solutions page
+      <PricingModel />
+      <WhyYouNeedUs />
     </div>
   )
 }

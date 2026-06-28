@@ -6,7 +6,6 @@ import starsAndLinesSVG from "../../assets/icons/stars-line-svgrepo-com.svg";
 import PricingCards from "./PricingCards";
 import WhyYouNeedUs from "./WhyYouNeedUs";
 
-
 function PricingModel() {
 
   const [currency, setCurrency] = useState<"GHC" | "USD">("GHC");

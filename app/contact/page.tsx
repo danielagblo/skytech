@@ -1,7 +1,9 @@
+import FAQs from "@/components/sections/FAQ"
+
 function page() {
   return (
     <div>
-      contact page
+      <FAQs />
     </div>
   )
 }

@@ -1,7 +1,9 @@
+import EnrolledInterns from "@/components/sections/internship/EnrolledInterns"
+
 function InternshipPage() {
   return (
     <div>
-      internship page
+      <EnrolledInterns />
     </div>
   )
 }

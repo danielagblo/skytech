@@ -142,7 +142,7 @@ export default function FAQSection() {
                     onClick={() => setOpenIndex(isOpen ? null : index)}
                     className="w-full flex items-center justify-between py-3 text-left gap-4 min-w-0"
                   >
-                    <span className={`text-xl transition-all min-w-0 break-words ${isOpen ? 'font-semibold text-gray-900' : 'text-gray-800'}`}>
+                    <span className={`text-xl transition-all min-w-0 wrap-break-word ${isOpen ? 'font-semibold text-gray-900' : 'text-gray-800'}`}>
                       {faq.question}
                     </span>
                     <span className={`text-3xl text-gray-400 shrink-0 transition-transform duration-200 ${isOpen ? 'rotate-45' : ''}`}>

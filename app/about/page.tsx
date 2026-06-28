@@ -78,7 +78,7 @@ function AboutPage() {
       <div className="bg-[#f1f1f1] p-10 mt-12">
         <h2 className="text-3xl mb-4 uppercase">Turning friction into fuel</h2>
         <p>
-          Instead of merely complaining about fragmented local systems, the team channeled that friction into a clear corporate mission: "Making Your Tech Dreams a Reality."
+          Instead of merely complaining about fragmented local systems, the team channeled that friction into a clear corporate mission: &quot;Making Your Tech Dreams a Reality.&quot;
           <br/><br/>
           Skytech Ghana moved away from simply selling &quot;one-size-fits-all&quot; software packages. They pivoted to become a comprehensive digital transformation and spatial partner. They recognized that true digital evolution requires walking alongside a client—handling everything from raw data analysis and spatial information management to building the actual applications that streamline everyday business operations.
         </p>
