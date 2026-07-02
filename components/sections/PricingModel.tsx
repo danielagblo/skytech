@@ -6,7 +6,7 @@ import starsAndLinesSVG from "../../assets/icons/stars-line-svgrepo-com.svg";
 import PricingCards from "./PricingCards";
 import WhyYouNeedUs from "./WhyYouNeedUs";
 
-function PricingModel() {
+function PricingModel( { showWhyYouNeedUs = true }: { showWhyYouNeedUs?: boolean } ) {
 
   const [currency, setCurrency] = useState<"GHC" | "USD">("GHC");
   const [serviceType, setServiceType] = useState<"Website" | "Mobile App">("Website");
@@ -74,7 +74,7 @@ function PricingModel() {
       </div>
 
       <PricingCards currency={currency} />
-      <WhyYouNeedUs />
+      {showWhyYouNeedUs && <WhyYouNeedUs />}
     </div>
   )
 }

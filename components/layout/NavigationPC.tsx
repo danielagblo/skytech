@@ -20,7 +20,7 @@ function NavigationPC({ className }: { className?: string }) {
   const currentPath = usePathname();
 
   return (
-    <div className={`${className ?? ""} flex items-center justify-between px-2 mix-blend-difference`}>
+    <div className={`${className ?? ""} flex items-center justify-between px-2 mix-blend-exclusion`}>
       <Image
         src={skytechLogo}
         alt="SkyTech Logo"
