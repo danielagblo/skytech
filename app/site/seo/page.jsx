@@ -21,11 +21,11 @@ export default function SEOPage() {
         <div className="section-shell text-center space-y-8">
           <span className="pill">Search Engine Optimization</span>
           <h1 className="text-5xl md:text-7xl font-extrabold text-slate-900 tracking-tight leading-[1.1]">
-            Dominate Search. <br />
-            <span className="text-blue-600">Drive Revenue.</span>
+            Rank Higher on Google. <br />
+            <span className="text-blue-600">Get More Customers.</span>
           </h1>
           <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
-            We don't just rank keywords; we build authority. Our data-driven SEO strategies help you capture high-intent traffic that actually converts.
+            We help your website appear on the first page of Google so people can find your business. Our SEO services bring you more traffic, leads, and sales.
           </p>
           <div className="flex flex-wrap justify-center gap-4 pt-4">
             <Link href="/site/contact" className="btn-primary px-10 py-4 text-lg">Get Your Free SEO Audit</Link>
@@ -53,10 +53,10 @@ export default function SEOPage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                 <div className="space-y-6">
                     <h2 className="text-4xl font-black text-slate-900 leading-tight">
-                        Why SEO is the most powerful growth lever for your business.
+                        Why SEO matters for your business.
                     </h2>
                     <p className="text-lg text-slate-600 leading-relaxed">
-                        Paid ads stop the moment you stop paying. SEO is an asset that grows in value over time, providing a consistent stream of leads without increasing your cost-per-acquisition.
+                        Paid ads stop working the moment you stop paying. SEO keeps bringing you customers for months and years to come.
                     </p>
                     <ul className="space-y-4">
                         {benefits.map((benefit, idx) => (
@@ -110,10 +110,10 @@ export default function SEOPage() {
               <div className="space-y-6 text-left">
                 <span className="pill border-blue-600/20 text-blue-600 bg-blue-50 uppercase tracking-[0.2em] text-[10px] font-black">Free Performance Audit</span>
                 <h2 className="text-4xl font-black text-slate-900 leading-tight">
-                  Analyze Your Edge. <br /> Get a Forensic SEO Audit.
+                  Get a Free SEO Audit. <br /> See How Your Site Ranks.
                 </h2>
                 <p className="text-slate-500 text-lg leading-relaxed font-medium">
-                  Is your site working for you or against you? We'll identify exactly where you're losing revenue and how to fix it in 60 seconds.
+                  We'll check your site's speed, SEO setup, and find quick wins to help you rank higher on Google.
                 </p>
                 <div className="grid grid-cols-2 gap-4 pt-4">
                   {['Core Web Vitals', 'On‑page SEO', 'Conversion Fixes', 'Quick Wins'].map(tag => (

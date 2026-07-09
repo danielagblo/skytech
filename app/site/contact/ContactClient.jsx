@@ -70,12 +70,12 @@ export default function ContactClient({ settings, teamMembers, contactContent })
         <div className="section-shell relative space-y-6">
           <span className="pill border-blue-600/20 text-blue-600 bg-blue-50 uppercase tracking-[0.2em] text-[10px] font-bold contact-hero-el">Contact</span>
           <h1 className="text-4xl lg:text-5xl leading-tight max-w-3xl text-slate-900 font-light contact-hero-el">
-            Tell us what you <span className="font-extrabold text-blue-600">want to build.</span>
+            Tell us about <span className="font-extrabold text-blue-600">your project.</span>
           </h1>
-          <p className="text-lg text-slate-500 max-w-3xl font-medium contact-hero-el">{contactContent.heroSubtitle || "We will reply fast and guide you step by step."}</p>
+          <p className="text-lg text-slate-500 max-w-3xl font-medium contact-hero-el">{contactContent.heroSubtitle || "We reply fast and guide you step by step. No pressure, just honest advice."}</p>
           <div className="flex flex-wrap gap-4 text-[10px] font-bold uppercase tracking-widest text-slate-400 contact-hero-el">
             <span className="rounded-full bg-slate-50 px-4 py-2 border border-slate-100">Reply in 24 hours</span>
-            <span className="rounded-full bg-slate-50 px-4 py-2 border border-slate-100">Remote team</span>
+            <span className="rounded-full bg-slate-50 px-4 py-2 border border-slate-100">Based in Ghana</span>
           </div>
         </div>
       </section>

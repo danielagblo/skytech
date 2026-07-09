@@ -232,7 +232,7 @@ export default function About({ teamMembers }) {
               </h2>
             </div>
             <p className="text-slate-500 max-w-sm text-base leading-relaxed font-medium border-l-2 border-blue-600/30 pl-6">
-              We started with a goal to build better software in Ghana. Today, we deliver high-quality systems for partners everywhere.
+              We started with a goal to build better websites and apps in Ghana. Today, we deliver quality digital products for businesses everywhere.
             </p>
           </div>
 
@@ -383,9 +383,9 @@ export default function About({ teamMembers }) {
 }
 
 const aboutStats = [
-  { label: 'Work Finished', value: '180+' },
-  { label: 'Lead Developers', value: '14' },
-  { label: 'Types of Businesses', value: '8' },
+  { label: 'Projects Completed', value: '180+' },
+  { label: 'Team Members', value: '14' },
+  { label: 'Industries Served', value: '8' },
 ];
 
 const timeline = [

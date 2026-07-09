@@ -110,14 +110,14 @@ export default function PricingClient({ initialPricing }) {
         </div>
 
         <div className="section-shell relative space-y-10">
-          <span className="pill border-blue-600/20 text-blue-600 bg-blue-50 uppercase tracking-[0.2em] text-[10px] font-extrabold pricing-hero-el">Investment Guide</span>
+          <span className="pill border-blue-600/20 text-blue-600 bg-blue-50 uppercase tracking-[0.2em] text-[10px] font-extrabold pricing-hero-el">Pricing</span>
           <div className="max-w-4xl space-y-6">
             <h1 className="text-4xl lg:text-6xl leading-[1.1] tracking-tight text-slate-900 font-light pricing-hero-el">
-              Transparent <span className="font-extrabold">Pricing.</span> <br />
-              <span className="text-blue-600 font-extrabold">Zero Surprises.</span>
+              Clear <span className="font-extrabold">Pricing.</span> <br />
+              <span className="text-blue-600 font-extrabold">No Hidden Fees.</span>
             </h1>
             <p className="text-xl text-slate-500 leading-relaxed font-medium max-w-2xl pricing-hero-el">
-              From startups to global enterprises, we provide fixed-price engineering solutions designed for long-term scalability.
+              We offer fixed prices for our services. Choose a package that fits your needs and budget.
             </p>
           </div>
         </div>
@@ -222,9 +222,9 @@ export default function PricingClient({ initialPricing }) {
         <div className="section-shell">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             {[
-              { title: "Transparent Line-Items", desc: "No hidden costs. Every quote includes engineering, QA, and initial infrastructure deployment." },
-              { title: "ROI-Centric Pricing", desc: "We price based on the technical complexity and the measurable business impact of the solution." },
-              { title: "Architectural Scalability", desc: "Our models are designed to grow. Scale your investment as your product moves from MVP to Enterprise." }
+              { title: "No Hidden Costs", desc: "What we quote is what you pay. We list everything included so there are no surprises." },
+              { title: "Fair Pricing", desc: "We price based on the work required, not on what we think you can pay." },
+              { title: "Grows With You", desc: "Start with what you need now. We can add features and expand as your business grows." }
             ].map(item => (
               <div key={item.title} className="space-y-4 strategic-item">
                 <div className="h-1 w-12 bg-blue-600" />

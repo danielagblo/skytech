@@ -72,13 +72,13 @@ export default function CaseStudiesClient({ projects }) {
       <div className="section-shell space-y-32">
         {/* Header Block */}
         <div className="max-w-4xl space-y-6">
-          <span className="pill border-blue-600/20 text-blue-600 bg-blue-50 uppercase tracking-[0.2em] text-[10px] font-bold case-hero-el">Proven Architectures</span>
+          <span className="pill border-blue-600/20 text-blue-600 bg-blue-50 uppercase tracking-[0.2em] text-[10px] font-bold case-hero-el">Our Work</span>
           <h1 className="text-4xl lg:text-6xl leading-[1.1] tracking-tight text-slate-900 font-light case-hero-el">
-            Engineering <span className="font-extrabold text-blue-600">results,</span> <br />
-            <span className="font-extrabold text-slate-950">not just features.</span>
+            Real projects, <span className="font-extrabold text-blue-600">real results.</span> <br />
+            <span className="font-extrabold text-slate-950">See what we've built.</span>
           </h1>
           <p className="text-xl text-slate-500 max-w-2xl leading-relaxed font-medium case-hero-el">
-            A forensic selection of technical deployments where we combined elite engineering with measurable business impact.
+            A selection of websites and apps we've built for our clients. Each project shows the problem, solution, and results.
           </p>
         </div>
 
@@ -154,15 +154,15 @@ export default function CaseStudiesClient({ projects }) {
         <div className="rounded-[4rem] bg-slate-950 p-16 md:p-24 text-center space-y-10 relative overflow-hidden case-cta-section">
           <div className="absolute inset-0 bg-blue-600/10 blur-[120px]" />
           <div className="relative z-10 space-y-4 max-w-3xl mx-auto case-cta-el">
-            <span className="text-blue-400 text-[10px] font-extrabold uppercase tracking-[0.4em]">Future Proofing</span>
-            <h2 className="text-4xl md:text-6xl font-extrabold text-white">Your architecture <br /> is next.</h2>
+            <span className="text-blue-400 text-[10px] font-extrabold uppercase tracking-[0.4em]">Get Started</span>
+            <h2 className="text-4xl md:text-6xl font-extrabold text-white">Let's build something <br /> great together.</h2>
             <p className="text-slate-400 text-lg leading-relaxed">
-              Join the brands that prioritized technical integrity and measurable growth. Let's build your technical legacy.
+              Ready to start your next project? Tell us about it and we'll give you a clear plan and a fixed price.
             </p>
           </div>
           <div className="relative z-10 case-cta-el">
             <Link href="/site/contact" className="inline-flex items-center gap-3 px-12 py-6 bg-blue-600 text-white rounded-full font-extrabold text-lg hover:bg-white hover:text-slate-955 transition-all shadow-2xl shadow-blue-600/20">
-              Start Technical Audit
+              Start Your Project
             </Link>
           </div>
         </div>
