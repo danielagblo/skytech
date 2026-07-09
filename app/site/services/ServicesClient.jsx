@@ -117,24 +117,24 @@ export default function ServicesClient({ servicesContent, whoWeWorkFor, engageme
           <span className="pill border-blue-600/20 text-blue-600 bg-blue-50 uppercase tracking-[0.2em] text-[10px] font-bold services-hero-el">Our Capabilities</span>
           <div className="max-w-4xl space-y-6">
             <h1 className="text-4xl lg:text-6xl leading-[1.1] tracking-tight text-slate-900 font-light services-hero-el">
-              Engineering <span className="font-extrabold text-blue-600">high-performance</span> <br />
-              <span className="font-extrabold text-slate-950">digital ecosystems.</span>
+              Websites, apps, <span className="font-extrabold text-blue-600">SEO</span> <br />
+              <span className="font-extrabold text-slate-950">& maintenance — all in one place.</span>
             </h1>
             <p className="text-xl md:text-2xl text-slate-500 leading-relaxed font-medium services-hero-el">
-              {servicesContent.heroSubtitle || "We architect, deploy, and scale. Our engineering standards prioritize bank-grade security and native performance across every platform."}
+              {servicesContent.heroSubtitle || "We build fast, secure websites and mobile apps. We also help you rank on Google and keep your site running smoothly."}
             </p>
           </div>
         </div>
       </section>
 
-      {/* Strategic Verticals (Who We Serve) */}
+      {/* Our Services */}
       <section className="py-24 bg-white border-b border-slate-100 verticals-section">
         <div className="section-shell space-y-16">
           <div className="text-center max-w-3xl mx-auto space-y-4 verticals-header">
-            <span className="text-blue-600 text-[10px] font-bold uppercase tracking-[0.3em]">Strategic Verticals</span>
-            <h2 className="text-4xl md:text-5xl font-extrabold text-slate-900 leading-tight">Industries We Modernize.</h2>
+            <span className="text-blue-600 text-[10px] font-bold uppercase tracking-[0.3em]">Our Services</span>
+            <h2 className="text-4xl md:text-5xl font-extrabold text-slate-900 leading-tight">What We Do.</h2>
             <p className="text-lg text-slate-600 leading-relaxed">
-              We specialize in sectors that demand technical rigor, high availability, and absolute data integrity.
+              We offer a full range of digital services — from building new websites and apps to improving and maintaining existing ones.
             </p>
           </div>
 
@@ -163,9 +163,9 @@ export default function ServicesClient({ servicesContent, whoWeWorkFor, engageme
       <section className="py-24 bg-slate-50 service-stack-section">
         <div className="section-shell space-y-16">
           <div className="text-center max-w-3xl mx-auto space-y-4 service-stack-header">
-            <span className="pill bg-white border-slate-200 text-slate-500 uppercase tracking-widest text-[9px] font-bold">Our Service Stack</span>
-            <h2 className="text-4xl font-extrabold text-slate-900 leading-tight">{servicesContent.whatWeDoTitle || "Full-Lifecycle Engineering."}</h2>
-            <p className="text-lg text-slate-600">{servicesContent.whatWeDoSubtitle || "We handle everything from initial system architecture to long-term infrastructure maintenance."}</p>
+            <span className="pill bg-white border-slate-200 text-slate-500 uppercase tracking-widest text-[9px] font-bold">Our Process</span>
+            <h2 className="text-4xl font-extrabold text-slate-900 leading-tight">{servicesContent.whatWeDoTitle || "What We Build."}</h2>
+            <p className="text-lg text-slate-600">{servicesContent.whatWeDoSubtitle || "From simple business websites to full online stores and mobile apps — we handle the full process."}</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -175,12 +175,12 @@ export default function ServicesClient({ servicesContent, whoWeWorkFor, engageme
                   <span className="text-4xl filter grayscale group-hover:grayscale-0 transition-all">⚡</span>
                   <span className="h-2 w-2 rounded-full bg-blue-600 opacity-0 group-hover:opacity-100 transition-opacity" />
                 </div>
-                <h3 className="text-2xl font-extrabold text-slate-900 mb-4">{service.name} Solutions</h3>
+                <h3 className="text-2xl font-extrabold text-slate-900 mb-4">{service.name}</h3>
                 <p className="text-slate-555 text-sm md:text-base leading-relaxed text-slate-500 mb-6">
-                  Custom system configuration and deployment strategies tailored to modern scalability demands.
+                  {service.name} — built with modern tools, tested thoroughly, and delivered on time.
                 </p>
                 <div className="pt-6 border-t border-slate-50 flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-blue-600">
-                  <span>View Technical Specs</span>
+                  <span>Learn More</span>
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
@@ -191,16 +191,16 @@ export default function ServicesClient({ servicesContent, whoWeWorkFor, engageme
         </div>
       </section>
 
-      {/* Engagement Architectures */}
+      {/* How We Work */}
       <section className="py-24 bg-white engagement-section">
         <div className="section-shell space-y-16">
           <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 border-b border-slate-100 pb-10 engagement-header">
             <div className="space-y-4">
-              <span className="text-blue-600 text-[10px] font-black uppercase tracking-[0.3em]">Collaboration Models</span>
-              <h2 className="text-4xl font-black text-slate-900 leading-tight">{servicesContent.engagementTitle || "Tactical Engagement Models."}</h2>
+              <span className="text-blue-600 text-[10px] font-black uppercase tracking-[0.3em]">How We Work</span>
+              <h2 className="text-4xl font-black text-slate-900 leading-tight">{servicesContent.engagementTitle || "Simple Process, Clear Results."}</h2>
             </div>
             <p className="text-slate-600 max-w-xl text-sm leading-relaxed">
-              We offer structured engagement paths designed to align with your organization's technical velocity and budgetary goals.
+              Whether you need a new site, improvements to an existing one, or ongoing support — we have a plan for you.
             </p>
           </div>
 
@@ -227,8 +227,8 @@ export default function ServicesClient({ servicesContent, whoWeWorkFor, engageme
       <section className="py-24 bg-slate-50 tools-section">
         <div className="section-shell space-y-12">
           <div className="text-center max-w-3xl mx-auto space-y-4 tools-header">
-            <span className="pill bg-white border-slate-200 text-slate-500 uppercase tracking-widest text-[9px] font-black">Our Infrastructure</span>
-            <h2 className="text-4xl font-black text-slate-900 tracking-tight">Tools of the Trade.</h2>
+            <span className="pill bg-white border-slate-200 text-slate-500 uppercase tracking-widest text-[9px] font-black">Tech Stack</span>
+            <h2 className="text-4xl font-black text-slate-900 tracking-tight">Technologies We Use.</h2>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-4">
             {stack.map((tech) => (
@@ -254,21 +254,21 @@ export default function ServicesClient({ servicesContent, whoWeWorkFor, engageme
         <div className="absolute inset-0 bg-blue-600/5 blur-[120px]" />
         <div className="section-shell relative z-10 text-center space-y-10 cta-header">
           <div className="space-y-4 max-w-3xl mx-auto">
-            <span className="pill border-blue-600/20 text-blue-400 bg-blue-600/10 uppercase tracking-[0.2em] text-[10px] font-black">Start the Process</span>
+            <span className="pill border-blue-600/20 text-blue-400 bg-blue-600/10 uppercase tracking-[0.2em] text-[10px] font-black">Get Started</span>
             <h2 className="text-4xl md:text-6xl font-black text-white leading-tight">
-              {servicesContent.ctaTitle || "Ready to architect your digital future?"}
+              {servicesContent.ctaTitle || "Ready to build something great?"}
             </h2>
             <p className="text-xl text-slate-400 leading-relaxed">
-              {servicesContent.ctaSubtitle || "Tell us about your technical challenges. We'll provide a clear blueprint and the engineering power to execute it."}
+              {servicesContent.ctaSubtitle || "Tell us about your project. We'll give you a clear plan and a fixed price."}
             </p>
           </div>
 
           <div className="flex justify-center gap-4 flex-wrap pt-6">
             <a href="/site/contact" className="px-10 py-5 bg-blue-600 text-white rounded-full font-black text-base hover:bg-blue-700 transition-all shadow-xl shadow-blue-600/20">
-              Technical Consultation
+              Start Your Project
             </a>
-            <a href="/site/contact" className="px-10 py-5 border-2 border-white/20 text-white rounded-full font-black text-base hover:bg-white/10 transition-all">
-              Request a Proposal
+            <a href="/site/pricing" className="px-10 py-5 border-2 border-white/20 text-white rounded-full font-black text-base hover:bg-white/10 transition-all">
+              View Pricing
             </a>
           </div>
         </div>
