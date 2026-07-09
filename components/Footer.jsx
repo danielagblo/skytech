@@ -24,7 +24,7 @@ export default async function Footer({ settings }) {
           <div className="space-y-4">
             <h3 className="text-white text-2xl font-bold tracking-tight">{siteName}</h3>
             <p className="text-sm text-slate-300/90 leading-relaxed">
-              Engineering high-performance digital ecosystems and mobile experiences for the next generation of global business.
+              We build websites, mobile apps, and help businesses grow online with SEO and maintenance services in Ghana.
             </p>
             <div className="space-y-2">
               <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.15em] text-blue-200">
@@ -33,7 +33,7 @@ export default async function Footer({ settings }) {
               </div>
               <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.15em] text-cyan-200">
                 <span className="h-1.5 w-1.5 rounded-full bg-cyan-400" />
-                Performance-First Engineering
+                Quality-first approach
               </div>
             </div>
           </div>
@@ -58,7 +58,7 @@ export default async function Footer({ settings }) {
               <li><Link href="/site/faqs" className="hover:text-white transition-colors">Common Questions</Link></li>
               <li><Link href="/site/contact" className="hover:text-white transition-colors">Project Inquiry</Link></li>
               <li><Link href="/site/internship" className="hover:text-white transition-colors">Careers</Link></li>
-              <li><Link href="/site/seo" className="hover:text-white transition-colors">Free Forensic Audit</Link></li>
+              <li><Link href="/site/seo" className="hover:text-white transition-colors">Free SEO Audit</Link></li>
               <li><Link href="/site/contact" className="hover:text-white transition-colors">Partner with Us</Link></li>
             </ul>
           </div>
