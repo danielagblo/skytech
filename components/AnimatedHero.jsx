@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useEffect, useRef } from 'react';
@@ -42,12 +43,12 @@ export default function AnimatedHero({ imageUrl, title, subtitle }) {
   }, []);
 
   return (
-    <section 
+    <section
       ref={heroRef}
       className="relative overflow-hidden bg-white text-slate-900 min-h-screen flex items-center"
     >
       {/* Parallax Background */}
-      <div 
+      <div
         ref={bgRef}
         className="absolute inset-0 z-0 will-change-transform scale-110"
       >
@@ -68,7 +69,7 @@ export default function AnimatedHero({ imageUrl, title, subtitle }) {
           <div className="max-w-6xl space-y-12 text-left flex flex-col items-start">
             <div className="space-y-8">
               {/* Animated Title */}
-              <h1 
+              <h1
                 ref={titleRef}
                 className="text-4xl lg:text-6xl leading-[1.1] tracking-tight text-white font-light opacity-0"
               >
@@ -78,7 +79,7 @@ export default function AnimatedHero({ imageUrl, title, subtitle }) {
               </h1>
 
               {/* Animated Tag/Subtitle */}
-              <div 
+              <div
                 ref={tagRef}
                 className="inline-flex flex-col items-start rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 shadow-xl overflow-hidden opacity-0"
               >
@@ -97,7 +98,7 @@ export default function AnimatedHero({ imageUrl, title, subtitle }) {
             </div>
 
             {/* Animated Action Buttons */}
-            <div 
+            <div
               ref={buttonsRef}
               className="flex flex-wrap justify-start gap-6 pt-4 opacity-0"
             >

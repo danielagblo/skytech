@@ -109,7 +109,7 @@ export default function WhyChooseUsSection() {
     // Set initial GSAP states dynamically
     gsap.set(cards, { opacity: 0, y: 20 });
     gsap.set(headerItems, { opacity: 0, y: 30 });
-    
+
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: el,

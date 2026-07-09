@@ -48,7 +48,7 @@ function Counter({ value, label, isLast }) {
       <div className="flex flex-col items-center text-center">
         {/* Value */}
         <div className="flex items-baseline justify-center mb-2">
-          <span 
+          <span
             className="text-5xl md:text-6xl font-black text-[#0B1521] tracking-tight counter-value-num"
             data-target={target}
             data-prefix={prefix}
@@ -59,7 +59,7 @@ function Counter({ value, label, isLast }) {
             {suffix}
           </span>
         </div>
-        
+
         {/* Label */}
         <p className="text-[11px] md:text-xs font-black uppercase tracking-[0.15em] text-[#0b172a]/80 text-center max-w-[180px] leading-snug">
           {label}
@@ -132,10 +132,10 @@ export default function AnimatedStats({ stats }) {
       <div className="section-shell">
         <div className="grid grid-cols-2 md:flex md:flex-row items-stretch justify-between gap-y-12 md:gap-y-0 gap-x-4">
           {stats.map((stat, idx) => (
-            <Counter 
-              key={stat.label} 
-              {...stat} 
-              isLast={idx === stats.length - 1} 
+            <Counter
+              key={stat.label}
+              {...stat}
+              isLast={idx === stats.length - 1}
             />
           ))}
         </div>

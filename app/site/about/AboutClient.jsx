@@ -47,7 +47,7 @@ export default function About({ teamMembers }) {
     // Timeline for hero entrance
     const tlHero = gsap.timeline({ defaults: { ease: 'power3.out' } });
     tlHero.to(heroElements, { opacity: 1, y: 0, duration: 0.5, stagger: 0.08, delay: 0.05 })
-           .to(heroStats, { opacity: 1, y: 0, duration: 0.5, stagger: 0.05 }, '-=0.3');
+      .to(heroStats, { opacity: 1, y: 0, duration: 0.5, stagger: 0.05 }, '-=0.3');
 
     // Method animations
     const tlMethod = gsap.timeline({
@@ -58,7 +58,7 @@ export default function About({ teamMembers }) {
       }
     });
     tlMethod.to(methodHeader, { opacity: 1, y: 0, duration: 0.8, stagger: 0.15, ease: 'power3.out' })
-            .to(methodSteps, { opacity: 1, y: 0, duration: 0.8, stagger: 0.15, ease: 'power2.out' }, '-=0.4');
+      .to(methodSteps, { opacity: 1, y: 0, duration: 0.8, stagger: 0.15, ease: 'power2.out' }, '-=0.4');
 
     // History Header Animation
     gsap.to(historyHeader, {
@@ -89,8 +89,8 @@ export default function About({ teamMembers }) {
       });
 
       tlItem.to(node, { opacity: 1, scale: 1, duration: 0.6, ease: 'back.out(1.7)' })
-            .to(year, { opacity: 1, x: 0, duration: 0.5, ease: 'power2.out' }, '-=0.3')
-            .to(content, { opacity: 1, x: 0, duration: 0.6, ease: 'power2.out' }, '-=0.4');
+        .to(year, { opacity: 1, x: 0, duration: 0.5, ease: 'power2.out' }, '-=0.3')
+        .to(content, { opacity: 1, x: 0, duration: 0.6, ease: 'power2.out' }, '-=0.4');
     });
 
     // Minds animations
@@ -102,7 +102,7 @@ export default function About({ teamMembers }) {
       }
     });
     tlMinds.to(mindsHeader, { opacity: 1, y: 0, duration: 0.8, stagger: 0.15, ease: 'power3.out' })
-            .to(mindsCards, { opacity: 1, y: 0, duration: 1.0, stagger: 0.18, ease: 'power2.out' }, '-=0.4');
+      .to(mindsCards, { opacity: 1, y: 0, duration: 1.0, stagger: 0.18, ease: 'power2.out' }, '-=0.4');
 
     // Team animations
     const tlTeam = gsap.timeline({
@@ -113,7 +113,7 @@ export default function About({ teamMembers }) {
       }
     });
     tlTeam.to(teamHeader, { opacity: 1, y: 0, duration: 0.8, stagger: 0.15, ease: 'power3.out' })
-          .to(teamCards, { opacity: 1, y: 0, duration: 0.9, stagger: 0.15, ease: 'power2.out' }, '-=0.4');
+      .to(teamCards, { opacity: 1, y: 0, duration: 0.9, stagger: 0.15, ease: 'power2.out' }, '-=0.4');
 
     return () => {
       ScrollTrigger.getAll().forEach(t => t.kill());

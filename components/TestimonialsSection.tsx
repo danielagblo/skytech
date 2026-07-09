@@ -19,7 +19,7 @@ interface Testimonial {
 export default function TestimonialsSection({ testimonials }: { testimonials: Testimonial[] }) {
   const [showAll, setShowAll] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
-  
+
   const displayedTestimonials = showAll ? testimonials : testimonials.slice(0, 3);
 
   useEffect(() => {
@@ -64,7 +64,7 @@ export default function TestimonialsSection({ testimonials }: { testimonials: Te
             </p>
           </div>
           {!showAll && testimonials.length > 3 && (
-            <button 
+            <button
               onClick={() => setShowAll(true)}
               className="btn-secondary w-fit"
             >
@@ -98,10 +98,10 @@ export default function TestimonialsSection({ testimonials }: { testimonials: Te
             </div>
           ))}
         </div>
-        
+
         {showAll && (
           <div className="text-center pt-8">
-            <button 
+            <button
               onClick={() => setShowAll(false)}
               className="text-blue-600 font-bold text-sm hover:underline"
             >
