@@ -10,8 +10,8 @@ if (typeof window !== 'undefined') {
 
 const allFeatures = [
   {
-    title: "Precision Engineering",
-    desc: "High-fidelity codebases built for performance, security, and infinite scalability.",
+    title: "Clean, Reliable Code",
+    desc: "We build websites and apps that are fast, secure, and easy to maintain.",
     icon: (
       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
@@ -19,8 +19,8 @@ const allFeatures = [
     )
   },
   {
-    title: "Forensic Audit",
-    desc: "Deep data analysis to identify bottlenecks and optimize for maximum conversion.",
+    title: "Performance Checks",
+    desc: "We review your site to find what's slowing it down and fix it.",
     icon: (
       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -28,8 +28,8 @@ const allFeatures = [
     )
   },
   {
-    title: "Rapid Deployment",
-    desc: "Agile workflows that get your MVP to market in weeks, not months.",
+    title: "Fast Delivery",
+    desc: "We work efficiently and keep you updated every step of the way.",
     icon: (
       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -37,8 +37,8 @@ const allFeatures = [
     )
   },
   {
-    title: "Dedicated Support",
-    desc: "Round-the-clock monitoring and expert support to keep your systems running 24/7.",
+    title: "Ongoing Support",
+    desc: "We're here after launch too. Questions, fixes, updates — we've got you covered.",
     icon: (
       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" />
@@ -46,8 +46,8 @@ const allFeatures = [
     )
   },
   {
-    title: "Modern Tech Stacks",
-    desc: "Leveraging the latest technologies like Next.js, AI, and Cloud-native architectures.",
+    title: "Modern Technology",
+    desc: "We use up-to-date tools and frameworks so your site stays fast and relevant.",
     icon: (
       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
@@ -55,8 +55,8 @@ const allFeatures = [
     )
   },
   {
-    title: "Strategic Growth",
-    desc: "We align your digital product with your long-term business and revenue goals.",
+    title: "Business-Focused",
+    desc: "We build with your goals in mind — more customers, more sales, better results.",
     icon: (
       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
@@ -64,8 +64,8 @@ const allFeatures = [
     )
   },
   {
-    title: "Data Security",
-    desc: "ISO-grade security protocols ensuring your user data and platform remain bulletproof.",
+    title: "Secure Systems",
+    desc: "We protect your site and your customers' data with strong security practices.",
     icon: (
       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 00-2 2zm10-10V7a4 4 0 00-8 0v4h8z" />
@@ -73,8 +73,8 @@ const allFeatures = [
     )
   },
   {
-    title: "SEO-First Build",
-    desc: "Search-engine optimized from the first line of code for maximum organic visibility.",
+    title: "SEO Ready",
+    desc: "Your site is built to rank on Google from day one.",
     icon: (
       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
@@ -82,8 +82,8 @@ const allFeatures = [
     )
   },
   {
-    title: "User-Centric UX",
-    desc: "Research-driven interfaces designed to reduce friction and maximize user retention.",
+    title: "Easy to Use",
+    desc: "Clean, simple designs that your customers will find easy to navigate.",
     icon: (
       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -138,10 +138,10 @@ export default function WhyChooseUsSection() {
         <div className="text-center max-w-3xl mx-auto space-y-2">
           <span className="pill border-blue-600/20 text-blue-600 bg-blue-50">WHY CHOOSE US</span>
           <h2 className="text-4xl sm:text-5xl font-black text-slate-900 leading-[1.1] tracking-tight">
-            Advanced software engineering <br /> for market leaders.
+            We build quality digital <br /> products for your business.
           </h2>
           <p className="text-lg text-slate-500 leading-relaxed max-w-2xl mx-auto">
-            We don't just build apps; we architect digital solutions that drive measurable business growth and long-term technical dominance.
+            We focus on clean code, clear communication, and delivering on time. Here's what sets us apart.
           </p>
         </div>
 

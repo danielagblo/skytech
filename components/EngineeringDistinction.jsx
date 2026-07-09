@@ -48,13 +48,13 @@ export default function EngineeringDistinction() {
         {/* Top Header Split */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="space-y-6 distinction-left">
-            <span className="text-blue-600 text-[10px] font-extrabold uppercase tracking-[0.3em]">Engineering Distinction</span>
+            <span className="text-blue-600 text-[10px] font-extrabold uppercase tracking-[0.3em]">Recognition</span>
             <h2 className="text-5xl md:text-6xl font-extrabold text-slate-900 leading-[1.1] tracking-tight">
-              Recognized for <br />
-              <span className="text-blue-600 font-extrabold">Technical</span> Excellence
+              Trusted by <br />
+              <span className="text-blue-600 font-extrabold">businesses in Ghana</span>
             </h2>
             <p className="text-lg text-slate-500 leading-relaxed max-w-xl">
-              Our commitment to bank-grade security and precision engineering has made us the trusted partner for Ghana's most ambitious digital projects.
+              We've built a reputation for delivering quality digital products on time. Our track record speaks for itself.
             </p>
           </div>
           <div className="relative flex justify-center lg:justify-end distinction-right">
@@ -81,9 +81,9 @@ export default function EngineeringDistinction() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {[
             {
-              category: "Industry Excellence",
+              category: "Industry Recognition",
               title: "Best Web & Mobile Development Agency 2023",
-              desc: "Recognized for outstanding technical delivery and high-performance product architectures across the West African region.",
+              desc: "Recognized for delivering high-quality websites and mobile apps for businesses across Ghana and West Africa.",
               icon: (
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
@@ -91,9 +91,9 @@ export default function EngineeringDistinction() {
               )
             },
             {
-              category: "Technical Distinction",
-              title: "Top-Rated Fintech & Banking Architecture",
-              desc: "Voted as the premier engineering partner for secure, scalable financial systems and real-time transaction processing.",
+              category: "Quality Service",
+              title: "Top-Rated Digital Solutions Partner",
+              desc: "Voted as a trusted partner for building secure, scalable websites, mobile apps, and digital platforms.",
               icon: (
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
@@ -101,9 +101,9 @@ export default function EngineeringDistinction() {
               )
             },
             {
-              category: "National Legacy",
+              category: "Client Trust",
               title: "Ghana's Most Trusted Digital Partner 2022",
-              desc: "A prestigious national distinction cementing Skytech's status as the country's most reliable provider for enterprise software solutions.",
+              desc: "Awarded for consistent quality, transparent communication, and reliable delivery on digital projects.",
               icon: (
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
