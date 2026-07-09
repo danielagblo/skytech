@@ -73,9 +73,9 @@ export default function AnimatedHero({ imageUrl, title, subtitle }) {
                 ref={titleRef}
                 className="text-4xl lg:text-6xl leading-[1.1] tracking-tight text-white font-light opacity-0"
               >
-                World Class <br />
-                <span className="font-extrabold text-white">Software solutions</span> <br />
-                for all <span className="font-extrabold text-blue-400">businesses.</span>
+                We build <br />
+                <span className="font-extrabold text-white">websites & mobile apps</span> <br />
+                that grow your <span className="font-extrabold text-blue-400">business.</span>
               </h1>
 
               {/* Animated Tag/Subtitle */}
@@ -91,7 +91,7 @@ export default function AnimatedHero({ imageUrl, title, subtitle }) {
                 </div>
                 <div className="px-5 py-3">
                   <p className="text-sm sm:text-base text-white font-bold tracking-tight">
-                    Get a website that ranks No. 1 on Google.
+                    Professional web design, mobile apps & SEO for your business.
                   </p>
                 </div>
               </div>

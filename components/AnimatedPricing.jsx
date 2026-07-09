@@ -54,11 +54,11 @@ export default function AnimatedPricing({ pricing }) {
           <div className="flex flex-wrap justify-center gap-3 pt-6">
             <div className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-slate-900 text-white text-[9px] font-extrabold uppercase tracking-widest shadow-xl shadow-slate-900/10">
               <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse" />
-              Maintenance Covers All Site Offers
+              Maintenance included with all plans
             </div>
             <div className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-white border border-slate-200 text-slate-600 text-[9px] font-extrabold uppercase tracking-widest shadow-sm">
               <span className="w-1.5 h-1.5 rounded-full bg-blue-600" />
-              Lowest rates compared to others like WopeDigital.com
+              Free hosting for 12 months
             </div>
           </div>
         </div>
