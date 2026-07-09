@@ -36,13 +36,13 @@ export default function TestimonialsSection({ testimonials }: { testimonials: Te
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: el,
-        start: 'top bottom-=250px',
-        toggleActions: 'play reverse play reverse',
+        start: 'top bottom-=150px',
+        toggleActions: 'play none none none',
       }
     });
 
-    tl.to(headerItems, { opacity: 1, y: 0, duration: 0.8, stagger: 0.15, ease: 'power3.out' })
-      .to(cards, { opacity: 1, y: 0, duration: 1.1, stagger: 0.2, ease: 'power2.out' }, '-=0.4');
+    tl.to(headerItems, { opacity: 1, y: 0, duration: 0.5, stagger: 0.08, ease: 'power3.out' })
+      .to(cards, { opacity: 1, y: 0, duration: 0.5, stagger: 0.08, ease: 'power2.out' }, '-=0.25');
 
     return () => {
       ScrollTrigger.getAll().forEach(t => t.kill());

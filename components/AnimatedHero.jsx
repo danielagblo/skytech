@@ -19,12 +19,10 @@ export default function AnimatedHero({ imageUrl, title, subtitle }) {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // 1. Entrance Stagger Animation
       const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
-
-      tl.fromTo(titleRef.current, { opacity: 0, y: 35 }, { opacity: 1, y: 0, duration: 0.8, delay: 0.2 })
-        .fromTo(tagRef.current, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8 }, '-=0.6')
-        .fromTo(buttonsRef.current, { opacity: 0, y: 25 }, { opacity: 1, y: 0, duration: 0.8 }, '-=0.6');
+      tl.fromTo(titleRef.current, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, delay: 0.1 })
+        .fromTo(tagRef.current, { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 0.5 }, '-=0.35')
+        .fromTo(buttonsRef.current, { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 0.5 }, '-=0.35');
 
       // 2. Parallax Scroll Animation
       gsap.to(bgRef.current, {

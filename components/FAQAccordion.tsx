@@ -36,19 +36,19 @@ export default function FAQAccordion({ faqs }: { faqs: FAQ[] }) {
     const sidebarBtns = el.querySelectorAll('.faq-sidebar-btn');
     const accordionItems = el.querySelectorAll('.faq-accordion-item');
 
-    gsap.set(sidebarBtns, { opacity: 0, x: -25 });
-    gsap.set(accordionItems, { opacity: 0, x: 25 });
+    gsap.set(sidebarBtns, { opacity: 0, x: -15 });
+    gsap.set(accordionItems, { opacity: 0, x: 15 });
 
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: el,
-        start: 'top bottom-=200px',
-        toggleActions: 'play reverse play reverse',
+        start: 'top bottom-=150px',
+        toggleActions: 'play none none none',
       }
     });
 
-    tl.to(sidebarBtns, { opacity: 1, x: 0, duration: 0.6, stagger: 0.1, ease: 'power2.out' })
-      .to(accordionItems, { opacity: 1, x: 0, duration: 0.8, stagger: 0.1, ease: 'power2.out' }, '-=0.4');
+    tl.to(sidebarBtns, { opacity: 1, x: 0, duration: 0.5, stagger: 0.05, ease: 'power2.out' })
+      .to(accordionItems, { opacity: 1, x: 0, duration: 0.5, stagger: 0.05, ease: 'power2.out' }, '-=0.35');
 
     return () => {
       ScrollTrigger.getAll().forEach(t => t.kill());

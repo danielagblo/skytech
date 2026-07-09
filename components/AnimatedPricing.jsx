@@ -22,17 +22,17 @@ export default function AnimatedPricing({ pricing }) {
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: el,
-        start: 'top bottom-=250px',
-        toggleActions: 'play reverse play reverse',
+        start: 'top bottom-=150px',
+        toggleActions: 'play none none none',
       }
     });
 
     // Set initial GSAP states dynamically
-    gsap.set(headerItems, { opacity: 0, y: 35 });
-    gsap.set(cards, { opacity: 0, y: 30 });
+    gsap.set(headerItems, { opacity: 0, y: 20 });
+    gsap.set(cards, { opacity: 0, y: 15 });
 
-    tl.to(headerItems, { opacity: 1, y: 0, duration: 0.8, stagger: 0.15, ease: 'power3.out' })
-      .to(cards, { opacity: 1, y: 0, duration: 1.3, stagger: 0.25, ease: 'power2.out' }, '-=0.5');
+    tl.to(headerItems, { opacity: 1, y: 0, duration: 0.5, stagger: 0.08, ease: 'power3.out' })
+      .to(cards, { opacity: 1, y: 0, duration: 0.6, stagger: 0.1, ease: 'power2.out' }, '-=0.35');
 
     return () => {
       ScrollTrigger.getAll().forEach(t => t.kill());

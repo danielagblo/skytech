@@ -23,19 +23,19 @@ export default function EngineeringDistinction() {
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: el,
-        start: 'top bottom-=250px',
-        toggleActions: 'play reverse play reverse',
+        start: 'top bottom-=150px',
+        toggleActions: 'play none none none',
       }
     });
 
     // Set initial GSAP states dynamically
-    gsap.set([leftContent, rightContent], { opacity: 0, y: 35 });
-    gsap.set(cards, { opacity: 0, y: 30 });
+    gsap.set([leftContent, rightContent], { opacity: 0, y: 20 });
+    gsap.set(cards, { opacity: 0, y: 15 });
 
     // Animate header parts and cards in timeline sequence
-    tl.to(leftContent, { opacity: 1, y: 0, duration: 1.0, ease: 'power3.out' })
-      .to(rightContent, { opacity: 1, y: 0, duration: 1.0, ease: 'power3.out' }, '-=0.7')
-      .to(cards, { opacity: 1, y: 0, duration: 1.3, stagger: 0.25, ease: 'power2.out' }, '-=0.5');
+    tl.to(leftContent, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' })
+      .to(rightContent, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, '-=0.4')
+      .to(cards, { opacity: 1, y: 0, duration: 0.6, stagger: 0.1, ease: 'power2.out' }, '-=0.3');
 
     return () => {
       ScrollTrigger.getAll().forEach(t => t.kill());

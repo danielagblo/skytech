@@ -29,8 +29,8 @@ export default function About({ teamMembers }) {
     const teamCards = el.querySelectorAll('.team-card');
 
     // Initial states
-    gsap.set(heroElements, { opacity: 0, y: 35 });
-    gsap.set(heroStats, { opacity: 0, y: 25 });
+    gsap.set(heroElements, { opacity: 0, y: 20 });
+    gsap.set(heroStats, { opacity: 0, y: 15 });
     gsap.set(methodHeader, { opacity: 0, y: 35 });
     gsap.set(methodSteps, { opacity: 0, y: 30 });
     gsap.set(historyHeader, { opacity: 0, y: 35 });
@@ -46,8 +46,8 @@ export default function About({ teamMembers }) {
 
     // Timeline for hero entrance
     const tlHero = gsap.timeline({ defaults: { ease: 'power3.out' } });
-    tlHero.to(heroElements, { opacity: 1, y: 0, duration: 0.8, stagger: 0.15, delay: 0.1 })
-           .to(heroStats, { opacity: 1, y: 0, duration: 0.8, stagger: 0.1 }, '-=0.5');
+    tlHero.to(heroElements, { opacity: 1, y: 0, duration: 0.5, stagger: 0.08, delay: 0.05 })
+           .to(heroStats, { opacity: 1, y: 0, duration: 0.5, stagger: 0.05 }, '-=0.3');
 
     // Method animations
     const tlMethod = gsap.timeline({
@@ -130,7 +130,7 @@ export default function About({ teamMembers }) {
   return (
     <main ref={containerRef} className="min-h-screen bg-white">
       {/* Hero Section (Precision Fold Fit - White Editorial) */}
-      <section className="relative h-screen flex flex-col justify-center overflow-hidden bg-white text-slate-900 px-4">
+      <section className="relative min-h-screen flex flex-col justify-center overflow-hidden bg-white text-slate-900 px-4 pt-32 md:pt-40 pb-20">
         {/* Background Asset with Luminous Overlay */}
         <div className="absolute inset-0 z-0">
           <Image

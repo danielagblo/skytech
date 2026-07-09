@@ -85,13 +85,13 @@ export default function AnimatedStats({ stats }) {
     if (items.length === 0) return;
 
     // Set initial position for staggered slide up
-    gsap.set(items, { opacity: 0, y: 45 });
+    gsap.set(items, { opacity: 0, y: 20 });
 
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: el,
-        start: 'top bottom-=250px',
-        toggleActions: 'play reverse play reverse',
+        start: 'top bottom-=150px',
+        toggleActions: 'play none none none',
       }
     });
 
@@ -107,19 +107,19 @@ export default function AnimatedStats({ stats }) {
       tl.to(item, {
         opacity: 1,
         y: 0,
-        duration: 0.8,
+        duration: 0.5,
         ease: 'power3.out',
-      }, idx * 0.22); // staggered delay
+      }, idx * 0.1); // staggered delay
 
       tl.to(obj, {
         val: targetVal,
-        duration: 1.5,
+        duration: 1.0,
         ease: 'power2.out',
         onUpdate: () => {
           const currentVal = targetVal % 1 === 0 ? Math.floor(obj.val) : obj.val.toFixed(1);
           numEl.innerText = (prefix && currentVal < 10) ? `${prefix}${currentVal}` : currentVal;
         }
-      }, idx * 0.22); // starts counting exactly as it begins to slide up
+      }, idx * 0.1); // starts counting exactly as it begins to slide up
     });
 
     return () => {
