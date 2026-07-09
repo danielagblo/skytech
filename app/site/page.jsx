@@ -25,254 +25,15 @@ import LatestInsights from "../../components/LatestInsights";
 export const metadata = {
   title: "Skytech Ghana - Website & Mobile App Developers",
   description:
-    "Skytech Ghana builds websites and mobile apps for businesses. Simple, clear, and focused on results.",
+    "Skytech Ghana builds websites and mobile apps for businesses in Ghana. Web design, SEO, and maintenance services.",
 };
 
 const stats = [
-  { label: "10 years on the Ghanaian market", value: "10+" },
-  { label: "Satisfied customers", value: "100+" },
-  { label: "Unique projects and still counting", value: "150+" },
-  { label: "Continental experience", value: "03+" },
-];
-
-
-
-
-const websitePackages = [
-  {
-    name: "Basic Website Package",
-    tagline: "Best for Startups & Small Businesses",
-    timeline: "3–8 weeks",
-    price: "GHS 2,500",
-    highlights: [
-      "5–6 page modern responsive website",
-      "Homepage, About, Services, Contact",
-      "Basic SEO setup",
-      "WhatsApp chat integration",
-      "1 business email (info@yourbusiness.com)",
-      "Google Maps & social media links",
-      "Mobile optimization",
-      "Free SSL certificate",
-      "6 months support",
-      "Free speed optimization (Bonus)",
-      "Free hosting for 12 months (Bonus)",
-    ],
-  },
-  {
-    name: "Standard Business Package",
-    tagline: "Most Popular – For Growing Brands",
-    timeline: "2–3 months",
-    price: "GHS 6,500",
-    highlights: [
-      "Includes everything in Basic plus:",
-      "10–12 pages",
-      "Advanced SEO (keywords, ranking, indexing)",
-      "Custom contact forms + automated emails",
-      "Live chat system",
-      "Testimonials, portfolio, gallery",
-      "Blog with admin access (CMS)",
-      "Analytics dashboard",
-      "3 business emails",
-      "Security hardening",
-      "Google Business Profile (Bonus)",
-    ],
-    badge: "Most popular",
-  },
-  {
-    name: "E-commerce/Booking Package",
-    tagline: "For Retail, Restaurants, & Services",
-    timeline: "3–6 months",
-    price: "GHS 25,000",
-    highlights: [
-      "Includes everything in Standard plus:",
-      "Full online store or booking system",
-      "Product uploads (up to 50 items)",
-      "Payment integrations (Visa, Momo, Paystack)",
-      "Stock & coupon management",
-      "Cart abandonment recovery",
-      "Automated order emails",
-      "Secure admin dashboard",
-      "Advanced SEO + schema",
-      "5 business emails",
-      "Analytics setup (Google Analytics + Search Console) (Bonus)",
-    ],
-  },
-  {
-    name: "Premium Corporate Package",
-    tagline: "For companies that need a full digital system",
-    timeline: "4–6 months",
-    price: "GHS 45,000",
-    highlights: [
-      "Custom UI/UX design",
-      "Full CMS or web application",
-      "Employee portal / client portal",
-      "API integrations",
-      "Mobile app–feel interface",
-      "Enterprise SEO",
-      "Security firewall + monitoring",
-      "Priority support",
-      "Brand kit creation (Bonus)",
-      "Does not include hosting",
-    ],
-  },
-];
-
-const seoGrowthPlan = {
-  name: "Professional SEO Growth Plan",
-  priceRange: "GHS 600/month – GHS 2,000/month",
-  items: [
-    "Keyword ranking & mapping",
-    "High-authority backlink building",
-    "Regular blog content creation",
-    "Monthly technical SEO audits",
-    "Performance & ranking reports",
-  ],
-};
-
-const appPackages = [
-  {
-    name: "Starter App Package",
-    tagline: "Best for personal brands & small teams",
-    timeline: "2–3 weeks",
-    price: "GHS 12,000",
-    highlights: [
-      "Cross-platform app (Android + iOS)",
-      "5 main screens (Home, Services, Contact)",
-      "Basic UI/UX design",
-      "Simple dashboard",
-      "1 API integration",
-      "Push notifications (basic)",
-      "1-month free support",
-    ],
-  },
-  {
-    name: "Business Growth Package",
-    tagline: "Best for SMEs & E-commerce",
-    timeline: "4–6 weeks",
-    price: "GHS 24,000",
-    highlights: [
-      "8–12 screens (custom UI/UX)",
-      "User authentication (Email/Phone)",
-      "Payment gateway integration",
-      "Booking system / E-commerce",
-      "Analytics integration (Firebase)",
-      "Admin panel",
-      "Push notifications",
-      "2 months support",
-      "SEO-Optimized app listing (Bonus)",
-    ],
-    badge: "Most popular",
-  },
-  {
-    name: "Enterprise App Package",
-    tagline: "Best for large companies & finance",
-    timeline: "2–3 months",
-    price: "GHS 80,000",
-    highlights: [
-      "Up to 25 screens (premium UI/UX)",
-      "Advanced auth (OTP, 2FA, Social)",
-      "Full e-commerce/marketplace system",
-      "Wallet / Subscription system",
-      "Real-time chat",
-      "Advanced admin + analytics",
-      "API development",
-      "Play Store/App Store optimization (Bonus)",
-      "3 months support",
-    ],
-  },
-  {
-    name: "Advanced Marketplace & Fintech",
-    tagline: "For complex Uber-like or Wallet apps",
-    timeline: "3–6 months",
-    price: "GHS 120,000",
-    highlights: [
-      "Apps + Web Admin + Vendor Portal",
-      "Real-time location tracking",
-      "In-app wallet & payment orchestration",
-      "Multi-vendor system",
-      "Bank-grade encryption",
-      "Cloud infrastructure setup",
-      "6 months premium support",
-      "Free initial consulting (Bonus)",
-    ],
-  },
-];
-
-const features = [
-  {
-    icon: "⚡",
-    title: "Fast and clear",
-    description:
-      "We move fast and keep you updated, so you always know what is happening.",
-  },
-  {
-    icon: "🤝",
-    title: "We work with you",
-    description:
-      "We listen, ask questions, and build what your customers need.",
-  },
-  {
-    icon: "📈",
-    title: "Real results",
-    description:
-      "We build things that help your business grow.",
-  },
-];
-
-const processSteps = [
-  {
-    number: "01",
-    title: "We listen",
-    description:
-      "You tell us your goals. We ask questions and agree on the plan.",
-  },
-  {
-    number: "02",
-    title: "We build",
-    description:
-      "We design and build while keeping you updated each week.",
-  },
-  {
-    number: "03",
-    title: "We launch and support",
-    description:
-      "We launch, fix issues fast, and help you grow.",
-  },
-];
-
-// Database fetching functions removed to resolve connection errors.
-// All data is now hardcoded for high-performance stability.
-
-const hardcodedServices = [
-  {
-    _id: "1",
-    title: "Web Engineering",
-    description: "High-performance, secure, and scalable web architectures designed for global reach.",
-    icon: "Globe"
-  },
-  {
-    _id: "2",
-    title: "Mobile App Development",
-    description: "iOS and Android experiences that feel native, fast, and feature-rich.",
-    icon: "Smartphone"
-  },
-  {
-    _id: "3",
-    title: "SEO & Digital Growth",
-    description: "Technical SEO and data-driven marketing to dominate search rankings.",
-    icon: "TrendingUp"
-  },
-  {
-    _id: "4",
-    title: "Creative Identity & Branding",
-    description: "Bespoke visual systems and brand architectures that command institutional authority.",
-    icon: "Palette"
-  }
-];
-
-
-
-export default async function Home() {
+  { label: "Years in business", value: "10+" },
+  { label: "Satisfied clients", value: "100+" },
+  { label: "Projects delivered", value: "150+" },
+  { label: "Countries served", value: "03+" },
+];export default async function Home() {
   const heroData = await getHeroData();
   const pricingData = await getPricing();
   const webPricing = pricingData.find(c => c.category === 'web') || { packages: [] };
@@ -283,7 +44,6 @@ export default async function Home() {
 
 
   const settings = await getSettings();
-  const services = hardcodedServices;
   const pricingBookletUrl = settings.pricingBookletUrl || "/static/pricing.pdf";
 
 
@@ -294,11 +54,10 @@ export default async function Home() {
   const galleryProjects = projects.slice(0, 3);
 
   const faqs = await getFAQs();
-  const faqsPreview = faqs.slice(0, 5);
 
   const hero = {
-    title: "World Class Software solutions for all businesses.",
-    subtitle: "No 1# website development company in Ghana.",
+    title: "We build websites & apps that grow your business.",
+    subtitle: "Website & App Development Company in Ghana",
     imageUrl: heroData?.imageUrl || "/images/hero-3.png"
   };
 
@@ -318,7 +77,7 @@ export default async function Home() {
         <section className="relative bg-white py-12 border-b border-slate-100 overflow-hidden">
           {/* Corner Badge */}
           <div className="absolute top-0 left-0 bg-blue-600 text-white px-5 py-2 text-[11px] font-extrabold uppercase tracking-[0.2em] shadow-lg z-10 rounded-br-lg">
-            Affiliate Network
+            Our Partners
           </div>
 
           <div className="relative flex items-center">
@@ -368,10 +127,10 @@ export default async function Home() {
               <div className="space-y-4 max-w-2xl">
                 <span className="pill">Portfolio</span>
                 <h2 className="text-4xl sm:text-5xl font-extrabold text-slate-900 leading-tight">
-                  Our Work in Action
+                  Recent Projects
                 </h2>
                 <p className="text-lg text-slate-600">
-                  A showcase of recent websites and apps we've launched for our partners.
+                  A selection of websites and apps we've built for our clients.
                 </p>
               </div>
               <Link className="btn-secondary px-8 py-3 rounded-full" href="/site/gallery">
@@ -453,7 +212,7 @@ export default async function Home() {
               Frequently Asked Questions
             </h2>
             <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-              Our platform is built to help you work smarter, not harder. It adapts to your needs and supports your goals. Make the most of every feature.
+              Got questions about our services, pricing, or process? We've got answers.
             </p>
           </div>
 
@@ -558,140 +317,4 @@ function PartnerGroup({ title, partners, variant = "light" }) {
   );
 }
 
-function PricingSection({ pricingBookletUrl, websitePackages, appPackages, seoGrowthPlan }) {
-  return (
-    <div className="space-y-10">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <PricingGroup title="Website development" packages={websitePackages} />
-        <PricingGroup title="Mobile app development" packages={appPackages} />
-      </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 rounded-3xl bg-white border border-slate-100 p-8 shadow-sm">
-          <div className="flex items-start justify-between gap-6 flex-col sm:flex-row">
-            <div className="space-y-2">
-              <span className="pill">SEO</span>
-              <h3 className="text-2xl font-extrabold text-slate-900">
-                {seoGrowthPlan.name}
-              </h3>
-              <p className="text-slate-600">
-                Monthly retainer for ongoing growth and rankings.
-              </p>
-            </div>
-            <div className="rounded-2xl bg-slate-50 border border-slate-100 px-5 py-4">
-              <p className="text-sm text-slate-600">From</p>
-              <p className="text-xl font-extrabold text-slate-900">
-                {seoGrowthPlan.priceRange}
-              </p>
-            </div>
-          </div>
-          <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm text-slate-700">
-            {seoGrowthPlan.items.map((item) => (
-              <div key={item} className="flex items-start gap-2">
-                <span className="mt-1.5 h-2 w-2 rounded-full bg-blue-500" />
-                <span>{item}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="rounded-3xl bg-slate-950 text-white border border-white/10 p-8 shadow-sm">
-          <h3 className="text-xl font-extrabold">Want the PDF?</h3>
-          <p className="text-white/80 mt-2">
-            You can still download the original booklet, but everything important
-            is shown above.
-          </p>
-          <div className="mt-6 space-y-3">
-            {pricingBookletUrl ? (
-              <a
-                className="btn-primary bg-white text-slate-950 hover:bg-slate-100 w-full"
-                href={`/api/content/view-booklet?file=${encodeURIComponent(
-                  pricingBookletUrl.split("/").pop()
-                )}`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Download pricing booklet
-              </a>
-            ) : (
-              <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white/80">
-                Booklet not uploaded yet.
-              </div>
-            )}
-            <Link
-              href="/site/contact"
-              className="btn-secondary border-white/20 text-white hover:bg-white/10 w-full"
-            >
-              Get a custom quote
-            </Link>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function PricingGroup({ title, packages }) {
-  const list = packages || [];
-  return (
-    <div className="rounded-3xl bg-white border border-slate-100 p-8 shadow-sm">
-      <div className="space-y-2">
-        <span className="pill">{title}</span>
-        <h3 className="text-2xl font-extrabold text-slate-900">
-          Choose a package
-        </h3>
-        <p className="text-slate-600">
-          Timelines and deliverables are included for each tier.
-        </p>
-      </div>
-
-      <div className="mt-8 grid grid-cols-1 gap-6">
-        {list.map((pkg) => (
-          <div
-            key={pkg.name}
-            className={`rounded-3xl border p-6 ${pkg.badge
-              ? "border-blue-200 bg-blue-50/40"
-              : "border-slate-100 bg-slate-50"
-              }`}
-          >
-            <div className="flex items-start justify-between gap-6 flex-col sm:flex-row">
-              <div className="space-y-1">
-                <div className="flex items-center gap-3">
-                  <p className="text-lg font-extrabold text-slate-900">
-                    {pkg.name}
-                  </p>
-                  {pkg.badge ? (
-                    <span className="inline-flex items-center rounded-full bg-blue-600 px-3 py-1 text-xs font-bold text-white">
-                      {pkg.badge}
-                    </span>
-                  ) : null}
-                </div>
-                <p className="text-sm text-slate-600">{pkg.tagline}</p>
-              </div>
-              <div className="rounded-2xl bg-white border border-slate-100 px-5 py-4 min-w-[220px]">
-                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
-                  Starting at
-                </p>
-                <p className="text-2xl font-extrabold text-slate-900 mt-1">
-                  {pkg.price}
-                </p>
-                <p className="text-sm text-slate-600 mt-1">
-                  Timeline: <span className="font-semibold">{pkg.timeline}</span>
-                </p>
-              </div>
-            </div>
-
-            <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm text-slate-700">
-              {pkg.highlights.map((item) => (
-                <div key={item} className="flex items-start gap-2">
-                  <span className="mt-1.5 h-2 w-2 rounded-full bg-blue-600" />
-                  <span>{item}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
