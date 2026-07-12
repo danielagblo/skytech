@@ -1,7 +1,9 @@
 import { ReactNode } from 'react';
-import Header from '../../components/Header';
-import Footer from '../../components/Footer';
+import Navigation from '../../components/skytech/layout/Navigation';
+import Footer from '../../components/skytech/layout/Footer';
 import { getSettings } from '../lib/settings';
+import { getLatestBlogPosts } from '../lib/blog';
+import { getAffiliates } from '../lib/affiliates';
 import FloatingWhatsApp from '../../components/FloatingWhatsApp';
 
 export async function generateMetadata() {
@@ -29,11 +31,21 @@ export async function generateMetadata() {
 
 export default async function SiteLayout({ children }: { children: ReactNode }) {
   const settings = await getSettings();
+  const [latestPosts, affiliates] = await Promise.all([
+    getLatestBlogPosts(4),
+    getAffiliates(),
+  ]);
+
+  const sponsors = affiliates.map((affiliate) => ({
+    name: affiliate.name,
+    logoUrl: affiliate.logoUrl,
+  }));
+
   return (
     <>
-      <Header siteName={settings.siteName} />
-      {children}
-      <Footer settings={settings} />
+      <Navigation className="fixed top-0 left-0 z-30 w-screen md:top-10" />
+      <main>{children}</main>
+      <Footer latestPosts={latestPosts} sponsors={sponsors} whatsapp={settings.whatsapp} />
       <FloatingWhatsApp whatsapp={settings.whatsapp} />
     </>
   );

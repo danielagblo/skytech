@@ -1,13 +1,15 @@
 import { ReactNode } from 'react';
 import Script from 'next/script';
-import { Outfit } from 'next/font/google';
+import { Inter } from 'next/font/google';
 import './globals.css';
 import '../index.css';
 import AnalyticsTracker from '../components/AnalyticsTracker';
 
-const outfit = Outfit({
+const inter = Inter({
   subsets: ['latin'],
-  variable: '--font-outfit',
+  variable: '--font-inter',
+  display: 'swap',
+  fallback: ['system-ui', 'sans-serif'],
 });
 
 export const metadata = {
@@ -28,7 +30,7 @@ export const metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
-      <body className={outfit.className} suppressHydrationWarning>
+      <body className={inter.className} suppressHydrationWarning>
         <AnalyticsTracker />
         {children}
 
