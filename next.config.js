@@ -21,6 +21,7 @@ const nextConfig = {
       bodySizeLimit: '10mb',
     },
   },
+  optimizeFonts: false,
 };
 
 module.exports = nextConfig;
