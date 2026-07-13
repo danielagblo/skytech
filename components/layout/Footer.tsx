@@ -1,7 +1,7 @@
 import Image from "next/image"
 import sponsorImage from "@/assets/images/placeholderSponsor.png"
-import whatsAppIcon from "@/assets/icons/whatsappLogo.svg"
 import LetsTalkButton from "../ui/LetsTalkButton"
+import sponsorsBigPicture from "@/assets/images/sponsors/sponsorsBigPicture.png"  
 
 const sponsorSizes = [
   "w-18 h-auto",
@@ -20,20 +20,27 @@ const sponsorSizes = [
 function Footer( { className }: { className?: string } ) {
   return (
     <div>
-      <div className="grid grid-cols-3 px-4 space-x-4 bg-[#f9f9f9]">
+      <div className="max-md:flex max-md:flex-col-reverse max-md:mt-6 max-md:items-center grid grid-cols-3 px-4 space-x-4 bg-[#f9f9f9]">
         {/* Will later make an array of sponsor images and loop over that */}
-        <div className="flex flex-row flex-wrap items-center justify-start gap-x-2">
-        {Array.from({ length: 15 }).map((_, index) => (
-          <div key={index} className={`${sponsorSizes[index % sponsorSizes.length]} shrink-0`}>
-            <Image
-              src={sponsorImage}
-              alt="Skytech Ghana Logo"
-              className="object-contain"
-            />
-          </div>
-        ))}
+        <div className="flex flex-row flex-wrap items-center justify-start gap-x-2 max-md:hidden">
+          {Array.from({ length: 15 }).map((_, index) => (
+            <div key={index} className={`${sponsorSizes[index % sponsorSizes.length]} shrink-0`}>
+              <Image
+                src={sponsorImage}
+                alt="Skytech Ghana Logo"
+                className="object-contain"
+              />
+            </div>
+          ))}
+        </div> 
+        <div className="md:hidden mt-4">
+          <Image
+            src={sponsorsBigPicture}
+            alt="Sponsors"
+            className="w-full h-auto"
+          />
         </div>
-        <div className="space-y-6 pt-10">
+        <div className="space-y-6 pt-10 max-md:text-center">
           <div>
             <ul className="space-y-2">
               <li>
