@@ -10,14 +10,23 @@ interface BottomSheetProps {
 
 const EXIT_DURATION = 300; // ms, must match the transition duration used below
 const DRAG_CLOSE_THRESHOLD = 120; // px dragged down before treated it as "dismiss"
+const DRAG_EXPAND_THRESHOLD = 80; // px dragged up before snapping fully open
+const MOBILE_DEFAULT_HEIGHT = 70;
+const MOBILE_FULL_HEIGHT = 100;
+
+function clamp(value: number, min: number, max: number) {
+  return Math.min(max, Math.max(min, value));
+}
 
 function BottomSheet({ isOpen, onClose, children }: BottomSheetProps) {
   const [mounted, setMounted] = useState(isOpen);
   const [entered, setEntered] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
-  const [dragY, setDragY] = useState(0);
+  const [mobileHeight, setMobileHeight] = useState(MOBILE_DEFAULT_HEIGHT);
   const [isDragging, setIsDragging] = useState(false);
   const dragStartY = useRef(0);
+  const dragStartHeight = useRef(MOBILE_DEFAULT_HEIGHT);
+  const dragDeltaY = useRef(0);
 
   useEffect(() => {
     const mq = window.matchMedia("(min-width: 768px)");
@@ -31,7 +40,7 @@ function BottomSheet({ isOpen, onClose, children }: BottomSheetProps) {
     if (isOpen) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setMounted(true);
-      setDragY(0);
+      setMobileHeight(MOBILE_DEFAULT_HEIGHT);
       setIsDragging(false);
       const raf = requestAnimationFrame(() => setEntered(true));
       return () => cancelAnimationFrame(raf);
@@ -58,6 +67,8 @@ function BottomSheet({ isOpen, onClose, children }: BottomSheetProps) {
   const handlePointerDown = (e: React.PointerEvent) => {
     if (isDesktop) return;
     dragStartY.current = e.clientY;
+    dragStartHeight.current = mobileHeight;
+    dragDeltaY.current = 0;
     setIsDragging(true);
   };
 
@@ -66,17 +77,34 @@ function BottomSheet({ isOpen, onClose, children }: BottomSheetProps) {
 
     const onPointerMove = (e: PointerEvent) => {
       const delta = e.clientY - dragStartY.current;
-      setDragY(Math.max(0, delta));
+      dragDeltaY.current = delta;
+      const deltaHeight = (delta / window.innerHeight) * 100;
+      setMobileHeight(
+        clamp(dragStartHeight.current - deltaHeight, MOBILE_DEFAULT_HEIGHT, MOBILE_FULL_HEIGHT)
+      );
     };
 
     const onPointerUp = () => {
       setIsDragging(false);
-      setDragY((current) => {
-        if (current > DRAG_CLOSE_THRESHOLD) {
+      if (dragDeltaY.current < -DRAG_EXPAND_THRESHOLD) {
+        setMobileHeight(MOBILE_FULL_HEIGHT);
+        return;
+      }
+
+      if (dragDeltaY.current > DRAG_CLOSE_THRESHOLD) {
+        if (dragStartHeight.current > MOBILE_DEFAULT_HEIGHT + 1) {
+          setMobileHeight(MOBILE_DEFAULT_HEIGHT);
+        } else {
           onClose();
         }
-        return current > DRAG_CLOSE_THRESHOLD ? current : 0;
-      });
+        return;
+      }
+
+      setMobileHeight(
+        dragStartHeight.current > MOBILE_DEFAULT_HEIGHT + 1
+          ? MOBILE_FULL_HEIGHT
+          : MOBILE_DEFAULT_HEIGHT
+      );
     };
 
     window.addEventListener("pointermove", onPointerMove);
@@ -92,8 +120,9 @@ function BottomSheet({ isOpen, onClose, children }: BottomSheetProps) {
   const mobileStyle: React.CSSProperties = isDesktop
     ? {}
     : {
-        transform: entered ? `translateY(${dragY}px)` : "translateY(100%)",
-        transition: isDragging ? "none" : "transform 300ms ease-out",
+        height: `${mobileHeight}vh`,
+        transform: entered ? "translateY(0)" : "translateY(100%)",
+        transition: isDragging ? "none" : "height 250ms ease-out, transform 300ms ease-out",
       };
 
   return (
@@ -109,7 +138,7 @@ function BottomSheet({ isOpen, onClose, children }: BottomSheetProps) {
         onClick={(e) => e.stopPropagation()}
         style={mobileStyle}
         className={`
-          absolute inset-x-0 bottom-0 flex max-h-[70vh] flex-col overflow-hidden
+          absolute inset-x-0 bottom-0 flex flex-col overflow-hidden
           rounded-t-3xl bg-white shadow-2xl
           md:inset-0 md:m-auto md:h-fit md:max-h-[85vh] md:w-full md:max-w-md
           md:rounded-2xl md:transition-all md:duration-300

@@ -30,7 +30,7 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-screen flex flex-col overflow-x-hidden">
-        <Navigation className="fixed top-10 left-0 z-20 w-screen py-1" />
+        <Navigation className="fixed top-0 left-0 z-20 w-screen md:top-10" />
         <main className="flex-1 h-full">
           {children}
         </main>

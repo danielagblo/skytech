@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 const WHATSAPP_NUMBER = "233552892433";
 
@@ -104,12 +104,35 @@ function WhatsAppOfferForm({ packageName, packagePrice, onClose }: WhatsAppOffer
   const [timeline, setTimeline] = useState<LaunchTimeline | null>(null);
   const [industry, setIndustry] = useState<string | null>(null);
   const [showErrors, setShowErrors] = useState(false);
+  const nameRef = useRef<HTMLInputElement | null>(null);
+  const emailRef = useRef<HTMLInputElement | null>(null);
+  const meetingRef = useRef<HTMLDivElement | null>(null);
+  const publicOfficeRef = useRef<HTMLDivElement | null>(null);
+  const industryRef = useRef<HTMLDivElement | null>(null);
 
   const isValid = Boolean(name.trim() && email.trim() && meeting && publicOffice && industry);
+
+  const scrollToFirstInvalidField = () => {
+    const firstInvalidField =
+      !name.trim()
+        ? nameRef.current
+        : !email.trim()
+          ? emailRef.current
+          : !meeting
+            ? meetingRef.current
+            : !publicOffice
+              ? publicOfficeRef.current
+              : !industry
+                ? industryRef.current
+                : null;
+
+    firstInvalidField?.scrollIntoView({ behavior: "smooth", block: "center" });
+  };
 
   const handleSubmit = () => {
     if (!isValid) {
       setShowErrors(true);
+      scrollToFirstInvalidField();
       return;
     }
 
@@ -146,6 +169,7 @@ function WhatsAppOfferForm({ packageName, packagePrice, onClose }: WhatsAppOffer
       <div className="mt-8 space-y-6 text-left">
         <div>
           <input
+            ref={nameRef}
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -158,6 +182,7 @@ function WhatsAppOfferForm({ packageName, packagePrice, onClose }: WhatsAppOffer
 
         <div>
           <input
+            ref={emailRef}
             type="email"
             value={email}
             placeholder="Your Email *"
@@ -169,35 +194,39 @@ function WhatsAppOfferForm({ packageName, packagePrice, onClose }: WhatsAppOffer
         </div>
 
         <div>
-          <p className="mb-2 text-base text-slate-800 text-center">
-            Can we arrange a meeting with you? <RequiredMark />
-          </p>
-          <div className="flex justify-center gap-8">
-            <CheckboxOption label="Yes" active={meeting === "Yes"} onClick={() => setMeeting("Yes")} />
-            <CheckboxOption label="No" active={meeting === "No"} onClick={() => setMeeting("No")} />
+          <div ref={meetingRef}>
+            <p className="mb-2 text-base text-slate-800 text-center">
+              Can we arrange a meeting with you? <RequiredMark />
+            </p>
+            <div className="flex justify-center gap-8">
+              <CheckboxOption label="Yes" active={meeting === "Yes"} onClick={() => setMeeting("Yes")} />
+              <CheckboxOption label="No" active={meeting === "No"} onClick={() => setMeeting("No")} />
+            </div>
           </div>
         </div>
 
         <div>
-          <p className="mb-2 text-base text-slate-800 text-center">
-            Do you have a public office address? <RequiredMark />
-          </p>
-          <div className="flex justify-center gap-6">
-            <CheckboxOption
-              label="Yes"
-              active={publicOffice === "Yes"}
-              onClick={() => setPublicOffice("Yes")}
-            />
-            <CheckboxOption
-              label="No"
-              active={publicOffice === "No"}
-              onClick={() => setPublicOffice("No")}
-            />
-            <CheckboxOption
-              label="Start-up"
-              active={publicOffice === "Start-up"}
-              onClick={() => setPublicOffice("Start-up")}
-            />
+          <div ref={publicOfficeRef}>
+            <p className="mb-2 text-base text-slate-800 text-center">
+              Do you have a public office address? <RequiredMark />
+            </p>
+            <div className="flex justify-center gap-6">
+              <CheckboxOption
+                label="Yes"
+                active={publicOffice === "Yes"}
+                onClick={() => setPublicOffice("Yes")}
+              />
+              <CheckboxOption
+                label="No"
+                active={publicOffice === "No"}
+                onClick={() => setPublicOffice("No")}
+              />
+              <CheckboxOption
+                label="Start-up"
+                active={publicOffice === "Start-up"}
+                onClick={() => setPublicOffice("Start-up")}
+              />
+            </div>
           </div>
         </div>
 
@@ -209,10 +238,12 @@ function WhatsAppOfferForm({ packageName, packagePrice, onClose }: WhatsAppOffer
         </div>
 
         <div>
-          <p className="mb-2 text-base text-slate-800">
-            What industry do you operate? <RequiredMark />
-          </p>
-          <PillGroup options={INDUSTRIES} value={industry} onChange={setIndustry} />
+          <div ref={industryRef}>
+            <p className="mb-2 text-base text-slate-800">
+              What industry do you operate? <RequiredMark />
+            </p>
+            <PillGroup options={INDUSTRIES} value={industry} onChange={setIndustry} />
+          </div>
         </div>
       </div>
 
@@ -230,7 +261,12 @@ function WhatsAppOfferForm({ packageName, packagePrice, onClose }: WhatsAppOffer
         <button
           type="button"
           onClick={handleSubmit}
-          className="flex-2 rounded-lg bg-emerald-600 py-3 font-semibold text-white transition-colors hover:bg-emerald-700"
+          disabled={!isValid}
+          className={`flex-2 rounded-lg py-3 font-semibold text-white transition-colors ${
+            isValid
+              ? "bg-emerald-600 hover:bg-emerald-700"
+              : "cursor-not-allowed bg-emerald-300 text-white/80"
+          }`}
         >
           Open on What&apos;s App
         </button>

@@ -1,4 +1,7 @@
+"use client"
+
 import Image from "next/image"
+import { usePathname } from "next/navigation"
 import sponsorImage from "@/assets/images/placeholderSponsor.png"
 import LetsTalkButton from "../ui/LetsTalkButton"
 import sponsorsBigPicture from "@/assets/images/sponsors/sponsorsBigPicture.png"  
@@ -18,8 +21,13 @@ const sponsorSizes = [
 ]
 
 function Footer( { className }: { className?: string } ) {
+  const currentPath = usePathname()
+  const isLandingPage = currentPath === "/" || currentPath === "/landing"
+
+  if (isLandingPage) return null
+
   return (
-    <div>
+    <div className={className ?? ""}>
       <div className="max-md:flex max-md:flex-col-reverse max-md:mt-6 max-md:items-center grid grid-cols-3 px-4 space-x-4 bg-[#f9f9f9]">
         {/* Will later make an array of sponsor images and loop over that */}
         <div className="flex flex-row flex-wrap items-center justify-start gap-x-2 max-md:hidden">
