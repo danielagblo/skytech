@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 
-const WHATSAPP_NUMBER = "233552892433";
+const WHATSAPP_NUMBER = "233538853087";
 
 interface WhatsAppOfferFormProps {
   packageName: string;
@@ -98,26 +98,26 @@ function CheckboxOption<T extends string>({
 
 function WhatsAppOfferForm({ packageName, packagePrice, onClose }: WhatsAppOfferFormProps) {
   const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [meeting, setMeeting] = useState<MeetingAnswer | null>(null);
   const [publicOffice, setPublicOffice] = useState<PublicOfficeAnswer | null>(null);
   const [timeline, setTimeline] = useState<LaunchTimeline | null>(null);
   const [industry, setIndustry] = useState<string | null>(null);
   const [showErrors, setShowErrors] = useState(false);
   const nameRef = useRef<HTMLInputElement | null>(null);
-  const emailRef = useRef<HTMLInputElement | null>(null);
+  const phoneRef = useRef<HTMLInputElement | null>(null);
   const meetingRef = useRef<HTMLDivElement | null>(null);
   const publicOfficeRef = useRef<HTMLDivElement | null>(null);
   const industryRef = useRef<HTMLDivElement | null>(null);
 
-  const isValid = Boolean(name.trim() && email.trim() && meeting && publicOffice && industry);
+  const isValid = Boolean(name.trim() && phone.trim() && meeting && publicOffice && industry);
 
   const scrollToFirstInvalidField = () => {
     const firstInvalidField =
       !name.trim()
         ? nameRef.current
-        : !email.trim()
-          ? emailRef.current
+        : !phone.trim()
+          ? phoneRef.current
           : !meeting
             ? meetingRef.current
             : !publicOffice
@@ -137,10 +137,10 @@ function WhatsAppOfferForm({ packageName, packagePrice, onClose }: WhatsAppOffer
     }
 
     const lines = [
-      `Hi Skytech Ghana, I'd like to select the ${packageName} (${packagePrice}).`,
+      `Hi Skytech Ghana, I'd like to select the *${packageName} (${packagePrice})*.\n`,
       ``,
       `Name: ${name}`,
-      `Email: ${email}`,
+      `Number: ${phone}`,
       `Can we arrange a meeting: ${meeting}`,
       `Public office address: ${publicOffice}`,
       timeline ? `Launch timeline: ${timeline}` : null,
@@ -172,6 +172,7 @@ function WhatsAppOfferForm({ packageName, packagePrice, onClose }: WhatsAppOffer
             ref={nameRef}
             type="text"
             value={name}
+            autoComplete="name"
             onChange={(e) => setName(e.target.value)}
             placeholder="Your Name *"
             className={`w-full rounded-full border bg-transparent px-4 py-2.5 text-center outline-none focus:border-slate-400 ${errorRing(
@@ -182,13 +183,15 @@ function WhatsAppOfferForm({ packageName, packagePrice, onClose }: WhatsAppOffer
 
         <div>
           <input
-            ref={emailRef}
-            type="email"
-            value={email}
-            placeholder="Your Email *"
-            onChange={(e) => setEmail(e.target.value)}
+            ref={phoneRef}
+            type="text"
+            value={phone}
+            autoComplete="tel"
+            pattern="^\+?\d{7,15}$"
+            placeholder="Your Phone Number *"
+            onChange={(e) => setPhone(e.target.value)}
             className={`w-full rounded-full border bg-transparent px-4 py-2.5 text-center outline-none focus:border-slate-400 ${errorRing(
-              !email.trim()
+              !phone.trim()
             )}`}
           />
         </div>
