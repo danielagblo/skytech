@@ -11,10 +11,10 @@ function NavigationMobile({ className }: { className?: string }) {
   const [scrolled, setScrolled] = useState(false);
   const router = useRouter();
   const currentPath = usePathname();
-  const isLandingPage = currentPath === "/";
+  const isLandingPage = currentPath === "/landing";
 
 useEffect(() => {
-  if (isLandingPage) return;
+  // if (!isLandingPage) return;
 
   const onScroll = () => {
     setScrolled(window.scrollY > 40);
@@ -42,7 +42,7 @@ useEffect(() => {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [isOpen]);
 
-const showSolidBar = !isLandingPage && scrolled;
+const showSolidBar = scrolled;
 
   return (
     <div className={className ?? ""}>
@@ -60,44 +60,44 @@ const showSolidBar = !isLandingPage && scrolled;
               showSolidBar ? "translate-y-0 opacity-100" : "-translate-y-2 opacity-0"
             }`}
           >
-            {!isLandingPage && (
-              <Image
-                src={skytechLogo}
-                alt="SkyTech Logo"
-                className="h-11 w-auto cursor-pointer"
-                onClick={() => {
-                  setIsOpen(false);
-                  router.push("/");
-                }}
-              />
-            )}
+            <Image
+              src={skytechLogo}
+              alt="SkyTech Logo"
+              className="h-11 w-auto cursor-pointer"
+              onClick={() => {
+                setIsOpen(false);
+                router.push("/");
+              }}
+            />
           </div>
 
-          <button
-            type="button"
-            aria-label={isOpen ? "Close menu" : "Open menu"}
-            aria-expanded={isOpen}
-            onClick={() => setIsOpen((v) => !v)}
-            className={`relative ml-auto flex h-10 w-10 flex-col items-center justify-center gap-1.5 ${
-              showSolidBar ? "" : "mix-blend-difference"
-            }`}
-          >
-            <span
-              className={`h-0.5 w-6 transition-all duration-300 ${
-                showSolidBar ? "bg-white" : "bg-white"
-              } ${isOpen ? "translate-y-2 rotate-45" : ""}`}
-            />
-            <span
-              className={`h-0.5 w-6 transition-all duration-300 ${
-                showSolidBar ? "bg-white" : "bg-white"
-              } ${isOpen ? "opacity-0" : "opacity-100"}`}
-            />
-            <span
-              className={`h-0.5 w-6 transition-all duration-300 ${
-                showSolidBar ? "bg-white" : "bg-white"
-              } ${isOpen ? "-translate-y-2 -rotate-45" : ""}`}
-            />
-          </button>
+          {!isLandingPage && (
+            <button
+              type="button"
+              aria-label={isOpen ? "Close menu" : "Open menu"}
+              aria-expanded={isOpen}
+              onClick={() => setIsOpen((v) => !v)}
+              className={`relative ml-auto flex h-10 w-10 flex-col items-center justify-center gap-1.5 ${
+                showSolidBar ? "" : "mix-blend-difference"
+              }`}
+            >
+              <span
+                className={`h-0.5 w-6 transition-all duration-300 ${
+                  showSolidBar ? "bg-white" : "bg-white"
+                } ${isOpen ? "translate-y-2 rotate-45" : ""}`}
+              />
+              <span
+                className={`h-0.5 w-6 transition-all duration-300 ${
+                  showSolidBar ? "bg-white" : "bg-white"
+                } ${isOpen ? "opacity-0" : "opacity-100"}`}
+              />
+              <span
+                className={`h-0.5 w-6 transition-all duration-300 ${
+                  showSolidBar ? "bg-white" : "bg-white"
+                } ${isOpen ? "-translate-y-2 -rotate-45" : ""}`}
+              />
+            </button>
+          )}
         </div>
       </div>
 
