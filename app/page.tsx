@@ -10,15 +10,11 @@ import PricingModel from "@/components/sections/PricingModel";
 import globeImage from "../assets/images/globeImage.png";
 import workWithUsImage from "../assets/images/workWithUs.png";
 
-import ghanaFlag from "../assets/icons/GhanaFlag.svg";
-import kenyaFlag from "../assets/icons/KenyaFlag.svg";
-import USFlag from "../assets/icons/USFlag.svg";
-import UKFlag from "../assets/icons/UKFlag.svg";
-import nigeriaFlag from "../assets/icons/NigeriaFlag.svg";
 import LetsTalkButton from "@/components/ui/LetsTalkButton";
 import TestimonialsBanner from "@/components/sections/home/TestimonialsBanner";
 import FAQSection from "@/components/sections/FAQ";
 import AwardsStatement from "@/components/sections/AwardsStatement";
+import FlagsList from "@/components/ui/FlagsList";
 
 const services = [
   {
@@ -80,26 +76,7 @@ export default function Home() {
         <div className="absolute top-8 right-12 z-10 text-xl">
           <p className="text-white">IT Connecting Across Borders</p>
 
-          <div className="flex flex-row gap-2 items-center justify-end">
-            {
-              [
-                ghanaFlag,
-                kenyaFlag, 
-                USFlag,
-                UKFlag,
-                nigeriaFlag
-              ].map((flag, index) => (
-                <div key={index} className="w-9 h-9 rounded-full overflow-hidden">
-                  <Image
-                    key={index}
-                    src={flag}
-                    alt={`Flag ${index}`}
-                    className="w-full h-full object-cover scale-135"
-                  />
-                </div>
-              ))
-            }
-          </div>
+          <FlagsList />
         </div>
       </div>
 
