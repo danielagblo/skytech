@@ -50,7 +50,7 @@ function InternCard({
   const s = sizeMap[size]
 
   return (
-    <div className={`shrink-0 ${s.card} bg-white rounded-2xl border border-gray-200 flex items-center gap-4 px-4`}>
+    <div className={`shrink-0 ${s.card} bg-gray-50 rounded-2xl border border-gray-200 flex items-center gap-4 px-4`}>
       <div className={`${s.avatar} rounded-full overflow-hidden shrink-0 bg-gray-200`}>
         <Image
           src={image}
@@ -157,7 +157,7 @@ function ScrollRow({
 
 export default function EnrolledInterns() {
   return (
-    <section className="py-10 overflow-hidden bg-gray-50">
+    <section className="py-10 overflow-hidden bg-white">
       {/* header */}
       <div className="flex items-center justify-between px-10 mb-8">
         <div className="flex items-center gap-4">
@@ -167,7 +167,7 @@ export default function EnrolledInterns() {
             <div className="h-full w-1/3 bg-blue-500 rounded-full" />
           </div>
         </div>
-        <span className="text-6xl font-black text-gray-900">439+</span>
+        <span className="text-5xl font-semibold text-gray-900">439+</span>
       </div>
 
       {/* rows */}
