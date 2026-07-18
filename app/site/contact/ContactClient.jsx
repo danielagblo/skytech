@@ -1,189 +1,243 @@
 "use client";
-import React, { useEffect, useRef } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import ContactFormClient from '../../../components/ContactFormClient';
 
-if (typeof window !== 'undefined') {
-  gsap.registerPlugin(ScrollTrigger);
-}
+import React, { useState } from 'react';
+import Image from 'next/image';
+import FAQAccordion from '../../../components/FAQAccordion';
+
+const countryContacts = [
+  { country: "Ghana", flag: "/images/icons/GhanaFlag.svg", phone: "+233 055 289 2433" },
+  { country: "Nigeria", flag: "/images/icons/NigeriaFlag.svg", phone: "+234 000 000 0000" },
+  { country: "Kenya", flag: "/images/icons/KenyaFlag.svg", phone: "+254 000 000 000" },
+  { country: "United Kingdom", flag: "/images/icons/UKFlag.svg", phone: "+44 000 000 0000" },
+  { country: "United States", flag: "/images/icons/USFlag.svg", phone: "+1 000 000 0000" },
+];
 
 export default function ContactClient({ settings, teamMembers, contactContent }) {
-  const containerRef = useRef(null);
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    company: '',
+    service: '',
+    budget: '',
+    message: '',
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
-  useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
-    // Elements
-    const heroElements = el.querySelectorAll('.contact-hero-el');
-    const infoCards = el.querySelectorAll('.contact-info-card');
-    const formCard = el.querySelector('.contact-form-card');
-    const teamHeader = el.querySelectorAll('.team-header > *');
-    const teamCards = el.querySelectorAll('.team-member-card');
-
-    // Initial GSAP states
-    gsap.set(heroElements, { opacity: 0, y: 35 });
-    gsap.set(infoCards, { opacity: 0, y: 30 });
-    gsap.set(formCard, { opacity: 0, x: 30 });
-    gsap.set(teamHeader, { opacity: 0, y: 35 });
-    gsap.set(teamCards, { opacity: 0, y: 25 });
-
-    // 1. Hero Animations
-    gsap.to(heroElements, { opacity: 1, y: 0, duration: 0.8, stagger: 0.15, ease: 'power3.out', delay: 0.1 });
-
-    // 2. Info Cards (Email, WhatsApp, Maps) and Form
-    const tlContact = gsap.timeline({
-      scrollTrigger: {
-        trigger: '.contact-grid',
-        start: 'top bottom-=150px',
-        toggleActions: 'play reverse play reverse',
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+      if (res.ok) {
+        setSubmitted(true);
+        setFormData({ name: '', email: '', phone: '', company: '', service: '', budget: '', message: '' });
       }
-    });
-    tlContact.to(infoCards, { opacity: 1, y: 0, duration: 0.8, stagger: 0.18, ease: 'power2.out' })
-             .to(formCard, { opacity: 1, x: 0, duration: 0.8, ease: 'power3.out' }, '-=0.5');
-
-    // 3. Team grid scrollTrigger
-    const tlTeam = gsap.timeline({
-      scrollTrigger: {
-        trigger: '.contact-team-section',
-        start: 'top bottom-=200px',
-        toggleActions: 'play reverse play reverse',
-      }
-    });
-    tlTeam.to(teamHeader, { opacity: 1, y: 0, duration: 0.8, stagger: 0.15, ease: 'power3.out' })
-          .to(teamCards, { opacity: 1, y: 0, duration: 0.9, stagger: 0.15, ease: 'power2.out' }, '-=0.4');
-
-    return () => {
-      ScrollTrigger.getAll().forEach(t => t.kill());
-    };
-  }, []);
+    } catch (err) {
+      console.error('Contact form error:', err);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
-    <main ref={containerRef} className="min-h-screen bg-white">
-      {/* Hero Section */}
-      <section className="relative overflow-hidden bg-white text-slate-900 py-24 px-4 border-b border-slate-100">
-        <div className="absolute inset-0" aria-hidden="true">
-          <div className="absolute left-10 -top-10 h-72 w-72 rounded-full bg-blue-600/5 blur-3xl" />
-          <div className="absolute right-0 bottom-0 h-80 w-80 rounded-full bg-cyan-400/5 blur-3xl" />
-        </div>
-        <div className="section-shell relative space-y-6">
-          <span className="pill border-blue-600/20 text-blue-600 bg-blue-50 uppercase tracking-[0.2em] text-[10px] font-bold contact-hero-el">Contact</span>
-          <h1 className="text-4xl lg:text-5xl leading-tight max-w-3xl text-slate-900 font-light contact-hero-el">
-            Tell us about <span className="font-extrabold text-blue-600">your project.</span>
+    <main className="min-h-screen bg-white pt-28 pb-20">
+      {/* Hero */}
+      <section className="pb-16">
+        <div className="section-shell text-center space-y-4 max-w-3xl mx-auto">
+          <span className="pill">Get in Touch</span>
+          <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 leading-tight tracking-tight">
+            Let&apos;s Build Something <span className="text-blue-600">Great Together</span>
           </h1>
-          <p className="text-lg text-slate-500 max-w-3xl font-medium contact-hero-el">{contactContent.heroSubtitle || "We reply fast and guide you step by step. No pressure, just honest advice."}</p>
-          <div className="flex flex-wrap gap-4 text-[10px] font-bold uppercase tracking-widest text-slate-400 contact-hero-el">
-            <span className="rounded-full bg-slate-50 px-4 py-2 border border-slate-100">Reply in 24 hours</span>
-            <span className="rounded-full bg-slate-50 px-4 py-2 border border-slate-100">Based in Ghana</span>
-          </div>
+          <p className="text-lg text-slate-500">
+            Tell us about your project and we&apos;ll get back to you within 24 hours.
+          </p>
         </div>
       </section>
 
-      {/* Contact Section */}
-      <section className="py-20 bg-white contact-grid">
+      {/* Form + Map Split */}
+      <section className="pb-24">
         <div className="section-shell">
-          <div className="grid grid-cols-1 lg:grid-cols-[0.9fr,1.1fr] gap-12">
-            {/* Contact Info */}
-            <div className="space-y-6">
-              <div className="rounded-3xl bg-slate-50 border border-slate-100 p-6 contact-info-card">
-                <h2 className="text-2xl font-extrabold text-slate-900 mb-4">{contactContent.contactInfoTitle || "Contact information"}</h2>
-                <div className="space-y-5">
-                  <div className="flex items-start gap-4">
-                    <div className="text-2xl">📧</div>
-                    <div>
-                      <h3 className="text-sm font-semibold text-slate-900 mb-1">Email</h3>
-                      <a href={`mailto:${settings.contactEmail}`} className="text-blue-700 text-sm font-semibold hover:underline">{settings.contactEmail}</a>
-                    </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            {/* Contact Form */}
+            <div className="rounded-3xl bg-white border border-slate-100 shadow-sm p-8 lg:p-10">
+              {submitted ? (
+                <div className="flex flex-col items-center justify-center py-20 space-y-4 text-center">
+                  <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center">
+                    <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
                   </div>
-                  <div className="flex items-start gap-4">
-                    <div className="text-2xl">📱</div>
-                    <div>
-                      <h3 className="text-sm font-semibold text-slate-900 mb-1">Phone</h3>
-                      <a href={`tel:${settings.contactPhone.replace(/\s/g, '')}`} className="text-blue-700 text-sm font-semibold hover:underline">{settings.contactPhone}</a>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-4">
-                    <div className="text-2xl">💬</div>
-                    <div>
-                      <h3 className="text-sm font-semibold text-slate-900 mb-1">WhatsApp</h3>
-                      <a href={`https://wa.me/${settings.whatsapp.replace(/\D/g, '')}`} className="text-blue-700 text-sm font-semibold hover:underline">{settings.whatsapp}</a>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-4">
-                    <div className="text-2xl">📍</div>
-                    <div>
-                      <h3 className="text-sm font-semibold text-slate-900 mb-1">Address</h3>
-                      <p className="text-sm text-slate-600">{settings.address}</p>
-                    </div>
-                  </div>
+                  <h3 className="text-2xl font-bold text-slate-900">Message Sent!</h3>
+                  <p className="text-slate-500">We&apos;ll get back to you within 24 hours.</p>
+                  <button
+                    onClick={() => setSubmitted(false)}
+                    className="btn-primary mt-4"
+                  >
+                    Send Another Message
+                  </button>
                 </div>
-              </div>
+              ) : (
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <h2 className="text-2xl font-bold text-slate-900 mb-2">Project Inquiry</h2>
+                  <p className="text-sm text-slate-500 mb-6">Fill out the form below and we&apos;ll reach out shortly.</p>
 
-              <div className="rounded-3xl overflow-hidden border border-slate-100 shadow-sm contact-info-card">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 mb-1.5">Full Name *</label>
+                      <input
+                        type="text"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleChange}
+                        required
+                        className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                        placeholder="John Doe"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 mb-1.5">Email *</label>
+                      <input
+                        type="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        required
+                        className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                        placeholder="john@example.com"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 mb-1.5">Phone</label>
+                      <input
+                        type="tel"
+                        name="phone"
+                        value={formData.phone}
+                        onChange={handleChange}
+                        className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                        placeholder="+233 000 000 0000"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 mb-1.5">Company</label>
+                      <input
+                        type="text"
+                        name="company"
+                        value={formData.company}
+                        onChange={handleChange}
+                        className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                        placeholder="Your Company"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-1.5">Service Needed</label>
+                    <select
+                      name="service"
+                      value={formData.service}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    >
+                      <option value="">Select a service</option>
+                      <option value="website">Website Development</option>
+                      <option value="mobile">Mobile App Development</option>
+                      <option value="seo">SEO & Growth</option>
+                      <option value="security">Security Systems</option>
+                      <option value="maintenance">Maintenance & Support</option>
+                      <option value="other">Other</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-1.5">Message *</label>
+                    <textarea
+                      name="message"
+                      value={formData.message}
+                      onChange={handleChange}
+                      required
+                      rows={5}
+                      className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-none"
+                      placeholder="Tell us about your project..."
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-full btn-primary py-4 text-base disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {isSubmitting ? 'Sending...' : 'Send Message'}
+                  </button>
+                </form>
+              )}
+            </div>
+
+            {/* Right Side - Map & Contact Info */}
+            <div className="space-y-8">
+              {/* Map */}
+              <div className="rounded-3xl overflow-hidden border border-slate-100 shadow-sm h-64 lg:h-80">
                 <iframe
-                  title="skytechghana on Google Maps"
-                  src="https://maps.google.com/maps?q=skytechghana&output=embed"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3970.6845994752326!2d-0.10359742413706885!3d5.624750132814997!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xfdf9c1a8e9b7f5d%3A0x7f7e6fb7b0f6c4e!2sSpintex%20Rd%2C%20Accra!5e0!3m2!1sen!2sgh!4v1691234567890!5m2!1sen!2sgh"
                   width="100%"
-                  height="280"
+                  height="100%"
                   style={{ border: 0 }}
                   allowFullScreen=""
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
-                ></iframe>
+                  title="Skytech Ghana Location"
+                />
               </div>
 
-              <div className="rounded-3xl bg-slate-900 text-white p-6 space-y-4 contact-info-card">
-                <p className="text-sm font-semibold uppercase tracking-[0.14em] text-blue-200">Quick call?</p>
-                <p className="text-lg">Book a short call and tell us your idea.</p>
-                <p className="text-sm text-white/80">Mon–Fri, 9am–6pm PT</p>
-              </div>
-            </div>
-
-            {/* Contact Form */}
-            <div className="glass-panel rounded-3xl p-8 contact-form-card">
-              <h2 className="text-2xl font-extrabold text-slate-900 mb-2">{contactContent.formTitle || "Tell us about your project"}</h2>
-              <p className="text-sm text-slate-600 mb-6">{contactContent.formSubtitle || "Share what you need and when you want it done."}</p>
-              <ContactFormClient />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Team Section */}
-      <section className="py-16 bg-slate-50 contact-team-section">
-        <div className="section-shell space-y-8">
-          <div className="space-y-2 team-header">
-            <span className="pill">Meet the team</span>
-            <h2 className="text-3xl font-extrabold text-slate-900">{contactContent.teamTitle || "Your Skytech Ghana leads"}</h2>
-            <p className="text-slate-600 max-w-2xl">{contactContent.teamSubtitle || "Core leaders who guide delivery and keep communication smooth."}</p>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {teamMembers.map((person) => (
-              <div key={person._id} className="rounded-3xl bg-white border border-slate-100 p-6 shadow-sm team-member-card">
-                <div className="flex items-center gap-4 mb-3">
-                  {person.imageUrl ? (
-                    <img
-                      src={person.imageUrl}
-                      alt={person.name}
-                      className="h-12 w-12 rounded-full object-cover border border-slate-100"
-                      loading="lazy"
-                    />
-                  ) : (
-                    <div className="h-12 w-12 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 font-bold text-lg border border-blue-100">
-                      {person.name.charAt(0)}
-                    </div>
-                  )}
-                  <div className="flex-1">
-                    <p className="text-lg font-bold text-slate-900">{person.name}</p>
-                    <span className="inline-flex items-center rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700 mt-1">
-                      {person.role}
+              {/* Direct Contact Info */}
+              <div className="rounded-3xl bg-slate-50 border border-slate-100 p-8 space-y-6">
+                <h3 className="text-xl font-bold text-slate-900">Direct Contact</h3>
+                <div className="space-y-4">
+                  <a href="mailto:hello@skytech.com" className="flex items-center gap-3 text-slate-600 hover:text-blue-600 transition-colors">
+                    <span className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0">
+                      <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
                     </span>
+                    <span className="text-sm font-medium">hello@skytech.com</span>
+                  </a>
+                  <div className="flex items-center gap-3 text-slate-600">
+                    <span className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0">
+                      <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                    </span>
+                    <span className="text-sm font-medium">Nii Ankrah Road - Dnor Plaza, Spintex</span>
                   </div>
                 </div>
-                <p className="text-sm text-slate-600 mb-3 line-clamp-2">{person.bio}</p>
               </div>
-            ))}
+
+              {/* Country Contacts with Flags */}
+              <div className="rounded-3xl bg-white border border-slate-100 p-8 space-y-4">
+                <h3 className="text-lg font-bold text-slate-900">International Support</h3>
+                <div className="space-y-3">
+                  {countryContacts.map((contact) => (
+                    <div key={contact.country} className="flex items-center gap-3 py-2">
+                      <div className="relative w-7 h-5 rounded-sm overflow-hidden flex-shrink-0">
+                        <Image src={contact.flag} alt={`${contact.country} flag`} fill className="object-cover" />
+                      </div>
+                      <span className="text-sm font-medium text-slate-700 flex-1">{contact.country}</span>
+                      <a href={`tel:${contact.phone.replace(/\s/g, '')}`} className="text-sm text-slate-500 hover:text-blue-600 transition-colors">
+                        {contact.phone}
+                      </a>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
