@@ -2,9 +2,7 @@ import React from 'react'
 
 function HardwareProcurementAndSupply() {
   return (
-    <div>
-      
-    </div>
+    <p>This service is still in the oven. <br />Thank you for your patience.</p>
   )
 }
 
