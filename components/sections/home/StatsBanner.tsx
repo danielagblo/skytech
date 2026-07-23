@@ -68,11 +68,11 @@ function StatsBanner() {
   return (
     <div
       ref={bannerRef}
-      className="bg-white grid grid-cols-4 px-10 py-6 w-screen uppercase text-lg font-medium leading-5"
+      className="bg-white grid grid-cols-2 gap-y-8 px-4 py-6 w-screen uppercase text-lg font-medium leading-5 md:grid-cols-4 md:gap-y-0 md:px-10"
     >
       <div>
-        <p className="text-center px-17.5">
-          <span className="block text-7xl font-semibold">
+        <p className="text-center px-2 md:px-17.5">
+          <span className="block text-4xl font-semibold md:text-7xl">
             <CountUp target={8} suffix="+" isVisible={isVisible} />
           </span>
           years in operation
@@ -80,8 +80,8 @@ function StatsBanner() {
       </div>
 
       <div>
-        <p className="text-center px-17.5">
-          <span className="block text-7xl font-semibold">
+        <p className="text-center px-2 md:px-17.5">
+          <span className="block text-4xl font-semibold md:text-7xl">
             <CountUp target={8} suffix="+" isVisible={isVisible} />
           </span>
           Satisfied Customers
@@ -89,8 +89,8 @@ function StatsBanner() {
       </div>
 
       <div>
-        <p className="text-center px-17.5">
-          <span className="block text-7xl font-semibold">
+        <p className="text-center px-2 md:px-17.5">
+          <span className="block text-4xl font-semibold md:text-7xl">
             <CountUp target={1000} suffix="+" isVisible={isVisible} />
           </span>
           Projects Completed
@@ -98,8 +98,8 @@ function StatsBanner() {
       </div>
 
       <div>
-        <p className="text-center px-17.5">
-          <span className="block text-7xl font-semibold">
+        <p className="text-center px-2 md:px-17.5">
+          <span className="block text-4xl font-semibold md:text-7xl">
             <CountUp target={4} suffix="+" isVisible={isVisible} />
           </span>
           Countries Served

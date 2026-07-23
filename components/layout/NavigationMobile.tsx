@@ -27,9 +27,22 @@ useEffect(() => {
 }, [isLandingPage]);
 
 useEffect(() => {
-    document.body.style.overflow = isOpen ? "hidden" : "";
+    if (!isOpen) return;
+
+    const scrollY = window.scrollY;
+    const { position, top, width, overflow } = document.body.style;
+
+    document.body.style.position = "fixed";
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.width = "100%";
+    document.body.style.overflow = "hidden";
+
     return () => {
-      document.body.style.overflow = "";
+      document.body.style.position = position;
+      document.body.style.top = top;
+      document.body.style.width = width;
+      document.body.style.overflow = overflow;
+      window.scrollTo(0, scrollY);
     };
   }, [isOpen]);
 
@@ -102,14 +115,14 @@ const showSolidBar = scrolled;
       </div>
 
       <div
-        className={`fixed inset-0 z-40 bg-[#2f59c1] transition-opacity duration-300 ${
+        className={`fixed inset-0 z-40 flex flex-col bg-[#2f59c1] transition-opacity duration-300 ${
           isOpen ? "opacity-100" : "pointer-events-none opacity-0"
         }`}
       >
         <div className="pointer-events-none absolute -top-24 -right-24 h-72 w-72 rounded-full bg-white/10 blur-3xl" />
         <div className="pointer-events-none absolute bottom-0 left-0 h-64 w-64 rounded-full bg-white/5 blur-3xl" />
 
-        <nav className="flex h-full flex-col justify-center px-8">
+        <nav className="flex min-h-full flex-1 flex-col justify-[safe_center] overflow-y-auto overscroll-contain px-8 py-20">
           <ul className="flex flex-col gap-1">
             {navigationLinks.map((link, i) => {
               const isActive = currentPath === link.href;

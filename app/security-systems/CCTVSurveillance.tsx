@@ -29,7 +29,7 @@ function CCTVSurveillance() {
         alt="CCTV Surveillance"
         className="w-screen h-auto"
       />
-      <h2 className="text-4xl mt-10 mb-4 uppercase">Installation framework</h2>
+      <h2 className="text-2xl mt-10 mb-4 md:text-4xl uppercase">Installation framework</h2>
       <p>
         To pull off a clean, professional NVR/DVR machine room setup that looks great on your website portfolio and keeps the system running 24/7, you need to move away from just dropping equipment on a desk.
       </p>
@@ -37,7 +37,7 @@ function CCTVSurveillance() {
       <p>
         Here is the professional framework for setting up the central surveillance station (the "brain" of the system).
       </p>
-      <h2 className="text-4xl mt-10 mb-4 capitalize">Core Server Room components</h2>
+      <h2 className="text-2xl mt-10 mb-4 md:text-4xl capitalize">Core Server Room components</h2>
       <p>
         A professional installation centralizes all hardware inside a secure enclosure. This protects against tampering, manages heat, and organizes power layout.
       </p>
@@ -61,12 +61,12 @@ function CCTVSurveillance() {
 
       <hr className="my-6" />
         
-      <h2 className="text-4xl mt-10 mb-4 capitalize">Project Execution framework</h2>
+      <h2 className="text-2xl mt-10 mb-4 md:text-4xl capitalize">Project Execution framework</h2>
       <p>
         When a client hires you for a CCTV and security setup, they aren't just buying hardware—they are buying a flawless deployment process. Here is the end-to-end framework for how to execute a professional security project from first contact to final handover.
       </p>
 
-      <h2 className="text-4xl mt-10 mb-4 capitalize">The 5-phase project execution framework</h2>
+      <h2 className="text-2xl mt-10 mb-4 md:text-4xl capitalize">The 5-phase project execution framework</h2>
 
       {/* There are step markers t the left of this list int he figma design, will implement later */}
       <ol className="capitalize">

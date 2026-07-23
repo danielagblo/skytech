@@ -90,23 +90,22 @@ export default function FAQSection() {
 
   return (
     <section className="py-16">
-      <h1 className="text-5xl mb-1">FAQs</h1>
+      <h1 className="text-3xl mb-1 md:text-5xl">FAQs</h1>
       <p className="mb-8">Frequently Asked Questions</p>
 
       <div
-        className="rounded-3xl py-6 px-3 flex flex-row bg-[#f9f9f9] overflow-hidden"
-        style={{ height: CARD_HEIGHT }}
+        className="rounded-3xl py-6 px-3 flex flex-col bg-[#f9f9f9] overflow-hidden h-auto md:flex-row md:h-[410px]"
       >
-        <div className="flex flex-row gap-2 pr-6 shrink-0 self-stretch">
-          <div className="flex flex-col shrink-0 pr-5">
+        <div className="flex flex-row gap-2 pr-6 pb-4 md:shrink-0 md:self-stretch md:pb-0">
+          <div className="hidden shrink-0 pr-5 md:flex md:flex-col">
             <ScrollPill scrollRatio={leftScroll.ratio} thumbRatio={leftScroll.thumb} />
           </div>
 
-          <div className="flex flex-col min-w-40 self-stretch">
+          <div className="flex flex-col w-full md:min-w-40 md:w-auto md:self-stretch">
             <p className="mb-3 pl-2 shrink-0">Question Areas</p>
             <div
               ref={leftRef}
-              className="flex flex-col overflow-y-auto flex-1 no-scrollbar"
+              className="flex flex-row flex-wrap gap-1 overflow-y-auto no-scrollbar md:flex-col md:flex-nowrap md:flex-1"
             >
               {categories.map((cat) => {
                 const isActive = cat === activeCategory
@@ -114,7 +113,7 @@ export default function FAQSection() {
                   <button
                     key={cat}
                     onClick={() => handleCategory(cat)}
-                    className={`flex items-center justify-between gap-6 pl-4 pr-6 py-3 rounded-lg text-left w-50 transition-all duration-200
+                    className={`flex items-center justify-between gap-6 pl-4 pr-6 py-3 rounded-lg text-left w-auto md:w-50 transition-all duration-200
                       ${isActive
                         ? 'text-gray-900 font-semibold bg-white'
                         : 'text-gray-500 hover:text-gray-600'
@@ -129,7 +128,7 @@ export default function FAQSection() {
           </div>
         </div>
 
-        <div className="flex flex-row gap-2 flex-1 pl-4 self-stretch min-w-0">
+        <div className="flex flex-row gap-2 flex-1 pl-0 border-t border-gray-200 pt-4 min-w-0 md:pl-4 md:border-t-0 md:pt-0 md:self-stretch">
           <div
             ref={rightRef}
             className="flex-1 flex flex-col overflow-y-auto overflow-x-hidden no-scrollbar"
@@ -142,7 +141,7 @@ export default function FAQSection() {
                     onClick={() => setOpenIndex(isOpen ? null : index)}
                     className="w-full flex items-center justify-between py-3 text-left gap-4 min-w-0"
                   >
-                    <span className={`text-xl transition-all min-w-0 wrap-break-word ${isOpen ? 'font-semibold text-gray-900' : 'text-gray-800'}`}>
+                    <span className={`text-lg transition-all min-w-0 wrap-break-word md:text-xl ${isOpen ? 'font-semibold text-gray-900' : 'text-gray-800'}`}>
                       {faq.question}
                     </span>
                     <span className={`text-3xl text-gray-400 shrink-0 transition-transform duration-200 ${isOpen ? 'rotate-45' : ''}`}>
@@ -156,7 +155,7 @@ export default function FAQSection() {
               )
             })}
           </div>
-          <div className="flex flex-col shrink-0 pl-6">
+          <div className="hidden shrink-0 pl-6 md:flex md:flex-col">
             <ScrollPill scrollRatio={rightScroll.ratio} thumbRatio={rightScroll.thumb} />
           </div>
         </div>

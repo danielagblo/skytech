@@ -52,11 +52,11 @@ export default function Home() {
         <TopScrollingBanner />
       </div>
       <LandingScreen />
-      <hr 
+      <hr
         className="h-6 w-screen bg-black"
       />
 
-      <p className="p-10 w-screen text-center font-medium bg-white text-2xl">
+      <p className="p-6 w-screen text-center font-medium bg-white text-lg md:p-10 md:text-2xl">
         WE’RE TRUSTED BY OVER <span className="font-semibold text-[#1E5AC8]">1000+ BRANDS </span>
       </p>
 
@@ -66,14 +66,15 @@ export default function Home() {
 
       <AwardsStatement />
 
-      <div className="relative w-screen h-[42.5vh] overflow-hidden">
+      <div className="relative w-screen h-[30vh] overflow-hidden md:h-[42.5vh]">
         <Image
           src={globeImage}
           alt="Globe"
           priority
+          className="h-full w-full object-cover md:h-auto md:w-auto md:object-fill"
         />
 
-        <div className="absolute top-8 right-12 z-10 text-xl">
+        <div className="absolute top-4 right-4 z-10 text-sm md:top-8 md:right-12 md:text-xl">
           <p className="text-white">IT Connecting Across Borders</p>
 
           <FlagsList />
@@ -81,9 +82,9 @@ export default function Home() {
       </div>
 
 
-      <div className="pt-15 px-6 bg-white">
-        <p className="text-4xl uppercase">What services do we<br/> offer best</p>
-        <div className="grid grid-cols-3 gap-4 max-w-[3000px] items-start justify-center mt-8">
+      <div className="pt-10 px-6 bg-white md:pt-15">
+        <p className="text-2xl uppercase md:text-4xl">What services do we<br/> offer best</p>
+        <div className="grid grid-cols-1 gap-4 max-w-[3000px] items-start justify-center mt-8 md:grid-cols-3">
           {
             services.map((service, index) => (
               <div key={index} className="bg-[#f6f6f6] relative pb-22.5 p-6 h-full border-t-5 border-[#1E5AC8]">
@@ -114,14 +115,14 @@ export default function Home() {
 
       <TestimonialsBanner />
 
-      <div className="bg-white px-10 pt-20">
-        <div className="relative bg-[#016DAB] rounded-2xl flex flex-row items-center justify-end pr-40 pt-5">
-          <Image 
+      <div className="bg-white px-6 pt-14 md:px-10 md:pt-20">
+        <div className="relative bg-[#016DAB] rounded-2xl flex flex-col items-center justify-center overflow-hidden py-10 md:flex-row md:items-center md:justify-end md:overflow-visible md:pr-40 md:pt-5">
+          <Image
             src={workWithUsImage}
             alt="Work With Us"
-            className="absolute -left-15 -bottom-50 h-190 w-190 object-contain"
+            className="static mb-4 h-40 w-40 object-contain md:absolute md:-left-15 md:-bottom-50 md:mb-0 md:h-190 md:w-190"
           />
-          <LetsTalkButton className="my-30 bg-white/20 text-white" />
+          <LetsTalkButton className="bg-white/20 text-white md:my-30" />
         </div>
         <FAQSection />
       </div>

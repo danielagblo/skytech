@@ -71,7 +71,7 @@ function AudienceCard({
         {number}
       </div>
 
-      <div className={`flex flex-row gap-4 ${wide ? "items-start" : "items-center"} h-full`}>
+      <div className={`flex flex-col gap-4 md:flex-row ${wide ? "items-start" : "items-center"} h-full`}>
         <div className="flex flex-col gap-3 flex-1 min-w-0 h-full">
           <h3 className={`font-semibold leading-snug text-2xl`}>
             {title}
@@ -86,7 +86,7 @@ function AudienceCard({
         </div>
 
         {image && (
-          <div className={`shrink-0 rounded-2xl ${wide ? "h-full scale-80" : ""} overflow-hidden ${wide ? 'w-64 h-56' : 'w-28 h-28'}`}>
+          <div className={`shrink-0 rounded-2xl w-full h-40 overflow-hidden ${wide ? "md:h-full md:scale-80" : ""} ${wide ? 'md:w-64 md:h-56' : 'md:w-28 md:h-28'}`}>
             <Image
               src={image}
               alt={alt}
@@ -108,14 +108,14 @@ const pairs = rest.reduce<AudienceItem[][]>((acc, item, i) => {
 }, [])
 
   return (
-    <section className="py-16 px-10">
-      <h1 className="text-4xl font-medium uppercase mb-12">Target Market Audience</h1>
+    <section className="py-16 px-6 md:px-10">
+      <h1 className="text-2xl font-medium uppercase mb-8 md:text-4xl md:mb-12">Target Market Audience</h1>
 
       <div className="flex flex-col gap-6">
         <AudienceCard {...first} />
 
         {pairs.map((pair, i) => (
-          <div key={i} className="grid grid-cols-2 gap-4">
+          <div key={i} className="grid grid-cols-1 gap-4 md:grid-cols-2">
             {pair.map((item) => (
               <AudienceCard number={item.number} title={item.title} description={item.description} image={item.image} alt={item.alt} wide={item.wide} key={item.number} />
             ))}

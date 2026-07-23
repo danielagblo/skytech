@@ -19,16 +19,16 @@ function WebSolutionsPage() {
         alt="About Us"
         className="w-screen h-40 object-cover"
       />
-      <div className="p-10">
-        <p className="text-4xl uppercase pb-3">Industries we serve <br /> digital solutions</p>
+      <div className="p-6 md:p-10">
+        <p className="text-2xl uppercase pb-3 md:text-4xl">Industries we serve <br /> digital solutions</p>
         <p>We specialize in areas that demand technical rigor,<br /> high availability, and absolute data integrity.</p>
       </div>
       <IndustryCards />
       <PricingModel showWhyYouNeedUs={false}/>
       <WorkingProcess />
       <TargetMarketAudience />
-      <div className="p-10 -mt-6 -mb-20">
-        <p className="text-4xl uppercase pb-3">WHY WE’RE THE PREFERRED CHOICE FOR <br />DIGITAL BUSINESS DEVELOPMENT SERVICE </p>
+      <div className="p-6 mt-0 mb-0 md:p-10 md:-mt-6 md:-mb-20">
+        <p className="text-2xl uppercase pb-3 md:text-4xl">WHY WE’RE THE PREFERRED CHOICE FOR <br />DIGITAL BUSINESS DEVELOPMENT SERVICE </p>
         <p>Our work ethics stem from 4 cardinal principles</p>
       </div>
 

@@ -159,15 +159,15 @@ export default function EnrolledInterns() {
   return (
     <section className="py-10 overflow-hidden bg-white">
       {/* header */}
-      <div className="flex items-center justify-between px-10 mb-8">
-        <div className="flex items-center gap-4">
-          <span className="text-2xl font-medium text-gray-800">Enrolled interns</span>
+      <div className="flex flex-col items-start gap-4 px-6 mb-8 md:flex-row md:items-center md:justify-between md:px-10">
+        <div className="flex items-center gap-3 md:gap-4">
+          <span className="text-lg font-medium text-gray-800 md:text-2xl">Enrolled interns</span>
           {/* decorative progress bar */}
-          <div className="w-48 h-2 bg-gray-200 rounded-full overflow-hidden">
+          <div className="w-24 h-2 bg-gray-200 rounded-full overflow-hidden md:w-48">
             <div className="h-full w-1/3 bg-blue-500 rounded-full" />
           </div>
         </div>
-        <span className="text-5xl font-semibold text-gray-900">439+</span>
+        <span className="text-3xl font-semibold text-gray-900 md:text-5xl">439+</span>
       </div>
 
       {/* rows */}

@@ -17,37 +17,37 @@ function AboutPage() {
         alt="About Us"
         className="w-screen h-40 object-cover"
       />
-      <div className="grid grid-cols-[2fr_1fr] pl-12 pr-15 gap-5 items-center justify-center">
+      <div className="grid grid-cols-1 px-6 gap-5 items-center justify-center text-center md:grid-cols-[2fr_1fr] md:pl-12 md:pr-15 md:px-0 md:text-left">
         <div>
-          <h1 className="text-5xl uppercase mb-3">
+          <h1 className="text-3xl uppercase mb-3 md:text-5xl">
             Driven by innovation powered by people
           </h1>
           <p>
-            With nearly a decade of hands on experience in Digital Business 
-            Development  Solutions and Enterprise Security IT Services, 
-            we empower businesses to adapt to changing technologies, 
-            scale operations seamlessly, and thrive in an increasingly 
+            With nearly a decade of hands on experience in Digital Business
+            Development  Solutions and Enterprise Security IT Services,
+            we empower businesses to adapt to changing technologies,
+            scale operations seamlessly, and thrive in an increasingly
             competitive world.
           </p>
         </div>
-        <div className="p-10">
-          <Image 
+        <div className="p-6 md:p-10">
+          <Image
             src={DrivenByInnovationImage}
             alt="Driven by Innovation"
-            className="h-auto w-100"
+            className="h-auto w-full max-w-100 mx-auto md:w-100"
           />
         </div>
       </div>
 
-      <div className="grid grid-cols-[1fr_2fr] bg-[#f1f1f1] pl-7 pr-15 gap-5 items-center justify-center">
-        <div className="p-10 ">
-          <Image 
+      <div className="grid grid-cols-1 bg-[#f1f1f1] px-6 gap-5 items-center justify-center text-center md:grid-cols-[1fr_2fr] md:pl-7 md:pr-15 md:px-0 md:text-left">
+        <div className="p-6 md:p-10">
+          <Image
             src={HowSkytechCameToImage}
             alt="How Skytech Came to Be"
-            className="h-auto w-100"
+            className="h-auto w-full max-w-100 mx-auto md:w-100"
           />
         </div>
-        <div className="pl-10">
+        <div className="md:pl-10">
           <h2 className="text-gray-500 uppercase mb-3">
             How Skytech Came to Be?
           </h2>
@@ -62,12 +62,12 @@ function AboutPage() {
         </div>
       </div>
 
-      <div className="p-10">
-        <h1 className="text-3xl uppercase">
+      <div className="p-6 md:p-10">
+        <h1 className="text-2xl uppercase md:text-3xl">
           The spark: a trifecta of frustration
         </h1>
         <p>
-          The inception of Skytech Ghana was fueled by three 
+          The inception of Skytech Ghana was fueled by three
           <br />
           glaring gaps in the regional technological landscape:
         </p>
@@ -75,8 +75,8 @@ function AboutPage() {
 
       <ProblemCards />
 
-      <div className="bg-[#f1f1f1] p-10 mt-12">
-        <h2 className="text-3xl mb-4 uppercase">Turning friction into fuel</h2>
+      <div className="bg-[#f1f1f1] p-6 mt-8 md:p-10 md:mt-12">
+        <h2 className="text-2xl mb-4 uppercase md:text-3xl">Turning friction into fuel</h2>
         <p>
           Instead of merely complaining about fragmented local systems, the team channeled that friction into a clear corporate mission: &quot;Making Your Tech Dreams a Reality.&quot;
           <br/><br/>
@@ -84,20 +84,20 @@ function AboutPage() {
         </p>
       </div>
 
-      <div className="grid grid-cols-[1fr_2fr] pl-7 pr-17 gap-5 items-center justify-center">
-        <div className="p-10 ">
-          <Image 
+      <div className="grid grid-cols-1 px-6 gap-5 items-center justify-center text-center md:grid-cols-[1fr_2fr] md:pl-7 md:pr-17 md:px-0 md:text-left">
+        <div className="p-6 md:p-10">
+          <Image
             src={MissionVisionImage}
             alt="Mission and Vision"
-            className="h-auto w-100"
+            className="h-auto w-full max-w-100 mx-auto md:w-100"
           />
         </div>
-        <div className="pl-10">
+        <div className="md:pl-10">
           <h1 className="text-3xl uppercase mb-2">
             Mission
           </h1>
           <p>
-            We break the cycle of high costs and vanishing developers by serving as a continuous, reliable technical partner. Every solution we deploy is built for affordability, backed by predictable maintenance costs, and supported by a team that stays by your side long after launch day. 
+            We break the cycle of high costs and vanishing developers by serving as a continuous, reliable technical partner. Every solution we deploy is built for affordability, backed by predictable maintenance costs, and supported by a team that stays by your side long after launch day.
           </p>
 
           <h1 className="text-3xl uppercase mt-6 mb-2">
@@ -109,7 +109,7 @@ function AboutPage() {
         </div>
       </div>
 
-      <AwardsStatement className="-mb-30 p-6" />
+      <AwardsStatement className="mb-8 p-6 md:-mb-30" />
       <WhyYouNeedUs />
 
       <div className="w-auto h-25"/>

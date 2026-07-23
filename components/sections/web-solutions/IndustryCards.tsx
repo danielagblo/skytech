@@ -42,7 +42,7 @@ const industryCards = [
 
 function IndustryCards() {
   return (
-    <div className="p-10 -my-8 grid grid-cols-3 gap-4 gap-y-10">
+    <div className="p-6 -my-8 grid grid-cols-1 gap-4 gap-y-10 sm:grid-cols-2 md:grid-cols-3 md:p-10">
       {
         industryCards.map((card, index) => (
           <div key={index} className="flex flex-col justify-start  max-w-100 max-h-100">

@@ -72,7 +72,7 @@ export default function PricingCards({ currency }: { currency: "GHC" | "USD" }) 
   const [selected, setSelected] = useState(defaultIndex)
 
   return (
-    <div className="flex flex-row items-stretch justify-center gap-4 mb-10">
+    <div className="flex flex-col items-stretch justify-center gap-4 mb-10 px-4 md:flex-row md:px-0">
       {plans.map((plan, index) => {
         const isSelected = selected === index
         const isRecommended = plan.recommended

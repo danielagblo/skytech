@@ -3,27 +3,27 @@ import whyYouNeedUsImage from '../../assets/images/manSitting.png'
 
 function WhyYouNeedUs() {
   return (
-    <div className='-mt-12'>
-      <div className='flex flex-row items-center justify-start'>
+    <div className='mt-0 md:-mt-12'>
+      <div className='flex flex-col items-center justify-start text-center px-6 md:flex-row md:text-left md:px-0'>
         <Image
           src={whyYouNeedUsImage}
           alt="Why You Need Us"
-          className="h-full w-150 max-h-150 object-fill"
+          className="h-32 w-32 object-contain md:h-full md:w-150 md:max-h-150 md:object-fill"
         />
-        <h1 className='font-medium uppercase text-6xl -ml-40 pt-27 leading-11'>
+        <h1 className='font-medium uppercase text-3xl mt-2 leading-tight md:text-6xl md:-ml-40 md:pt-27 md:leading-11'>
           Here is Why <br />
-          <span className="text-4xl font-outline font-semibold tracking-widest"> you need us</span>
+          <span className="text-2xl font-outline font-semibold tracking-widest md:text-4xl"> you need us</span>
         </h1>
       </div>
-      <div className="bg-[#f7f7f7] pt-26 pb-10 -mt-40 w-full flex flex-row items-stretch justify-center">
-        <div className='w-full flex flex-col gap-4 items-center justify-center pl-10 pr-4'>
-          <div className='w-full flex flex-row gap-4 items-center justify-center'>
+      <div className="bg-[#f7f7f7] pt-8 pb-10 mt-6 w-full flex flex-col items-stretch justify-center gap-2 md:pt-26 md:-mt-40 md:flex-row">
+        <div className='w-full flex flex-col gap-4 items-center justify-center px-6 md:pl-10 md:pr-4'>
+          <div className='w-full flex flex-col gap-4 items-center justify-center md:flex-row'>
             <div className='bg-[#00FFF2] w-full rounded-2xl p-3'>
               <p className='font-semibold text-xl mb-2 capitalize'>8yrs Of Proven Expertise</p>
               <p className='text-lg'>
-                Nearly a decade of hands-on 
-                experience delivering reliable, 
-                high-performing software and 
+                Nearly a decade of hands-on
+                experience delivering reliable,
+                high-performing software and
                 web solutions across borders.
               </p>
             </div>
@@ -33,24 +33,24 @@ function WhyYouNeedUs() {
                 We plug in like your internal
                 IT department with absolute
                 transparency. We don’t disappear
-                suddenly,we stay. 
+                suddenly,we stay.
               </p>
             </div>
           </div>
           <div className='bg-[#FF6B6B] w-full rounded-2xl p-3 text-white'>
               <p className='font-semibold text-xl mb-2 capitalize'>Complimentary Maintenance</p>
               <p className='text-lg'>
-                Enjoy peace of mind with free ongoing maintenance to ensure your platforms stay secure, updated, and 
+                Enjoy peace of mind with free ongoing maintenance to ensure your platforms stay secure, updated, and
                 running smoothly.
               </p>
             </div>
         </div>
-        <div className='w-full flex flex-col h-full gap-2 pr-10'>
-          <div className='bg-[#F7CF94] w-full rounded-2xl p-3 h-55'>
+        <div className='w-full flex flex-col gap-2 px-6 md:h-full md:pl-0 md:pr-10'>
+          <div className='bg-[#F7CF94] w-full rounded-2xl p-3 h-auto md:h-55'>
               <p className='font-semibold text-xl mb-2 capitalize'>Teamwork</p>
               <p className='text-2xl'>
-                We integrate seamlessly with 
-                your Team, working side by 
+                We integrate seamlessly with
+                your Team, working side by
                 side to support your business
                 goals.
               </p>

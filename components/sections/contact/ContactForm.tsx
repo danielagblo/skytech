@@ -69,11 +69,11 @@ export default function ContactForm() {
     "w-full rounded-xl border border-gray-300 px-4 py-4 outline-none transition focus:border-[#355BC9] focus:ring-2 focus:ring-blue-200";
 
   return (
-    <section className="bg-white py-20 px-6">
+    <section className="bg-white py-12 px-6 md:py-20">
       <div className="mx-auto max-w-7xl">
 
         <div className="mb-12">
-          <h2 className="text-5xl font-semibold text-slate-900">
+          <h2 className="text-3xl font-semibold text-slate-900 md:text-5xl">
             We&apos;d love to hear from you.
           </h2>
 
@@ -149,7 +149,7 @@ export default function ContactForm() {
 
             <div className="mt-8">
 
-              <h3 className="text-5xl font-semibold leading-tight text-slate-900">
+              <h3 className="text-3xl font-semibold leading-tight text-slate-900 md:text-5xl">
                 SPEAK TO OUR
                 <br />
                 24/7 SUPPORT.

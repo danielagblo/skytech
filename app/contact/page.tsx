@@ -14,7 +14,7 @@ function page() {
         className="w-screen h-40 object-cover"
       />
       <ContactForm />
-      <div className="p-6 -mt-45">
+      <div className="p-6 mt-0 md:-mt-45">
         <FAQs />
       </div>
     </div>

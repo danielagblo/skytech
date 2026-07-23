@@ -14,9 +14,9 @@ function PricingModel( { showWhyYouNeedUs = true }: { showWhyYouNeedUs?: boolean
   return (
     <div className="bg-white">
       <div className="p-6">
-        <div className="grid grid-cols-2 gap-4 max-w-[3000px] items-center justify-center mt-8">
+        <div className="grid grid-cols-1 gap-4 max-w-[3000px] items-center justify-center mt-8 md:grid-cols-2">
           <div>
-            <p className="text-4xl uppercase">SIMPLE RATE CARD <br/>WITH ZERO SURPRISES</p>
+            <p className="text-2xl uppercase md:text-4xl">SIMPLE RATE CARD <br/>WITH ZERO SURPRISES</p>
             <ul className="leading-8 mt-4 pl-3">
               <li>
                 &#10004; We do regular maintenance on your site at NO FEES
@@ -26,8 +26,8 @@ function PricingModel( { showWhyYouNeedUs = true }: { showWhyYouNeedUs?: boolean
               </li>
             </ul>
           </div>
-          <div className="flex h-[35vh] items-center justify-center">
-            <Image 
+          <div className="flex h-[25vh] items-center justify-center md:h-[35vh]">
+            <Image
               src={starsAndLinesSVG}
               alt="Award"
               className="h-full w-full object-contain"
@@ -36,24 +36,24 @@ function PricingModel( { showWhyYouNeedUs = true }: { showWhyYouNeedUs?: boolean
         </div>
       </div>
 
-      <div className="grid grid-cols-2 px-12 py-8">
+      <div className="grid grid-cols-1 gap-3 px-6 py-8 md:grid-cols-2 md:gap-0 md:px-12">
         <div>
-          <p className="hover:underline underline-offset-3 text-gray-500 font-bold decoration-2 decoration-[#1E5AC8] cursor-pointer" onClick={() => 
-              serviceType === "Website"  
-                ? setServiceType("Mobile App") 
+          <p className="hover:underline underline-offset-3 text-gray-500 font-bold decoration-2 decoration-[#1E5AC8] cursor-pointer" onClick={() =>
+              serviceType === "Website"
+                ? setServiceType("Mobile App")
                 : setServiceType("Website")
               }
             >
-            <span className={serviceType === "Mobile App" ? "hidden" : "text-[#1E5AC8] font-bold"}>Website Rates</span>  
+            <span className={serviceType === "Mobile App" ? "hidden" : "text-[#1E5AC8] font-bold"}>Website Rates</span>
             <span className={serviceType === "Mobile App" ? "hidden" : "font-bold"}>     &#10132;     </span>
 
-            <span className={serviceType === "Mobile App" ? "text-[#1E5AC8] font-bold" : ""}>Mobile App Rates</span> 
+            <span className={serviceType === "Mobile App" ? "text-[#1E5AC8] font-bold" : ""}>Mobile App Rates</span>
             <span className={serviceType === "Website" ? "hidden" : "font-bold"}>     &#10132;     </span>
 
             <span className={serviceType === "Website" ? "hidden" : ""}>Website Rates</span>
           </p>
         </div>
-        <div className="flex flex-row gap-4 justify-end font-medium uppercase text-lg">
+        <div className="flex flex-row gap-4 justify-start font-medium uppercase text-lg md:justify-end">
           <p 
             className={"inline hover:underline underline-offset-4 text-gray-500 font-bold decoration-2 decoration-[#1E5AC8] cursor-pointer"
               + (currency === "GHC" ? " text-[#1E5AC8] underline" : "")

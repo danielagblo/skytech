@@ -15,10 +15,10 @@ const problems = [
 
 export default function ProblemCards() {
   return (
-    <div className="grid grid-cols-3 divide-x-5 divide-white rounded-xl overflow-hidden mx-10">
+    <div className="grid grid-cols-1 divide-y-5 divide-white rounded-xl overflow-hidden mx-6 md:grid-cols-3 md:divide-x-5 md:divide-y-0 md:mx-10">
       {problems.map((problem, index) => (
         <div key={index} className="p-6 bg-[#f9f9f9] flex flex-col gap-3">
-          <h3 className="font-bold text-xl leading-snug h-12">{problem.title}</h3>
+          <h3 className="font-bold text-xl leading-snug md:h-12">{problem.title}</h3>
           <p className="text-gray-700 text-base leading-relaxed">{problem.body}</p>
         </div>
       ))}
