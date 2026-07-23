@@ -1,10 +1,12 @@
 "use client"
 
+import { useEffect, useState } from "react"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
 import sponsorImage from "@/assets/images/placeholderSponsor.png"
 import LetsTalkButton from "../ui/LetsTalkButton"
-import sponsorsBigPicture from "@/assets/images/sponsors/sponsorsBigPicture.png"  
+import sponsorsBigPicture from "@/assets/images/sponsors/sponsorsBigPicture.png"
+import { getLatestBlogPosts, type BlogPost } from "@/lib/blog"
 
 const sponsorSizes = [
   "w-18 h-auto",
@@ -22,7 +24,13 @@ const sponsorSizes = [
 
 function Footer( { className }: { className?: string } ) {
   const currentPath = usePathname()
-  const isLandingPage = currentPath === "/" || currentPath === "/landing"
+  const isLandingPage = currentPath === "/landing"
+
+  const [latestPosts, setLatestPosts] = useState<BlogPost[]>([])
+
+  useEffect(() => {
+    getLatestBlogPosts(4).then(setLatestPosts)
+  }, [])
 
   if (isLandingPage) return null
 
@@ -65,13 +73,18 @@ function Footer( { className }: { className?: string } ) {
               </li>
             </ul>
           </div>
-          {/* i need to check if there are any blog articles to display from sanity (display about 5-6 latest/top) */}
-          {/* <div>
-            <p className="font-semibold">Key Blog Articles</p>
-            <ul>
-              
-            </ul>
-          </div> */}
+          {latestPosts.length > 0 && (
+            <div>
+              <p className="font-semibold mb-2">Key Blog Articles</p>
+              <ul className="space-y-2">
+                {latestPosts.map((post) => (
+                  <li key={post.slug}>
+                    <a href={`/blog/${post.slug}`}>{post.title}</a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
         <div className="w-full h-full flex flex-col gap-2 items-center justify-center flex-1">
           <LetsTalkButton className="bg-[#f1f1f1]" />

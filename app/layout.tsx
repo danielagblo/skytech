@@ -34,7 +34,7 @@ export default function RootLayout({
         <main className="flex-1 h-full">
           {children}
         </main>
-        <Footer className="mt-10 w-screen p-3" />
+        <Footer className="mt-10 w-screen" />
       </body>
     </html>
   );
