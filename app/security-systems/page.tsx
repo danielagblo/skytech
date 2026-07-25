@@ -58,7 +58,27 @@ function SecuritySystemsPage() {
         loading="eager"
         priority
       />
-      <div className="px-4 py-4 flex items-center justify-center md:absolute md:top-[27.5vh] md:w-screen md:px-0 md:py-0">
+      <div className="px-4 pt-4 pb-2 md:hidden">
+        <label htmlFor="security-service" className="mb-2 block font-semibold text-gray-900">
+          Choose a Security Service:
+        </label>
+        <select
+          id="security-service"
+          value={activeTab.name}
+          onChange={(e) => {
+            const selected = cards.find((c) => c.name === e.target.value) ?? cards[0];
+            setActiveTab(selected);
+          }}
+          className="w-full rounded-xl border border-gray-300 bg-white p-3 text-black outline-none focus:border-[#2f59c1] focus:ring-2 focus:ring-blue-200"
+        >
+          {cards.map((card) => (
+            <option key={card.name} value={card.name}>
+              {card.name}
+            </option>
+          ))}
+        </select>
+      </div>
+      <div className="hidden px-4 py-4 items-center justify-center md:flex md:absolute md:top-[27.5vh] md:w-screen md:px-0 md:py-0">
         <div className="grid grid-cols-2 gap-3 w-full md:grid-cols-3 md:gap-6 md:w-auto">
           {
             cards.map((card, index) => (

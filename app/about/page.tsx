@@ -19,7 +19,7 @@ function AboutPage() {
       />
       <div className="grid grid-cols-1 px-6 gap-5 items-center justify-center text-center md:grid-cols-[2fr_1fr] md:pl-12 md:pr-15 md:px-0 md:text-left">
         <div>
-          <h1 className="text-3xl uppercase mb-3 md:text-5xl">
+          <h1 className="text-3xl uppercase max-md:mt-7.5  mb-3 md:text-5xl">
             Driven by innovation powered by people
           </h1>
           <p>
@@ -112,7 +112,6 @@ function AboutPage() {
       <AwardsStatement className="mb-8 p-6 md:-mb-30" />
       <WhyYouNeedUs />
 
-      <div className="w-auto h-25"/>
     </div>
   )
 }
