@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import bannerImage from "@/assets/images/securitySystemsBannerImage.png";
+import TopScrollingBanner from "@/components/sections/home/TopScrollingBanner";
 import CCTVSurveillance from "./CCTVSurveillance";
 import GPSTracking from "./GPSTracking";
 import BiometricAndAutomatedGate from "./BiometricAndAutomatedGate";
@@ -50,6 +51,9 @@ function SecuritySystemsPage() {
 
   return (
   <>
+    <div className="md:fixed top-0 w-screen z-20">
+      <TopScrollingBanner className="bg-[#031B41] text-white p-3 flex items-center justify-center max-md:pt-11" />
+    </div>
     <div className="relative overflow-x-hidden">
       <Image
         src={bannerImage}

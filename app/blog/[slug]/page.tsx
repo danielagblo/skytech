@@ -3,6 +3,7 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 
 import { formatBlogDate, getAllBlogPosts, getBlogPostBySlug, getRelatedBlogPosts } from "@/lib/blog"
+import TopScrollingBanner from "@/components/sections/home/TopScrollingBanner"
 
 type BlogPostPageProps = {
   params: Promise<{ slug: string }>
@@ -33,6 +34,9 @@ async function BlogPostPage({ params }: BlogPostPageProps) {
 
   return (
     <div>
+      <div className="md:fixed top-0 w-screen z-20">
+        <TopScrollingBanner className="bg-[#83867E] text-white p-3 flex items-center justify-center max-md:pt-11" />
+      </div>
       <div className="relative w-full h-[400px]">
         <Image
           src={post.coverImage}

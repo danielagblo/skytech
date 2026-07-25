@@ -2,6 +2,7 @@ import Image from "next/image"
 import Link from "next/link"
 
 import { getAllBlogPosts } from "@/lib/blog"
+import TopScrollingBanner from "@/components/sections/home/TopScrollingBanner"
 
 import BlogPageHeader from "@/assets/images/BlogPageHeader.png"
 
@@ -15,7 +16,10 @@ async function BlogPage() {
 
   return (
     <div>
-        <Image 
+        <div className="md:fixed top-0 w-screen z-20">
+          <TopScrollingBanner className="bg-[#031B41] text-white p-3 flex items-center justify-center max-md:pt-11" />
+        </div>
+        <Image
           src={BlogPageHeader}
           alt="Blog Header"
           className="w-screen h-87.5 object-cover -z-10 absolute top-0"
