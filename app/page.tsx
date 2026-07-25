@@ -48,7 +48,7 @@ const services = [
 export default function Home() {
   return (
     <div>
-      <div className="fixed top-0 w-screen z-20">
+      <div className="md:fixed top-0 w-screen z-20">
         <TopScrollingBanner />
       </div>
       <LandingScreen />
@@ -71,7 +71,7 @@ export default function Home() {
           src={globeImage}
           alt="Globe"
           priority
-          className="h-full w-full object-cover md:h-auto md:w-auto md:object-fill"
+          className="h-full w-full object-cover md:h-auto md:w-screen md:object-fill"
         />
 
         <div className="absolute top-4 right-4 z-10 text-sm md:top-8 md:right-12 md:text-xl">
@@ -115,14 +115,14 @@ export default function Home() {
 
       <TestimonialsBanner />
 
-      <div className="bg-white px-6 pt-14 md:px-10 md:pt-20">
-        <div className="relative bg-[#016DAB] rounded-2xl flex flex-col items-center justify-center overflow-hidden py-10 md:flex-row md:items-center md:justify-end md:overflow-visible md:pr-40 md:pt-5">
+      <div className="bg-white md:px-10 md:pt-20">
+        <div className="relative max-md:w-9/10 max-md:mx-auto bg-[#016DAB] rounded-2xl flex flex-col items-center max-md:pt-25 max-md:pb-34 justify-center overflow-hidden md:pb-10 md:flex-row md:justify-end md:overflow-visible md:pr-40">
           <Image
             src={workWithUsImage}
             alt="Work With Us"
-            className="static mb-4 h-40 w-40 object-contain md:absolute md:-left-15 md:-bottom-50 md:mb-0 md:h-190 md:w-190"
+            className="mb-4 object-contain absolute md:-left-15 md:-bottom-50 md:mb-0 md:h-190 md:w-190"
           />
-          <LetsTalkButton className="bg-white/20 text-white md:my-30" />
+          <LetsTalkButton className="bg-white/20 max-md:absolute max-md:bottom-3 max-md:right-3 text-white md:my-30" />
         </div>
         <FAQSection />
       </div>

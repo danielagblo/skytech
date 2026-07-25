@@ -8,11 +8,11 @@ function WhyYouNeedUs() {
         <Image
           src={whyYouNeedUsImage}
           alt="Why You Need Us"
-          className="h-32 w-32 object-contain md:h-full md:w-150 md:max-h-150 md:object-fill"
+          className="max-md:-ml-13 object-contain md:h-full md:w-150 md:max-h-150 md:object-fill"
         />
-        <h1 className='font-medium uppercase text-3xl mt-2 leading-tight md:text-6xl md:-ml-40 md:pt-27 md:leading-11'>
+        <h1 className='font-medium uppercase text-5xl leading-tight max-md:-my-7 md:text-6xl md:-ml-40 md:pt-27 md:leading-11'>
           Here is Why <br />
-          <span className="text-2xl font-outline font-semibold tracking-widest md:text-4xl"> you need us</span>
+          <span className="text-4xl font-outline font-semibold tracking-widest"> you need us</span>
         </h1>
       </div>
       <div className="bg-[#f7f7f7] pt-8 pb-10 mt-6 w-full flex flex-col items-stretch justify-center gap-2 md:pt-26 md:-mt-40 md:flex-row">

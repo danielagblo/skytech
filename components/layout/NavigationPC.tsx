@@ -20,7 +20,7 @@ function NavigationPC({ className }: { className?: string }) {
 
   return (
     <div
-      className={`${className ?? ""} flex items-center justify-between px-2 transition-colors duration-300 ${
+      className={`${className ?? ""} flex items-center justify-between px-2 py-1 transition-colors duration-300 ${
         scrolled
           ? "bg-[#2f59c1]"
           : "bg-white/10 backdrop-blur-md"

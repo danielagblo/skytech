@@ -15,8 +15,15 @@ function PricingModel( { showWhyYouNeedUs = true }: { showWhyYouNeedUs?: boolean
     <div className="bg-white">
       <div className="p-6">
         <div className="grid grid-cols-1 gap-4 max-w-[3000px] items-center justify-center mt-8 md:grid-cols-2">
-          <div>
+          <div className="max-md:relative">
             <p className="text-2xl uppercase md:text-4xl">SIMPLE RATE CARD <br/>WITH ZERO SURPRISES</p>
+            <div className="md:hidden max-md:absolute right-0 -top-2 flex h-[8vh] items-center justify-center">
+              <Image
+                src={starsAndLinesSVG}
+                alt="Award"
+                className="h-full w-full object-contain"
+              />
+            </div>
             <ul className="leading-8 mt-4 pl-3">
               <li>
                 &#10004; We do regular maintenance on your site at NO FEES
@@ -26,7 +33,7 @@ function PricingModel( { showWhyYouNeedUs = true }: { showWhyYouNeedUs?: boolean
               </li>
             </ul>
           </div>
-          <div className="flex h-[25vh] items-center justify-center md:h-[35vh]">
+          <div className="max-md:hidden flex h-[25vh] items-center justify-center md:h-[35vh]">
             <Image
               src={starsAndLinesSVG}
               alt="Award"
