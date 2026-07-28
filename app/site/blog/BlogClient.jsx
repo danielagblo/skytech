@@ -1,188 +1,148 @@
 "use client";
-import React, { useEffect, useRef } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import Link from 'next/link';
 
-if (typeof window !== 'undefined') {
-  gsap.registerPlugin(ScrollTrigger);
-}
+import React, { useState } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
 
 export default function BlogClient({ posts, featuredPost, gridPosts }) {
-  const containerRef = useRef(null);
+  const [searchQuery, setSearchQuery] = useState('');
 
-  useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
-
-    const headerItems = el.querySelectorAll('.blog-header-el');
-    const featuredCard = el.querySelector('.featured-card');
-    const gridCards = el.querySelectorAll('.blog-grid-card');
-    const newsletter = el.querySelector('.newsletter-card');
-
-    // Initial GSAP states
-    gsap.set(headerItems, { opacity: 0, y: 35 });
-    gsap.set(featuredCard, { opacity: 0, y: 30 });
-    gsap.set(gridCards, { opacity: 0, y: 25 });
-    gsap.set(newsletter, { opacity: 0, y: 30 });
-
-    // 1. Header Animations
-    gsap.to(headerItems, { opacity: 1, y: 0, duration: 0.8, stagger: 0.15, ease: 'power3.out', delay: 0.1 });
-
-    // 2. Featured Post Card
-    gsap.to(featuredCard, {
-      opacity: 1,
-      y: 0,
-      duration: 1.0,
-      ease: 'power2.out',
-      scrollTrigger: {
-        trigger: '.featured-post-section',
-        start: 'top bottom-=100px',
-        toggleActions: 'play reverse play reverse',
-      }
-    });
-
-    // 3. Blog Grid Cards
-    gsap.to(gridCards, {
-      opacity: 1,
-      y: 0,
-      duration: 0.9,
-      stagger: 0.15,
-      ease: 'power2.out',
-      scrollTrigger: {
-        trigger: '.blog-grid-container',
-        start: 'top bottom-=150px',
-        toggleActions: 'play reverse play reverse',
-      }
-    });
-
-    // 4. Newsletter block
-    gsap.to(newsletter, {
-      opacity: 1,
-      y: 0,
-      duration: 0.8,
-      ease: 'power3.out',
-      scrollTrigger: {
-        trigger: '.newsletter-section',
-        start: 'top bottom-=200px',
-        toggleActions: 'play reverse play reverse',
-      }
-    });
-
-    return () => {
-      ScrollTrigger.getAll().forEach(t => t.kill());
-    };
-  }, []);
+  const filteredPosts = posts.filter(post =>
+    post.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    post.excerpt?.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
-    <main ref={containerRef} className="min-h-screen pt-24 pb-20 bg-white">
-      <div className="section-shell space-y-12">
-        <div className="max-w-3xl space-y-4">
-          <span className="pill blog-header-el">Insights</span>
-          <h1 className="text-4xl lg:text-5xl leading-tight text-slate-900 font-light blog-header-el">
-            The <span className="font-extrabold text-blue-600">Digital Edge</span>
-          </h1>
-          <p className="text-lg text-slate-600 blog-header-el">
-            Expert advice on building, scaling, and optimizing your digital products.
-          </p>
+    <main className="min-h-screen bg-white">
+      {/* Hero Banner */}
+      <section className="relative bg-slate-950 text-white pt-36 pb-20 overflow-hidden">
+        {/* Grid mesh background */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute inset-0" style={{
+            backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
+            backgroundSize: '60px 60px'
+          }} />
         </div>
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-slate-950/50" />
 
-        {/* Featured Post */}
-        {featuredPost ? (
-          <div className="featured-post-section">
-            <div className="relative group overflow-hidden rounded-[2.5rem] bg-slate-50 aspect-[21/9] flex items-end p-8 md:p-16 border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-700 featured-card">
-              {featuredPost.coverImage && (
-                <img 
-                  src={featuredPost.coverImage} 
-                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000" 
-                  alt={featuredPost.title}
-                />
-              )}
-              <div className="absolute inset-0 bg-gradient-to-t from-white via-white/40 to-transparent z-10" />
-              <div className="relative z-20 max-w-2xl space-y-4">
-                <span className="pill border-blue-600/20 text-blue-600 bg-blue-50 uppercase tracking-[0.2em] text-[10px] font-bold w-fit">Featured Insight</span>
-                <h2 className="text-3xl md:text-5xl font-extrabold text-slate-900 tracking-tighter leading-[1.05]">
-                  {featuredPost.title}
-                </h2>
-                <p className="text-slate-700 text-lg hidden md:block leading-relaxed font-medium line-clamp-2">
-                  {featuredPost.excerpt}
-                </p>
-                <div className="flex items-center gap-6 pt-4">
-                  <Link href={`/site/blog/${featuredPost.slug}`} className="btn-primary px-8 py-4">Read Article</Link>
-                  <span className="text-slate-400 text-xs font-bold uppercase tracking-widest">
-                    {new Date(featuredPost.createdAt).toLocaleDateString('en-US')}
-                  </span>
-                </div>
-              </div>
+        <div className="section-shell relative z-10 text-center space-y-6 max-w-3xl mx-auto">
+          <span className="pill bg-white/10 text-blue-300 border-white/10">Blog</span>
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight tracking-tight">
+            News & <span className="text-blue-400">Insights</span>
+          </h1>
+          <p className="text-lg text-slate-300 max-w-xl mx-auto">
+            Practical tips and news about web development, mobile apps, and digital growth in Ghana.
+          </p>
+
+          {/* Search Bar */}
+          <div className="max-w-md mx-auto pt-4">
+            <div className="relative">
+              <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+              <input
+                type="text"
+                placeholder="Search articles..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-12 pr-4 py-3.5 rounded-full bg-white/10 border border-white/10 text-white placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white/15 transition-all backdrop-blur-sm"
+              />
             </div>
           </div>
-        ) : (
-          <div className="py-20 text-center border-2 border-dashed border-slate-100 rounded-[2.5rem] text-slate-400">
-            No insights published yet. Check back soon.
-          </div>
-        )}
+        </div>
+      </section>
 
-        {/* Blog Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 blog-grid-container">
-          {gridPosts.map((post) => (
-            <article key={post._id} className="group space-y-5 blog-grid-card">
-              <div className="aspect-[16/10] overflow-hidden rounded-3xl bg-slate-100 border border-slate-200 relative">
-                {post.coverImage ? (
-                  <img 
-                    src={post.coverImage} 
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
-                    alt={post.title}
+      {/* Featured Post */}
+      {featuredPost && !searchQuery && (
+        <section className="py-16">
+          <div className="section-shell">
+            <Link
+              href={`/site/blog/${featuredPost.slug}`}
+              className="group grid grid-cols-1 lg:grid-cols-2 gap-8 rounded-3xl overflow-hidden bg-slate-50 border border-slate-100 card-hover"
+            >
+              <div className="relative h-64 lg:h-auto overflow-hidden">
+                {featuredPost.coverImage ? (
+                  <Image
+                    src={featuredPost.coverImage}
+                    alt={featuredPost.title}
+                    fill
+                    className="object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center text-slate-400 italic">
-                    {post.category} Image
+                  <div className="w-full h-full bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center min-h-[250px]">
+                    <span className="text-white/30 font-bold text-lg uppercase tracking-wider">Featured</span>
                   </div>
                 )}
               </div>
-              <div className="space-y-3">
-                <div className="flex items-center gap-3">
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-blue-600 bg-blue-50 px-2 py-1 rounded-md">
-                    {post.category}
-                  </span>
-                  <span className="text-xs text-slate-400">
-                    {new Date(post.createdAt).toLocaleDateString('en-US')}
-                  </span>
-                </div>
-                <h3 className="text-2xl font-bold text-slate-900 group-hover:text-blue-600 transition-colors line-clamp-2">
-                  {post.title}
-                </h3>
-                <p className="text-slate-600 text-sm line-clamp-2 leading-relaxed">
-                  {post.excerpt}
+              <div className="p-8 lg:p-12 flex flex-col justify-center space-y-4">
+                <span className="pill w-fit">Featured</span>
+                <h2 className="text-2xl lg:text-3xl font-bold text-slate-900 group-hover:text-blue-600 transition-colors leading-tight">
+                  {featuredPost.title}
+                </h2>
+                <p className="text-slate-500 leading-relaxed line-clamp-3">
+                  {featuredPost.excerpt || featuredPost.body?.slice(0, 180)}
                 </p>
-                <Link href={`/site/blog/${post.slug}`} className="inline-flex items-center gap-2 text-slate-900 font-bold text-sm group-hover:gap-3 transition-all">
-                  Read More
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                  </svg>
-                </Link>
+                <div className="flex items-center gap-3 text-sm text-slate-400 pt-2">
+                  <span>{new Date(featuredPost.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                  <span className="w-1 h-1 rounded-full bg-slate-300" />
+                  <span>{featuredPost.readTime || '5 min read'}</span>
+                </div>
               </div>
-            </article>
-          ))}
-        </div>
-
-        {/* Newsletter */}
-        <div className="newsletter-section">
-          <div className="glass-panel rounded-[2.5rem] p-12 flex flex-col md:flex-row items-center justify-between gap-8 border-blue-100 bg-blue-50/30 newsletter-card">
-            <div className="space-y-3 max-w-md text-left">
-              <h2 className="text-3xl font-bold text-slate-900">Stay Updated</h2>
-              <p className="text-slate-600">Get the latest insights on technology and design delivered straight to your inbox.</p>
-            </div>
-            <form className="w-full max-w-md flex gap-3">
-              <input 
-                type="email" 
-                placeholder="Enter your email" 
-                className="flex-1 px-6 py-4 rounded-2xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
-              />
-              <button type="submit" className="btn-primary">Join</button>
-            </form>
+            </Link>
           </div>
+        </section>
+      )}
+
+      {/* Blog Grid */}
+      <section className="pb-24">
+        <div className="section-shell">
+          {(searchQuery ? filteredPosts : gridPosts)?.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {(searchQuery ? filteredPosts : gridPosts).map((post) => (
+                <Link
+                  key={post.slug}
+                  href={`/site/blog/${post.slug}`}
+                  className="group rounded-3xl overflow-hidden bg-white border border-slate-100 card-hover"
+                >
+                  <div className="relative h-48 overflow-hidden">
+                    {post.coverImage ? (
+                      <Image
+                        src={post.coverImage}
+                        alt={post.title}
+                        fill
+                        className="object-cover transition-transform duration-700 group-hover:scale-105"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-gradient-to-br from-slate-200 to-slate-300 flex items-center justify-center">
+                        <span className="text-slate-400 font-bold text-sm uppercase tracking-wider">Blog Post</span>
+                      </div>
+                    )}
+                  </div>
+                  <div className="p-6 space-y-3">
+                    <div className="flex items-center gap-3 text-xs text-slate-400">
+                      <span>{new Date(post.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                      <span className="w-1 h-1 rounded-full bg-slate-300" />
+                      <span>{post.readTime || '5 min read'}</span>
+                    </div>
+                    <h3 className="text-lg font-bold text-slate-900 group-hover:text-blue-600 transition-colors line-clamp-2">
+                      {post.title}
+                    </h3>
+                    <p className="text-sm text-slate-500 leading-relaxed line-clamp-2">
+                      {post.excerpt || post.body?.slice(0, 120)}
+                    </p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-20">
+              <p className="text-slate-500 text-lg">
+                {searchQuery ? 'No articles match your search.' : 'No blog posts available yet.'}
+              </p>
+            </div>
+          )}
         </div>
-      </div>
+      </section>
     </main>
   );
 }
