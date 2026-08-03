@@ -13,6 +13,7 @@ interface Submission {
   startDate: string;
   duration: string;
   message: string;
+  enrolled?: boolean;
   submittedAt: string;
 }
 
@@ -63,6 +64,26 @@ export default function InternshipSubmissionsPage() {
     }
   };
 
+  const handleToggleEnrolled = async (submission: Submission) => {
+    try {
+      const res = await fetch('/api/content/internship-submissions', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: submission.id, enrolled: !submission.enrolled }),
+      });
+      if (res.ok) {
+        setSubmissions(submissions.map((s) =>
+          s.id === submission.id ? { ...s, enrolled: !s.enrolled } : s
+        ));
+      } else {
+        alert('Failed to update enrollment status');
+      }
+    } catch (error) {
+      console.error('Error updating enrollment status:', error);
+      alert('Error updating enrollment status');
+    }
+  };
+
   const programs = ['All', ...Array.from(new Set(submissions.map(s => s.program).filter(Boolean))).sort()];
   const levels = ['All', ...Array.from(new Set(submissions.map(s => s.level).filter(Boolean))).sort()];
   const durations = ['All', ...Array.from(new Set(submissions.map(s => s.duration).filter(Boolean))).sort()];
@@ -85,9 +106,11 @@ export default function InternshipSubmissionsPage() {
   }).sort((a, b) => {
     let comparison = 0;
     const field = sortField as keyof Submission;
+    const av = (a[field] ?? "") as string;
+    const bv = (b[field] ?? "") as string;
     
-    if (a[field] < b[field]) comparison = -1;
-    if (a[field] > b[field]) comparison = 1;
+    if (av < bv) comparison = -1;
+    if (av > bv) comparison = 1;
     
     return sortOrder === 'asc' ? comparison : -comparison;
   });
@@ -253,6 +276,15 @@ export default function InternshipSubmissionsPage() {
                   <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-semibold bg-purple-50 text-purple-700">
                     {submission.duration || 'Duration TBD'}
                   </span>
+                  <span
+                    className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-semibold mt-2 ${
+                      submission.enrolled
+                        ? 'bg-emerald-50 text-emerald-700'
+                        : 'bg-slate-100 text-slate-600'
+                    }`}
+                  >
+                    {submission.enrolled ? '● Enrolled' : '○ Applied'}
+                  </span>
                   <p className="text-xs text-slate-600 mt-2">
                     {new Date(submission.submittedAt).toLocaleDateString()}
                   </p>
@@ -298,6 +330,19 @@ export default function InternshipSubmissionsPage() {
                     >
                       Call
                     </a>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleToggleEnrolled(submission);
+                      }}
+                      className={`px-4 py-2 rounded-lg font-semibold text-sm transition-colors border ${
+                        submission.enrolled
+                          ? 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
+                          : 'bg-emerald-50 text-emerald-700 border-emerald-100 hover:bg-emerald-100'
+                      }`}
+                    >
+                      {submission.enrolled ? 'Unenroll' : 'Mark as Enrolled'}
+                    </button>
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
