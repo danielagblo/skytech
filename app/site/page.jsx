@@ -16,6 +16,7 @@ import LetsTalkButton from "../../components/skytech/ui/LetsTalkButton";
 import PricingModel from "../../components/skytech/sections/PricingModel";
 import TestimonialsBanner from "../../components/skytech/sections/home/TestimonialsBanner";
 import TopScrollingBanner from "../../components/skytech/sections/home/TopScrollingBanner";
+import AnimatedCounter from "../../components/skytech/sections/home/AnimatedCounter";
 
 const services = [
   {
@@ -127,19 +128,35 @@ export default async function Home() {
         <div className="section-shell">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
             <div className="space-y-2">
-              <p className="text-[#000] font-inter text-5xl md:text-7xl font-semibold tracking-tighter">8+</p>
+              <p className="text-[#000] font-inter text-5xl md:text-7xl font-semibold tracking-tighter">
+                <AnimatedCounter value={8} suffix="+" />
+              </p>
               <p className="text-[#000] font-inter text-sm font-bold tracking-[0.2em] uppercase text-slate-500">YEARS IN OPERATION</p>
             </div>
             <div className="space-y-2">
-              <p className="text-[#000] font-inter text-5xl md:text-7xl font-semibold tracking-tighter">8+</p>
+              <p className="text-[#000] font-inter text-5xl md:text-7xl font-semibold tracking-tighter">
+                <AnimatedCounter value={8} suffix="+" />
+              </p>
               <p className="text-[#000] font-inter text-sm font-bold tracking-[0.2em] uppercase text-slate-500">SATISFIED CUSTOMERS</p>
             </div>
             <div className="space-y-2">
-              <p className="text-[#000] font-inter text-5xl md:text-7xl font-semibold tracking-tighter">1k+</p>
+              <p className="text-[#000] font-inter text-5xl md:text-7xl font-semibold tracking-tighter">
+                <AnimatedCounter
+                  value={1000}
+                  suffix="+"
+                  format={(n) =>
+                    n >= 1000
+                      ? `${n % 1000 === 0 ? n / 1000 : (n / 1000).toFixed(1)}k`
+                      : `${n}`
+                  }
+                />
+              </p>
               <p className="text-[#000] font-inter text-sm font-bold tracking-[0.2em] uppercase text-slate-500">PROJECTS COMPLETED</p>
             </div>
             <div className="space-y-2">
-              <p className="text-[#000] font-inter text-5xl md:text-7xl font-semibold tracking-tighter">4+</p>
+              <p className="text-[#000] font-inter text-5xl md:text-7xl font-semibold tracking-tighter">
+                <AnimatedCounter value={4} suffix="+" />
+              </p>
               <p className="text-[#000] font-inter text-sm font-bold tracking-[0.2em] uppercase text-slate-500">COUNTRIES SERVED</p>
             </div>
           </div>
@@ -162,7 +179,7 @@ export default async function Home() {
                     key={`${i}-${idx}`}
                     src={partner.logoUrl}
                     alt={partner.name || "Brand"}
-                    className="h-12 w-auto object-contain inline-block grayscale opacity-70 hover:opacity-100 transition-opacity"
+                    className="h-12 w-auto object-contain inline-block"
                   />
                 ))}
               </React.Fragment>
@@ -275,9 +292,9 @@ export default async function Home() {
       {/* Testimonials */}
       <TestimonialsBanner
         testimonials={testimonials.map((t) => ({
-          quote: t.message || t.content || "",
-          name: t.name || "",
-          title: t.role || t.company || "",
+          quote: t.quote || "",
+          name: t.author || "",
+          title: t.company || "",
         }))}
       />
 
