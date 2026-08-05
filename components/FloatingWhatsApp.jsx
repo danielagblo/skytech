@@ -1,11 +1,17 @@
 "use client";
 
+import Image from "next/image";
+import { usePathname } from "next/navigation";
+
 function toWaDigits(value) {
   if (!value) return "";
   return String(value).replace(/[^\d]/g, "");
 }
 
 export default function FloatingWhatsApp({ whatsapp }) {
+  const pathname = usePathname();
+  if (pathname === "/site/landing") return null;
+
   const digits = toWaDigits(whatsapp);
   if (!digits) return null;
 
@@ -16,15 +22,21 @@ export default function FloatingWhatsApp({ whatsapp }) {
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="fixed bottom-5 right-5 z-50 inline-flex items-center gap-2 rounded-full bg-slate-950 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-slate-900/20 hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
       aria-label="Chat on WhatsApp"
+      className="group fixed bottom-10 right-5 z-50 flex items-center gap-2"
     >
-      <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-base">
-        💬
+      <span className="pointer-events-none max-w-0 overflow-hidden whitespace-nowrap rounded-full bg-slate-900 text-sm font-medium text-white opacity-0 shadow-lg transition-all duration-300 group-hover:max-w-xs group-hover:px-4 group-hover:py-2 group-hover:opacity-100">
+        Chat with us
       </span>
-      <span className="hidden sm:inline">Need help? Chat now</span>
-      <span className="sm:hidden">Chat</span>
+      <span className="flex h-14 w-14 items-center justify-center rounded-full bg-white shadow-xl border border-slate-100 transition-transform duration-300 group-hover:scale-110 active:scale-95">
+        <Image
+          src="/images/icons/whatsappLogo.svg"
+          alt="WhatsApp Icon"
+          width={38}
+          height={38}
+          className="object-contain"
+        />
+      </span>
     </a>
   );
 }
-
