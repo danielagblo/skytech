@@ -50,7 +50,8 @@ function ScrollPill({ scrollRatio, thumbRatio }: { scrollRatio: number; thumbRat
 
 export default function FAQSection({ faqs = DEFAULT_FAQS }: { faqs?: GroupedFAQs }) {
   const categories = Object.keys(faqs);
-  const [activeCategory, setActiveCategory] = useState(categories[0] || "General");
+  const defaultCategory = categories.includes("General") ? "General" : categories[0] || "General";
+  const [activeCategory, setActiveCategory] = useState(defaultCategory);
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   const leftRef = useRef<HTMLDivElement>(null);
