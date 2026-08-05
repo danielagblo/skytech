@@ -58,6 +58,28 @@ export default function InternshipForm() {
         throw new Error("Submission failed");
       }
 
+      try {
+        await fetch("/api/sms/send", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            message: [
+              "New internship application:",
+              `Name: ${formData.fullName}`,
+              `Phone: ${formData.phone}`,
+              `Email: ${formData.email}`,
+              `Program: ${formData.programOffering}`,
+              `Institution: ${formData.institutionType}`,
+              `Level: ${formData.level}`,
+              `Duration: ${formData.duration}`,
+            ].join("\n"),
+            recipients: ["233552892433"],
+          }),
+        });
+      } catch (err) {
+        console.error("Failed to send Arkesel SMS:", err);
+      }
+
       alert("Application submitted successfully!");
       setFormData(EMPTY_FORM);
     } catch (err) {

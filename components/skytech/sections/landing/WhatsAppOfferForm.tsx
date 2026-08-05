@@ -99,6 +99,7 @@ function WhatsAppOfferForm({ packageName, packagePrice, onClose, whatsappNumber 
   const [timeline, setTimeline] = useState<LaunchTimeline | null>(null);
   const [industry, setIndustry] = useState<string | null>(null);
   const [showErrors, setShowErrors] = useState(false);
+  const [sending, setSending] = useState(false);
   const nameRef = useRef<HTMLInputElement | null>(null);
   const phoneRef = useRef<HTMLInputElement | null>(null);
   const meetingRef = useRef<HTMLDivElement | null>(null);
@@ -124,7 +125,7 @@ function WhatsAppOfferForm({ packageName, packagePrice, onClose, whatsappNumber 
     firstInvalidField?.scrollIntoView({ behavior: "smooth", block: "center" });
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!isValid) {
       setShowErrors(true);
       scrollToFirstInvalidField();
@@ -143,6 +144,23 @@ function WhatsAppOfferForm({ packageName, packagePrice, onClose, whatsappNumber 
     ].filter(Boolean);
 
     const message = lines.join("\n");
+
+    setSending(true);
+    try {
+      await fetch("/api/sms/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          message,
+          recipients: [whatsappNumber],
+        }),
+      });
+    } catch (error) {
+      console.error("Failed to send Arkesel SMS:", error);
+    } finally {
+      setSending(false);
+    }
+
     window.open(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`, "_blank");
     onClose();
   };
@@ -240,12 +258,12 @@ function WhatsAppOfferForm({ packageName, packagePrice, onClose, whatsappNumber 
         <button
           type="button"
           onClick={handleSubmit}
-          disabled={!isValid}
+          disabled={!isValid || sending}
           className={`flex-[2] rounded-lg py-3 font-semibold text-white transition-colors ${
-            isValid ? "bg-emerald-600 hover:bg-emerald-700" : "cursor-not-allowed bg-emerald-300 text-white/80"
+            isValid && !sending ? "bg-emerald-600 hover:bg-emerald-700" : "cursor-not-allowed bg-emerald-300 text-white/80"
           }`}
         >
-          Open on What&apos;s App
+          {sending ? "Sending..." : "Open on What&apos;s App"}
         </button>
       </div>
     </div>

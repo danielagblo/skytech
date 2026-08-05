@@ -48,6 +48,25 @@ export default function ContactForm() {
 
       if (!response.ok) throw new Error("Submission failed");
 
+      try {
+        await fetch("/api/sms/send", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            message: [
+              "New contact message:",
+              `Name: ${formData.fullName}`,
+              `Phone: ${formData.phone}`,
+              `Email: ${formData.email}`,
+              `Message: ${formData.message}`,
+            ].join("\n"),
+            recipients: ["233552892433"],
+          }),
+        });
+      } catch (err) {
+        console.error("Failed to send Arkesel SMS:", err);
+      }
+
       alert("Message sent!");
 
       setFormData({
