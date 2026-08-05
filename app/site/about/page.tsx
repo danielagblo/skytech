@@ -6,7 +6,7 @@ import AwardsStatement from "@/components/skytech/sections/AwardsStatement";
 
 function AboutPage() {
   return (
-    <div className="text-xl">
+    <div className="text-xl overflow-x-hidden">
       <Image
         src="/images/images/AboutBanner.png"
         alt="About Us"
