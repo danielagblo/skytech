@@ -36,7 +36,7 @@ function Footer({ latestPosts = [], sponsors = [], whatsapp, className }: Footer
     <div className={className ?? ""}>
       <div className="max-md:flex max-md:flex-col-reverse max-md:mt-6 max-md:items-center max-md:gap-6 grid grid-cols-3 px-4 gap-4 bg-[#f9f9f9]">
         <div className="flex flex-row flex-wrap items-center justify-start gap-x-2 max-md:hidden">
-          {sponsors.map((sponsor, index) => (
+          {sponsors.slice(0, 5).map((sponsor, index) => (
             <div key={`${sponsor.name}-${index}`} className={`${sponsorSizes[index % sponsorSizes.length]} shrink-0`}>
               {sponsor.logoUrl && (
                 <Image
