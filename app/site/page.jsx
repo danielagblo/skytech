@@ -141,15 +141,7 @@ export default async function Home() {
             </div>
             <div className="space-y-2">
               <p className="text-[#000] font-inter text-5xl md:text-7xl font-semibold tracking-tighter">
-                <AnimatedCounter
-                  value={1000}
-                  suffix="+"
-                  format={(n) =>
-                    n >= 1000
-                      ? `${n % 1000 === 0 ? n / 1000 : (n / 1000).toFixed(1)}k`
-                      : `${n}`
-                  }
-                />
+                <AnimatedCounter value={1000} suffix="+" compact />
               </p>
               <p className="text-[#000] font-inter text-sm font-bold tracking-[0.2em] uppercase text-slate-500">PROJECTS COMPLETED</p>
             </div>

@@ -5,13 +5,13 @@ import { useEffect, useRef, useState } from "react";
 export default function AnimatedCounter({
   value,
   suffix = "",
-  format,
+  compact = false,
   duration = 1800,
   className = "",
 }: {
   value: number;
   suffix?: string;
-  format?: (n: number) => string;
+  compact?: boolean;
   duration?: number;
   className?: string;
 }) {
@@ -45,7 +45,11 @@ export default function AnimatedCounter({
     return () => observer.disconnect();
   }, [value, duration]);
 
-  const text = format ? format(display) : display.toString();
+  const text = compact
+    ? display >= 1000
+      ? `${display % 1000 === 0 ? display / 1000 : (display / 1000).toFixed(1)}k`
+      : `${display}`
+    : display.toString();
 
   return (
     <span ref={ref} className={className}>
