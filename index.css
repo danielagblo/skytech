@@ -1,6 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Londrina+Outline&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
 
 * {
   margin: 0;
@@ -10,17 +14,14 @@
 
 html {
   text-rendering: geometricPrecision;
-  font-size: 18.5px;
+  font-size: 16px;
+  scroll-behavior: smooth;
 }
 
 body {
-  font-family: "Outfit", "Manrope", "Inter", system-ui, -apple-system, sans-serif;
+  font-family: "Inter", "Outfit", "Manrope", system-ui, -apple-system, sans-serif;
   color: #0f172a;
-  background:
-    radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.07), transparent 34%),
-    radial-gradient(circle at 80% 0%, rgba(56, 189, 248, 0.06), transparent 30%),
-    radial-gradient(circle at 50% 90%, rgba(99, 102, 241, 0.05), transparent 34%),
-    #f8fafc;
+  background: #ffffff;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -35,12 +36,14 @@ a {
   background: rgba(59, 130, 246, 0.25);
 }
 
+/* ===== UTILITY CLASSES ===== */
+
 .focus-ring {
   @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2;
 }
 
 .section-shell {
-  @apply max-w-6xl mx-auto px-4 md:px-6;
+  @apply max-w-7xl mx-auto px-5 sm:px-6 lg:px-8;
 }
 
 .glass-panel {
@@ -48,32 +51,208 @@ a {
 }
 
 .pill {
-  @apply inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] bg-white/80 text-blue-700 border border-blue-100;
+  @apply inline-flex items-center rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-[0.15em] bg-blue-50 text-blue-600 border border-blue-100;
 }
 
 .btn-primary {
-  @apply inline-flex items-center justify-center rounded-2xl bg-blue-600 px-6 py-3 font-semibold text-white shadow-lg shadow-blue-600/25 transition hover:-translate-y-0.5 hover:bg-blue-700 active:translate-y-0;
+  @apply inline-flex items-center justify-center rounded-full bg-blue-600 px-7 py-3.5 font-semibold text-white shadow-lg shadow-blue-600/25 transition-all duration-300 hover:-translate-y-0.5 hover:bg-blue-700 hover:shadow-xl active:translate-y-0;
 }
 
 .btn-secondary {
-  @apply inline-flex items-center justify-center rounded-2xl border border-blue-200 px-6 py-3 font-semibold text-blue-700 transition hover:-translate-y-0.5 hover:border-blue-300 hover:bg-blue-50 active:translate-y-0;
+  @apply inline-flex items-center justify-center rounded-full border-2 border-slate-200 px-7 py-3.5 font-semibold text-slate-700 transition-all duration-300 hover:-translate-y-0.5 hover:border-blue-300 hover:text-blue-700 hover:bg-blue-50 active:translate-y-0;
 }
+
+.btn-dark {
+  @apply inline-flex items-center justify-center rounded-full bg-slate-900 px-7 py-3.5 font-semibold text-white shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:bg-slate-800 active:translate-y-0;
+}
+
+/* ===== ANIMATIONS ===== */
 
 @keyframes marquee {
   0% {
     transform: translateX(0);
   }
+
   100% {
     transform: translateX(-50%);
   }
 }
 
 .animate-marquee {
-  animation: marquee 28s linear infinite;
+  animation: marquee 30s linear infinite;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.7s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-slide-in-left {
+  animation: slideInLeft 0.6s ease-out forwards;
+}
+
+@keyframes pulse-soft {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.animate-pulse-soft {
+  animation: pulse-soft 3s ease-in-out infinite;
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+/* ===== SCROLLBAR ===== */
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Scrollbar none for nav tabs */
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+/* ===== HERO STRIPES BACKGROUND ===== */
+
+.hero-stripes {
+  background: repeating-linear-gradient(90deg,
+      #0f172a 0px,
+      #0f172a 60px,
+      #1e293b 60px,
+      #1e293b 120px);
+}
+
+/* ===== CARD HOVER EFFECTS ===== */
+
+.card-hover {
+  @apply transition-all duration-500 hover:-translate-y-1 hover:shadow-xl;
+}
+
+/* ===== GRADIENT TEXT ===== */
+
+.gradient-text {
+  @apply bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent;
+}
+
+/* ===== SKYTECH FRONTEND (ported from danielagblo/skytech) ===== */
+
+.font-outline {
+  font-family: "Londrina Outline", sans-serif;
+}
+
+.subtitle {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 0.4rem;
+  margin-top: -7px;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.wrap-break-word {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+@keyframes sponsor-scroll {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-sponsor-scroll {
+  animation: sponsor-scroll 60s linear infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .animate-marquee {
+
+  .animate-marquee,
+  .animate-fade-in-up,
+  .animate-fade-in,
+  .animate-slide-in-left,
+  .animate-float,
+  .animate-pulse-soft,
+  .animate-sponsor-scroll {
     animation: none !important;
   }
 }

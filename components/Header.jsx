@@ -5,166 +5,122 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 
-export default function Header({ siteName = "Skytech Ghana" }) {
+export default function Header({ siteName = "SKYTECH GHANA" }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
-  const isHome = pathname === '/site';
 
+  // Lock body scroll when mobile menu is open
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [isOpen]);
 
   const nav = [
     { href: "/site", label: "Home" },
     { href: "/site/about", label: "About" },
-    { href: "/site/services", label: "Services" },
-    { href: "/site/case-studies", label: "Case Studies" },
+    { href: "/site/services", label: "Web-Solutions" },
+    { href: "/site/services/security-systems", label: "Security-Systems" },
     { href: "/site/pricing", label: "Pricing" },
-    { href: "/site/blog", label: "Blog" },
-    { href: "/site/gallery", label: "Gallery" },
-    { href: "/site/faqs", label: "FAQs" },
     { href: "/site/internship", label: "Internship" },
+    { href: "/site/contact", label: "Contact" },
   ];
 
   const isActive = (href) => pathname === href;
+  const isHome = pathname === '/site';
 
   return (
-    <header
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${(isScrolled || isOpen)
-        ? "bg-white border-b border-slate-200/60 shadow-lg py-2"
-        : "bg-transparent py-6"
-        }`}
-    >
-      <nav className="max-w-[1600px] mx-auto px-6 lg:px-12 flex items-center justify-between">
-        {/* Logo */}
-        <div className="flex-shrink-0 w-24 lg:w-32 h-10 flex items-center relative">
-          <Link href="/site" className="absolute top-1/2 -translate-y-1/2 left-0 focus-ring rounded-xl group z-[60]">
-            <div className={`relative transition-all duration-500 group-hover:scale-110 ${(isScrolled || isOpen) ? "h-20 w-20" : "h-32 w-32"}`}>
-              <Image
-                src={(isHome && !isScrolled) ? "/try1.png" : "/try.png"}
-                alt={`${siteName} logo`}
-                fill
-                className="object-contain drop-shadow-sm"
-                priority
-              />
-            </div>
-          </Link>
+    <header className="w-full z-50 relative bg-black">
+      {/* Top Banner Ticker - ONLY on Home page */}
+      {isHome && (
+        <div className="bg-[#000] w-full h-[65px] flex items-center overflow-hidden whitespace-nowrap border-b border-white/5">
+          <div className="animate-marquee inline-block text-[#FFF] font-inter text-lg md:text-xl tracking-[-0.06em] px-4">
+            We help you rank no #1 on Google. Digital Business Development Solutions. Enterprise Security IT Services Risk Reduction, 100% Transparency. &nbsp;&nbsp;&nbsp;&nbsp; We help you rank no #1 on Google. Digital Business Development Solutions. Enterprise Security IT Services Risk Reduction, 100% Transparency.
+          </div>
         </div>
+      )}
+
+      <nav className="max-w-[1600px] mx-auto px-6 py-3 flex items-center justify-between">
+        {/* Logo block */}
+        <Link href="/site" className="flex items-center gap-3 group z-[60]">
+          <div className="relative h-10 w-10">
+            <Image
+              src="/try1.png"
+              alt="SKYTECH GHANA logo"
+              fill
+              className="object-contain"
+              priority
+            />
+          </div>
+          <span className="text-white font-inter text-xl font-bold tracking-wider uppercase">
+            SKYTECH GHANA
+          </span>
+        </Link>
 
         {/* Desktop Menu */}
-        <div className="hidden lg:flex items-center gap-2 text-sm font-semibold">
+        <div className="hidden lg:flex items-center gap-6 font-inter text-sm font-semibold">
           {nav.map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              className={[
-                "px-3 py-2 rounded-xl transition-all duration-300 focus-ring",
-                isActive(item.href)
-                  ? (isHome && !isScrolled ? "text-white bg-white/10" : "text-blue-700 bg-blue-50")
-                  : (isHome && !isScrolled ? "text-white/80 hover:text-white hover:bg-white/10" : "text-slate-700 hover:text-blue-700 hover:bg-slate-50"),
-              ].join(" ")}
+              className={`text-white transition-colors duration-300 py-1 border-b-2 hover:text-white/80 ${
+                isActive(item.href) ? "border-white" : "border-transparent"
+              }`}
             >
               {item.label}
             </Link>
           ))}
         </div>
 
-        <div className="flex items-center gap-2">
-          {/* CTA Button - Hidden on Mobile/Tablet for cleaner look */}
-          <div className="hidden lg:inline-flex">
-            <Link
-              href="/site/contact"
-              className="btn-primary px-6 py-2.5 text-sm rounded-2xl focus-ring whitespace-nowrap"
-            >
-              Talk to us
-            </Link>
-          </div>
-
-          {/* Mobile Menu Button */}
-          <button
-            aria-label="Toggle navigation menu"
-            className="lg:hidden group flex flex-col items-end space-y-1.5 focus-ring rounded-xl p-2 transition-colors hover:bg-black/5"
-            onClick={() => setIsOpen(!isOpen)}
-          >
-            <span className={`h-0.5 rounded-full transition-all duration-300 ${isHome && !isScrolled && !isOpen ? 'bg-white' : 'bg-slate-900'} ${isOpen ? 'w-7 rotate-45 translate-y-2' : 'w-7'}`}></span>
-            <span className={`h-0.5 rounded-full transition-all duration-300 ${isHome && !isScrolled && !isOpen ? 'bg-white' : 'bg-slate-900'} ${isOpen ? 'opacity-0' : 'w-5'}`}></span>
-            <span className={`h-0.5 rounded-full transition-all duration-300 ${isHome && !isScrolled && !isOpen ? 'bg-white' : 'bg-slate-900'} ${isOpen ? 'w-7 -rotate-45 -translate-y-2' : 'w-7'}`}></span>
-          </button>
-        </div>
+        {/* Mobile Menu Toggle */}
+        <button
+          aria-label="Toggle navigation menu"
+          className="lg:hidden flex flex-col items-center justify-center w-10 h-10 rounded-full focus-ring"
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          <span className={`h-0.5 w-6 bg-white transition-all duration-300 ${isOpen ? 'rotate-45 translate-y-1' : 'mb-1.5'}`} />
+          <span className={`h-0.5 w-6 bg-white transition-all duration-300 ${isOpen ? 'opacity-0 w-0' : ''}`} />
+          <span className={`h-0.5 w-6 bg-white transition-all duration-300 ${isOpen ? '-rotate-45 -translate-y-1' : 'mt-1.5'}`} />
+        </button>
       </nav>
 
       {/* Mobile Menu Overlay */}
-      {isOpen && (
-        <div className="lg:hidden fixed inset-0 bg-white z-[60] flex flex-col p-4 animate-in fade-in slide-in-from-top duration-300">
-          {/* Menu Header (Logo + Close) */}
-          <div className="flex items-center justify-between py-2 mb-8">
-            <Link href="/site" className="flex items-center gap-3" onClick={() => setIsOpen(false)}>
-              <span className="relative h-8 w-8 bg-slate-950 rounded-xl overflow-hidden ring-1 ring-slate-900/10">
-                <Image
-                  src={(isHome && !isScrolled) ? "/try1.png" : "/try.png"}
-                  alt={`${siteName} logo`}
-                  fill
-                  className="object-contain p-1.5"
-                />
-              </span>
-              <span className="text-slate-900 text-lg font-extrabold tracking-tight whitespace-nowrap">
-                {siteName}
-              </span>
-            </Link>
+      <div className={`lg:hidden fixed inset-0 bg-black z-[55] transition-all duration-500 ${
+        isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+      }`}>
+        <div className="flex flex-col h-full pt-24 pb-8 px-6 text-center space-y-6">
+          {/* Close Button */}
+          <button
+            onClick={() => setIsOpen(false)}
+            className="absolute top-5 right-5 p-3 rounded-full bg-slate-900 text-white hover:bg-slate-800 transition-colors"
+            aria-label="Close menu"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
 
-            <button
-              onClick={() => setIsOpen(false)}
-              className="p-3 bg-slate-50 rounded-2xl text-slate-900 active:scale-90 transition-all"
-              aria-label="Close menu"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <line x1="18" y1="6" x2="6" y2="18"></line>
-                <line x1="6" y1="6" x2="18" y2="18"></line>
-              </svg>
-            </button>
-          </div>
-
-          {/* Menu Links */}
-          <div className="flex-1 overflow-y-auto space-y-2 pb-10">
-            {nav.map((item, index) => (
+          {/* Links */}
+          <div className="flex flex-col space-y-4">
+            {nav.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className={[
-                  "block px-4 py-4 rounded-2xl transition-all duration-300",
-                  isActive(item.href)
-                    ? "text-blue-700 bg-blue-50/80 font-bold text-xl"
-                    : "text-slate-800 hover:bg-slate-50 text-xl font-medium",
-                ].join(" ")}
-                style={{ animationDelay: `${index * 50}ms` }}
+                className={`text-xl font-medium py-3 text-white transition-all ${
+                  isActive(item.href) ? "font-bold text-blue-400" : ""
+                }`}
                 onClick={() => setIsOpen(false)}
               >
                 {item.label}
               </Link>
             ))}
-
-            <div className="pt-8 mt-4 border-t border-slate-100">
-              <Link
-                href="/site/contact"
-                className="block btn-primary text-center px-6 py-5 rounded-2xl shadow-xl shadow-blue-600/10 active:scale-[0.98] transition-all text-lg"
-                onClick={() => setIsOpen(false)}
-              >
-                Talk to us
-              </Link>
-            </div>
-          </div>
-
-          {/* Footer Info in Menu */}
-          <div className="py-6 border-t border-slate-50 text-center">
-            <p className="text-slate-400 text-sm font-medium">Engineering Ghana's Digital Future</p>
           </div>
         </div>
-      )}
+      </div>
     </header>
   );
 }

@@ -107,3 +107,41 @@ export async function DELETE(request: NextRequest) {
     );
   }
 }
+
+export async function PATCH(request: NextRequest) {
+  try {
+    await dbConnect();
+    const { id, enrolled } = await request.json();
+
+    if (!id) {
+      return NextResponse.json(
+        { error: "Submission ID is required" },
+        { status: 400, headers: corsHeaders },
+      );
+    }
+
+    const updated = await InternshipSubmission.findByIdAndUpdate(
+      id,
+      { $set: { enrolled: Boolean(enrolled) } },
+      { new: true },
+    );
+
+    if (!updated) {
+      return NextResponse.json(
+        { error: "Submission not found" },
+        { status: 404, headers: corsHeaders },
+      );
+    }
+
+    return NextResponse.json(
+      { success: true, enrolled: updated.enrolled },
+      { headers: corsHeaders },
+    );
+  } catch (error) {
+    console.error("Failed to update submission:", error);
+    return NextResponse.json(
+      { error: "Failed to update submission: " + String(error) },
+      { status: 500, headers: corsHeaders },
+    );
+  }
+}

@@ -1,114 +1,51 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useRef } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useState } from 'react';
 
-if (typeof window !== 'undefined') {
-  gsap.registerPlugin(ScrollTrigger);
-}
+export default function TestimonialsSection({ testimonials }: { testimonials: Array<{ name?: string; message?: string; text?: string; content?: string; role?: string; company?: string }> }) {
+  const [activeIndex, setActiveIndex] = useState(0);
 
-interface Testimonial {
-  _id: string;
-  quote: string;
-  author: string;
-  company: string;
-  rating?: number;
-}
-
-export default function TestimonialsSection({ testimonials }: { testimonials: Testimonial[] }) {
-  const [showAll, setShowAll] = useState(false);
-  const sectionRef = useRef<HTMLDivElement>(null);
-
-  const displayedTestimonials = showAll ? testimonials : testimonials.slice(0, 3);
-
-  useEffect(() => {
-    const el = sectionRef.current;
-    if (!el) return;
-
-    const cards = el.querySelectorAll('.testimonial-card');
-    const headerItems = el.querySelectorAll('.testimonials-header > *');
-
-    // Set initial states dynamically
-    gsap.set(cards, { opacity: 0, y: 30 });
-    gsap.set(headerItems, { opacity: 0, y: 35 });
-
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: el,
-        start: 'top bottom-=150px',
-        toggleActions: 'play none none none',
-      }
-    });
-
-    tl.to(headerItems, { opacity: 1, y: 0, duration: 0.5, stagger: 0.08, ease: 'power3.out' })
-      .to(cards, { opacity: 1, y: 0, duration: 0.5, stagger: 0.08, ease: 'power2.out' }, '-=0.25');
-
-    return () => {
-      ScrollTrigger.getAll().forEach(t => t.kill());
-    };
-  }, [showAll]);
+  if (!testimonials || testimonials.length === 0) return null;
 
   return (
-    <section ref={sectionRef} className="py-20 bg-white">
-      <div className="section-shell space-y-10">
-        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4 testimonials-header">
-          <div className="space-y-3">
-            <span className="pill">Client outcomes</span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900">
-              What partners say about us
-            </h2>
-            <p className="text-slate-600 max-w-2xl">
-              We build long-term partnerships anchored on transparency, speed,
-              and quality.
-            </p>
-          </div>
-          {!showAll && testimonials.length > 3 && (
-            <button
-              onClick={() => setShowAll(true)}
-              className="btn-secondary w-fit"
-            >
-              View all testimonials
-            </button>
-          )}
+    <section className="py-24 bg-white">
+      <div className="section-shell space-y-16">
+        <div className="text-center max-w-3xl mx-auto space-y-4">
+          <span className="pill">Testimonials</span>
+          <h2 className="text-4xl sm:text-5xl font-bold text-slate-900 leading-tight tracking-tight">
+            What Our Partners Say
+          </h2>
+          <p className="text-lg text-slate-600">
+            Real feedback from real clients we&apos;ve worked with.
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {displayedTestimonials.map((item) => (
+        {/* Testimonial Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {testimonials.slice(0, 6).map((testimonial, idx) => (
             <div
-              key={item._id}
-              className="rounded-3xl border border-slate-100 bg-slate-50 p-6 shadow-sm hover:shadow-md transition-shadow testimonial-card"
+              key={idx}
+              className="relative p-8 rounded-3xl bg-slate-50 border border-slate-100 hover:shadow-xl hover:bg-white transition-all duration-500"
             >
-              <p className="text-slate-700 leading-relaxed mb-6 italic">
-                "{item.quote}"
+              {/* Quote mark */}
+              <div className="text-blue-200 text-6xl font-serif leading-none mb-4">&ldquo;</div>
+
+              <p className="text-slate-600 leading-relaxed mb-6 text-sm">
+                {testimonial.message || testimonial.text || testimonial.content}
               </p>
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="font-semibold text-slate-900">
-                    {item.author}
-                  </p>
-                  <p className="text-sm text-slate-500">{item.company}</p>
+
+              <div className="flex items-center gap-3 pt-4 border-t border-slate-100">
+                <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-sm">
+                  {(testimonial.name || "C")[0].toUpperCase()}
                 </div>
-                <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-blue-700 border border-slate-100">
-                  {Array(item.rating || 5)
-                    .fill("⭐")
-                    .join("")}
-                </span>
+                <div>
+                  <p className="font-semibold text-slate-900 text-sm">{testimonial.name || "Client"}</p>
+                  <p className="text-xs text-slate-500">{testimonial.role || testimonial.company || ""}</p>
+                </div>
               </div>
             </div>
           ))}
         </div>
-
-        {showAll && (
-          <div className="text-center pt-8">
-            <button
-              onClick={() => setShowAll(false)}
-              className="text-blue-600 font-bold text-sm hover:underline"
-            >
-              Show less
-            </button>
-          </div>
-        )}
       </div>
     </section>
   );

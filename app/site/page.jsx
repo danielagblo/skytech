@@ -2,25 +2,44 @@ import React from "react";
 export const dynamic = 'force-dynamic';
 import Link from "next/link";
 import Image from "next/image";
-import { getHeroData } from '../lib/hero';
-import { getSettings, DEFAULT_SETTINGS } from '../lib/settings';
+import { getSettings } from '../lib/settings';
+import { getPricing } from '../lib/pricing';
 import { getAffiliates } from '../lib/affiliates';
 import { getTestimonials } from '../lib/testimonials';
-import { getPricing } from '../lib/pricing';
 import { getBlogPosts } from '../admin/blog-actions';
-import { getProjects } from '../lib/projects';
 import { getFAQs } from '../lib/faqs';
 
-import FreeAuditForm from "../../components/FreeAuditForm";
-import AnimatedHero from "../../components/AnimatedHero";
-import HeroSlideshow from "../../components/HeroSlideshow";
-import AnimatedStats from "../../components/AnimatedStats";
-import FAQAccordion from "../../components/FAQAccordion";
-import TestimonialsSection from "../../components/TestimonialsSection";
-import WhyChooseUsSection from "../../components/WhyChooseUsSection";
-import EngineeringDistinction from "../../components/EngineeringDistinction";
-import AnimatedPricing from "../../components/AnimatedPricing";
-import LatestInsights from "../../components/LatestInsights";
+import WhyYouNeedUs from "../../components/skytech/sections/WhyYouNeedUs";
+import FAQSection from "../../components/skytech/sections/FAQ";
+import { groupFAQs } from "../../components/skytech/sections/faqGroup";
+import LetsTalkButton from "../../components/skytech/ui/LetsTalkButton";
+import PricingModel from "../../components/skytech/sections/PricingModel";
+import TestimonialsBanner from "../../components/skytech/sections/home/TestimonialsBanner";
+import TopScrollingBanner from "../../components/skytech/sections/home/TopScrollingBanner";
+
+const services = [
+  {
+    title: "website development",
+    list: ["corporate business", "e-commerce", "blog content", "e-learning"],
+    href: "/site/services",
+  },
+  {
+    title: "mobile app development",
+    list: ["corporate business", "e-commerce", "blog content", "e-learning"],
+    href: "/site/services",
+  },
+  {
+    title: "IT installations",
+    list: [
+      "POS (Point of Sale) systems",
+      "Wi-Fi Network Connection",
+      "CCTV surveillance systems",
+      "inverter & solar panel",
+      "door and alarm installation",
+    ],
+    href: "/site/services/security-systems",
+  },
+];
 
 export const metadata = {
   title: "Skytech Ghana - Website & Mobile App Developers",
@@ -28,293 +47,255 @@ export const metadata = {
     "Skytech Ghana builds websites and mobile apps for businesses in Ghana. Web design, SEO, and maintenance services.",
 };
 
-const stats = [
-  { label: "Years in business", value: "10+" },
-  { label: "Satisfied clients", value: "100+" },
-  { label: "Projects delivered", value: "150+" },
-  { label: "Countries served", value: "03+" },
-];export default async function Home() {
-  const heroData = await getHeroData();
-  const pricingData = await getPricing();
-  const webPricing = pricingData.find(c => c.category === 'web') || { packages: [] };
-  const pricing = webPricing.packages.slice(0, 3); // Get first 3 packages
-
+export default async function Home() {
+  const settings = await getSettings();
   const testimonialsData = await getTestimonials();
   const testimonials = testimonialsData.length > 0 ? testimonialsData : [];
-
-
-  const settings = await getSettings();
-  const pricingBookletUrl = settings.pricingBookletUrl || "/static/pricing.pdf";
-
-
   const allPosts = await getBlogPosts();
   const latestPosts = allPosts.filter(p => p.published).slice(0, 3);
-
-  const projects = await getProjects();
-  const galleryProjects = projects.slice(0, 3);
-
   const faqs = await getFAQs();
-
-  const hero = {
-    title: "We build websites & apps that grow your business.",
-    subtitle: "Website & App Development Company in Ghana",
-    imageUrl: heroData?.imageUrl || "/images/hero-3.png"
-  };
-
   const partnersData = await getAffiliates();
   const allPartners = (partnersData || []).filter((p) => p?.logoUrl || p?.name);
+  const pricing = await getPricing();
 
   return (
-    <>
-      <AnimatedHero
-        imageUrl={hero.imageUrl}
-        title={hero.title}
-        subtitle={hero.subtitle}
-      />
+    <div className="bg-[#FFF] min-w-screen min-h-screen overflow-x-hidden relative">
+      {/* Top Scrolling Banner */}
+      <div className="md:fixed top-0 w-screen z-20">
+        <TopScrollingBanner />
+      </div>
 
-      {/* Affiliate Network (Dynamic Marquee) */}
-      {allPartners.length > 0 && (
-        <section className="relative bg-white py-12 border-b border-slate-100 overflow-hidden">
-          {/* Corner Badge */}
-          <div className="absolute top-0 left-0 bg-blue-600 text-white px-5 py-2 text-[11px] font-extrabold uppercase tracking-[0.2em] shadow-lg z-10 rounded-br-lg">
-            Our Partners
-          </div>
+      {/* Hero Section */}
+      <div className="relative w-full h-[50vh] min-h-[400px] bg-black overflow-hidden">
+        <Image
+          src="/images/images/homePageBannerImage.png"
+          fill
+          className="object-cover opacity-50"
+          alt="Background"
+          priority
+        />
+        
+        <div className="absolute inset-0 bg-gradient-to-r from-black/80 to-transparent z-10" />
 
-          <div className="relative flex items-center">
-            {/* Marquee Container */}
-            <div className="flex w-full overflow-hidden">
-              <div className="flex animate-marquee items-center gap-16 whitespace-nowrap py-4">
-                {[...Array(3)].map((_, i) => (
-                  <React.Fragment key={i}>
-                    {allPartners.map((partner, idx) => (
-                      <div key={`${i}-${idx}`} className="flex-shrink-0">
-                        <Image
-                          src={partner.logoUrl}
-                          alt={partner.name || "Partner Logo"}
-                          width={160}
-                          height={80}
-                          className="h-10 sm:h-12 w-auto object-contain"
-                        />
-                      </div>
-                    ))}
-                  </React.Fragment>
-                ))}
-              </div>
-            </div>
+        <div className="section-shell relative z-10 h-full flex flex-col justify-center text-white space-y-6">
+          <span className="text-[#FFF] font-inter text-5xl md:text-6xl font-bold tracking-wider uppercase">
+            8+ YEARS IN OPERATION
+          </span>
 
-            {/* Gradient Overlays for smooth edges */}
-            <div className="pointer-events-none absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-white to-transparent z-10" />
-            <div className="pointer-events-none absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-white to-transparent z-10" />
-          </div>
-        </section>
-      )}
+          <p className="text-[#FFF] font-inter text-lg md:text-xl max-w-2xl opacity-90 leading-relaxed">
+            FOR WEBSITE, MOBILE APP DEVELOPMENT AND IT INSTALLATIONS
+          </p>
 
-      {/* Animated Stats Bar */}
-      <AnimatedStats stats={stats} />
-
-      {/* Digital Distinction & Technical Honor */}
-      <EngineeringDistinction />
-
-      {/* Pricing booklet */}
-      <AnimatedPricing pricing={pricing} />
-
-
-      {/* Gallery Bento Grid */}
-      {galleryProjects.length >= 3 && (
-        <section className="py-24 bg-slate-50">
-          <div className="section-shell space-y-16">
-            <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8">
-              <div className="space-y-4 max-w-2xl">
-                <span className="pill">Portfolio</span>
-                <h2 className="text-4xl sm:text-5xl font-extrabold text-slate-900 leading-tight">
-                  Recent Projects
-                </h2>
-                <p className="text-lg text-slate-600">
-                  A selection of websites and apps we've built for our clients.
-                </p>
-              </div>
-              <Link className="btn-secondary px-8 py-3 rounded-full" href="/site/gallery">
-                View full gallery
-              </Link>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 md:grid-rows-2 gap-6 h-[800px] md:h-[600px]">
-              <div className="md:col-span-2 md:row-span-2 relative group overflow-hidden rounded-[2.5rem] bg-slate-900">
-                {galleryProjects[0].image ? (
-                  <Image
-                    src={galleryProjects[0].image}
-                    alt={galleryProjects[0].title}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-700"
-                  />
-                ) : (
-                  <div className="absolute inset-0 flex items-center justify-center text-slate-800 font-extrabold text-2xl uppercase tracking-[0.2em] -rotate-12 opacity-5">Project Featured</div>
-                )}
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/20 to-transparent z-10" />
-                <div className="absolute bottom-0 left-0 right-0 p-10 z-20">
-                  <span className="pill bg-blue-600 text-white border-none mb-4">{galleryProjects[0].category}</span>
-                  <h3 className="text-3xl font-extrabold text-white">{galleryProjects[0].title}</h3>
-                </div>
-              </div>
-
-              <div className="relative group overflow-hidden rounded-[2.5rem] bg-slate-200">
-                {galleryProjects[1].image && (
-                  <Image
-                    src={galleryProjects[1].image}
-                    alt={galleryProjects[1].title}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-700"
-                  />
-                )}
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent z-10" />
-                <div className="absolute bottom-0 left-0 right-0 p-6 z-20">
-                  <span className="text-[10px] font-bold text-white/80 uppercase tracking-widest mb-1 block">{galleryProjects[1].category}</span>
-                  <h3 className="text-lg font-bold text-white">{galleryProjects[1].title}</h3>
-                </div>
-              </div>
-
-              <div className="relative group overflow-hidden rounded-[2.5rem] bg-blue-600">
-                {galleryProjects[2].image && (
-                  <Image
-                    src={galleryProjects[2].image}
-                    alt={galleryProjects[2].title}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-700"
-                  />
-                )}
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent z-10" />
-                <div className="absolute bottom-0 left-0 right-0 p-6 z-20">
-                  <span className="text-[10px] font-bold text-white/80 uppercase tracking-widest mb-1 block">{galleryProjects[2].category}</span>
-                  <h3 className="text-lg font-bold text-white">{galleryProjects[2].title}</h3>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
-
-
-
-      {/* Testimonials */}
-      {testimonials?.length > 0 && (
-        <TestimonialsSection testimonials={testimonials} />
-      )}
-
-
-
-
-      {/* FAQ Section */}
-      <section className="py-24 bg-white relative overflow-hidden">
-        <div className="section-shell space-y-16">
-          <div className="text-center space-y-4 max-w-3xl mx-auto">
-            <span className="pill">Support</span>
-            <h2 className="text-4xl sm:text-5xl font-extrabold text-slate-900 leading-tight tracking-tight">
-              Frequently Asked Questions
-            </h2>
-            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-              Got questions about our services, pricing, or process? We've got answers.
-            </p>
-          </div>
-
-          <FAQAccordion faqs={faqs} />
-
-          <div className="text-center">
-            <Link href="/site/faqs" className="group inline-flex items-center gap-2 text-sm font-extrabold uppercase tracking-widest text-blue-600 hover:gap-3 transition-all">
-              Full FAQ Center
-              <svg className="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
+          <div className="flex gap-4">
+            <Link href="/site/contact" className="bg-[#1E5AC8] hover:bg-blue-700 text-white font-inter text-base font-bold px-8 py-3.5 transition-all">
+              BOOK A MEETING
             </Link>
+            <Link href="/site/pricing" className="bg-white hover:bg-slate-100 text-black font-inter text-base font-bold px-8 py-3.5 transition-all">
+              PRICING
+            </Link>
+          </div>
+        </div>
+
+        {/* Floating Award Trophy Graphic */}
+        <div className="absolute right-10 bottom-8 z-10 hidden lg:flex flex-col items-center gap-2">
+          <div className="flex items-end gap-3 h-48">
+            <div className="relative w-20 h-28">
+              <Image
+                src="/images/images/homePageAward2.png"
+                fill
+                className="object-contain"
+                alt="AWARD-EXCELLENCE 1"
+              />
+            </div>
+            <div className="relative w-36 h-44">
+              <Image
+                src="/images/images/homePageAward.png"
+                fill
+                className="object-contain"
+                alt="NEWNEWAWARD 1"
+              />
+            </div>
+          </div>
+          <p className="text-[#FFF] font-inter text-base font-bold tracking-[0.1em] uppercase">
+            2+ TOP AWARDS
+          </p>
+        </div>
+      </div>
+
+      {/* Key Stats Counter Grid */}
+      <section className="bg-[#FDFDFD] border-y border-slate-200 py-12">
+        <div className="section-shell">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
+            <div className="space-y-2">
+              <p className="text-[#000] font-inter text-5xl md:text-7xl font-semibold tracking-tighter">8+</p>
+              <p className="text-[#000] font-inter text-sm font-bold tracking-[0.2em] uppercase text-slate-500">YEARS IN OPERATION</p>
+            </div>
+            <div className="space-y-2">
+              <p className="text-[#000] font-inter text-5xl md:text-7xl font-semibold tracking-tighter">8+</p>
+              <p className="text-[#000] font-inter text-sm font-bold tracking-[0.2em] uppercase text-slate-500">SATISFIED CUSTOMERS</p>
+            </div>
+            <div className="space-y-2">
+              <p className="text-[#000] font-inter text-5xl md:text-7xl font-semibold tracking-tighter">1k+</p>
+              <p className="text-[#000] font-inter text-sm font-bold tracking-[0.2em] uppercase text-slate-500">PROJECTS COMPLETED</p>
+            </div>
+            <div className="space-y-2">
+              <p className="text-[#000] font-inter text-5xl md:text-7xl font-semibold tracking-tighter">4+</p>
+              <p className="text-[#000] font-inter text-sm font-bold tracking-[0.2em] uppercase text-slate-500">COUNTRIES SERVED</p>
+            </div>
           </div>
         </div>
       </section>
 
-      <LatestInsights latestPosts={latestPosts} />
-    </>
-  );
-}
+      {/* Sponsors Brand Marquee */}
+      <section className="py-16 bg-[#FFF] border-b border-slate-100">
+        <div className="section-shell mb-8 text-center">
+          <h2 className="text-[#000] font-inter text-2xl font-bold tracking-tight">
+            WE’RE TRUSTED BY OVER <span className="text-[#1E5AC8]">1000+ BRANDS</span>
+          </h2>
+        </div>
+        <div className="bg-[rgba(30,90,200,0.05)] py-6 overflow-hidden relative">
+          <div className="flex animate-marquee items-center gap-16 whitespace-nowrap">
+            {[...Array(3)].map((_, i) => (
+              <React.Fragment key={i}>
+                {allPartners.map((partner, idx) => (
+                  <img
+                    key={`${i}-${idx}`}
+                    src={partner.logoUrl}
+                    alt={partner.name || "Brand"}
+                    className="h-12 w-auto object-contain inline-block grayscale opacity-70 hover:opacity-100 transition-opacity"
+                  />
+                ))}
+              </React.Fragment>
+            ))}
+          </div>
+        </div>
+      </section>
 
+      {/* Digital Excellence Awards Section */}
+      <section className="py-24 bg-white">
+        <div className="section-shell">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div className="space-y-6">
+              <h2 className="text-slate-800 font-inter text-3xl sm:text-4xl font-medium leading-[1.15] tracking-tight">
+                RECOGNIZE FOR DIGITAL EXCELLENCE
+              </h2>
+              <p className="text-slate-600 text-lg leading-relaxed">
+                Our commitment to delivering exceptional digital business development and other IT Services has made us an award-winning agency trusted by businesses worldwide.
+              </p>
+            </div>
+            
+            {/* Single Trophy with Circle Background */}
+            <div className="flex justify-center">
+              <div className="relative w-80 h-80 rounded-full border-[20px] border-slate-50 bg-white flex items-center justify-center shadow-inner">
+                <div className="relative w-56 h-56">
+                  <Image src="/images/images/homePageAward.png" fill className="object-contain" alt="Award 1" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
-function LogoMarquee({ partners }) {
-  const items = partners.slice(0, 20);
-  if (!items.length) return null;
-  const row = [...items, ...items];
-  return (
-    <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/5">
-      <div className="pointer-events-none absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-slate-950 to-transparent" />
-      <div className="pointer-events-none absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-slate-950 to-transparent" />
-      <div className="py-6">
-        <div className="flex gap-4 whitespace-nowrap will-change-transform animate-marquee [mask-image:linear-gradient(to_right,transparent,black_12%,black_88%,transparent)]">
-          {row.map((p, idx) => (
+      {/* IT Connecting Across Borders Globe Section */}
+      <section className="relative w-full h-[280px] bg-black overflow-hidden flex items-start pt-4 -mt-20 z-20">
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="/images/images/globeImage.png"
+            fill
+            className="object-cover opacity-95 scale-110"
+            alt="Globe Connections"
+            priority
+          />
+        </div>
+        
+        <div className="section-shell relative z-20 w-full flex flex-col md:flex-row items-center justify-between gap-6 text-white">
+          <div className="md:w-1/2" />
+          <div className="flex flex-col items-center md:items-end gap-3 text-right">
+            <h2 className="text-2xl sm:text-3xl font-inter font-normal tracking-tight">
+              IT Connecting across borders.
+            </h2>
+            <div className="flex items-center gap-2">
+              <div className="relative w-14 h-14 rounded-full overflow-hidden aspect-square">
+                <Image src="/images/icons/GhanaFlag.svg" fill className="object-cover scale-[1.35]" alt="Ghana" />
+              </div>
+              <div className="relative w-14 h-14 rounded-full overflow-hidden aspect-square">
+                <Image src="/images/icons/KenyaFlag.svg" fill className="object-cover scale-[1.35]" alt="Kenya" />
+              </div>
+              <div className="relative w-14 h-14 rounded-full overflow-hidden aspect-square">
+                <Image src="/images/icons/USFlag.svg" fill className="object-cover scale-[1.35]" alt="United States" />
+              </div>
+              <div className="relative w-14 h-14 rounded-full overflow-hidden aspect-square">
+                <Image src="/images/icons/UKFlag.svg" fill className="object-cover scale-[1.35]" alt="United Kingdom" />
+              </div>
+              <div className="relative w-14 h-14 rounded-full overflow-hidden aspect-square">
+                <Image src="/images/icons/NigeriaFlag.svg" fill className="object-cover scale-[1.35]" alt="Nigeria" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* What Services We Offer Best */}
+      <section className="pt-10 px-6 bg-white md:pt-[3.75rem]">
+        <p className="text-2xl uppercase md:text-4xl">
+          What services do we <br /> offer best
+        </p>
+        <div className="grid grid-cols-1 gap-4 max-w-[3000px] items-start justify-center mt-8 md:grid-cols-3">
+          {services.map((service, index) => (
             <div
-              key={`${p.name || "partner"}-${idx}`}
-              className="shrink-0 rounded-2xl border border-white/10 bg-white/5 px-5 py-4"
-              title={p.name || ""}
+              key={index}
+              className="bg-[#f6f6f6] relative pb-[5.625rem] p-6 h-full border-t-[5px] border-[#1E5AC8]"
             >
-              {p.logoUrl ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={p.logoUrl}
-                  alt={p.name || "Partner logo"}
-                  className="h-8 w-auto max-w-[160px] object-contain opacity-90"
-                  loading="lazy"
-                />
-              ) : (
-                <span className="text-sm font-semibold text-white/85">
-                  {p.name}
-                </span>
-              )}
+              <p className="text-xl font-semibold uppercase">{service.title}</p>
+              <div className="pr-4">
+                <hr className="text-[#1E5AC8]" />
+                <ul className="mt-4 capitalize leading-7 text-lg">
+                  {service.list.map((item, itemIndex) => (
+                    <li key={itemIndex}>{item}</li>
+                  ))}
+                </ul>
+              </div>
+              <Link
+                href={service.href}
+                className="absolute bg-white bottom-5 border rounded-full py-2 px-3 border-[#1E5AC8] right-7 hover:bg-gray-100 cursor-pointer hover:scale-[0.97] active:scale-[1.02] transition-all duration-300"
+              >
+                &#10132;
+              </Link>
             </div>
           ))}
         </div>
-      </div>
+      </section>
+
+      {/* Simple Rate Card with Zero Surprises */}
+      <PricingModel categories={pricing} showWhyYouNeedUs={false} />
+
+      {/* Here is why you need us */}
+      <WhyYouNeedUs />
+
+      {/* Testimonials */}
+      <TestimonialsBanner
+        testimonials={testimonials.map((t) => ({
+          quote: t.message || t.content || "",
+          name: t.name || "",
+          title: t.role || t.company || "",
+        }))}
+      />
+
+      {/* Work With Us + FAQs */}
+      <section className="bg-white pt-8 md:pt-20 md:px-10">
+        <div className="relative max-md:w-[90%] max-md:mx-auto bg-[#016DAB] rounded-2xl flex flex-col items-center max-md:pt-[6.25rem] max-md:pb-[8.5rem] justify-center overflow-hidden md:pb-10 md:flex-row md:justify-end md:overflow-visible md:pr-[10rem]">
+          <Image
+            src="/images/images/workWithUs.png"
+            alt="Work With Us"
+            width={882}
+            height={942}
+            className="mb-4 object-contain absolute md:-left-[3.75rem] md:-bottom-[12.5rem] md:mb-0 md:h-[47.5rem] md:w-[47.5rem]"
+          />
+          <LetsTalkButton whatsapp={settings.whatsapp} className="bg-white/20 max-md:absolute max-md:bottom-3 max-md:right-3 text-white md:my-[7.5rem]" />
+        </div>
+
+        <FAQSection faqs={groupFAQs(faqs)} />
+      </section>
     </div>
   );
 }
-
-function PartnerGroup({ title, partners, variant = "light" }) {
-  if (!partners?.length) return null;
-  const card =
-    variant === "dark"
-      ? "rounded-3xl border border-white/10 bg-white/5 p-7"
-      : "rounded-3xl border border-white/70 bg-white p-7 shadow-lg shadow-blue-500/5";
-  const cell =
-    variant === "dark"
-      ? "flex items-center justify-center rounded-2xl border border-white/10 bg-white/5 px-4 py-5"
-      : "flex items-center justify-center rounded-2xl border border-slate-100 bg-slate-50 px-4 py-5";
-  const titleClass = variant === "dark" ? "text-white" : "text-slate-900";
-  const fallbackText = variant === "dark" ? "text-white/85" : "text-slate-700";
-  return (
-    <div className={card}>
-      <h3 className={`text-lg font-bold mb-4 ${titleClass}`}>{title}</h3>
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-        {partners
-          .filter((p) => p?.logoUrl || p?.name)
-          .slice(0, 18)
-          .map((partner, idx) => (
-            <div
-              key={`${partner.name || "partner"}-${idx}`}
-              className={cell}
-              title={partner.name || ""}
-            >
-              {partner.logoUrl ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={partner.logoUrl}
-                  alt={partner.name || "Partner logo"}
-                  className="h-10 w-auto max-w-[160px] object-contain"
-                  loading="lazy"
-                />
-              ) : (
-                <span className={`text-sm font-semibold ${fallbackText} text-center`}>
-                  {partner.name}
-                </span>
-              )}
-            </div>
-          ))}
-      </div>
-    </div>
-  );
-}
-
-

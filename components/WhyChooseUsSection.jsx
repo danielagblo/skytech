@@ -1,184 +1,110 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-if (typeof window !== 'undefined') {
-  gsap.registerPlugin(ScrollTrigger);
-}
-
-const allFeatures = [
-  {
-    title: "Clean, Reliable Code",
-    desc: "We build websites and apps that are fast, secure, and easy to maintain.",
-    icon: (
-      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
-      </svg>
-    )
-  },
-  {
-    title: "Performance Checks",
-    desc: "We review your site to find what's slowing it down and fix it.",
-    icon: (
-      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-      </svg>
-    )
-  },
-  {
-    title: "Fast Delivery",
-    desc: "We work efficiently and keep you updated every step of the way.",
-    icon: (
-      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-      </svg>
-    )
-  },
-  {
-    title: "Ongoing Support",
-    desc: "We're here after launch too. Questions, fixes, updates — we've got you covered.",
-    icon: (
-      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" />
-      </svg>
-    )
-  },
-  {
-    title: "Modern Technology",
-    desc: "We use up-to-date tools and frameworks so your site stays fast and relevant.",
-    icon: (
-      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-      </svg>
-    )
-  },
-  {
-    title: "Business-Focused",
-    desc: "We build with your goals in mind — more customers, more sales, better results.",
-    icon: (
-      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-      </svg>
-    )
-  },
-  {
-    title: "Secure Systems",
-    desc: "We protect your site and your customers' data with strong security practices.",
-    icon: (
-      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 00-2 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-      </svg>
-    )
-  },
-  {
-    title: "SEO Ready",
-    desc: "Your site is built to rank on Google from day one.",
-    icon: (
-      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-      </svg>
-    )
-  },
-  {
-    title: "Easy to Use",
-    desc: "Clean, simple designs that your customers will find easy to navigate.",
-    icon: (
-      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-      </svg>
-    )
-  }
-];
+import Image from 'next/image';
 
 export default function WhyChooseUsSection() {
-  const [showAll, setShowAll] = useState(false);
-  const containerRef = useRef(null);
-
-  const visibleFeatures = showAll ? allFeatures : allFeatures.slice(0, 6);
-
-  useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
-
-    const cards = el.querySelectorAll('.why-us-card');
-    const headerItems = el.querySelectorAll('.text-center > *');
-    if (cards.length === 0) return;
-
-    // Set initial GSAP states dynamically
-    gsap.set(cards, { opacity: 0, y: 20 });
-    gsap.set(headerItems, { opacity: 0, y: 30 });
-
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: el,
-        start: 'top bottom-=150px',
-        toggleActions: 'play none none none',
-      }
-    });
-
-    tl.to(headerItems, { opacity: 1, y: 0, duration: 0.5, stagger: 0.08, ease: 'power3.out' })
-      .to(cards, {
-        opacity: 1,
-        y: 0,
-        duration: 0.5,
-        stagger: 0.05,
-        ease: 'power2.out',
-      }, '-=0.25');
-
-    return () => {
-      ScrollTrigger.getAll().forEach(t => t.kill());
-    };
-  }, [showAll]);
-
   return (
-    <section ref={containerRef} className="py-10 bg-slate-50 relative overflow-hidden border-b border-slate-100">
-      <div className="section-shell space-y-6">
-        <div className="text-center max-w-3xl mx-auto space-y-2">
-          <span className="pill border-blue-600/20 text-blue-600 bg-blue-50">WHY CHOOSE US</span>
+    <section className="py-24 bg-slate-50 relative overflow-hidden border-b border-slate-100">
+      <div className="section-shell space-y-16">
+        {/* Title Block */}
+        <div className="max-w-3xl space-y-4">
+          <span className="pill text-blue-600 bg-blue-50">Why Choose Us</span>
           <h2 className="text-4xl sm:text-5xl font-black text-slate-900 leading-[1.1] tracking-tight">
-            We build quality digital <br /> products for your business.
+            Why We're the Preferred Choice for Digital Business Development Service
           </h2>
-          <p className="text-lg text-slate-500 leading-relaxed max-w-2xl mx-auto">
-            We focus on clean code, clear communication, and delivering on time. Here's what sets us apart.
+          <p className="text-lg text-slate-500 max-w-2xl">
+            Our commitment is to deliver high-quality work with absolute integrity.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 transition-all duration-700">
-          {visibleFeatures.map((item, idx) => (
-            <div
-              key={item.title}
-              className="group flex items-start gap-6 p-8 rounded-[2rem] bg-white border border-slate-100 hover:border-blue-500/30 hover:shadow-2xl hover:shadow-blue-500/5 transition-all duration-300 why-us-card"
-            >
-              <div className="flex-shrink-0 w-14 h-14 rounded-2xl bg-slate-50 flex items-center justify-center text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-all duration-500 shadow-sm">
-                {item.icon}
+        {/* Core Layout Split */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+          {/* Left Column: Image & Taglines */}
+          <div className="space-y-8">
+            <div className="relative w-full aspect-[4/3] rounded-[3.5rem] overflow-hidden shadow-xl bg-white border border-slate-100">
+              <Image
+                src="/images/images/manSitting.png"
+                alt="Skytech developer working"
+                fill
+                className="object-cover"
+              />
+            </div>
+            
+            {/* Here Is Why Title Block */}
+            <div className="space-y-2">
+              <h3 className="text-3xl font-black text-slate-900 uppercase tracking-tight">
+                Here Is Why
+              </h3>
+              <p className="text-2xl font-bold text-slate-400">
+                You Need Us.
+              </p>
+            </div>
+          </div>
+
+          {/* Right Column: Grid Blocks */}
+          <div className="space-y-12">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Card 1 */}
+              <div className="p-8 rounded-[2.5rem] bg-white border border-slate-100 shadow-sm space-y-3">
+                <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-600">
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                  </svg>
+                </div>
+                <h4 className="text-lg font-bold text-slate-900">Proven Expertise</h4>
+                <p className="text-xs text-slate-500 leading-relaxed">
+                  Highly adequate & senior developer team actively building high performance software without client barriers.
+                </p>
               </div>
-              <div className="space-y-2">
-                <h3 className="text-lg font-black text-slate-900 tracking-tight group-hover:text-blue-600 transition-colors">
-                  {item.title}
-                </h3>
-                <p className="text-sm text-slate-500 leading-relaxed">
-                  {item.desc}
+
+              {/* Card 2 */}
+              <div className="p-8 rounded-[2.5rem] bg-white border border-slate-100 shadow-sm space-y-3">
+                <div className="w-12 h-12 rounded-2xl bg-cyan-50 flex items-center justify-center text-cyan-600">
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                  </svg>
+                </div>
+                <h4 className="text-lg font-bold text-slate-900">Our Relationship With You</h4>
+                <p className="text-xs text-slate-500 leading-relaxed">
+                  We value relationships with our clients with transparency, we don't cheat nor building secrets.
+                </p>
+              </div>
+
+              {/* Card 3 */}
+              <div className="p-8 rounded-[2.5rem] bg-white border border-slate-100 shadow-sm space-y-3">
+                <div className="w-12 h-12 rounded-2xl bg-rose-50 flex items-center justify-center text-rose-600">
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                </div>
+                <h4 className="text-lg font-bold text-slate-900">Complimentary Maintenance</h4>
+                <p className="text-xs text-slate-500 leading-relaxed">
+                  We provide initial technical support maintenance to ensure your platform stays secure, optimized, and running smoothly.
+                </p>
+              </div>
+
+              {/* Card 4 */}
+              <div className="p-8 rounded-[2.5rem] bg-white border border-slate-100 shadow-sm space-y-3">
+                <div className="w-12 h-12 rounded-2xl bg-amber-50 flex items-center justify-center text-amber-600">
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                  </svg>
+                </div>
+                <h4 className="text-lg font-bold text-slate-900">Teamwork</h4>
+                <p className="text-xs text-slate-500 leading-relaxed">
+                  Our creative team merge with your team working side by side to support your business goals.
                 </p>
               </div>
             </div>
-          ))}
-        </div>
 
-        <div className="flex justify-center pt-4">
-          <button
-            onClick={() => setShowAll(!showAll)}
-            className="group relative inline-flex items-center gap-3 px-8 py-4 bg-slate-900 text-white rounded-full font-bold overflow-hidden transition-all hover:pr-12 active:scale-95 shadow-xl shadow-slate-900/20"
-          >
-            <span className="relative z-10">{showAll ? "Show Less" : "Discover More"}</span>
-            <div className="absolute right-4 translate-x-4 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
+            {/* Extra transparent block text */}
+            <div className="pt-6 border-t border-slate-200">
+              <span className="text-sm font-extrabold uppercase tracking-widest text-slate-400">
+                Bulk Reductions, 100% Transparency
+              </span>
             </div>
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-indigo-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-          </button>
+          </div>
         </div>
       </div>
     </section>
