@@ -81,7 +81,7 @@ export default function PricingCards({
   const [selected, setSelected] = useState(defaultIndex);
 
   return (
-    <div className="flex flex-col items-stretch justify-center gap-4 max-md:gap-[4.375rem] mb-10 px-4 md:flex-row md:px-0">
+    <div className="grid grid-cols-1 gap-4 max-md:gap-[4.375rem] mb-10 px-4 md:grid-cols-2 md:px-0 lg:grid-cols-3">
       {plans.map((plan, index) => {
         const isSelected = selected === index;
         const isRecommended = plan.recommended;
