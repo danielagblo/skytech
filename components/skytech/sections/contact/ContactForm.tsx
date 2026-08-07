@@ -83,17 +83,18 @@ export default function ContactForm() {
   };
 
   const inputStyle =
-    "w-full rounded-xl border border-gray-300 px-4 py-4 outline-none transition focus:border-[#355BC9] focus:ring-2 focus:ring-blue-200";
+    "w-full rounded-xl border border-gray-300 px-4 py-4 outline-none transition focus:border-brand-600 focus:ring-2 focus:ring-brand-200";
 
   return (
-    <section className="bg-white py-12 px-6 md:py-20">
+    <section className="bg-white px-6 py-12 md:py-20">
       <div className="mx-auto max-w-7xl">
         <div className="mb-12">
-          <h2 className="text-3xl font-semibold text-slate-900 md:text-5xl">
+          <span className="pill">Contact</span>
+          <h2 className="mt-4 text-3xl font-semibold text-slate-900 md:text-5xl">
             We&apos;d love to hear from you.
           </h2>
 
-          <p className="mt-3 max-w-xl text-gray-600">
+          <p className="mt-3 max-w-xl text-slate-600">
             Whether you&apos;ve a project in mind, want to collaborate, or just have
             questions, feel free to reach out. Our team is ready to help.
           </p>
@@ -140,7 +141,7 @@ export default function ContactForm() {
 
             <button
               disabled={loading}
-              className="w-full rounded-xl bg-[#355BC9] py-4 text-lg font-medium text-white transition hover:bg-[#2b4bb4]"
+              className="w-full rounded-xl bg-brand-600 py-4 text-lg font-medium text-white shadow-soft transition hover:bg-brand-700"
             >
               {loading ? "Sending..." : "Send Message"}
             </button>
