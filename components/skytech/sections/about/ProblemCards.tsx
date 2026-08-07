@@ -15,13 +15,21 @@ const problems = [
 
 export default function ProblemCards() {
   return (
-    <div className="grid grid-cols-1 divide-y-[5px] divide-white rounded-xl overflow-hidden mx-6 md:grid-cols-3 md:divide-x-[5px] md:divide-y-0 md:mx-10">
-      {problems.map((problem, index) => (
-        <div key={index} className="p-6 bg-[#f9f9f9] flex flex-col gap-3">
-          <h3 className="font-bold text-xl leading-snug md:h-12">{problem.title}</h3>
-          <p className="text-gray-700 text-base leading-relaxed">{problem.body}</p>
-        </div>
-      ))}
+    <div className="section-shell">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+        {problems.map((problem, index) => (
+          <div
+            key={index}
+            className="flex flex-col rounded-3xl border border-slate-100 bg-white p-8 shadow-soft transition-all duration-500 hover:-translate-y-1 hover:shadow-lift"
+          >
+            <span className="mb-5 inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-brand-600 font-display text-base font-semibold text-white">
+              {String(index + 1).padStart(2, "0")}
+            </span>
+            <h3 className="mb-3 text-xl font-semibold leading-snug text-slate-900">{problem.title}</h3>
+            <p className="text-base leading-relaxed text-slate-600">{problem.body}</p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
