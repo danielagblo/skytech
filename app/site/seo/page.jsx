@@ -10,7 +10,7 @@ export default function SEOPage() {
   return (
     <main className="overflow-x-hidden bg-white">
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-slate-950 pt-28 pb-16 text-white md:pb-20">
+      <section className="relative overflow-hidden bg-slate-950 pt-28 pb-28 text-white md:pb-36">
         <Image
           src="/images/images/BlogPageHeader.png"
           alt="SEO Services"
@@ -46,8 +46,8 @@ export default function SEOPage() {
       </section>
 
       {/* Stats / Results */}
-      <section className="bg-slate-50 px-6 pb-16 md:pb-20">
-        <div className="section-shell -mt-8 rounded-2xl border border-slate-200 bg-white p-8 shadow-lift md:p-10">
+      <section className="relative z-10 bg-slate-50 px-6 pb-16 md:pb-20">
+        <div className="section-shell md:-mt-32 md:rounded-2xl md:border md:border-slate-200 md:bg-white md:p-10 md:shadow-lift">
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-3">
             {seoStats.map((stat, idx) => (
               <div key={idx} className="text-center">
