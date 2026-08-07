@@ -45,7 +45,7 @@ export default async function SiteLayout({ children }: { children: ReactNode }) 
     <>
       <Navigation className="fixed top-0 left-0 z-30 w-screen md:top-10" />
       <main>{children}</main>
-      <Footer latestPosts={latestPosts} sponsors={sponsors} whatsapp={settings.whatsapp} />
+      <Footer latestPosts={latestPosts} sponsors={sponsors} settings={settings} />
       <FloatingWhatsApp whatsapp={settings.whatsapp} />
     </>
   );
