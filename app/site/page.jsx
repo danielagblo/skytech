@@ -165,15 +165,16 @@ export default async function Home() {
             <span className="text-brand-600">1000+ brands</span> across two continents
           </p>
         </div>
-        <div className="border-y border-slate-200 bg-slate-50/60 py-8">
-          <div className="mx-auto grid max-w-4xl grid-cols-2 items-center justify-items-center gap-x-4 gap-y-8 sm:grid-cols-3 lg:grid-cols-6">
+        <div className="border-y border-slate-200 bg-slate-50/60 py-10">
+          <div className="section-shell grid grid-cols-3 items-center gap-4 sm:grid-cols-4 md:grid-cols-6">
             {allPartners.map((partner, idx) => (
-              <img
-                key={`${idx}-${partner.name || partner.logoUrl}`}
-                src={partner.logoUrl}
-                alt={partner.name || "Brand"}
-                className="h-16 w-32 object-contain md:h-20 md:w-40"
-              />
+              <div key={`${idx}-${partner.name || partner.logoUrl}`} className="flex items-center justify-center">
+                <img
+                  src={partner.logoUrl}
+                  alt={partner.name || "Brand"}
+                  className="h-12 w-auto max-w-[12.5rem] object-contain md:h-14"
+                />
+              </div>
             ))}
           </div>
         </div>
