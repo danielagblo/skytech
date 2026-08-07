@@ -41,27 +41,27 @@ export default function AboutClient({ teamMembers }) {
   return (
     <main className="min-h-screen bg-white">
       {/* Hero Section */}
-      <section className="relative min-h-[80vh] flex items-center overflow-hidden bg-white pt-32 pb-20">
+      <section className="relative flex min-h-[80vh] items-center overflow-hidden bg-white pt-32 pb-20">
         {/* Background */}
         <div className="absolute inset-0 z-0">
           <Image
             src="/images/images/AboutBanner.png"
             alt="Skytech About"
             fill
-            className="object-cover opacity-8"
+            className="object-cover opacity-10"
             priority
           />
           <div className="absolute inset-0 bg-gradient-to-b from-white via-white/90 to-white" />
         </div>
 
         <div className="section-shell relative z-10 space-y-10">
-          <div className="max-w-4xl mx-auto text-center space-y-6">
+          <div className="mx-auto max-w-4xl space-y-6 text-center">
             <span className="pill">Our Story</span>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 leading-[1.1] tracking-tight">
-              We build <span className="text-blue-600">websites and apps</span>{" "}
+            <h1 className="text-4xl font-bold leading-[1.1] tracking-tight text-slate-900 sm:text-5xl lg:text-6xl">
+              We build <span className="text-brand-600">websites and apps</span>{" "}
               that help your <span className="text-slate-950">business grow.</span>
             </h1>
-            <p className="text-lg md:text-xl text-slate-500 leading-relaxed max-w-2xl mx-auto">
+            <p className="mx-auto max-w-2xl text-lg leading-relaxed text-slate-500 md:text-xl">
               We are a team of expert developers. We focus on good work and clear talk with our partners.
             </p>
           </div>
@@ -71,10 +71,10 @@ export default function AboutClient({ teamMembers }) {
             {aboutStats.map((stat) => (
               <div
                 key={stat.label}
-                className="flex items-center gap-4 px-6 py-3 rounded-full bg-white border border-slate-200 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-500"
+                className="flex items-center gap-4 rounded-full border border-slate-200 bg-white px-6 py-3 shadow-soft transition-all duration-500 hover:-translate-y-0.5 hover:shadow-lift"
               >
                 <span className="text-2xl font-bold text-slate-900">{stat.value}</span>
-                <span className="w-px h-5 bg-slate-200" />
+                <span className="h-5 w-px bg-slate-200" />
                 <span className="text-xs font-bold uppercase tracking-wider text-slate-500">{stat.label}</span>
               </div>
             ))}
@@ -83,16 +83,16 @@ export default function AboutClient({ teamMembers }) {
       </section>
 
       {/* Mission & Vision Section */}
-      <section className="py-24 bg-white border-t border-slate-100">
+      <section className="border-t border-slate-100 bg-white py-24">
         <div className="section-shell">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <div className="grid grid-cols-1 items-center gap-16 lg:grid-cols-2">
             <div className="space-y-8">
               <span className="pill">Mission & Vision</span>
-              <h2 className="text-4xl sm:text-5xl font-bold text-slate-900 leading-tight tracking-tight">
+              <h2 className="text-4xl font-bold leading-tight tracking-tight text-slate-900 sm:text-5xl">
                 Our Strategic Vision{" "}
-                <span className="text-blue-600">For Your Business.</span>
+                <span className="text-brand-600">For Your Business.</span>
               </h2>
-              <div className="space-y-5 text-slate-600 text-lg leading-relaxed">
+              <div className="space-y-5 text-lg leading-relaxed text-slate-600">
                 <p>
                   Our mission is to help ambitious teams turn ideas into real products. We&apos;re not just coders—we&apos;re partners who care about your outcomes, move with speed, and communicate with complete honesty.
                 </p>
@@ -102,7 +102,7 @@ export default function AboutClient({ teamMembers }) {
               </div>
             </div>
             <div className="relative flex justify-center lg:justify-end">
-              <div className="relative w-full max-w-lg aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl">
+              <div className="relative aspect-[4/3] w-full max-w-lg overflow-hidden rounded-3xl shadow-2xl">
                 <Image
                   src="/images/images/MissionVisionChessImage.png"
                   alt="Strategic Vision"
@@ -116,35 +116,35 @@ export default function AboutClient({ teamMembers }) {
       </section>
 
       {/* How We Work */}
-      <section className="py-24 bg-slate-50">
+      <section className="bg-slate-50 py-24">
         <div className="section-shell space-y-16">
-          <div className="text-center max-w-3xl mx-auto space-y-4">
+          <div className="mx-auto max-w-3xl space-y-4 text-center">
             <span className="pill">Our Method</span>
-            <h2 className="text-4xl font-bold text-slate-900 tracking-tight">
+            <h2 className="text-4xl font-bold tracking-tight text-slate-900">
               We plan, build, and launch.
             </h2>
-            <p className="text-slate-500 text-lg">
+            <p className="text-lg text-slate-500">
               You get clear steps and regular updates, so nothing is confusing.
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
             {processSteps.map((step) => (
               <div
                 key={step.title}
-                className="group rounded-3xl bg-white border border-slate-100 p-8 hover:shadow-xl hover:shadow-blue-600/5 transition-all duration-500"
+                className="group rounded-3xl border border-slate-100 bg-white p-8 shadow-soft transition-all duration-500 hover:shadow-lift hover:shadow-brand-600/5"
               >
                 {step.image && (
-                  <div className="relative w-full h-40 rounded-2xl overflow-hidden mb-6">
+                  <div className="relative mb-6 h-40 w-full overflow-hidden rounded-2xl">
                     <Image src={step.image} alt={step.title} fill className="object-cover" />
                   </div>
                 )}
-                <div className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600 text-sm font-bold text-white shadow-lg shadow-blue-600/20">
+                <div className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-brand-600 text-sm font-bold text-white shadow-lg shadow-brand-600/20">
                   {step.number}
                 </div>
-                <h3 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-blue-600 transition-colors">
+                <h3 className="mb-3 text-xl font-bold text-slate-900 transition-colors group-hover:text-brand-600">
                   {step.title}
                 </h3>
-                <p className="text-slate-500 text-sm leading-relaxed">
+                <p className="text-sm leading-relaxed text-slate-500">
                   {step.description}
                 </p>
               </div>
@@ -154,38 +154,38 @@ export default function AboutClient({ teamMembers }) {
       </section>
 
       {/* History Timeline */}
-      <section className="py-24 bg-white">
+      <section className="bg-white py-24">
         <div className="section-shell space-y-16">
           <div className="space-y-4">
             <span className="pill">Our History</span>
-            <h2 className="text-4xl sm:text-5xl font-bold text-slate-900 leading-tight tracking-tight">
-              A Record of <span className="text-blue-600">Reliability.</span>
+            <h2 className="text-4xl font-bold leading-tight tracking-tight text-slate-900 sm:text-5xl">
+              A Record of <span className="text-brand-600">Reliability.</span>
             </h2>
-            <p className="text-slate-500 max-w-lg text-lg leading-relaxed">
+            <p className="max-w-lg text-lg leading-relaxed text-slate-500">
               We started with a goal to build better websites and apps in Ghana. Today, we deliver quality digital products for businesses everywhere.
             </p>
           </div>
 
           <div className="relative max-w-4xl">
             {/* Vertical Line */}
-            <div className="absolute left-[30px] md:left-[40px] top-0 bottom-0 w-px bg-slate-200" />
+            <div className="absolute top-0 bottom-0 left-[30px] w-px bg-slate-200 md:left-[40px]" />
 
             <div className="space-y-12">
               {timeline.map((item, idx) => (
                 <div key={item.year} className="group relative flex items-start gap-8">
                   {/* Node */}
                   <div className="relative z-10 flex-shrink-0">
-                    <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-white border-2 border-blue-600 flex items-center justify-center font-bold text-lg text-blue-600 transition-all group-hover:bg-blue-600 group-hover:text-white shadow-sm">
+                    <div className="flex h-16 w-16 items-center justify-center rounded-full border-2 border-brand-600 bg-white text-lg font-bold text-brand-600 shadow-sm transition-all group-hover:bg-brand-600 group-hover:text-white md:h-20 md:w-20">
                       {item.year}
                     </div>
                   </div>
 
                   {/* Content */}
-                  <div className="pt-4 space-y-1">
-                    <h3 className="text-xl md:text-2xl font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
+                  <div className="space-y-1 pt-4">
+                    <h3 className="text-xl font-bold text-slate-900 transition-colors group-hover:text-brand-600 md:text-2xl">
                       {item.title}
                     </h3>
-                    <p className="text-slate-500 leading-relaxed">
+                    <p className="leading-relaxed text-slate-500">
                       {item.detail}
                     </p>
                   </div>
@@ -198,34 +198,34 @@ export default function AboutClient({ teamMembers }) {
 
       {/* Team Members */}
       {teamMembers && teamMembers.length > 0 && (
-        <section className="py-24 bg-slate-50">
+        <section className="bg-slate-50 py-24">
           <div className="section-shell space-y-16">
             <div className="space-y-4">
               <span className="pill">Meet the Team</span>
-              <h2 className="text-4xl sm:text-5xl font-bold text-slate-900 leading-tight tracking-tight">
-                Engineering <span className="text-blue-600">Excellence.</span>
+              <h2 className="text-4xl font-bold leading-tight tracking-tight text-slate-900 sm:text-5xl">
+                Engineering <span className="text-brand-600">Excellence.</span>
               </h2>
-              <p className="text-slate-500 text-lg leading-relaxed max-w-lg">
+              <p className="max-w-lg text-lg leading-relaxed text-slate-500">
                 Our leadership team brings decades of experience in building secure, scalable digital products.
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
               {teamMembers.map((member) => (
                 <div
                   key={member.name}
-                  className="group p-8 rounded-3xl bg-white border border-slate-100 hover:shadow-xl hover:shadow-blue-600/5 transition-all duration-500"
+                  className="group rounded-3xl border border-slate-100 bg-white p-8 shadow-soft transition-all duration-500 hover:shadow-lift hover:shadow-brand-600/5"
                 >
-                  <div className="mb-6 w-16 h-16 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-all overflow-hidden">
+                  <div className="mb-6 flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl bg-brand-50 text-brand-600 transition-all group-hover:bg-brand-600 group-hover:text-white">
                     {member.imageUrl ? (
-                      <img src={member.imageUrl} alt={member.name} className="w-full h-full object-cover" />
+                      <img src={member.imageUrl} alt={member.name} className="h-full w-full object-cover" />
                     ) : (
                       <span className="text-2xl font-bold">{(member.name || "T")[0]}</span>
                     )}
                   </div>
-                  <h3 className="text-xl font-bold text-slate-900 mb-1">{member.name}</h3>
-                  <p className="text-xs font-bold text-blue-600 uppercase tracking-wider mb-4">{member.role}</p>
-                  <p className="text-slate-500 leading-relaxed text-sm">
+                  <h3 className="mb-1 text-xl font-bold text-slate-900">{member.name}</h3>
+                  <p className="mb-4 text-xs font-bold uppercase tracking-wider text-brand-600">{member.role}</p>
+                  <p className="text-sm leading-relaxed text-slate-500">
                     {member.bio}
                   </p>
                 </div>
