@@ -172,7 +172,7 @@ export default async function Home() {
                 key={`${idx}-${partner.name || partner.logoUrl}`}
                 src={partner.logoUrl}
                 alt={partner.name || "Brand"}
-                className="h-12 w-auto object-contain"
+                className="h-16 w-auto object-contain md:h-20"
               />
             ))}
           </div>
