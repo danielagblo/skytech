@@ -63,71 +63,77 @@ function PricingModel({
 
   return (
     <div className="bg-white">
-      <div className="p-6">
-        <div className="grid grid-cols-1 gap-4 max-w-[3000px] items-center justify-center mt-8 md:grid-cols-2">
-          <div className="max-md:relative">
-            <p className="text-2xl uppercase md:text-4xl">SIMPLE RATE CARD <br />WITH ZERO SURPRISES</p>
-            <div className="md:hidden max-md:absolute right-0 -top-2 flex h-[8vh] items-center justify-center">
-              <Image
-                src="/images/icons/stars-line-svgrepo-com.svg"
-                alt="Award"
-                width={80}
-                height={80}
-                className="h-full w-full object-contain"
-              />
-            </div>
-            <ul className="leading-8 mt-4 pl-3">
-              <li>&#10004; We do regular maintenance on your site at NO FEES</li>
-              <li>&#10004; We program,we don&apos;t use template or wordpress.</li>
+      <div className="px-6 pt-16 md:pt-20">
+        <div className="mx-auto grid max-w-[80rem] grid-cols-1 items-center gap-10 lg:grid-cols-[1.4fr_1fr]">
+          <div className="relative">
+            <span className="section-tag">Simple & transparent</span>
+            <h2 className="section-title mt-3">
+              Simple rate card with zero surprises
+            </h2>
+            <ul className="mt-6 space-y-2 text-slate-600">
+              <li className="flex items-start gap-3">
+                <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand-100 text-brand-700">
+                  <svg className="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
+                </span>
+                We do regular maintenance on your site at no fees
+              </li>
+              <li className="flex items-start gap-3">
+                <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand-100 text-brand-700">
+                  <svg className="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
+                </span>
+                We program, we don&apos;t use templates or WordPress
+              </li>
             </ul>
           </div>
-          <div className="max-md:hidden flex h-[25vh] items-center justify-center md:h-[35vh]">
+          <div className="flex items-center justify-center lg:justify-end">
             <Image
               src="/images/icons/stars-line-svgrepo-com.svg"
               alt="Award"
               width={200}
               height={200}
-              className="h-full w-full object-contain"
+              className="h-40 w-40 object-contain opacity-90 lg:h-56 lg:w-56"
             />
           </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-3 px-6 py-8 md:grid-cols-2 md:gap-0 md:px-12">
-        <div>
-          <p className="hover:underline underline-offset-[3px] text-gray-500 font-bold decoration-2 decoration-[#1E5AC8] cursor-pointer">
-            {items.map((item, i) => (
-              <span key={item.key}>
-                {i > 0 && <span className="font-bold">&#10132;</span>}
-                <span
-                  onClick={() => setActiveIndex(item.index)}
-                  className={activeIndex === item.index ? "text-[#1E5AC8] font-bold" : ""}
-                >
-                  {item.label}
-                </span>
-              </span>
-            ))}
-          </p>
+      <div className="mx-auto mt-10 flex max-w-[80rem] flex-col gap-5 px-5 sm:flex-row sm:items-center sm:justify-between lg:px-8">
+        {/* Category tabs */}
+        <div className="flex flex-wrap items-center gap-2">
+          {items.map((item, i) => (
+            <button
+              key={item.key}
+              type="button"
+              onClick={() => setActiveIndex(item.index)}
+              className={`rounded-full px-4 py-2 text-sm font-semibold transition-all duration-300 ${
+                activeIndex === item.index
+                  ? "bg-brand-600 text-white shadow-soft"
+                  : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+              }`}
+            >
+              {item.label}
+            </button>
+          ))}
         </div>
-        <div className="flex flex-row gap-4 justify-start font-medium uppercase text-lg md:justify-end">
-          <p
-            className={
-              "inline hover:underline underline-offset-4 text-gray-500 font-bold decoration-2 decoration-[#1E5AC8] cursor-pointer" +
-              (currency === "GHC" ? " text-[#1E5AC8] underline" : "")
-            }
-            onClick={() => setCurrency("GHC")}
-          >
-            GHC
-          </p>
-          <p
-            className={
-              "inline hover:underline underline-offset-4 text-gray-500 font-bold decoration-2 decoration-[#1E5AC8] cursor-pointer" +
-              (currency === "USD" ? " text-[#1E5AC8] underline" : "")
-            }
-            onClick={() => setCurrency("USD")}
-          >
-            USD
-          </p>
+
+        {/* Currency toggle */}
+        <div className="inline-flex items-center gap-1 rounded-full bg-slate-100 p-1">
+          {(["GHC", "USD"] as Currency[]).map((c) => (
+            <button
+              key={c}
+              type="button"
+              onClick={() => setCurrency(c)}
+              className={`rounded-full px-5 py-2 text-sm font-semibold uppercase transition-all duration-300 ${
+                currency === c ? "bg-brand-600 text-white shadow-soft" : "text-slate-600 hover:text-slate-900"
+              }`}
+            >
+              {c}
+            </button>
+          ))}
         </div>
       </div>
 

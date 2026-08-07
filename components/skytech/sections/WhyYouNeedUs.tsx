@@ -1,67 +1,114 @@
 import Image from "next/image";
 
+const items = [
+  {
+    bg: "bg-[#00FFF2]",
+    title: "8 Years of Proven Expertise",
+    body: "Nearly a decade of hands-on experience delivering reliable, high-performing software and web solutions across borders.",
+    icon: (
+      <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+    ),
+  },
+  {
+    bg: "bg-[#6878B1]",
+    dark: true,
+    title: "Our Relationship with You",
+    body: "We plug in like your internal IT department with absolute transparency. We don\u2019t disappear suddenly, we stay.",
+    icon: (
+      <path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m6-1.13a4 4 0 10-4-4 4 4 0 004 4zm6 0a4 4 0 10-4-4 4 4 0 004 4z" />
+    ),
+  },
+  {
+    bg: "bg-[#FF6B6B]",
+    dark: true,
+    title: "Complimentary Maintenance",
+    body: "Enjoy peace of mind with free ongoing maintenance to keep your platforms secure, updated, and running smoothly.",
+    icon: (
+      <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+    ),
+  },
+  {
+    bg: "bg-[#F7CF94]",
+    title: "Teamwork",
+    body: "We integrate seamlessly with your team, working side by side to support your business goals.",
+    icon: (
+      <path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m3-3.13a4 4 0 10-4-4 4 4 0 004 4zM12 4a4 4 0 100 8 4 4 0 000-8z" />
+    ),
+  },
+];
+
 function WhyYouNeedUs() {
   return (
-    <div className="mt-0 md:-mt-12">
-      <div className="flex flex-col items-center justify-start text-center px-6 md:flex-row md:text-left md:px-0">
-        <Image
-          src="/images/images/manSitting.png"
-          alt="Why You Need Us"
-          width={600}
-          height={600}
-          className="max-md:-ml-[3.25rem] object-contain md:h-full md:w-[37.5rem] md:max-h-[37.5rem] md:object-fill"
-        />
-        <h1 className="font-medium uppercase text-5xl leading-tight max-md:-my-7 md:text-6xl md:-ml-[10rem] md:pt-[6.75rem] md:leading-[2.75rem]">
-          Here is Why <br />
-          <span className="text-4xl font-outline font-semibold tracking-widest"> you need us</span>
-        </h1>
-      </div>
-      <div className="bg-[#f7f7f7] pt-8 pb-10 mt-6 w-full flex flex-col items-stretch justify-center gap-2 md:pt-[6.5rem] md:-mt-[10rem] md:flex-row">
-        <div className="w-full flex flex-col gap-4 items-center justify-center px-6 md:pl-10 md:pr-4">
-          <div className="w-full flex flex-col gap-4 items-center justify-center md:flex-row">
-            <div className="bg-[#00FFF2] w-full rounded-2xl p-3">
-              <p className="font-semibold text-xl mb-2 capitalize">8yrs Of Proven Expertise</p>
-              <p className="text-lg">
-                Nearly a decade of hands-on
-                experience delivering reliable,
-                high-performing software and
-                web solutions across borders.
-              </p>
-            </div>
-            <div className="bg-[#6878B1] w-full rounded-2xl p-3 text-white">
-              <p className="font-semibold text-xl mb-2 capitalize">Our relationship with you</p>
-              <p className="text-lg">
-                We plug in like your internal
-                IT department with absolute
-                transparency. We don&apos;t disappear
-                suddenly,we stay.
-              </p>
-            </div>
-          </div>
-          <div className="bg-[#FF6B6B] w-full rounded-2xl p-3 text-white">
-            <p className="font-semibold text-xl mb-2 capitalize">Complimentary Maintenance</p>
-            <p className="text-lg">
-              Enjoy peace of mind with free ongoing maintenance to ensure your platforms stay secure, updated, and
-              running smoothly.
-            </p>
+    <section id="why-us" className="bg-white">
+      {/* Header — image bleeding to the left screen edge */}
+      <div className="relative">
+        <div className="pointer-events-none absolute inset-y-0 left-0 hidden w-[60vw] md:block">
+          <Image
+            src="/images/images/manSitting.png"
+            alt="Why You Need Us"
+            fill
+            sizes="60vw"
+            priority
+            className="object-contain object-left"
+          />
+        </div>
+
+        <div className="md:hidden relative">
+          <div className="pointer-events-none relative left-1/2 w-screen -translate-x-1/2">
+            <Image
+              src="/images/images/manSitting.png"
+              alt="Why You Need Us"
+              width={520}
+              height={520}
+              className="mx-auto w-full object-contain"
+            />
           </div>
         </div>
-        <div className="w-full flex flex-col gap-2 px-6 md:h-full md:pl-0 md:pr-10">
-          <div className="bg-[#F7CF94] w-full rounded-2xl p-3 h-auto md:h-[13.75rem]">
-            <p className="font-semibold text-xl mb-2 capitalize">Teamwork</p>
-            <p className="text-2xl">
-              We integrate seamlessly with
-              your Team, working side by
-              side to support your business
-              goals.
-            </p>
-          </div>
-          <div className="w-full text-2xl rounded-2xl p-3">
-            Risk Reduction, 100% Transparancy
+
+        <div className="section-shell relative md:flex md:min-h-[34rem] md:items-center">
+          <h2 className="mx-auto w-full max-w-3xl px-5 pt-0 text-center font-display text-6xl font-semibold uppercase leading-[1.1] tracking-tight text-slate-900 sm:text-6xl md:absolute md:top-1/2 md:right-[6.5rem] md:w-auto md:max-w-none md:-translate-y-1/2 md:px-0 md:py-14 md:text-left md:text-5xl lg:text-6xl">
+            Here is why
+            <span className="block">
+              <span className="font-outline text-[0.9em] font-semibold tracking-widest"> you need us</span>
+            </span>
+          </h2>
+        </div>
+      </div>
+
+      {/* Floor + cards */}
+      <div className="bg-[#f7f7f7] py-16 md:-mt-[8rem] md:pt-[11rem]">
+        <div className="mx-auto grid max-w-[80rem] grid-cols-1 gap-5 px-5 md:grid-cols-2 lg:grid-cols-4 lg:px-8">
+          {items.map((item) => (
+            <div
+              key={item.title}
+              className={`flex flex-col rounded-3xl p-6 shadow-soft ${item.bg} ${
+                item.dark ? "text-white" : "text-slate-900"
+              }`}
+            >
+              <span className={`mb-4 flex h-11 w-11 items-center justify-center rounded-2xl ${
+                item.dark ? "bg-white/20" : "bg-black/5"
+              }`}>
+                <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                  {item.icon}
+                </svg>
+              </span>
+              <h3 className="text-lg font-semibold">{item.title}</h3>
+              <p className={`mt-2 text-sm leading-relaxed ${item.dark ? "text-white/90" : "text-slate-700"}`}>
+                {item.body}
+              </p>
+            </div>
+          ))}
+        </div>
+
+        {/* Risk reduction strip */}
+        <div className="mx-auto mt-5 max-w-[80rem] px-5 lg:px-8">
+          <div className="flex flex-col items-center justify-between gap-4 rounded-2xl bg-white px-6 py-5 text-center shadow-soft sm:flex-row sm:text-left md:px-10">
+            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand-700">Risk reduction</p>
+            <p className="font-display text-2xl font-semibold text-slate-900">100% Transparency</p>
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 }
 

@@ -20,23 +20,26 @@ import AnimatedCounter from "../../components/skytech/sections/home/AnimatedCoun
 
 const services = [
   {
-    title: "website development",
-    list: ["corporate business", "e-commerce", "blog content", "e-learning"],
+    title: "Website Development",
+    items: 4,
+    list: ["Corporate business", "E-commerce", "Blog content", "E-learning"],
     href: "/site/services",
   },
   {
-    title: "mobile app development",
-    list: ["corporate business", "e-commerce", "blog content", "e-learning"],
+    title: "Mobile App Development",
+    items: 4,
+    list: ["Corporate business", "E-commerce", "Blog content", "E-learning"],
     href: "/site/services",
   },
   {
-    title: "IT installations",
+    title: "IT Installations",
+    items: 5,
     list: [
       "POS (Point of Sale) systems",
       "Wi-Fi Network Connection",
       "CCTV surveillance systems",
-      "inverter & solar panel",
-      "door and alarm installation",
+      "Inverter & solar panel",
+      "Door and alarm installation",
     ],
     href: "/site/services/security-systems",
   },
@@ -48,122 +51,122 @@ export const metadata = {
     "Skytech Ghana builds websites and mobile apps for businesses in Ghana. Web design, SEO, and maintenance services.",
 };
 
+const stats = [
+  { value: 8, suffix: "+", label: "Years in Operation", compact: false },
+  { value: 8, suffix: "+", label: "Satisfied Customers", compact: false },
+  { value: 1000, suffix: "+", label: "Projects Completed", compact: true },
+  { value: 4, suffix: "+", label: "Countries Served", compact: false },
+];
+
 export default async function Home() {
   const settings = await getSettings();
   const testimonialsData = await getTestimonials();
   const testimonials = testimonialsData.length > 0 ? testimonialsData : [];
-  const allPosts = await getBlogPosts();
-  const latestPosts = allPosts.filter(p => p.published).slice(0, 3);
   const faqs = await getFAQs();
   const partnersData = await getAffiliates();
   const allPartners = (partnersData || []).filter((p) => p?.logoUrl || p?.name);
   const pricing = await getPricing();
 
   return (
-    <div className="bg-[#FFF] min-w-screen min-h-screen overflow-x-hidden relative">
-      {/* Top Scrolling Banner */}
-      <div className="md:fixed top-0 w-screen z-20">
+    <div className="bg-white min-w-screen min-h-screen overflow-x-hidden relative">
+      {/* Top Scrolling Banner (kept) */}
+      <div className="md:fixed top-0 w-screen z-30">
         <TopScrollingBanner />
       </div>
 
-      {/* Hero Section */}
-      <div className="relative w-full h-[50vh] min-h-[400px] bg-black overflow-hidden">
+      {/* ===== HERO (kept structure: full-bleed + headline + 2 CTAs + awards) ===== */}
+      <section className="relative w-full min-h-[50vh] bg-slate-950 overflow-hidden flex items-center pt-16 md:pt-24">
         <Image
           src="/images/images/homePageBannerImage.png"
           fill
-          className="object-cover opacity-50"
+          className="object-cover opacity-35"
           alt="Background"
           priority
         />
-        
-        <div className="absolute inset-0 bg-gradient-to-r from-black/80 to-transparent z-10" />
 
-        <div className="section-shell relative z-10 h-full flex flex-col justify-center text-white space-y-6">
-          <span className="text-[#FFF] font-inter text-5xl md:text-6xl font-bold tracking-wider uppercase">
-            8+ YEARS IN OPERATION
-          </span>
+        {/* Premium layered overlays */}
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/70 to-slate-950/30" />
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-950/60 via-transparent to-slate-950" />
+        <div className="pointer-events-none absolute inset-0 z-[1] opacity-20 bg-grid" />
+        <div className="pointer-events-none absolute -top-32 right-0 h-[34rem] w-[34rem] rounded-full bg-brand-600/40 blur-[120px]" />
 
-          <p className="text-[#FFF] font-inter text-lg md:text-xl max-w-2xl opacity-90 leading-relaxed">
-            FOR WEBSITE, MOBILE APP DEVELOPMENT AND IT INSTALLATIONS
-          </p>
+        <div className="section-shell relative z-10 w-full">
+          <div className="grid h-full items-center md:grid-cols-[1.15fr_1fr]">
+            {/* Copy */}
+            <div className="mx-auto max-w-2xl py-8 text-center text-white md:text-left">
+              <h1 className="font-display text-5xl font-bold uppercase leading-none tracking-tight sm:text-6xl md:text-7xl">
+                8+ YEARS
+                <span className="block whitespace-nowrap">IN OPERATION</span>
+              </h1>
 
-          <div className="flex gap-4">
-            <Link href="/site/contact" className="bg-[#1E5AC8] hover:bg-blue-700 text-white font-inter text-base font-bold px-8 py-3.5 transition-all">
-              BOOK A MEETING
-            </Link>
-            <Link href="/site/pricing" className="bg-white hover:bg-slate-100 text-black font-inter text-base font-bold px-8 py-3.5 transition-all">
-              PRICING
-            </Link>
+              {/* Awards — mobile (on top of the buttons) */}
+              <div className="md:hidden mt-6 flex justify-center">
+                <div className="flex items-end -space-x-8">
+                  <div className="relative h-16 w-12">
+                    <Image src="/images/images/homePageAward2.png" fill className="object-contain" alt="AWARD-EXCELLENCE 1" />
+                  </div>
+                  <div className="relative h-36 w-28">
+                    <Image src="/images/images/homePageAward.png" fill className="object-contain" alt="NEWNEWAWARD 1" />
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-5 flex flex-wrap justify-center gap-3 md:mt-6 md:gap-4 md:justify-start">
+                <Link href="/site/contact" className="btn-primary !px-4 !py-2 !text-xs md:!px-6 md:!py-3 md:!text-sm">
+                  BOOK A MEETING
+                </Link>
+                <Link href="/site/pricing" className="btn-secondary !border-white/25 !bg-white/10 !px-4 !py-2 !text-xs !text-white backdrop-blur-sm hover:!bg-white/20 md:!px-6 md:!py-3 md:!text-sm">
+                  PRICING
+                </Link>
+              </div>
+
+              <p className="mt-6 mb-5 mx-auto max-w-sm text-center text-sm font-medium uppercase leading-relaxed tracking-wide text-slate-200 sm:max-w-md sm:text-base md:mx-0 md:max-w-none md:whitespace-nowrap md:text-left md:text-xl">
+                For Website, Mobile App Development and IT Installations
+              </p>
+            </div>
           </div>
         </div>
 
-        {/* Floating Award Trophy Graphic */}
-        <div className="absolute right-10 bottom-8 z-10 hidden lg:flex flex-col items-center gap-2">
-          <div className="flex items-end gap-3 h-48">
-            <div className="relative w-20 h-28">
-              <Image
-                src="/images/images/homePageAward2.png"
-                fill
-                className="object-contain"
-                alt="AWARD-EXCELLENCE 1"
-              />
+        {/* Awards — desktop (kept up top-right) */}
+        <div className="absolute top-[58%] right-10 z-10 hidden -translate-y-1/2 md:flex flex-col items-center">
+          <div className="flex items-end -space-x-8">
+            <div className="relative h-20 w-14">
+              <Image src="/images/images/homePageAward2.png" fill className="object-contain" alt="AWARD-EXCELLENCE 1" />
             </div>
-            <div className="relative w-36 h-44">
-              <Image
-                src="/images/images/homePageAward.png"
-                fill
-                className="object-contain"
-                alt="NEWNEWAWARD 1"
-              />
-            </div>
-          </div>
-          <p className="text-[#FFF] font-inter text-base font-bold tracking-[0.1em] uppercase">
-            2+ TOP AWARDS
-          </p>
-        </div>
-      </div>
-
-      {/* Key Stats Counter Grid */}
-      <section className="bg-[#FDFDFD] border-y border-slate-200 py-12">
-        <div className="section-shell">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
-            <div className="space-y-2">
-              <p className="text-[#000] font-inter text-5xl md:text-7xl font-semibold tracking-tighter">
-                <AnimatedCounter value={8} suffix="+" />
-              </p>
-              <p className="text-[#000] font-inter text-sm font-bold tracking-[0.2em] uppercase text-slate-500">YEARS IN OPERATION</p>
-            </div>
-            <div className="space-y-2">
-              <p className="text-[#000] font-inter text-5xl md:text-7xl font-semibold tracking-tighter">
-                <AnimatedCounter value={8} suffix="+" />
-              </p>
-              <p className="text-[#000] font-inter text-sm font-bold tracking-[0.2em] uppercase text-slate-500">SATISFIED CUSTOMERS</p>
-            </div>
-            <div className="space-y-2">
-              <p className="text-[#000] font-inter text-5xl md:text-7xl font-semibold tracking-tighter">
-                <AnimatedCounter value={1000} suffix="+" compact />
-              </p>
-              <p className="text-[#000] font-inter text-sm font-bold tracking-[0.2em] uppercase text-slate-500">PROJECTS COMPLETED</p>
-            </div>
-            <div className="space-y-2">
-              <p className="text-[#000] font-inter text-5xl md:text-7xl font-semibold tracking-tighter">
-                <AnimatedCounter value={4} suffix="+" />
-              </p>
-              <p className="text-[#000] font-inter text-sm font-bold tracking-[0.2em] uppercase text-slate-500">COUNTRIES SERVED</p>
+            <div className="relative h-48 w-36">
+              <Image src="/images/images/homePageAward.png" fill className="object-contain" alt="NEWNEWAWARD 1" />
             </div>
           </div>
         </div>
       </section>
 
-      {/* Sponsors Brand Marquee */}
-      <section className="py-16 bg-[#FFF] border-b border-slate-100">
-        <div className="section-shell mb-8 text-center">
-          <h2 className="text-[#000] font-inter text-2xl font-bold tracking-tight">
-            WE’RE TRUSTED BY OVER <span className="text-[#1E5AC8]">1000+ BRANDS</span>
-          </h2>
+      {/* ===== Stats band (floating over hero) ===== */}
+      <section className="relative z-20 -mt-8 px-4 sm:px-8 md:-mt-6">
+        <div className="mx-auto max-w-[80rem] rounded-2xl border border-slate-200 bg-white p-8 shadow-lift md:p-10">
+          <div className="grid grid-cols-2 gap-8 text-center lg:grid-cols-4">
+            {stats.map((s) => (
+              <div key={s.label} className="space-y-2">
+                <p className="font-display text-5xl font-bold tracking-tighter text-brand-600 md:text-6xl">
+                  <AnimatedCounter value={s.value} suffix={s.suffix} compact={s.compact} />
+                </p>
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">{s.label}</p>
+              </div>
+            ))}
+          </div>
         </div>
-        <div className="bg-[rgba(30,90,200,0.05)] py-6 overflow-hidden relative">
-          <div className="flex animate-marquee items-center gap-16 whitespace-nowrap">
+      </section>
+
+      {/* ===== Sponsors Brand Marquee ===== */}
+      <section className="py-20">
+        <div className="section-shell mb-10 text-center">
+          <span className="section-tag">Our track record</span>
+          <p className="section-title mt-3 text-balance">
+            Trusted by over{" "}
+            <span className="text-brand-600">1000+ brands</span> across two continents
+          </p>
+        </div>
+        <div className="overflow-hidden border-y border-slate-200 bg-slate-50/60 py-6">
+          <div className="flex animate-marquee items-center gap-20 whitespace-nowrap">
             {[...Array(3)].map((_, i) => (
               <React.Fragment key={i}>
                 {allPartners.map((partner, idx) => (
@@ -171,7 +174,7 @@ export default async function Home() {
                     key={`${i}-${idx}`}
                     src={partner.logoUrl}
                     alt={partner.name || "Brand"}
-                    className="h-12 w-auto object-contain inline-block"
+                    className="h-12 w-auto object-contain opacity-60 grayscale transition hover:opacity-100 hover:grayscale-0"
                   />
                 ))}
               </React.Fragment>
@@ -180,24 +183,30 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Digital Excellence Awards Section */}
-      <section className="py-24 bg-white">
+      {/* ===== Digital Excellence Awards ===== */}
+      <section className="bg-gradient-to-b from-white to-brand-50/50 py-24">
         <div className="section-shell">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div className="space-y-6">
-              <h2 className="text-slate-800 font-inter text-3xl sm:text-4xl font-medium leading-[1.15] tracking-tight">
-                RECOGNIZE FOR DIGITAL EXCELLENCE
-              </h2>
-              <p className="text-slate-600 text-lg leading-relaxed">
-                Our commitment to delivering exceptional digital business development and other IT Services has made us an award-winning agency trusted by businesses worldwide.
+          <div className="grid items-center gap-14 lg:grid-cols-2">
+            <div className="space-y-5">
+              <span className="section-tag">Awards & Recognition</span>
+              <h2 className="section-title text-balance">Recognized for digital excellence</h2>
+              <p className="section-lead">
+                Our commitment to exceptional digital business development and IT services has made us
+                an award-winning agency trusted by businesses worldwide.
               </p>
+              <div className="flex flex-wrap gap-3">
+                <Link href="/site/about" className="btn-primary">Learn about us</Link>
+                <Link href="/site/case-studies" className="btn-secondary">See our work</Link>
+              </div>
             </div>
-            
-            {/* Single Trophy with Circle Background */}
+
             <div className="flex justify-center">
-              <div className="relative w-80 h-80 rounded-full border-[20px] border-slate-50 bg-white flex items-center justify-center shadow-inner">
-                <div className="relative w-56 h-56">
-                  <Image src="/images/images/homePageAward.png" fill className="object-contain" alt="Award 1" />
+              <div className="relative">
+                <div className="absolute inset-0 -m-4 rounded-full bg-gradient-to-br from-brand-200 to-brand-500 opacity-40 blur-2xl" />
+                <div className="relative flex h-80 w-80 items-center justify-center rounded-full border border-brand-100 bg-white shadow-lift sm:h-96 sm:w-96">
+                  <div className="relative h-56 w-56 sm:h-64 sm:w-64">
+                    <Image src="/images/images/homePageAward.png" fill className="object-contain" alt="Award" />
+                  </div>
                 </div>
               </div>
             </div>
@@ -205,68 +214,50 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* IT Connecting Across Borders Globe Section */}
-      <section className="relative w-full h-[280px] bg-black overflow-hidden flex items-start pt-4 -mt-20 z-20">
-        <div className="absolute inset-0 z-0">
-          <Image
-            src="/images/images/globeImage.png"
-            fill
-            className="object-cover opacity-95 scale-110"
-            alt="Globe Connections"
-            priority
-          />
-        </div>
-        
-        <div className="section-shell relative z-20 w-full flex flex-col md:flex-row items-center justify-between gap-6 text-white">
-          <div className="md:w-1/2" />
-          <div className="flex flex-col items-center md:items-end gap-3 text-right">
-            <h2 className="text-2xl sm:text-3xl font-inter font-normal tracking-tight">
-              IT Connecting across borders.
+      {/* ===== IT Connecting Across Borders Globe ===== */}
+      <section className="relative w-full h-[280px] bg-slate-950 overflow-hidden">
+        <Image src="/images/images/globeImage.png" fill className="object-cover opacity-80 scale-110" alt="Globe Connections" priority />
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/40 to-slate-900/30" />
+        <div className="section-shell relative z-10 flex h-full flex-col items-start justify-center gap-4 text-white md:flex-row md:items-center md:justify-between">
+          <div className="max-w-md">
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand-300">Global reach</p>
+            <h2 className="mt-2 font-display text-3xl font-semibold tracking-tight">
+              IT connecting across borders.
             </h2>
-            <div className="flex items-center gap-2">
-              <div className="relative w-14 h-14 rounded-full overflow-hidden aspect-square">
-                <Image src="/images/icons/GhanaFlag.svg" fill className="object-cover scale-[1.35]" alt="Ghana" />
+          </div>
+          <div className="flex items-center gap-3">
+            {["GhanaFlag", "KenyaFlag", "USFlag", "UKFlag", "NigeriaFlag"].map((flag) => (
+              <div key={flag} className="relative h-14 w-14 rounded-full overflow-hidden ring-2 ring-white/30">
+                <Image src={`/images/icons/${flag}.svg`} fill className="object-cover scale-[1.35]" alt={flag} />
               </div>
-              <div className="relative w-14 h-14 rounded-full overflow-hidden aspect-square">
-                <Image src="/images/icons/KenyaFlag.svg" fill className="object-cover scale-[1.35]" alt="Kenya" />
-              </div>
-              <div className="relative w-14 h-14 rounded-full overflow-hidden aspect-square">
-                <Image src="/images/icons/USFlag.svg" fill className="object-cover scale-[1.35]" alt="United States" />
-              </div>
-              <div className="relative w-14 h-14 rounded-full overflow-hidden aspect-square">
-                <Image src="/images/icons/UKFlag.svg" fill className="object-cover scale-[1.35]" alt="United Kingdom" />
-              </div>
-              <div className="relative w-14 h-14 rounded-full overflow-hidden aspect-square">
-                <Image src="/images/icons/NigeriaFlag.svg" fill className="object-cover scale-[1.35]" alt="Nigeria" />
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* What Services We Offer Best */}
-      <section className="pt-10 px-6 bg-white md:pt-[3.75rem]">
+      {/* ===== What Services We Offer Best (old style) ===== */}
+      <section className="px-6 pt-10 md:pt-[3.75rem]">
         <p className="text-2xl uppercase md:text-4xl">
           What services do we <br /> offer best
         </p>
-        <div className="grid grid-cols-1 gap-4 max-w-[3000px] items-start justify-center mt-8 md:grid-cols-3">
+        <div className="mt-8 grid max-w-[3000px] grid-cols-1 items-start justify-center gap-4 md:grid-cols-3">
           {services.map((service, index) => (
             <div
               key={index}
-              className="bg-[#f6f6f6] relative pb-[5.625rem] p-6 h-full border-t-[5px] border-[#1E5AC8]"
+              className="relative h-full border-t-[5px] border-brand-600 bg-[#f6f6f6] p-6 pb-[5.625rem]"
             >
               <p className="text-xl font-semibold uppercase">{service.title}</p>
               <div className="pr-4">
-                <hr className="text-[#1E5AC8]" />
-                <ul className="mt-4 capitalize leading-7 text-lg">
-                  {service.list.map((item, itemIndex) => (
-                    <li key={itemIndex}>{item}</li>
+                <hr className="mb-3 mt-0 border-t border-brand-600" />
+                <ul className="mt-4 space-y-0 text-lg capitalize leading-7">
+                  {service.list.map((item) => (
+                    <li key={item}>{item}</li>
                   ))}
                 </ul>
               </div>
               <Link
                 href={service.href}
-                className="absolute bg-white bottom-5 border rounded-full py-2 px-3 border-[#1E5AC8] right-7 hover:bg-gray-100 cursor-pointer hover:scale-[0.97] active:scale-[1.02] transition-all duration-300"
+                className="absolute bottom-5 right-7 rounded-full border border-brand-600 bg-white px-3 py-2 transition-all duration-300 hover:scale-[0.97] hover:bg-gray-100 active:scale-[1.02]"
               >
                 &#10132;
               </Link>
@@ -275,13 +266,15 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Simple Rate Card with Zero Surprises */}
-      <PricingModel categories={pricing} showWhyYouNeedUs={false} />
+      {/* ===== Pricing ===== */}
+      <section id="pricing">
+        <PricingModel categories={pricing} showWhyYouNeedUs={false} />
+      </section>
 
-      {/* Here is why you need us */}
+      {/* ===== Why you need us ===== */}
       <WhyYouNeedUs />
 
-      {/* Testimonials */}
+      {/* ===== Testimonials (kept: dual marquee) ===== */}
       <TestimonialsBanner
         testimonials={testimonials.map((t) => ({
           quote: t.quote || "",
@@ -290,17 +283,20 @@ export default async function Home() {
         }))}
       />
 
-      {/* Work With Us + FAQs */}
-      <section className="bg-white pt-8 md:pt-20 md:px-10">
-        <div className="relative max-md:w-[90%] max-md:mx-auto bg-[#016DAB] rounded-2xl flex flex-col items-center max-md:pt-[6.25rem] max-md:pb-[8.5rem] justify-center overflow-hidden md:pb-10 md:flex-row md:justify-end md:overflow-visible md:pr-[10rem]">
+      {/* ===== Work With Us + FAQs ===== */}
+      <section className="bg-white pt-8 md:px-10 md:pt-20">
+        <div className="relative mx-auto flex max-md:w-[90%] max-md:flex-col max-md:items-center max-md:justify-center max-md:pt-[3rem] max-md:pb-[9rem] max-md:bg-[#016DAB] max-md:rounded-2xl md:justify-end md:overflow-visible md:rounded-2xl md:bg-[#016DAB] md:pb-10 md:pr-[10rem]">
           <Image
             src="/images/images/workWithUs.png"
             alt="Work With Us"
             width={882}
             height={942}
-            className="mb-4 object-contain absolute md:-left-[3.75rem] md:-bottom-[12.5rem] md:mb-0 md:h-[47.5rem] md:w-[47.5rem]"
+            className="absolute object-contain max-md:left-1/2 max-md:h-[26rem] max-md:w-[26rem] max-md:-translate-x-1/2 md:-bottom-[12.5rem] md:-left-[3.75rem] md:mb-0 md:h-[47.5rem] md:w-[47.5rem]"
           />
-          <LetsTalkButton whatsapp={settings.whatsapp} className="bg-white/20 max-md:absolute max-md:bottom-3 max-md:right-3 text-white md:my-[7.5rem]" />
+          <LetsTalkButton
+            whatsapp={settings.whatsapp}
+            className="bg-white/20 text-white max-md:absolute max-md:bottom-3 max-md:right-3 md:my-[7.5rem]"
+          />
         </div>
 
         <FAQSection faqs={groupFAQs(faqs)} />
