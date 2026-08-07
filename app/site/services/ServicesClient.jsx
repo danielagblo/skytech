@@ -15,12 +15,13 @@ export default function ServicesClient({ servicesContent, whoWeWorkFor, engageme
   return (
     <main className="min-h-screen bg-white">
       {/* Hero */}
-      <section className="relative bg-slate-950 text-white pt-36 pb-24 overflow-hidden">
+      <section className="relative overflow-hidden bg-slate-950 pt-36 pb-24 text-white">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute inset-0" style={{
-            backgroundImage: 'radial-gradient(circle at 30% 50%, rgba(59,130,246,0.3), transparent 50%), radial-gradient(circle at 70% 30%, rgba(56,189,248,0.2), transparent 50%)'
+            backgroundImage: 'radial-gradient(circle at 30% 50%, rgba(30,90,200,0.5), transparent 50%), radial-gradient(circle at 70% 30%, rgba(56,189,248,0.25), transparent 50%)'
           }} />
         </div>
+        <div className="pointer-events-none absolute -left-20 top-10 h-80 w-80 rounded-full bg-brand-600/20 blur-[120px]" />
 
         <div className="section-shell relative z-10 mx-auto max-w-4xl space-y-6 text-center">
           <span className="pill bg-white/10 text-brand-300 border-white/10">Our Services</span>
@@ -45,11 +46,11 @@ export default function ServicesClient({ servicesContent, whoWeWorkFor, engageme
       <section className="py-24 bg-white">
         <div className="section-shell space-y-16">
           <div className="text-center max-w-3xl mx-auto space-y-4">
-            <span className="pill">What We Build</span>
-            <h2 className="text-4xl sm:text-5xl font-bold text-slate-900 leading-tight tracking-tight">
+            <span className="section-tag">What We Build</span>
+            <h2 className="section-title text-4xl sm:text-5xl">
               {servicesContent.whatWeDoTitle}
             </h2>
-            <p className="text-lg text-slate-600">
+            <p className="section-lead">
               {servicesContent.whatWeDoSubtitle}
             </p>
           </div>
@@ -97,8 +98,8 @@ export default function ServicesClient({ servicesContent, whoWeWorkFor, engageme
       <section className="py-24 bg-slate-50">
         <div className="section-shell space-y-16">
           <div className="text-center max-w-3xl mx-auto space-y-4">
-            <span className="pill">How We Work</span>
-            <h2 className="text-4xl font-bold text-slate-900 tracking-tight">
+            <span className="section-tag">How We Work</span>
+            <h2 className="section-title text-4xl">
               {servicesContent.engagementTitle}
             </h2>
           </div>
@@ -134,11 +135,11 @@ export default function ServicesClient({ servicesContent, whoWeWorkFor, engageme
       <section className="py-24 bg-white">
         <div className="section-shell space-y-16">
           <div className="text-center max-w-3xl mx-auto space-y-4">
-            <span className="pill">Technology</span>
-            <h2 className="text-4xl font-bold text-slate-900 tracking-tight">
+            <span className="section-tag">Technology</span>
+            <h2 className="section-title text-4xl">
               Our Tech Stack
             </h2>
-            <p className="text-slate-600 text-lg">
+            <p className="section-lead">
               We use modern, battle-tested tools to build reliable digital products.
             </p>
           </div>

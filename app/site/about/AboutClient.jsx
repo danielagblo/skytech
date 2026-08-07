@@ -41,23 +41,26 @@ export default function AboutClient({ teamMembers }) {
   return (
     <main className="min-h-screen bg-white">
       {/* Hero Section */}
-      <section className="relative flex min-h-[80vh] items-center overflow-hidden bg-white pt-32 pb-20">
+      <section className="relative flex min-h-[80vh] items-center overflow-hidden bg-gradient-to-b from-brand-50/60 to-white pt-32 pb-20">
         {/* Background */}
         <div className="absolute inset-0 z-0">
+          <div className="absolute inset-0 bg-grid-light" />
           <Image
             src="/images/images/AboutBanner.png"
             alt="Skytech About"
             fill
-            className="object-cover opacity-10"
+            className="object-cover opacity-[0.06]"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-white via-white/90 to-white" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-white" />
+          <div className="pointer-events-none absolute -top-24 right-0 h-96 w-96 rounded-full bg-brand-600/10 blur-[120px]" />
+          <div className="pointer-events-none absolute -bottom-24 left-0 h-96 w-96 rounded-full bg-brand-600/10 blur-[120px]" />
         </div>
 
         <div className="section-shell relative z-10 space-y-10">
           <div className="mx-auto max-w-4xl space-y-6 text-center">
             <span className="pill">Our Story</span>
-            <h1 className="text-4xl font-bold leading-[1.1] tracking-tight text-slate-900 sm:text-5xl lg:text-6xl">
+            <h1 className="section-title text-4xl font-semibold leading-[1.1] tracking-tight text-slate-900 sm:text-5xl lg:text-6xl">
               We build <span className="text-brand-600">websites and apps</span>{" "}
               that help your <span className="text-slate-950">business grow.</span>
             </h1>
@@ -71,11 +74,11 @@ export default function AboutClient({ teamMembers }) {
             {aboutStats.map((stat) => (
               <div
                 key={stat.label}
-                className="flex items-center gap-4 rounded-full border border-slate-200 bg-white px-6 py-3 shadow-soft transition-all duration-500 hover:-translate-y-0.5 hover:shadow-lift"
+                className="flex items-center gap-4 rounded-full border border-brand-100 bg-white px-7 py-3.5 shadow-soft transition-all duration-500 hover:-translate-y-0.5 hover:border-brand-200 hover:shadow-lift"
               >
-                <span className="text-2xl font-bold text-slate-900">{stat.value}</span>
-                <span className="h-5 w-px bg-slate-200" />
-                <span className="text-xs font-bold uppercase tracking-wider text-slate-500">{stat.label}</span>
+                <span className="font-display text-3xl font-semibold text-brand-600">{stat.value}</span>
+                <span className="h-5 w-px bg-brand-100" />
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-600">{stat.label}</span>
               </div>
             ))}
           </div>
@@ -87,11 +90,13 @@ export default function AboutClient({ teamMembers }) {
         <div className="section-shell">
           <div className="grid grid-cols-1 items-center gap-16 lg:grid-cols-2">
             <div className="space-y-8">
-              <span className="pill">Mission & Vision</span>
-              <h2 className="text-4xl font-bold leading-tight tracking-tight text-slate-900 sm:text-5xl">
-                Our Strategic Vision{" "}
-                <span className="text-brand-600">For Your Business.</span>
-              </h2>
+              <div className="space-y-4">
+                <span className="section-tag">Mission &amp; Vision</span>
+                <h2 className="section-title text-4xl sm:text-5xl">
+                  Our Strategic Vision{" "}
+                  <span className="text-brand-600">For Your Business.</span>
+                </h2>
+              </div>
               <div className="space-y-5 text-lg leading-relaxed text-slate-600">
                 <p>
                   Our mission is to help ambitious teams turn ideas into real products. We&apos;re not just coders—we&apos;re partners who care about your outcomes, move with speed, and communicate with complete honesty.
@@ -102,7 +107,7 @@ export default function AboutClient({ teamMembers }) {
               </div>
             </div>
             <div className="relative flex justify-center lg:justify-end">
-              <div className="relative aspect-[4/3] w-full max-w-lg overflow-hidden rounded-3xl shadow-2xl">
+              <div className="relative aspect-[4/3] w-full max-w-lg overflow-hidden rounded-3xl shadow-lift ring-1 ring-brand-100">
                 <Image
                   src="/images/images/MissionVisionChessImage.png"
                   alt="Strategic Vision"
@@ -119,13 +124,9 @@ export default function AboutClient({ teamMembers }) {
       <section className="bg-slate-50 py-24">
         <div className="section-shell space-y-16">
           <div className="mx-auto max-w-3xl space-y-4 text-center">
-            <span className="pill">Our Method</span>
-            <h2 className="text-4xl font-bold tracking-tight text-slate-900">
-              We plan, build, and launch.
-            </h2>
-            <p className="text-lg text-slate-500">
-              You get clear steps and regular updates, so nothing is confusing.
-            </p>
+            <span className="section-tag">Our Method</span>
+            <h2 className="section-title text-4xl">We plan, build, and launch.</h2>
+            <p className="section-lead">You get clear steps and regular updates, so nothing is confusing.</p>
           </div>
           <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
             {processSteps.map((step) => (
@@ -157,13 +158,11 @@ export default function AboutClient({ teamMembers }) {
       <section className="bg-white py-24">
         <div className="section-shell space-y-16">
           <div className="space-y-4">
-            <span className="pill">Our History</span>
-            <h2 className="text-4xl font-bold leading-tight tracking-tight text-slate-900 sm:text-5xl">
+            <span className="section-tag">Our History</span>
+            <h2 className="section-title text-4xl sm:text-5xl">
               A Record of <span className="text-brand-600">Reliability.</span>
             </h2>
-            <p className="max-w-lg text-lg leading-relaxed text-slate-500">
-              We started with a goal to build better websites and apps in Ghana. Today, we deliver quality digital products for businesses everywhere.
-            </p>
+            <p className="section-lead max-w-lg">We started with a goal to build better websites and apps in Ghana. Today, we deliver quality digital products for businesses everywhere.</p>
           </div>
 
           <div className="relative max-w-4xl">
@@ -201,13 +200,11 @@ export default function AboutClient({ teamMembers }) {
         <section className="bg-slate-50 py-24">
           <div className="section-shell space-y-16">
             <div className="space-y-4">
-              <span className="pill">Meet the Team</span>
-              <h2 className="text-4xl font-bold leading-tight tracking-tight text-slate-900 sm:text-5xl">
+              <span className="section-tag">Meet the Team</span>
+              <h2 className="section-title text-4xl sm:text-5xl">
                 Engineering <span className="text-brand-600">Excellence.</span>
               </h2>
-              <p className="max-w-lg text-lg leading-relaxed text-slate-500">
-                Our leadership team brings decades of experience in building secure, scalable digital products.
-              </p>
+              <p className="section-lead max-w-lg">Our leadership team brings decades of experience in building secure, scalable digital products.</p>
             </div>
 
             <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">

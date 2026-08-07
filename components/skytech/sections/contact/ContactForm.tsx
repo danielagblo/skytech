@@ -89,12 +89,12 @@ export default function ContactForm() {
     <section className="bg-white px-6 py-12 md:py-20">
       <div className="mx-auto max-w-7xl">
         <div className="mb-12">
-          <span className="pill">Contact</span>
-          <h2 className="mt-4 text-3xl font-semibold text-slate-900 md:text-5xl">
+          <span className="section-tag">Contact</span>
+          <h2 className="section-title mt-4 text-3xl md:text-5xl">
             We&apos;d love to hear from you.
           </h2>
 
-          <p className="mt-3 max-w-xl text-slate-600">
+          <p className="section-lead mt-3 max-w-xl">
             Whether you&apos;ve a project in mind, want to collaborate, or just have
             questions, feel free to reach out. Our team is ready to help.
           </p>
@@ -148,7 +148,7 @@ export default function ContactForm() {
           </form>
 
           <div>
-            <div className="overflow-hidden rounded-xl shadow">
+            <div className="overflow-hidden rounded-2xl shadow-soft ring-1 ring-slate-100">
               <iframe
                 title="SkyTech Ghana"
                 src="https://maps.google.com/maps?q=5.6519898,-0.0643809&z=19&output=embed"
@@ -158,8 +158,8 @@ export default function ContactForm() {
               />
             </div>
 
-            <div className="mt-8">
-              <h3 className="text-3xl font-semibold leading-tight text-slate-900 md:text-5xl">
+            <div className="mt-8 rounded-3xl bg-gradient-to-b from-brand-50/60 to-white p-8 ring-1 ring-brand-100">
+              <h3 className="font-display text-3xl font-semibold leading-tight text-slate-900 md:text-5xl">
                 SPEAK TO OUR
                 <br />
                 24/7 SUPPORT.
@@ -170,18 +170,18 @@ export default function ContactForm() {
                   <Image src="/images/icons/mailIcon.svg" alt="Mail Icon" width={24} height={24} className="inline-block w-full h-full" />
                 </div>
                 &nbsp;&nbsp;
-                <p className="inline-block">info@skytechghana.com</p>
+                <p className="inline-block text-brand-700">info@skytechghana.com</p>
 
                 <br />
                 <div className="h-6 w-6 inline-block">
                   <Image src="/images/icons/telephoneIcon.svg" alt="Telephone Icon" width={24} height={24} className="inline-block w-full h-full" />
                 </div>
                 &nbsp;&nbsp;
-                <p className="inline-block">+233 55 289 2433</p>
+                <p className="inline-block text-brand-700">+233 55 289 2433</p>
               </div>
 
               <div className="mt-8">
-                <p className="mb-2 text-gray-600">All international enquiries</p>
+                <p className="mb-2 text-slate-500">All international enquiries</p>
 
                 <div className="flex items-center gap-2 text-2xl">
                   <FlagsList />
@@ -192,14 +192,14 @@ export default function ContactForm() {
                     <Image src="/images/icons/mailIcon.svg" alt="Mail Icon" width={24} height={24} className="inline-block w-full h-full" />
                   </div>
                   &nbsp;&nbsp;
-                  <p className="inline-block">world@skytechghana.com</p>
+                  <p className="inline-block text-brand-700">world@skytechghana.com</p>
 
                   <br />
                   <div className="h-6 w-6 inline-block">
                     <Image src="/images/icons/telephoneIcon.svg" alt="Telephone Icon" width={24} height={24} className="inline-block w-full h-full" />
                   </div>
                   &nbsp;&nbsp;
-                  <p className="inline-block">+1 558 289 2433</p>
+                  <p className="inline-block text-brand-700">+1 558 289 2433</p>
                 </div>
               </div>
             </div>
