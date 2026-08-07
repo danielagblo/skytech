@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 
 import CCTVSurveillance from "./CCTVSurveillance";
@@ -12,31 +12,37 @@ import HardwareProcurementAndSupply from "./HardwareProcurementAndSupply";
 
 const cards = [
   {
+    hash: "cctv",
     name: "CCTV Surveillance",
     title: "CCTV Surveillance Camera Installation",
     component: <CCTVSurveillance />,
   },
   {
+    hash: "gps",
     name: "GPS Tracking",
     title: "GPS Tracking Solutions",
     component: <GPSTracking />,
   },
   {
+    hash: "biometric",
     name: "Biometric & Automated Gates",
     title: "Biometric & Automated Gate Systems",
     component: <BiometricAndAutomatedGate />,
   },
   {
+    hash: "cyber",
     name: "Cyber Security",
     title: "Cyber Security Solutions",
     component: <CyberSecurity />,
   },
   {
+    hash: "mobile",
     name: "Mobile Tracking",
     title: "Mobile Tracking Solutions",
     component: <MobileTracking />,
   },
   {
+    hash: "hardware",
     name: "Hardware Procurement & Supplying",
     title: "Hardware Procurement & Supplying",
     component: <HardwareProcurementAndSupply />,
@@ -44,6 +50,7 @@ const cards = [
 ];
 
 interface SecurityCard {
+  hash: string;
   name: string;
   title: string;
   component: React.ReactNode;
@@ -51,6 +58,29 @@ interface SecurityCard {
 
 function SecuritySystemsPage() {
   const [activeTab, setActiveTab] = useState<SecurityCard>(cards[0]);
+  const [activeTabHash, setActiveTabHash] = useState(cards[0].hash);
+
+  useEffect(() => {
+    const onHashChange = () => {
+      const hash = window.location.hash.replace("#", "");
+      const match = cards.find((c) => c.hash === hash);
+      if (match) {
+        setActiveTab(match);
+        setActiveTabHash(match.hash);
+      }
+    };
+
+    onHashChange();
+    window.addEventListener("hashchange", onHashChange);
+    return () => window.removeEventListener("hashchange", onHashChange);
+  }, []);
+
+  const handleSelectTab = (card: SecurityCard) => {
+    setActiveTab(card);
+    setActiveTabHash(card.hash);
+    window.history.replaceState(null, "", `#${card.hash}`);
+    document.getElementById("security-content")?.scrollIntoView({ behavior: "smooth" });
+  };
 
   return (
     <div className="overflow-x-hidden bg-white">
@@ -92,11 +122,11 @@ function SecuritySystemsPage() {
 
           <div className="mb-10 flex flex-wrap items-center justify-center gap-3">
             {cards.map((card) => {
-              const isActive = activeTab.name === card.name;
+              const isActive = activeTabHash === card.hash;
               return (
                 <button
-                  key={card.name}
-                  onClick={() => setActiveTab(card)}
+                  key={card.hash}
+                  onClick={() => handleSelectTab(card)}
                   className={`rounded-full px-5 py-2.5 text-sm font-medium transition-all duration-300 ${
                     isActive
                       ? "bg-brand-600 text-white shadow-soft"
@@ -109,28 +139,7 @@ function SecuritySystemsPage() {
             })}
           </div>
 
-          <div className="mx-auto mb-10 max-w-xl md:hidden">
-            <label htmlFor="security-service" className="mb-2 block font-semibold text-gray-900">
-              Choose a Security Service:
-            </label>
-            <select
-              id="security-service"
-              value={activeTab.name}
-              onChange={(e) => {
-                const selected = cards.find((c) => c.name === e.target.value) ?? cards[0];
-                setActiveTab(selected);
-              }}
-              className="w-full rounded-xl border border-slate-200 bg-white p-3 text-slate-900 outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-200"
-            >
-              {cards.map((card) => (
-                <option key={card.name} value={card.name}>
-                  {card.name}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="rounded-3xl border border-slate-100 bg-white p-6 shadow-soft md:p-10">
+          <div id="security-content" className="scroll-mt-24 rounded-3xl border border-slate-100 bg-white p-6 shadow-soft md:p-10">
             <h2 className="mb-6 font-display text-3xl font-semibold uppercase leading-tight text-slate-900 md:text-4xl">
               {activeTab.title || activeTab.name || "Unknown Service"}
             </h2>

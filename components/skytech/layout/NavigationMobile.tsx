@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
-import { navigationLinks } from "@/app/lib/navigationLinks";
+import { navigationLinks, servicesNav } from "@/app/lib/navigationLinks";
 
 function NavigationMobile({ className }: { className?: string }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -101,6 +101,8 @@ function NavigationMobile({ className }: { className?: string }) {
           <ul className="flex flex-col gap-1">
             {navigationLinks.map((link, i) => {
               const isActive = currentPath === link.href;
+              const isServices = link.name === "Services";
+
               return (
                 <li
                   key={link.name}
@@ -109,16 +111,59 @@ function NavigationMobile({ className }: { className?: string }) {
                   }`}
                   style={{ transitionDelay: isOpen ? `${i * 40 + 100}ms` : "0ms" }}
                 >
-                  <a
-                    href={link.href}
-                    onClick={() => setIsOpen(false)}
-                    className={`flex items-center justify-between text-2xl text-white ${
-                      isActive ? "font-bold" : "font-medium text-white/80"
-                    }`}
-                  >
-                    {link.name}
-                    {isActive && <span className="h-2 w-2 rounded-full bg-white" />}
-                  </a>
+                  {isServices ? (
+                    <>
+                      <a
+                        href={link.href}
+                        onClick={() => setIsOpen(false)}
+                        className={`flex items-center justify-between text-2xl text-white ${
+                          isActive ? "font-bold" : "font-medium text-white/80"
+                        }`}
+                      >
+                        {link.name}
+                        {isActive && <span className="h-2 w-2 rounded-full bg-white" />}
+                      </a>
+                      <ul className="mt-4 space-y-1">
+                        {servicesNav.map((service) => (
+                          <li key={service.name}>
+                            <a
+                              href={service.href}
+                              onClick={() => setIsOpen(false)}
+                              className="block rounded-lg py-2 pl-4 text-lg text-brand-100 transition-colors hover:bg-white/10 hover:text-white"
+                            >
+                              {service.name}
+                            </a>
+                            {service.children && (
+                              <ul className="mt-1 space-y-1 border-l border-white/15 pl-6">
+                                {service.children.map((child) => (
+                                  <li key={child.name}>
+                                    <a
+                                      href={child.href}
+                                      onClick={() => setIsOpen(false)}
+                                      className="block rounded-lg py-1.5 text-base text-white/70 transition-colors hover:text-white"
+                                    >
+                                      {child.name}
+                                    </a>
+                                  </li>
+                                ))}
+                              </ul>
+                            )}
+                          </li>
+                        ))}
+                      </ul>
+                    </>
+                  ) : (
+                    <a
+                      href={link.href}
+                      onClick={() => setIsOpen(false)}
+                      className={`flex items-center justify-between text-2xl text-white ${
+                        isActive ? "font-bold" : "font-medium text-white/80"
+                      }`}
+                    >
+                      {link.name}
+                      {isActive && <span className="h-2 w-2 rounded-full bg-white" />}
+                    </a>
+                  )}
                 </li>
               );
             })}
