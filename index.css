@@ -39,31 +39,69 @@ a {
 /* ===== UTILITY CLASSES ===== */
 
 .focus-ring {
-  @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2;
+  @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2;
 }
 
 .section-shell {
-  @apply max-w-7xl mx-auto px-5 sm:px-6 lg:px-8;
+  @apply max-w-[80rem] mx-auto px-5 sm:px-6 lg:px-8;
 }
 
 .glass-panel {
-  @apply bg-white/80 backdrop-blur-xl border border-white/60 shadow-lg shadow-blue-500/5;
+  @apply bg-white/80 backdrop-blur-xl border border-white/60 shadow-soft;
 }
 
 .pill {
-  @apply inline-flex items-center rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-[0.15em] bg-blue-50 text-blue-600 border border-blue-100;
+  @apply inline-flex items-center rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] bg-brand-50 text-brand-700 border border-brand-100;
 }
 
 .btn-primary {
-  @apply inline-flex items-center justify-center rounded-full bg-blue-600 px-7 py-3.5 font-semibold text-white shadow-lg shadow-blue-600/25 transition-all duration-300 hover:-translate-y-0.5 hover:bg-blue-700 hover:shadow-xl active:translate-y-0;
+  @apply inline-flex items-center justify-center rounded-full bg-brand-600 px-7 py-3.5 font-semibold text-white shadow-soft transition-all duration-300 hover:-translate-y-0.5 hover:bg-brand-700 hover:shadow-lift active:translate-y-0;
 }
 
 .btn-secondary {
-  @apply inline-flex items-center justify-center rounded-full border-2 border-slate-200 px-7 py-3.5 font-semibold text-slate-700 transition-all duration-300 hover:-translate-y-0.5 hover:border-blue-300 hover:text-blue-700 hover:bg-blue-50 active:translate-y-0;
+  @apply inline-flex items-center justify-center rounded-full border border-slate-200 bg-white px-7 py-3.5 font-semibold text-slate-700 shadow-soft transition-all duration-300 hover:-translate-y-0.5 hover:border-brand-300 hover:text-brand-700 hover:bg-brand-50 active:translate-y-0;
 }
 
 .btn-dark {
-  @apply inline-flex items-center justify-center rounded-full bg-slate-900 px-7 py-3.5 font-semibold text-white shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:bg-slate-800 active:translate-y-0;
+  @apply inline-flex items-center justify-center rounded-full bg-slate-900 px-7 py-3.5 font-semibold text-white shadow-soft transition-all duration-300 hover:-translate-y-0.5 hover:bg-slate-800 active:translate-y-0;
+}
+
+/* ===== PREMIUM DECORATIVE BACKGROUNDS ===== */
+
+.bg-grid {
+  background-image:
+    linear-gradient(rgba(148, 163, 184, 0.14) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(148, 163, 184, 0.14) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+
+.bg-grid-light {
+  background-image:
+    linear-gradient(rgba(30, 90, 200, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(30, 90, 200, 0.06) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+.glow-brand {
+  box-shadow: 0 0 0 1px rgba(30, 90, 200, 0.08), 0 0 80px -20px rgba(30, 90, 200, 0.45);
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+/* ===== PREMIUM SECTION HEADERS ===== */
+
+.section-tag {
+  @apply inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.22em] text-brand-600;
+}
+
+.section-title {
+  @apply font-display text-3xl sm:text-4xl lg:text-[2.75rem] font-semibold tracking-tight text-slate-900 leading-[1.1];
+}
+
+.section-lead {
+  @apply text-lg text-slate-600 leading-relaxed;
 }
 
 /* ===== ANIMATIONS ===== */
