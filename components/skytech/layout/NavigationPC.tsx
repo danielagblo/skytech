@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
 import { navigationLinks } from "@/app/lib/navigationLinks";
@@ -8,22 +7,10 @@ import { navigationLinks } from "@/app/lib/navigationLinks";
 function NavigationPC({ className }: { className?: string }) {
   const router = useRouter();
   const currentPath = usePathname();
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   return (
     <div
-      className={`${className ?? ""} flex items-center justify-between gap-4 px-6 py-2 transition-colors duration-300 ${
-        scrolled
-          ? "bg-brand-700/95 backdrop-blur-md shadow-soft"
-          : "bg-white/10 backdrop-blur-md"
-      }`}
+      className={`${className ?? ""} flex items-center justify-between gap-4 px-6 py-2 bg-brand-700/95 backdrop-blur-md shadow-soft`}
     >
       <Image
         src="/images/images/skytechLogo.png"

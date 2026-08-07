@@ -7,17 +7,9 @@ import { navigationLinks } from "@/app/lib/navigationLinks";
 
 function NavigationMobile({ className }: { className?: string }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
   const router = useRouter();
   const currentPath = usePathname();
   const isLandingPage = currentPath === "/site/landing";
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -53,9 +45,7 @@ function NavigationMobile({ className }: { className?: string }) {
       <div className="relative z-50">
         <div
           aria-hidden
-          className={`pointer-events-none absolute inset-0 bg-brand-700/95 backdrop-blur-md shadow-soft transition-all duration-300 ${
-            scrolled ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0"
-          }`}
+          className="pointer-events-none absolute inset-0 bg-brand-700/95 backdrop-blur-md shadow-soft"
         />
 
         <div className="relative flex items-center justify-between px-4 py-2">
@@ -77,9 +67,7 @@ function NavigationMobile({ className }: { className?: string }) {
               aria-label={isOpen ? "Close menu" : "Open menu"}
               aria-expanded={isOpen}
               onClick={() => setIsOpen((v) => !v)}
-              className={`relative ml-auto flex h-10 w-10 flex-col items-center justify-center gap-1.5 ${
-                scrolled ? "" : "mix-blend-difference"
-              }`}
+              className="relative ml-auto flex h-10 w-10 flex-col items-center justify-center gap-1.5"
             >
               <span
                 className={`h-0.5 w-6 bg-white transition-all duration-300 ${

@@ -83,25 +83,26 @@ export default function ContactForm() {
   };
 
   const inputStyle =
-    "w-full rounded-xl border border-gray-300 px-4 py-4 outline-none transition focus:border-brand-600 focus:ring-2 focus:ring-brand-200";
+    "w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-4 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-brand-600 focus:bg-white focus:ring-2 focus:ring-brand-200";
 
   return (
-    <section className="bg-white px-6 py-12 md:py-20">
+    <section className="bg-slate-50 px-6 py-16 md:py-24">
       <div className="mx-auto max-w-7xl">
-        <div className="mb-12">
-          <span className="section-tag">Contact</span>
-          <h2 className="section-title mt-4 text-3xl md:text-5xl">
-            We&apos;d love to hear from you.
+        <div className="mb-12 flex flex-col items-center text-center">
+          <span className="section-tag">Get in Touch</span>
+          <h2 className="section-title mt-4 text-3xl text-balance sm:text-4xl lg:text-5xl">
+            Send us a message
           </h2>
-
           <p className="section-lead mt-3 max-w-xl">
-            Whether you&apos;ve a project in mind, want to collaborate, or just have
-            questions, feel free to reach out. Our team is ready to help.
+            Fill in the form and our team will get back to you shortly.
           </p>
         </div>
 
         <div className="grid gap-12 lg:grid-cols-2">
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form
+            onSubmit={handleSubmit}
+            className="space-y-5 rounded-3xl border border-slate-100 bg-white p-8 shadow-lift lg:p-10"
+          >
             <input
               className={inputStyle}
               name="fullName"
@@ -141,7 +142,7 @@ export default function ContactForm() {
 
             <button
               disabled={loading}
-              className="w-full rounded-xl bg-brand-600 py-4 text-lg font-medium text-white shadow-soft transition hover:bg-brand-700"
+              className="w-full rounded-xl bg-brand-600 py-4 text-lg font-medium text-white shadow-soft transition hover:bg-brand-700 disabled:cursor-not-allowed disabled:opacity-70"
             >
               {loading ? "Sending..." : "Send Message"}
             </button>
@@ -159,7 +160,7 @@ export default function ContactForm() {
             </div>
 
             <div className="mt-8 rounded-3xl bg-gradient-to-b from-brand-50/60 to-white p-8 ring-1 ring-brand-100">
-              <h3 className="font-display text-3xl font-semibold leading-tight text-slate-900 md:text-5xl">
+              <h3 className="font-display text-3xl font-semibold leading-tight text-slate-900 md:text-4xl">
                 SPEAK TO OUR
                 <br />
                 24/7 SUPPORT.

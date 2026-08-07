@@ -90,19 +90,23 @@ export default function InternshipForm() {
   };
 
   const inputClass =
-    "w-full rounded-xl border border-gray-300 px-4 py-4 outline-none transition focus:border-brand-600 focus:ring-2 focus:ring-brand-200";
+    "w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-4 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-brand-600 focus:bg-white focus:ring-2 focus:ring-brand-200";
 
   return (
-    <section className="bg-white px-6 py-16 md:px-10">
+    <section className="bg-slate-50 px-6 py-16 md:px-10">
       <div className="mx-auto max-w-6xl">
         <div className="text-center">
-          <span className="pill">Internship</span>
-          <h1 className="mt-4 text-4xl font-semibold tracking-tight text-slate-900">INTERNSHIP FORM</h1>
-
-          <p className="mt-2 text-slate-500">Please fill in your details</p>
+          <span className="section-tag justify-center">Internship</span>
+          <h1 className="section-title mt-4 text-3xl text-balance sm:text-4xl lg:text-5xl">
+            Internship Form
+          </h1>
+          <p className="section-lead mt-3">Please fill in your details</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="mt-12 space-y-5">
+        <form
+          onSubmit={handleSubmit}
+          className="mt-12 space-y-5 rounded-3xl border border-slate-100 bg-white p-8 shadow-lift lg:p-10"
+        >
           <div className="grid gap-5 md:grid-cols-2">
             <input
               className={inputClass}
