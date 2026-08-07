@@ -156,28 +156,24 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* ===== Sponsors Brand Marquee ===== */}
+      {/* ===== Sponsors Brand Row ===== */}
       <section className="py-20">
         <div className="section-shell mb-10 text-center">
-          <span className="section-tag">Our track record</span>
+          <span className="section-tag">Our Clients</span>
           <p className="section-title mt-3 text-balance">
             Trusted by over{" "}
             <span className="text-brand-600">1000+ brands</span> across two continents
           </p>
         </div>
-        <div className="overflow-hidden border-y border-slate-200 bg-slate-50/60 py-6">
-          <div className="flex animate-marquee items-center gap-20 whitespace-nowrap">
-            {[...Array(3)].map((_, i) => (
-              <React.Fragment key={i}>
-                {allPartners.map((partner, idx) => (
-                  <img
-                    key={`${i}-${idx}`}
-                    src={partner.logoUrl}
-                    alt={partner.name || "Brand"}
-                    className="h-12 w-auto object-contain opacity-60 grayscale transition hover:opacity-100 hover:grayscale-0"
-                  />
-                ))}
-              </React.Fragment>
+        <div className="border-y border-slate-200 bg-slate-50/60 py-8">
+          <div className="section-shell grid grid-cols-2 items-center justify-items-center gap-x-10 gap-y-8 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+            {allPartners.map((partner, idx) => (
+              <img
+                key={`${idx}-${partner.name || partner.logoUrl}`}
+                src={partner.logoUrl}
+                alt={partner.name || "Brand"}
+                className="h-12 w-auto object-contain"
+              />
             ))}
           </div>
         </div>
