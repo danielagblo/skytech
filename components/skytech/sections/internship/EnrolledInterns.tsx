@@ -166,7 +166,7 @@ export default function EnrolledInterns({ interns }: { interns: EnrolledIntern[]
         <div className="flex items-center gap-3 md:gap-4">
           <span className="text-lg font-medium text-gray-800 md:text-2xl">Enrolled interns</span>
           <div className="w-24 h-2 bg-gray-200 rounded-full overflow-hidden md:w-48">
-            <div className="h-full w-1/3 bg-blue-500 rounded-full" />
+            <div className="h-full w-1/3 bg-brand-600 rounded-full" />
           </div>
         </div>
         <span className="text-3xl font-semibold text-gray-900 md:text-5xl">{interns.length}+</span>

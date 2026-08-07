@@ -90,15 +90,16 @@ export default function InternshipForm() {
   };
 
   const inputClass =
-    "w-full rounded-xl border border-gray-300 px-4 py-4 outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-200";
+    "w-full rounded-xl border border-gray-300 px-4 py-4 outline-none transition focus:border-brand-600 focus:ring-2 focus:ring-brand-200";
 
   return (
-    <section className="bg-white py-16 px-10">
+    <section className="bg-white px-6 py-16 md:px-10">
       <div className="mx-auto max-w-6xl">
         <div className="text-center">
-          <h1 className="text-4xl font-medium tracking-tight">INTERNSHIP FORM</h1>
+          <span className="pill">Internship</span>
+          <h1 className="mt-4 text-4xl font-semibold tracking-tight text-slate-900">INTERNSHIP FORM</h1>
 
-          <p className="mt-2 text-gray-600">Please fill in your details</p>
+          <p className="mt-2 text-slate-500">Please fill in your details</p>
         </div>
 
         <form onSubmit={handleSubmit} className="mt-12 space-y-5">
@@ -195,12 +196,12 @@ export default function InternshipForm() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-xl bg-[#355BC9] py-4 text-lg font-medium text-white transition hover:bg-[#2849b5] disabled:cursor-not-allowed disabled:opacity-70"
+            className="w-full rounded-xl bg-brand-600 py-4 text-lg font-medium text-white shadow-soft transition hover:bg-brand-700 disabled:cursor-not-allowed disabled:opacity-70"
           >
             {loading ? "Submitting..." : "Apply Now"}
           </button>
 
-          <p className="text-center text-sm text-gray-500">
+          <p className="text-center text-sm text-slate-500">
             You&apos;ll receive an approval Email or SMS if your application is approved.
           </p>
         </form>
