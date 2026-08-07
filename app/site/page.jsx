@@ -166,7 +166,7 @@ export default async function Home() {
           </p>
         </div>
         <div className="border-y border-slate-200 bg-slate-50/60 py-8">
-          <div className="section-shell grid grid-cols-2 items-center justify-items-center gap-x-6 gap-y-8 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+          <div className="mx-auto grid max-w-4xl grid-cols-2 items-center justify-items-center gap-x-4 gap-y-8 sm:grid-cols-3 lg:grid-cols-6">
             {allPartners.map((partner, idx) => (
               <img
                 key={`${idx}-${partner.name || partner.logoUrl}`}
