@@ -35,21 +35,43 @@ const industryCards = [
 
 function IndustryCards() {
   return (
-    <div className="p-6 -my-8 grid grid-cols-1 gap-4 gap-y-10 sm:grid-cols-2 md:grid-cols-3 md:p-10">
-      {industryCards.map((card, index) => (
-        <div key={index} className="flex flex-col justify-start max-w-[25rem] max-h-[25rem]">
-          <Image
-            src={card.image}
-            alt={card.title}
-            width={400}
-            height={300}
-            className="mb-4"
-          />
-          <h3 className="text-2xl pl-4">{card.title}</h3>
-          <p className="text-gray-600 pl-4 text-lg">{card.description}</p>
+    <section className="px-6 py-16 md:px-10 md:py-20">
+      <div className="mx-auto max-w-7xl">
+        <div className="mb-12 flex flex-col items-center text-center">
+          <span className="section-tag justify-center">Industries</span>
+          <h2 className="section-title mt-4 text-3xl text-balance sm:text-4xl">
+            Built for the sectors that matter
+          </h2>
+          <p className="section-lead mt-3 max-w-xl">
+            Tailored digital solutions for industries that demand technical rigor.
+          </p>
         </div>
-      ))}
-    </div>
+
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {industryCards.map((card, index) => (
+            <div
+              key={index}
+              className="group flex flex-col overflow-hidden rounded-3xl border border-slate-100 bg-white shadow-soft transition-all duration-500 hover:-translate-y-1 hover:shadow-lift"
+            >
+              <div className="relative aspect-[4/3] w-full overflow-hidden">
+                <Image
+                  src={card.image}
+                  alt={card.title}
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+              </div>
+              <div className="p-6">
+                <h3 className="font-display text-xl font-semibold uppercase text-slate-900">
+                  {card.title}
+                </h3>
+                <p className="mt-2 leading-relaxed text-slate-600">{card.description}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }
 

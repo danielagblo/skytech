@@ -11,33 +11,49 @@ export default async function WebSolutionsPage() {
   const pricing = await getPricing();
 
   return (
-    <div className="text-xl">
-      <Image
-        src="/images/images/AboutBanner.png"
-        alt="About Us"
-        width={1600}
-        height={160}
-        className="w-screen h-40 object-cover"
-      />
-      <div className="p-6 md:p-10">
-        <p className="text-2xl uppercase pb-3 md:text-4xl">
-          Industries we serve <br /> digital solutions
-        </p>
-        <p>
-          We specialize in areas that demand technical rigor,
-          <br /> high availability, and absolute data integrity.
-        </p>
-      </div>
+    <div className="overflow-x-hidden bg-white">
+      <section className="relative overflow-hidden bg-slate-950 pt-28 pb-16 text-white md:pb-20">
+        <Image
+          src="/images/images/AboutBanner.png"
+          alt="Web Solutions"
+          width={1600}
+          height={160}
+          className="absolute inset-0 h-full w-full object-cover opacity-25"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/70 to-slate-950/30" />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-grid opacity-20" />
+        <div className="absolute -top-20 left-1/3 h-72 w-72 rounded-full bg-brand-600/40 blur-[120px]" />
+
+        <div className="section-shell relative">
+          <div className="max-w-2xl">
+            <span className="pill">Web Solutions</span>
+            <h1 className="font-display mt-5 text-4xl font-semibold uppercase leading-[1.1] text-white sm:text-5xl">
+              INDUSTRIES WE SERVE
+              <span className="block text-brand-400">DIGITAL SOLUTIONS</span>
+            </h1>
+            <p className="mt-5 max-w-xl text-lg leading-relaxed text-slate-300">
+              We specialize in areas that demand technical rigor, high availability,
+              and absolute data integrity.
+            </p>
+          </div>
+        </div>
+      </section>
+
       <IndustryCards />
       <PricingModel categories={pricing} showWhyYouNeedUs={false} />
       <WorkingProcess />
       <TargetMarketAudience />
-      <div className="p-6 mt-0 mb-0 md:p-10 md:-mt-6 md:-mb-20">
-        <p className="text-2xl uppercase pb-3 md:text-4xl">
-          WHY WE&apos;RE THE PREFERRED CHOICE FOR <br />
-          DIGITAL BUSINESS DEVELOPMENT SERVICE{" "}
-        </p>
-        <p>Our work ethics stem from 4 cardinal principles</p>
+
+      <div className="px-6 md:px-10">
+        <div className="flex flex-col items-center py-16 text-center">
+          <span className="section-tag justify-center">Our Principles</span>
+          <p className="section-title mt-4 text-3xl text-balance sm:text-4xl">
+            Why we&apos;re the preferred choice for
+            <span className="block">digital business development services</span>
+          </p>
+          <p className="section-lead mt-4">Our work ethics stem from 4 cardinal principles</p>
+        </div>
       </div>
 
       <WhyYouNeedUs />

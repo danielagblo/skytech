@@ -59,17 +59,17 @@ const audiences: AudienceItem[] = [
 
 function AudienceCard({ number, title, description, image, alt, wide }: AudienceItem) {
   return (
-    <div className="relative rounded-3xl border border-gray-400 p-6 pt-10 flex flex-col gap-6 h-full">
-      <div className="absolute -top-3 -left-2 w-9 h-9 rounded-full border border-gray-500 flex items-center justify-center font-semibold text-gray-700 shrink-0">
+    <div className="relative flex h-full flex-col gap-6 rounded-3xl border border-slate-100 bg-white p-6 pt-10 shadow-soft transition-all duration-500 hover:-translate-y-1 hover:shadow-lift md:p-8 md:pt-10">
+      <div className="absolute -top-3 -left-2 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand-600 font-display text-sm font-semibold text-white shadow-soft">
         {number}
       </div>
 
-      <div className={`flex flex-col gap-4 md:flex-row ${wide ? "items-start" : "items-center"} h-full`}>
-        <div className="flex flex-col gap-3 flex-1 min-w-0 h-full">
-          <h3 className="font-semibold leading-snug text-2xl">{title}</h3>
-          <div className="flex flex-col gap-3">
+      <div className={`flex h-full flex-col gap-4 md:flex-row ${wide ? "items-start" : "items-center"}`}>
+        <div className="h-full min-w-0 flex-1 flex-col gap-3">
+          <h3 className="font-display text-2xl font-semibold leading-snug text-slate-900">{title}</h3>
+          <div className="mt-3 flex flex-col gap-3">
             {description.split("\n\n").map((para, i) => (
-              <p key={i} className="text-gray-800 text-lg leading-relaxed">
+              <p key={i} className="leading-relaxed text-slate-600">
                 {para}
               </p>
             ))}
@@ -78,11 +78,11 @@ function AudienceCard({ number, title, description, image, alt, wide }: Audience
 
         {image && (
           <div
-            className={`shrink-0 rounded-2xl w-full h-40 overflow-hidden ${
-              wide ? "md:h-full md:scale-[0.8]" : ""
-            } ${wide ? "md:w-64 md:h-56" : "md:w-28 md:h-28"}`}
+            className={`shrink-0 overflow-hidden rounded-2xl ${
+              wide ? "md:h-56 md:w-64 md:scale-[0.8]" : "md:h-28 md:w-28"
+            } h-40 w-full`}
           >
-            <Image src={image} alt={alt} width={256} height={224} className="w-full h-full object-cover" />
+            <Image src={image} alt={alt} width={256} height={224} className="h-full w-full object-cover" />
           </div>
         )}
       </div>
@@ -99,27 +99,34 @@ export default function TargetMarketAudience() {
   }, []);
 
   return (
-    <section className="py-16 px-6 md:px-10">
-      <h1 className="text-2xl font-medium uppercase mb-8 md:text-4xl md:mb-12">Target Market Audience</h1>
+    <section className="px-6 py-16 md:px-10 md:py-24">
+      <div className="mx-auto max-w-7xl">
+        <div className="mb-12 flex flex-col items-center text-center">
+          <span className="section-tag justify-center">Who we serve</span>
+          <h2 className="section-title mt-4 text-3xl text-balance sm:text-4xl">
+            Target Market Audience
+          </h2>
+        </div>
 
-      <div className="flex flex-col gap-6">
-        <AudienceCard {...first} />
+        <div className="flex flex-col gap-6">
+          <AudienceCard {...first} />
 
-        {pairs.map((pair, i) => (
-          <div key={i} className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            {pair.map((item) => (
-              <AudienceCard
-                number={item.number}
-                title={item.title}
-                description={item.description}
-                image={item.image}
-                alt={item.alt}
-                wide={item.wide}
-                key={item.number}
-              />
-            ))}
-          </div>
-        ))}
+          {pairs.map((pair, i) => (
+            <div key={i} className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              {pair.map((item) => (
+                <AudienceCard
+                  number={item.number}
+                  title={item.title}
+                  description={item.description}
+                  image={item.image}
+                  alt={item.alt}
+                  wide={item.wide}
+                  key={item.number}
+                />
+              ))}
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );

@@ -23,33 +23,43 @@ const steps = [
 
 export default function WorkingProcess() {
   return (
-    <section className="py-12 px-6 md:py-20 md:px-10">
-      <h2 className="text-3xl text-center font-normal leading-tight mb-10 max-w-3xl mx-auto md:text-5xl md:mb-24">
-        Our working process on how to grow your business
-      </h2>
+    <section className="bg-slate-50 px-6 py-16 md:px-10 md:py-24">
+      <div className="mx-auto max-w-7xl">
+        <div className="mb-14 flex flex-col items-center text-center">
+          <span className="section-tag justify-center">How we work</span>
+          <h2 className="section-title mt-4 max-w-3xl text-balance">
+            Our working process on how to grow your business
+          </h2>
+        </div>
 
-      <div className="relative">
-        <div className="hidden md:block absolute top-[28.57%] left-0 right-0 border-t-[3px] border-dashed border-gray-300 z-0" />
+        <div className="relative">
+          <div className="absolute left-0 right-0 top-1/2 hidden -translate-y-1/2 border-t-[3px] border-dashed border-brand-200 lg:block" />
 
-        <div className="grid grid-cols-1 gap-10 relative z-10 md:grid-cols-3 md:gap-8 md:px-[4.375rem]">
-          {steps.map((step, index) => (
-            <div key={index} className="flex flex-col">
-              <div className="w-40 h-40 rounded-full overflow-hidden mx-auto mb-8 bg-black shrink-0 md:w-60 md:h-60">
-                <Image
-                  src={step.image}
-                  alt={step.alt}
-                  width={240}
-                  height={240}
-                  className="w-40 h-40 object-cover md:w-60 md:h-60"
-                />
+          <div className="grid grid-cols-1 gap-10 md:grid-cols-3 md:gap-8 lg:px-[4.375rem]">
+            {steps.map((step, index) => (
+              <div key={index} className="group relative flex flex-col">
+                <div className="relative mx-auto mb-8 shrink-0">
+                  <span className="absolute -top-3 -left-3 z-10 flex h-11 w-11 items-center justify-center rounded-2xl bg-brand-600 font-display text-base font-semibold text-white shadow-soft">
+                    {index + 1}
+                  </span>
+                  <div className="h-40 w-40 overflow-hidden rounded-full bg-slate-900 md:h-56 md:w-56">
+                    <Image
+                      src={step.image}
+                      alt={step.alt}
+                      width={240}
+                      height={240}
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                  </div>
+                </div>
+
+                <div className="px-2 text-center md:text-left">
+                  <h3 className="font-display text-2xl font-semibold text-slate-900">{step.title}</h3>
+                  <p className="mt-3 leading-relaxed text-slate-600">{step.description}</p>
+                </div>
               </div>
-
-              <div className="px-2">
-                <h3 className="text-2xl font-semibold mb-3">{step.title}</h3>
-                <p className="text-gray-700 leading-relaxed text-lg">{step.description}</p>
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </section>
