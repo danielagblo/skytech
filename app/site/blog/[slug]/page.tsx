@@ -47,17 +47,17 @@ async function BlogPostPage({ params }: BlogPostPageProps) {
           <div className="flex flex-wrap items-center gap-3 mb-6">
             <Link
               href="/site/blog"
-              className="rounded-full bg-gray-100 px-4 py-2 text-sm hover:no-underline hover:bg-gray-200"
+              className="rounded-full bg-brand-50 px-4 py-2 text-sm text-brand-700 hover:no-underline hover:bg-brand-100"
             >
               &#x1F878; Return
             </Link>
             <Link
               href="/site/blog"
-              className="rounded-full bg-gray-100 px-4 py-2 text-sm hover:no-underline hover:bg-gray-200"
+              className="rounded-full bg-brand-50 px-4 py-2 text-sm text-brand-700 hover:no-underline hover:bg-brand-100"
             >
               Blog home
             </Link>
-            <span className="ml-auto text-sm text-gray-500">
+            <span className="ml-auto text-sm text-slate-500">
               {formatBlogDate(post.publishedAt)}&nbsp;&nbsp;{post.readTimeMinutes} mins read
             </span>
           </div>
@@ -70,26 +70,26 @@ async function BlogPostPage({ params }: BlogPostPageProps) {
         </div>
 
         <div>
-          <h2 className="text-2xl border-b border-black inline-block pb-1 mb-6">Other topics</h2>
+          <h2 className="mb-6 inline-block border-b border-brand-600 pb-1 text-2xl">Other topics</h2>
           <div className="space-y-8">
             {relatedPosts.map((related) => (
               <Link
                 key={related.slug}
                 href={`/site/blog/${related.slug}`}
-                className="block group hover:no-underline"
+                className="group block hover:no-underline"
               >
                 {related.coverImage && (
-                  <div className="relative w-full aspect-[4/3] overflow-hidden rounded-sm">
+                  <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl ring-1 ring-slate-100 shadow-soft transition-shadow group-hover:shadow-lift">
                     <Image
                       src={related.coverImage}
                       alt={related.title}
                       fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-300"
+                      className="object-cover transition-transform duration-300 group-hover:scale-105"
                     />
                   </div>
                 )}
-                <h3 className="uppercase font-semibold mt-3 group-hover:underline">{related.title}</h3>
-                <p className="text-gray-600 text-sm mt-1 line-clamp-3">{related.excerpt}</p>
+                <h3 className="mt-3 font-semibold uppercase transition-colors group-hover:text-brand-600">{related.title}</h3>
+                <p className="mt-1 line-clamp-3 text-sm text-slate-600">{related.excerpt}</p>
               </Link>
             ))}
           </div>

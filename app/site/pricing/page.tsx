@@ -16,14 +16,14 @@ export default async function PricingPage() {
         alt="Pricing"
         width={1600}
         height={160}
-        className="w-screen h-40 object-cover"
+        className="h-40 w-screen object-cover"
       />
 
       <div className="p-6 text-center md:p-10 md:text-left">
-        <p className="text-2xl uppercase pb-3 md:text-4xl">
+        <p className="pb-3 text-2xl uppercase md:text-4xl">
           Simple, Transparent Pricing <br className="hidden md:block" /> Built For Your Business
         </p>
-        <p>No hidden fees, no surprise renewals — just honest rates for real, custom-built software.</p>
+        <p className="text-slate-500">No hidden fees, no surprise renewals — just honest rates for real, custom-built software.</p>
       </div>
 
       <PricingModel categories={pricing} />
