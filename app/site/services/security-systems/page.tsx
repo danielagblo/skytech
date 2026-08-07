@@ -3,7 +3,6 @@
 import { useState } from "react";
 import Image from "next/image";
 
-import TopScrollingBanner from "@/components/skytech/sections/home/TopScrollingBanner";
 import CCTVSurveillance from "./CCTVSurveillance";
 import GPSTracking from "./GPSTracking";
 import BiometricAndAutomatedGate from "./BiometricAndAutomatedGate";
@@ -54,70 +53,96 @@ function SecuritySystemsPage() {
   const [activeTab, setActiveTab] = useState<SecurityCard>(cards[0]);
 
   return (
-    <>
-      <div className="md:fixed top-0 w-screen z-20">
-        <TopScrollingBanner className="bg-[#031B41] text-white p-3 flex items-center justify-center max-md:pt-11 " />
-      </div>
-      <div className="relative overflow-x-hidden">
+    <div className="overflow-x-hidden bg-white">
+      <section className="relative overflow-hidden bg-slate-950 pt-28 pb-16 text-white md:pb-20">
         <Image
           src="/images/images/securitySystemsBannerImage.png"
-          alt="Banner Image"
-          width={1600}
-          height={800}
-          className="w-screen h-auto"
-          loading="eager"
+          alt="Security Systems"
+          fill
           priority
+          className="absolute inset-0 object-cover opacity-25"
         />
-        <div className="px-4 pt-4 pb-2 md:hidden">
-          <label htmlFor="security-service" className="mb-2 block font-semibold text-gray-900">
-            Choose a Security Service:
-          </label>
-          <select
-            id="security-service"
-            value={activeTab.name}
-            onChange={(e) => {
-              const selected = cards.find((c) => c.name === e.target.value) ?? cards[0];
-              setActiveTab(selected);
-            }}
-            className="w-full rounded-xl border border-gray-300 bg-white p-3 text-black outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-200"
-          >
-            {cards.map((card) => (
-              <option key={card.name} value={card.name}>
-                {card.name}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="hidden px-4 py-4 items-center justify-center max-md:pt-11 md:flex md:absolute md:top-[27.5vh] md:w-screen md:px-0 md:py-0">
-          <div className="grid grid-cols-2 gap-3 w-full md:grid-cols-3 md:gap-6 md:w-auto">
-            {cards.map((card, index) => (
-              <div
-                key={index}
-                className={`text-white rounded-2xl bg-brand-600 md:bg-white/15 md:backdrop-blur-md
-                  min-h-20 p-3 md:p-0 md:min-w-[22vw] md:min-h-[12vw] md:max-w-[19.375rem] md:max-h-[8.75rem]
-                  flex justify-center max-md:pt-11 items-center text-sm md:text-2xl
-                  cursor-pointer transition-all duration-300 ease-in-out ${
-                    activeTab.name === card.name ? "border-2 border-white" : "border-2 border-transparent"
-                  }`}
-                onClick={() => setActiveTab(card)}
-              >
-                <p className="text-center">{card.name}</p>
-              </div>
-            ))}
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/70 to-slate-950/30" />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-grid opacity-20" />
+        <div className="absolute -top-20 right-1/4 h-72 w-72 rounded-full bg-brand-600/40 blur-[120px]" />
+
+        <div className="section-shell relative">
+          <div className="max-w-2xl">
+            <span className="pill">Enterprise Security</span>
+            <h1 className="font-display mt-5 text-4xl font-semibold uppercase leading-[1.1] text-white sm:text-5xl">
+              SECURITY SYSTEMS &amp; SOLUTIONS
+            </h1>
+            <p className="mt-5 max-w-xl text-lg leading-relaxed text-slate-300">
+              Protecting your people, property, and data with enterprise-grade
+              surveillance, tracking, and cyber security services.
+            </p>
           </div>
         </div>
-      </div>
-      <div className="p-4 md:p-8">
-        <h2 className="text-2xl font-bold mb-4 uppercase md:text-4xl">
-          {activeTab.title || activeTab.name || "Unknown Service"}
-        </h2>
-        {activeTab.component ? (
-          <div className="text-lg">{activeTab.component}</div>
-        ) : (
-          <p className="text-lg">Sorry, this service is not currently available</p>
-        )}
-      </div>
-    </>
+      </section>
+
+      <section className="px-4 py-12 md:px-8">
+        <div className="mx-auto max-w-7xl">
+          <div className="mb-8 flex flex-col items-center">
+            <span className="section-tag justify-center">Choose a Service</span>
+            <h2 className="section-title mt-4 text-3xl text-balance sm:text-4xl">
+              Explore our security offerings
+            </h2>
+          </div>
+
+          <div className="mb-10 flex flex-wrap items-center justify-center gap-3">
+            {cards.map((card) => {
+              const isActive = activeTab.name === card.name;
+              return (
+                <button
+                  key={card.name}
+                  onClick={() => setActiveTab(card)}
+                  className={`rounded-full px-5 py-2.5 text-sm font-medium transition-all duration-300 ${
+                    isActive
+                      ? "bg-brand-600 text-white shadow-soft"
+                      : "border border-slate-200 bg-white text-slate-600 hover:border-brand-600 hover:text-brand-600"
+                  }`}
+                >
+                  {card.name}
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="mx-auto mb-10 max-w-xl md:hidden">
+            <label htmlFor="security-service" className="mb-2 block font-semibold text-gray-900">
+              Choose a Security Service:
+            </label>
+            <select
+              id="security-service"
+              value={activeTab.name}
+              onChange={(e) => {
+                const selected = cards.find((c) => c.name === e.target.value) ?? cards[0];
+                setActiveTab(selected);
+              }}
+              className="w-full rounded-xl border border-slate-200 bg-white p-3 text-slate-900 outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-200"
+            >
+              {cards.map((card) => (
+                <option key={card.name} value={card.name}>
+                  {card.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="rounded-3xl border border-slate-100 bg-white p-6 shadow-soft md:p-10">
+            <h2 className="mb-6 font-display text-3xl font-semibold uppercase leading-tight text-slate-900 md:text-4xl">
+              {activeTab.title || activeTab.name || "Unknown Service"}
+            </h2>
+            {activeTab.component ? (
+              <div className="text-lg">{activeTab.component}</div>
+            ) : (
+              <p className="text-lg text-slate-600">Sorry, this service is not currently available</p>
+            )}
+          </div>
+        </div>
+      </section>
+    </div>
   );
 }
 
