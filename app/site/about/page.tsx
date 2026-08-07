@@ -2,7 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 
 import ProblemCards from "@/components/skytech/sections/about/ProblemCards";
-import WhyYouNeedUs from "@/components/skytech/sections/WhyYouNeedUs";
 import AwardsStatement from "@/components/skytech/sections/AwardsStatement";
 
 const aboutStats = [
@@ -175,8 +174,7 @@ function AboutPage() {
         </div>
       </section>
 
-      <AwardsStatement className="mb-8 p-6 md:-mb-[7.5rem]" />
-      <WhyYouNeedUs />
+      <AwardsStatement className="p-6" />
     </div>
   );
 }

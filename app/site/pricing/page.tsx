@@ -26,7 +26,7 @@ export default async function PricingPage() {
         <p className="text-slate-500">No hidden fees, no surprise renewals — just honest rates for real, custom-built software.</p>
       </div>
 
-      <PricingModel categories={pricing} />
+      <PricingModel categories={pricing} showWhyYouNeedUs={false} />
 
       <div className="bg-white px-6 pb-10 md:px-10">
         <FAQSection faqs={groupFAQs(faqs)} />

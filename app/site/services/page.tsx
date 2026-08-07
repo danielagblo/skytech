@@ -3,7 +3,6 @@ import Image from "next/image";
 import PricingModel from "@/components/skytech/sections/PricingModel";
 import IndustryCards from "@/components/skytech/sections/web-solutions/IndustryCards";
 import WorkingProcess from "@/components/skytech/sections/web-solutions/WorkingProcess";
-import WhyYouNeedUs from "@/components/skytech/sections/WhyYouNeedUs";
 import TargetMarketAudience from "@/components/skytech/sections/web-solutions/TargetMarket";
 import { getPricing } from "@/app/lib/pricing";
 
@@ -44,19 +43,6 @@ export default async function WebSolutionsPage() {
       <PricingModel categories={pricing} showWhyYouNeedUs={false} />
       <WorkingProcess />
       <TargetMarketAudience />
-
-      <div className="px-6 md:px-10">
-        <div className="flex flex-col items-center py-16 text-center">
-          <span className="section-tag justify-center">Our Principles</span>
-          <p className="section-title mt-4 text-3xl text-balance sm:text-4xl">
-            Why we&apos;re the preferred choice for
-            <span className="block">digital business development services</span>
-          </p>
-          <p className="section-lead mt-4">Our work ethics stem from 4 cardinal principles</p>
-        </div>
-      </div>
-
-      <WhyYouNeedUs />
     </div>
   );
 }
