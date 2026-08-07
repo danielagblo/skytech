@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
-import FAQAccordion from '../../../components/FAQAccordion';
 
 const countryContacts = [
   { country: "Ghana", flag: "/images/icons/GhanaFlag.svg", phone: "+233 055 289 2433" },

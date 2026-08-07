@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
-
+import { useState } from "react";
+import SectionHeading from "../ui/SectionHeading";
 import type { GroupedFAQs } from "./faqGroup";
 
 const DEFAULT_FAQS: GroupedFAQs = {
@@ -27,136 +27,89 @@ const DEFAULT_FAQS: GroupedFAQs = {
   ],
 };
 
-const CARD_HEIGHT = 410;
-
-function ScrollPill({ scrollRatio, thumbRatio }: { scrollRatio: number; thumbRatio: number }) {
-  const trackHeight = CARD_HEIGHT - 80;
-  const thumbH = Math.max(thumbRatio * trackHeight, 32);
-  const maxTop = trackHeight - thumbH;
-  const top = scrollRatio * maxTop;
-
-  return (
-    <div
-      className="w-2.5 rounded-full bg-white relative shrink-0 scale-y-[0.8] flex justify-center"
-      style={{ height: trackHeight }}
-    >
-      <div
-        className="w-2 rounded-full bg-[#817e7e] absolute transition-all duration-150"
-        style={{ height: thumbH, top }}
-      />
-    </div>
-  );
-}
-
 export default function FAQSection({ faqs = DEFAULT_FAQS }: { faqs?: GroupedFAQs }) {
   const categories = Object.keys(faqs);
   const defaultCategory = categories.includes("General") ? "General" : categories[0] || "General";
   const [activeCategory, setActiveCategory] = useState(defaultCategory);
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
-  const leftRef = useRef<HTMLDivElement>(null);
-  const rightRef = useRef<HTMLDivElement>(null);
-  const [leftScroll, setLeftScroll] = useState({ ratio: 0, thumb: 1 });
-  const [rightScroll, setRightScroll] = useState({ ratio: 0, thumb: 1 });
-
-  function calcScrollState(el: HTMLDivElement) {
-    const scrollable = el.scrollHeight - el.clientHeight;
-    const ratio = scrollable > 0 ? el.scrollTop / scrollable : 0;
-    const thumb = scrollable > 0 ? el.clientHeight / el.scrollHeight : 1;
-    return { ratio, thumb };
-  }
-
-  useEffect(() => {
-    const el = leftRef.current;
-    if (!el) return;
-    const update = () => setLeftScroll(calcScrollState(el));
-    update();
-    el.addEventListener("scroll", update);
-    return () => el.removeEventListener("scroll", update);
-  }, []);
-
-  useEffect(() => {
-    const el = rightRef.current;
-    if (!el) return;
-    const update = () => setRightScroll(calcScrollState(el));
-    update();
-    el.addEventListener("scroll", update);
-    return () => el.removeEventListener("scroll", update);
-  }, [activeCategory, openIndex]);
-
   const handleCategory = (cat: string) => {
     setActiveCategory(cat);
     setOpenIndex(null);
-    if (rightRef.current) rightRef.current.scrollTop = 0;
-    setRightScroll({ ratio: 0, thumb: 1 });
   };
 
   const currentFaqs = faqs[activeCategory] || [];
 
   return (
-    <section className="py-16">
-      <h1 className="text-3xl mb-1 md:text-5xl">FAQs</h1>
-      <p className="mb-8">Frequently Asked Questions</p>
+    <section className="section-shell py-16">
+      <SectionHeading
+        tag="FAQ"
+        title="Frequently Asked Questions"
+        lead="Everything you need to know about our services, pricing and processes. Can't find an answer? Reach out and our team will help."
+        align="center"
+        className="mb-10"
+      />
 
-      <div className="rounded-3xl py-6 px-3 flex flex-col bg-[#f9f9f9] overflow-hidden h-auto md:flex-row md:h-[410px]">
-        <div className="flex flex-row gap-2 pr-6 pb-4 md:shrink-0 md:self-stretch md:pb-0">
-          <div className="hidden shrink-0 pr-5 md:flex md:flex-col">
-            <ScrollPill scrollRatio={leftScroll.ratio} thumbRatio={leftScroll.thumb} />
-          </div>
-
-          <div className="flex flex-col w-full md:min-w-[10rem] md:w-auto md:self-stretch">
-            <p className="mb-3 pl-2 shrink-0">Question Areas</p>
-            <div
-              ref={leftRef}
-              className="flex flex-row flex-wrap gap-1 overflow-y-auto no-scrollbar md:flex-col md:flex-nowrap md:flex-1"
+      {/* Category tabs */}
+      <div className="mb-8 flex flex-wrap justify-center gap-2">
+        {categories.map((cat) => {
+          const isActive = cat === activeCategory;
+          return (
+            <button
+              key={cat}
+              onClick={() => handleCategory(cat)}
+              className={`rounded-full px-5 py-2.5 text-sm font-semibold uppercase tracking-[0.12em] transition-all duration-200 ${
+                isActive
+                  ? "bg-brand-600 text-white shadow-soft"
+                  : "bg-brand-50 text-slate-600 hover:bg-brand-100 hover:text-brand-700"
+              }`}
             >
-              {categories.map((cat) => {
-                const isActive = cat === activeCategory;
-                return (
-                  <button
-                    key={cat}
-                    onClick={() => handleCategory(cat)}
-                    className={`flex items-center justify-between gap-6 pl-4 pr-6 py-3 rounded-lg text-left w-auto md:w-[12.5rem] transition-all duration-200 ${
-                      isActive ? "text-gray-900 font-semibold bg-white" : "text-gray-500 hover:text-gray-600"
-                    }`}
-                  >
-                    <span className="text-xl">{cat}</span>
-                    <span className={`text-lg transition-opacity ${isActive ? "opacity-100" : "opacity-40"}`}>&#10132;</span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        </div>
+              {cat}
+            </button>
+          );
+        })}
+      </div>
 
-        <div className="flex flex-row gap-2 flex-1 pl-0 border-t border-gray-200 pt-4 min-w-0 md:pl-4 md:border-t-0 md:pt-0 md:self-stretch">
-          <div ref={rightRef} className="flex-1 flex flex-col overflow-y-auto overflow-x-hidden no-scrollbar">
-            {currentFaqs.map((faq, index) => {
-              const isOpen = openIndex === index;
-              return (
-                <div key={index} className="border-b border-gray-400 last:border-0 min-w-0">
-                  <button
-                    onClick={() => setOpenIndex(isOpen ? null : index)}
-                    className="w-full flex items-center justify-between py-3 text-left gap-4 min-w-0"
-                  >
-                    <span className={`text-lg transition-all min-w-0 wrap-break-word md:text-xl ${isOpen ? "font-semibold text-gray-900" : "text-gray-800"}`}>
-                      {faq.question}
-                    </span>
-                    <span className={`text-3xl text-gray-400 shrink-0 transition-transform duration-200 ${isOpen ? "rotate-45" : ""}`}>
-                      &#10010;
-                    </span>
-                  </button>
-                  <div className={`overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? "max-h-40 pb-4" : "max-h-0"}`}>
-                    <p className="text-gray-600 leading-relaxed pr-4">{faq.answer}</p>
-                  </div>
+      {/* Accordion */}
+      <div className="mx-auto max-w-3xl overflow-hidden rounded-3xl bg-white ring-1 ring-slate-200 shadow-soft">
+        {currentFaqs.length === 0 && (
+          <p className="px-6 py-10 text-center text-slate-500">No questions in this category yet.</p>
+        )}
+        {currentFaqs.map((faq, index) => {
+          const isOpen = openIndex === index;
+          return (
+            <div key={index} className="border-b border-slate-100 last:border-0">
+              <button
+                onClick={() => setOpenIndex(isOpen ? null : index)}
+                className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left"
+              >
+                <span
+                  className={`text-lg transition-colors ${
+                    isOpen ? "font-semibold text-brand-700" : "font-medium text-slate-800"
+                  }`}
+                >
+                  {faq.question}
+                </span>
+                <span
+                  className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-2xl font-light transition-all duration-200 ${
+                    isOpen ? "rotate-45 bg-brand-600 text-white" : "bg-slate-100 text-slate-500"
+                  }`}
+                >
+                  &#10010;
+                </span>
+              </button>
+              <div
+                className={`grid transition-all duration-300 ease-in-out ${
+                  isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+                }`}
+              >
+                <div className="overflow-hidden">
+                  <p className="px-6 pb-6 text-slate-600 leading-relaxed">{faq.answer}</p>
                 </div>
-              );
-            })}
-          </div>
-          <div className="hidden shrink-0 pl-6 md:flex md:flex-col">
-            <ScrollPill scrollRatio={rightScroll.ratio} thumbRatio={rightScroll.thumb} />
-          </div>
-        </div>
+              </div>
+            </div>
+          );
+        })}
       </div>
     </section>
   );

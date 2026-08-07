@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getFAQs } from "../../lib/faqs";
-import FAQAccordion from "../../../components/FAQAccordion";
+import FAQSection from "../../../components/skytech/sections/FAQ";
+import { groupFAQs } from "../../../components/skytech/sections/faqGroup";
 
 export const metadata = {
   title: "Frequently Asked Questions - Skytech Ghana",
@@ -26,7 +27,7 @@ export default async function FAQPage() {
         </div>
 
         {faqs.length > 0 ? (
-          <FAQAccordion faqs={faqs} />
+          <FAQSection faqs={groupFAQs(faqs)} />
         ) : (
           <div className="py-20 text-center bg-white rounded-[2.5rem] border border-dashed border-slate-200 text-slate-400">
             No FAQs available at the moment.
