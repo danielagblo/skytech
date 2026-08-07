@@ -66,7 +66,7 @@ function WhyYouNeedUs() {
         </div>
 
         <div className="section-shell relative md:flex md:min-h-[34rem] md:items-center">
-          <h2 className="mx-auto w-full max-w-3xl px-5 pt-0 text-center font-display text-6xl font-semibold uppercase leading-[1.1] tracking-tight text-slate-900 sm:text-6xl md:absolute md:top-1/2 md:right-[6.5rem] md:w-auto md:max-w-none md:-translate-y-1/2 md:px-0 md:py-14 md:text-left md:text-5xl lg:text-6xl">
+          <h2 className="mx-auto w-full max-w-3xl px-5 pt-0 text-center font-display text-6xl font-semibold uppercase leading-[1.1] tracking-tight text-slate-900 sm:text-6xl md:absolute md:top-1/2 md:left-1/2 md:w-auto md:max-w-none md:-translate-x-1/2 md:-translate-y-1/2 md:px-0 md:py-14 md:text-left md:text-5xl lg:text-6xl">
             Here is why
             <span className="block">
               <span className="font-outline text-[0.9em] font-semibold tracking-widest"> you need us</span>
