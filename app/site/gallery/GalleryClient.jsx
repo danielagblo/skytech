@@ -48,9 +48,9 @@ export default function GalleryClient({ projects }) {
     <main ref={containerRef} className="min-h-screen pt-24 pb-20 bg-white">
       <div className="section-shell space-y-12">
         <div className="max-w-3xl space-y-4">
-          <span className="pill border-blue-600/20 text-blue-600 bg-blue-50 uppercase tracking-[0.2em] text-[10px] font-bold gallery-header-el">Portfolio</span>
+          <span className="pill border-brand-600/20 text-brand-600 bg-brand-50 uppercase tracking-[0.2em] text-[10px] font-bold gallery-header-el">Portfolio</span>
           <h1 className="text-4xl lg:text-5xl leading-tight text-slate-900 font-light gallery-header-el">
-            Our Work <span className="font-extrabold text-blue-600">in Action</span>
+            Our Work <span className="font-extrabold text-brand-600">in Action</span>
           </h1>
           <p className="text-lg text-slate-600 gallery-header-el">
             A selection of projects where we've helped businesses transform their digital presence.
@@ -78,7 +78,7 @@ export default function GalleryClient({ projects }) {
                 )}
 
                 <div className="absolute bottom-0 left-0 right-0 p-8 z-20 translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                  <span className="inline-block px-3 py-1 rounded-full bg-blue-600 text-white text-[10px] font-bold uppercase tracking-wider mb-3">
+                  <span className="inline-block px-3 py-1 rounded-full bg-brand-600 text-white text-[10px] font-bold uppercase tracking-wider mb-3">
                     {project.category}
                   </span>
                   <h3 className="text-2xl font-bold text-white mb-2">{project.title}</h3>

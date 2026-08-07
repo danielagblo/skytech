@@ -79,7 +79,7 @@ function SecuritySystemsPage() {
               const selected = cards.find((c) => c.name === e.target.value) ?? cards[0];
               setActiveTab(selected);
             }}
-            className="w-full rounded-xl border border-gray-300 bg-white p-3 text-black outline-none focus:border-[#2f59c1] focus:ring-2 focus:ring-blue-200"
+            className="w-full rounded-xl border border-gray-300 bg-white p-3 text-black outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-200"
           >
             {cards.map((card) => (
               <option key={card.name} value={card.name}>
@@ -93,7 +93,7 @@ function SecuritySystemsPage() {
             {cards.map((card, index) => (
               <div
                 key={index}
-                className={`text-white rounded-2xl bg-[#2f59c1] md:bg-white/15 md:backdrop-blur-md
+                className={`text-white rounded-2xl bg-brand-600 md:bg-white/15 md:backdrop-blur-md
                   min-h-20 p-3 md:p-0 md:min-w-[22vw] md:min-h-[12vw] md:max-w-[19.375rem] md:max-h-[8.75rem]
                   flex justify-center max-md:pt-11 items-center text-sm md:text-2xl
                   cursor-pointer transition-all duration-300 ease-in-out ${

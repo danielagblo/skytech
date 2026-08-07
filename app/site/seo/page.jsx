@@ -13,7 +13,7 @@ export default function SEOPage() {
       <section className="relative py-20 px-4">
         <div className="absolute inset-0 -z-10">
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full max-w-7xl">
-            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-100/50 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/4" />
+            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-brand-100/50 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/4" />
             <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-cyan-100/30 rounded-full blur-[120px] translate-y-1/2 -translate-x-1/4" />
           </div>
         </div>
@@ -22,7 +22,7 @@ export default function SEOPage() {
           <span className="pill">Search Engine Optimization</span>
           <h1 className="text-5xl md:text-7xl font-extrabold text-slate-900 tracking-tight leading-[1.1]">
             Rank Higher on Google. <br />
-            <span className="text-blue-600">Get More Customers.</span>
+            <span className="text-brand-600">Get More Customers.</span>
           </h1>
           <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
             We help your website appear on the first page of Google so people can find your business. Our SEO services bring you more traffic, leads, and sales.
@@ -39,7 +39,7 @@ export default function SEOPage() {
         <div className="section-shell grid grid-cols-1 md:grid-cols-3 gap-12">
             {seoStats.map((stat, idx) => (
                 <div key={idx} className="text-center space-y-2">
-                    <p className="text-5xl font-black text-blue-600">{stat.value}</p>
+                    <p className="text-5xl font-black text-brand-600">{stat.value}</p>
                     <p className="text-slate-900 font-black uppercase tracking-[0.2em] text-[10px]">{stat.label}</p>
                     <p className="text-slate-500 text-xs font-medium">{stat.detail}</p>
                 </div>
@@ -61,7 +61,7 @@ export default function SEOPage() {
                     <ul className="space-y-4">
                         {benefits.map((benefit, idx) => (
                             <li key={idx} className="flex items-start gap-4">
-                                <div className="mt-1 h-6 w-6 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 shrink-0 border border-blue-100">
+                                <div className="mt-1 h-6 w-6 rounded-full bg-brand-50 flex items-center justify-center text-brand-600 shrink-0 border border-brand-100">
                                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                                     </svg>
@@ -103,12 +103,12 @@ export default function SEOPage() {
 
       {/* Audit Tool Section */}
       <section className="py-24 bg-white relative overflow-hidden border-t border-slate-100">
-        <div className="absolute inset-0 bg-blue-600/5 blur-[120px] pointer-events-none" />
+        <div className="absolute inset-0 bg-brand-600/5 blur-[120px] pointer-events-none" />
         <div className="section-shell relative">
           <div className="max-w-5xl mx-auto rounded-[3rem] border border-slate-200 bg-white shadow-2xl p-12 lg:p-16">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
               <div className="space-y-6 text-left">
-                <span className="pill border-blue-600/20 text-blue-600 bg-blue-50 uppercase tracking-[0.2em] text-[10px] font-black">Free Performance Audit</span>
+                <span className="pill border-brand-600/20 text-brand-600 bg-brand-50 uppercase tracking-[0.2em] text-[10px] font-black">Free Performance Audit</span>
                 <h2 className="text-4xl font-black text-slate-900 leading-tight">
                   Get a Free SEO Audit. <br /> See How Your Site Ranks.
                 </h2>
@@ -118,7 +118,7 @@ export default function SEOPage() {
                 <div className="grid grid-cols-2 gap-4 pt-4">
                   {['Core Web Vitals', 'On‑page SEO', 'Conversion Fixes', 'Quick Wins'].map(tag => (
                     <div key={tag} className="flex items-center gap-3 text-[10px] font-black text-slate-400 uppercase tracking-widest">
-                      <span className="h-2 w-2 rounded-full bg-blue-600" />
+                      <span className="h-2 w-2 rounded-full bg-brand-600" />
                       {tag}
                     </div>
                   ))}
