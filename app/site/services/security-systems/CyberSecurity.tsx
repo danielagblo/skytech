@@ -10,18 +10,13 @@ function CyberSecurity() {
       <p>
         Our proactive security services help secure your corporate networks, optimize device endpoints, and establish a culture of digital safety through audits and continuous monitoring.
       </p>
-      <button
-        className="bg-white rounded-full px-6 py-3 my-6 hover:bg-gray-200 hover:scale-[0.97] active:scale-[1.02] transition-all cursor-pointer duration-300 border border-slate-200 text-slate-800 font-semibold"
-        onClick={() => {}}
-      >
-        Request Quote &#10132;
-      </button>
+
       <Image
         src="/images/images/globeImage.png"
         alt="Cyber Security Solutions and Infrastructure"
         width={1600}
         height={900}
-        className="w-screen h-auto rounded-2xl border border-slate-100"
+        className="w-full h-auto rounded-2xl border border-slate-100"
       />
       <h2 className="text-2xl mt-10 mb-4 md:text-4xl uppercase">Security Operations Framework</h2>
       <p>

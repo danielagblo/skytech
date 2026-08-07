@@ -10,18 +10,13 @@ function CCTVSurveillance() {
       <p>
         Whether you need to monitor remote perimeters, secure high-traffic retail spaces, or establish secure corporate surveillance networks, our end-to-end solutions keep you connected to what matters most, 24/7
       </p>
-      <button
-        className="bg-white rounded-full px-6 py-3 my-6 hover:bg-gray-200 hover:scale-[0.97] active:scale-[1.02] transition-all cursor-pointer duration-300"
-        onClick={() => {}}
-      >
-        Request Quote &#10132;
-      </button>
+
       <Image
         src="/images/images/manFixingCamera.png"
         alt="CCTV Surveillance"
         width={1600}
         height={900}
-        className="w-screen h-auto"
+        className="w-full h-auto rounded-2xl"
       />
       <h2 className="text-2xl mt-10 mb-4 md:text-4xl uppercase">Installation framework</h2>
       <p>

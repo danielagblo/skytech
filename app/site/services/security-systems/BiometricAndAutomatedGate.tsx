@@ -10,18 +10,13 @@ function BiometricAndAutomatedGate() {
       <p>
         From lightning-fast facial recognition terminals to heavy-duty automated barriers capable of continuous operation, our access solutions offer a smooth user experience while maintaining strict perimeter control.
       </p>
-      <button
-        className="bg-white rounded-full px-6 py-3 my-6 hover:bg-gray-200 hover:scale-[0.97] active:scale-[1.02] transition-all cursor-pointer duration-300 border border-slate-200 text-slate-800 font-semibold"
-        onClick={() => {}}
-      >
-        Request Quote &#10132;
-      </button>
+
       <Image
-        src="/images/images/propertytechImage.png"
+        src="/images/images/biometrics_gates_new.png"
         alt="Biometric & Automated Gate Systems"
         width={1600}
         height={900}
-        className="w-screen h-auto rounded-2xl border border-slate-100"
+        className="w-full h-auto rounded-2xl border border-slate-100 object-cover max-h-[500px]"
       />
       <h2 className="text-2xl mt-10 mb-4 md:text-4xl uppercase">Access Control Framework</h2>
       <p>

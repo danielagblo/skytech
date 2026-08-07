@@ -10,18 +10,13 @@ function MobileTracking() {
       <p>
         Whether you are managing a delivery service, coordinating sales representatives, or ensuring the safety of remote workers, our mobile tracking systems provide the real-time insights you need.
       </p>
-      <button
-        className="bg-white rounded-full px-6 py-3 my-6 hover:bg-gray-200 hover:scale-[0.97] active:scale-[1.02] transition-all cursor-pointer duration-300 border border-slate-200 text-slate-800 font-semibold"
-        onClick={() => {}}
-      >
-        Request Quote &#10132;
-      </button>
+
       <Image
-        src="/images/images/landingPageBanner.png"
+        src="/images/images/mobile_tracking_phone.png"
         alt="Mobile Tracking & Device Management"
         width={1600}
         height={900}
-        className="w-screen h-auto rounded-2xl border border-slate-100"
+        className="w-full h-auto rounded-2xl border border-slate-100 object-cover max-h-[500px]"
       />
       <h2 className="text-2xl mt-10 mb-4 md:text-4xl uppercase">Mobile Deployment Framework</h2>
       <p>
