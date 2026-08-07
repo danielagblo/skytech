@@ -13,13 +13,9 @@ function NavigationMobile({ className }: { className?: string }) {
   const isLandingPage = currentPath === "/site/landing";
 
   useEffect(() => {
-    const onScroll = () => {
-      setScrolled(window.scrollY > 40);
-    };
-
+    const onScroll = () => setScrolled(window.scrollY > 40);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
@@ -52,36 +48,28 @@ function NavigationMobile({ className }: { className?: string }) {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [isOpen]);
 
-  const showSolidBar = scrolled;
-
   return (
     <div className={className ?? ""}>
       <div className="relative z-50">
         <div
           aria-hidden
-          className={`pointer-events-none absolute inset-0 bg-[#2f59c1] shadow-sm transition-all duration-300 ${
-            showSolidBar ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0"
+          className={`pointer-events-none absolute inset-0 bg-brand-700/95 backdrop-blur-md shadow-soft transition-all duration-300 ${
+            scrolled ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0"
           }`}
         />
 
         <div className="relative flex items-center justify-between px-4 py-2">
-          <div
-            className={`transition-all duration-300 ${
-              showSolidBar ? "translate-y-0 opacity-100" : "-translate-y-2 opacity-0"
-            }`}
-          >
-            <Image
-              src="/images/images/skytechLogo.png"
-              alt="SkyTech Logo"
-              width={44}
-              height={44}
-              className="h-11 w-auto cursor-pointer"
-              onClick={() => {
-                setIsOpen(false);
-                router.push("/site");
-              }}
-            />
-          </div>
+          <Image
+            src="/images/images/skytechLogo.png"
+            alt="SkyTech Logo"
+            width={44}
+            height={44}
+            className="h-10 w-auto cursor-pointer transition"
+            onClick={() => {
+              setIsOpen(false);
+              router.push("/site");
+            }}
+          />
 
           {!isLandingPage && (
             <button
@@ -90,7 +78,7 @@ function NavigationMobile({ className }: { className?: string }) {
               aria-expanded={isOpen}
               onClick={() => setIsOpen((v) => !v)}
               className={`relative ml-auto flex h-10 w-10 flex-col items-center justify-center gap-1.5 ${
-                showSolidBar ? "" : "mix-blend-difference"
+                scrolled ? "" : "mix-blend-difference"
               }`}
             >
               <span
@@ -114,7 +102,7 @@ function NavigationMobile({ className }: { className?: string }) {
       </div>
 
       <div
-        className={`fixed inset-0 z-40 flex flex-col bg-[#2f59c1] transition-opacity duration-300 ${
+        className={`fixed inset-0 z-40 flex flex-col bg-gradient-to-b from-brand-800 to-brand-950 transition-opacity duration-300 ${
           isOpen ? "opacity-100" : "pointer-events-none opacity-0"
         }`}
       >

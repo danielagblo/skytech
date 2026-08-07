@@ -17,36 +17,46 @@ function NavigationPC({ className }: { className?: string }) {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const solid = scrolled;
-
   return (
     <div
-      className={`${className ?? ""} flex items-center justify-between px-2 py-1 transition-colors duration-300 ${solid ? "bg-[#2f59c1]" : "bg-white/10 backdrop-blur-md"
-        }`}
+      className={`${className ?? ""} flex items-center justify-between gap-4 px-6 py-2 transition-colors duration-300 ${
+        scrolled
+          ? "bg-brand-700/95 backdrop-blur-md shadow-soft"
+          : "bg-white/10 backdrop-blur-md"
+      }`}
     >
       <Image
         src="/images/images/skytechLogo.png"
         alt="SkyTech Logo"
         width={56}
         height={56}
-        className="h-14 w-auto cursor-pointer hover:scale-[1.02] transition"
+        className="h-12 w-auto cursor-pointer transition hover:scale-[1.02]"
         onClick={() => router.push("/site")}
       />
       <nav>
-        <ul className="flex text-white flex-row items-center gap-6 pr-4">
-          {navigationLinks.map((link) => (
-            <li key={link.name}>
-              <a
-                href={link.href}
-                className={`whitespace-nowrap ${currentPath === link.href
-                  ? "underline underline-offset-[10px] font-bold decoration-2"
-                  : "hover:text-blue-300"
+        <ul className="flex items-center gap-7 pr-4">
+          {navigationLinks.map((link) => {
+            const isActive = currentPath === link.href;
+            return (
+              <li key={link.name}>
+                <a
+                  href={link.href}
+                  className={`relative whitespace-nowrap text-[0.95rem] text-white transition-colors ${
+                    isActive
+                      ? "font-semibold"
+                      : "opacity-90 hover:text-brand-100 hover:opacity-100"
                   }`}
-              >
-                {link.name}
-              </a>
-            </li>
-          ))}
+                >
+                  {link.name}
+                  <span
+                    className={`pointer-events-none absolute -bottom-1.5 left-0 h-0.5 rounded-full bg-white transition-all duration-300 ${
+                      isActive ? "w-full" : "w-0"
+                    }`}
+                  />
+                </a>
+              </li>
+            );
+          })}
         </ul>
       </nav>
     </div>
