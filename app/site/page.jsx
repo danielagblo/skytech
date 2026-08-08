@@ -228,12 +228,12 @@ export default async function Home() {
             {services.map((service, index) => (
               <div
                 key={index}
-                className="relative h-full border-t-[5px] border-brand-600 bg-[#f6f6f6] p-2.5 pb-9 md:p-6 md:pb-[5.625rem]"
+                className="relative h-full border-t-[5px] border-brand-600 bg-[#f6f6f6] p-2.5 pb-7 md:p-6 md:pb-[5.625rem]"
               >
                 <p className="text-[10px] sm:text-xs md:text-lg font-semibold uppercase">{service.title}</p>
                 <div className="pr-1 md:pr-4">
-                  <hr className="mb-3 mt-0 border-t border-brand-600" />
-                  <ul className="mt-4 space-y-0 text-[10px] sm:text-xs md:text-lg capitalize leading-4 md:leading-7">
+                  <hr className="mb-2 mt-0 border-t border-brand-600" />
+                  <ul className="mt-2 space-y-0 text-[10px] sm:text-xs md:text-lg capitalize leading-4 md:leading-7">
                     {service.list.map((item) => (
                       <li key={item}>{item}</li>
                     ))}
@@ -241,7 +241,7 @@ export default async function Home() {
                 </div>
                 <Link
                   href={service.href}
-                  className="absolute bottom-1.5 right-1.5 md:bottom-5 md:right-7 rounded-none border border-brand-600 bg-white px-1.5 py-0.5 md:px-3 md:py-2 text-[10px] md:text-base transition-all duration-300 hover:scale-[0.97] hover:bg-gray-100 active:scale-[1.02]"
+                  className="absolute bottom-1 right-1.5 md:bottom-5 md:right-7 rounded-none border border-brand-600 bg-white px-1.5 py-0.5 md:px-3 md:py-2 text-[10px] md:text-base transition-all duration-300 hover:scale-[0.97] hover:bg-gray-100 active:scale-[1.02]"
                 >
                   &#10132;
                 </Link>
