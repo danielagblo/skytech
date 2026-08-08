@@ -50,13 +50,15 @@ function PricingModel({
   const [currency, setCurrency] = useState<Currency>("GHC");
   const [activeIndex, setActiveIndex] = useState(0);
 
-  const items = categories.map((c, i) => ({
+  const filteredCategories = categories.filter(c => c.category !== "branding");
+
+  const items = filteredCategories.map((c, i) => ({
     key: c.category,
     label: `${CATEGORY_LABELS[c.category] || c.label} Rates`,
     index: i,
   }));
 
-  const activeCategory = categories[activeIndex];
+  const activeCategory = filteredCategories[activeIndex];
   const plans = activeCategory && activeCategory.packages.length > 0
     ? activeCategory.packages.map(toPlan)
     : [];
