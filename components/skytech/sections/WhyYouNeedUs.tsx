@@ -2,7 +2,6 @@ import Image from "next/image";
 
 const items = [
   {
-    bg: "bg-white",
     title: "8 Years of Proven Expertise",
     body: "Nearly a decade of hands-on experience delivering reliable, high-performing software and web solutions across borders.",
     icon: (
@@ -10,7 +9,6 @@ const items = [
     ),
   },
   {
-    bg: "bg-white",
     title: "Our Relationship with You",
     body: "We plug in like your internal IT department with absolute transparency. We don’t disappear suddenly, we stay.",
     icon: (
@@ -18,7 +16,6 @@ const items = [
     ),
   },
   {
-    bg: "bg-white",
     title: "Complimentary Maintenance",
     body: "Enjoy peace of mind with free ongoing maintenance to keep your platforms secure, updated, and running smoothly.",
     icon: (
@@ -26,7 +23,6 @@ const items = [
     ),
   },
   {
-    bg: "bg-white",
     title: "Teamwork",
     body: "We integrate seamlessly with your team, working side by side to support your business goals.",
     icon: (
@@ -79,19 +75,15 @@ function WhyYouNeedUs() {
           {items.map((item) => (
             <div
               key={item.title}
-              className={`flex flex-col rounded-none p-6 shadow-soft ${item.bg} ${
-                item.dark ? "text-white" : "text-slate-900"
-              }`}
+              className="flex flex-col rounded-none p-6 shadow-soft bg-white text-slate-900"
             >
-              <span className={`mb-4 flex h-11 w-11 items-center justify-center rounded-none ${
-                item.dark ? "bg-white/20" : "bg-black/5"
-              }`}>
+              <span className="mb-4 flex h-11 w-11 items-center justify-center rounded-none bg-black/5">
                 <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
                   {item.icon}
                 </svg>
               </span>
               <h3 className="text-lg font-semibold">{item.title}</h3>
-              <p className={`mt-2 text-sm leading-relaxed ${item.dark ? "text-white/90" : "text-slate-700"}`}>
+              <p className="mt-2 text-sm leading-relaxed text-slate-700">
                 {item.body}
               </p>
             </div>
