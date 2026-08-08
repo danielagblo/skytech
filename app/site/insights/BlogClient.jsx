@@ -26,7 +26,7 @@ export default function BlogClient({ posts, featuredPost, gridPosts }) {
         <div className="absolute inset-0 bg-gradient-to-b from-transparent to-slate-950/50" />
 
         <div className="section-shell relative z-10 text-center space-y-6 max-w-3xl mx-auto">
-          <span className="pill bg-white/10 text-blue-300 border-white/10">Blog</span>
+          <span className="pill bg-white/10 text-blue-300 border-white/10">Insights</span>
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight tracking-tight">
             News & <span className="text-blue-400">Insights</span>
           </h1>
@@ -57,7 +57,7 @@ export default function BlogClient({ posts, featuredPost, gridPosts }) {
         <section className="py-16">
           <div className="section-shell">
             <Link
-              href={`/site/blog/${featuredPost.slug}`}
+              href={`/site/insights/${featuredPost.slug}`}
               className="group grid grid-cols-1 lg:grid-cols-2 gap-8 rounded-3xl overflow-hidden bg-slate-50 border border-slate-100 card-hover"
             >
               <div className="relative h-64 lg:h-auto overflow-hidden">
@@ -101,7 +101,7 @@ export default function BlogClient({ posts, featuredPost, gridPosts }) {
               {(searchQuery ? filteredPosts : gridPosts).map((post) => (
                 <Link
                   key={post.slug}
-                  href={`/site/blog/${post.slug}`}
+                  href={`/site/insights/${post.slug}`}
                   className="group rounded-3xl overflow-hidden bg-white border border-slate-100 card-hover"
                 >
                   <div className="relative h-48 overflow-hidden">

@@ -49,10 +49,10 @@ async function BlogPostPage({ params }: BlogPostPageProps) {
         <div className="section-shell relative">
           <div className="max-w-3xl">
             <Link
-              href="/site/blog"
+              href="/site/insights"
               className="pill transition hover:bg-brand-50"
             >
-              &#x1F878; Back to Blog
+              &#x1F878; Back to Insights
             </Link>
             <h1 className="font-display mt-5 text-3xl font-semibold uppercase leading-[1.1] text-white sm:text-4xl lg:text-5xl">
               {post.title}
@@ -81,7 +81,7 @@ async function BlogPostPage({ params }: BlogPostPageProps) {
             {relatedPosts.map((related) => (
               <Link
                 key={related.slug}
-                href={`/site/blog/${related.slug}`}
+                href={`/site/insights/${related.slug}`}
                 className="group block hover:no-underline"
               >
                 {related.coverImage && (

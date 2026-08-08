@@ -12,7 +12,7 @@ export const navigationLinks: NavigationLink[] = [
   { name: "About", href: "/site/about" },
   { name: "Services", href: "/site/services" },
   { name: "Pricing", href: "/site/pricing" },
-  { name: "Blog", href: "/site/blog" },
+  { name: "Insights", href: "/site/insights" },
   { name: "Internship", href: "/site/internship" },
   { name: "Contact", href: "/site/contact" },
 ];

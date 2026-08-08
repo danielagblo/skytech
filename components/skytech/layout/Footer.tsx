@@ -94,12 +94,12 @@ function Footer({ latestPosts = [], sponsors = [], settings, whatsapp, className
             {latestPosts.length > 0 ? (
               <>
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
-                  Key Blog Articles
+                  Key Insights
                 </p>
                 <ul className="space-y-2.5 text-sm text-slate-300">
                   {latestPosts.map((post) => (
                     <li key={post.slug}>
-                      <a href={`/site/blog/${post.slug}`} className="transition hover:text-brand-300">
+                      <a href={`/site/insights/${post.slug}`} className="transition hover:text-brand-300">
                         {post.title}
                       </a>
                     </li>

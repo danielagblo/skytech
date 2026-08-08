@@ -6,7 +6,7 @@ import { getAllBlogPosts, formatBlogDate } from "@/app/lib/blog";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "News & Insights | Skytech Ghana",
+  title: "Insights | Skytech Ghana",
   description:
     "Articles and updates from Skytech Ghana on tech, security, and digital business development.",
 };
@@ -19,7 +19,7 @@ async function BlogPage() {
       <section className="relative overflow-hidden bg-slate-950 pt-28 pb-16 text-white md:pb-20">
         <Image
           src="/images/images/BlogPageHeader.png"
-          alt="News & Insights"
+          alt="Insights"
           fill
           className="absolute inset-0 object-cover opacity-25"
         />
@@ -30,7 +30,7 @@ async function BlogPage() {
 
         <div className="section-shell relative">
           <div className="max-w-2xl">
-            <span className="pill">News &amp; Insights</span>
+            <span className="pill">Insights</span>
             <h1 className="font-display mt-5 text-4xl font-semibold uppercase leading-[1.1] text-white sm:text-5xl">
               STAY AHEAD WITH OUR LATEST UPDATES
             </h1>
@@ -43,9 +43,9 @@ async function BlogPage() {
       </section>
 
       <section className="px-6 py-16 md:px-12">
-        <div className="grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-6">
           {posts.map((post) => (
-            <Link key={post.slug} href={`/site/blog/${post.slug}`} className="group hover:no-underline">
+            <Link key={post.slug} href={`/site/insights/${post.slug}`} className="group hover:no-underline">
               <div className="relative aspect-[4/3] w-full overflow-hidden rounded-none ring-1 ring-slate-100 shadow-soft transition-shadow duration-300 group-hover:shadow-lift">
                 <Image
                   src={post.coverImage}

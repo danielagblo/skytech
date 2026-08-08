@@ -34,7 +34,7 @@ export async function deleteBlogPost(id: string) {
   }
   await BlogPost.findByIdAndDelete(id);
   revalidatePath("/dashboard/blog");
-  revalidatePath("/site/blog");
+  revalidatePath("/site/insights");
   return { success: true };
 }
 
@@ -60,8 +60,8 @@ export async function saveBlogPost(data: any) {
     }
 
     revalidatePath("/dashboard/blog");
-    revalidatePath("/site/blog");
-    revalidatePath(`/site/blog/${updateData.slug}`);
+    revalidatePath("/site/insights");
+    revalidatePath(`/site/insights/${updateData.slug}`);
     
     return { success: true };
   } catch (error: any) {

@@ -52,7 +52,7 @@ export default function LatestInsights({ latestPosts }) {
               Strategies and insights from our engineering team to help you navigate the digital landscape.
             </p>
           </div>
-          <Link className="group inline-flex items-center gap-3 px-8 py-4 bg-slate-900 text-white rounded-full font-bold transition-all hover:bg-blue-600 active:scale-95 shadow-xl shadow-slate-900/10" href="/site/blog">
+          <Link className="group inline-flex items-center gap-3 px-8 py-4 bg-slate-900 text-white rounded-full font-bold transition-all hover:bg-blue-600 active:scale-95 shadow-xl shadow-slate-900/10" href="/site/insights">
             Read All Entries
             <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
@@ -64,7 +64,7 @@ export default function LatestInsights({ latestPosts }) {
           {latestPosts.map((post, idx) => (
             <Link
               key={post._id || idx}
-              href={`/site/blog/${post.slug}`}
+              href={`/site/insights/${post.slug}`}
               className="group flex flex-col bg-white border border-slate-100 rounded-[2rem] overflow-hidden hover:shadow-2xl hover:shadow-blue-500/5 transition-all duration-300 insight-card"
             >
               {/* Image Top */}
