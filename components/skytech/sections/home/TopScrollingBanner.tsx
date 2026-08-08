@@ -13,7 +13,7 @@ function TopScrollingBanner({
   const formattedWhatsapp = whatsapp.replace(/\s+/g, "").replace("+", "");
 
   return (
-    <div className={className ? `${className} relative` : "relative flex bg-black text-white h-[45px] items-center overflow-hidden whitespace-nowrap border-b border-white/5 w-full z-10"}>
+    <div className={className ? className : "relative flex bg-black text-white h-[45px] items-center overflow-hidden whitespace-nowrap border-b border-white/5 w-full z-10"}>
       {/* 1. LEFT SIDE: Fading edge only (no button) */}
       <div className="absolute left-0 top-0 h-full w-12 bg-gradient-to-r from-black to-transparent pointer-events-none z-20" />
 

@@ -26,12 +26,18 @@ const services = [
     items: 4,
     list: ["Corporate business", "E-commerce", "Blog content", "E-learning"],
     href: "/services",
+    icon: (
+      <path strokeLinecap="round" strokeLinejoin="round" d="M10 6L6 12l6 6M14 6l6 6-6 6" />
+    ),
   },
   {
     title: "Mobile App Development",
     items: 4,
     list: ["Corporate business", "E-commerce", "Blog content", "E-learning"],
     href: "/services",
+    icon: (
+      <path strokeLinecap="round" strokeLinejoin="round" d="M15.5 1.5H8.75a1.5 1.5 0 00-1.5 1.5v18a1.5 1.5 0 001.5 1.5h7.5a1.5 1.5 0 001.5-1.5V3a1.5 1.5 0 00-1.5-1.5zM12 18.75h.008v.008H12v-.008z" />
+    ),
   },
   {
     title: "SEO Growth",
@@ -43,6 +49,9 @@ const services = [
       "On & Off-page SEO",
     ],
     href: "/seo",
+    icon: (
+      <path strokeLinecap="round" strokeLinejoin="round" d="M3 13.25c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v6.75A1.125 1.125 0 016.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
+    ),
   },
 ];
 
@@ -69,7 +78,7 @@ export default async function Home() {
 
 
       {/* ===== HERO (kept structure: full-bleed + headline + 2 CTAs + awards) ===== */}
-      <section className="relative w-full min-h-[50vh] bg-slate-950 overflow-hidden flex items-center mt-[80px] md:mt-0 pt-16 md:pt-24">
+      <section className="relative w-full min-h-[50vh] bg-slate-950 overflow-hidden flex items-center mt-0 pt-[140px] md:pt-[180px]">
         <Image
           src="/images/images/homePageBannerImage.png"
           fill
@@ -214,33 +223,91 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="px-6 pt-10 md:pt-[3.75rem]">
-        <div className="mx-auto max-w-[80rem]">
-          <p className="text-xl uppercase md:text-3xl">
-            What services do we <br /> offer best
-          </p>
-          <div className="mt-8 grid grid-cols-3 gap-2 md:gap-4 items-start justify-center">
+      <section className="relative overflow-hidden bg-gradient-to-b from-white via-brand-50/40 to-white py-16 md:py-24">
+        {/* Decorative background */}
+        <div className="pointer-events-none absolute inset-0 bg-grid-light" />
+        <div className="pointer-events-none absolute -right-40 top-0 h-[28rem] w-[28rem] rounded-full bg-brand-200/40 blur-[120px]" />
+        <div className="pointer-events-none absolute -left-40 bottom-0 h-[24rem] w-[24rem] rounded-full bg-cyan-200/40 blur-[120px]" />
+
+        <div className="section-shell relative z-10">
+          <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
+            <div className="max-w-2xl">
+              <span className="section-tag">What we do best</span>
+              <h2 className="section-title mt-3 text-balance">
+                What services do we <span className="text-brand-600">offer best</span>
+              </h2>
+            </div>
+            <p className="section-lead max-w-md">
+              From the web to mobile to search — one partner for everything your brand needs to win online.
+            </p>
+          </div>
+
+          <div className="mt-12 grid grid-cols-1 items-start gap-5 md:mt-16 md:grid-cols-3 md:gap-6">
             {services.map((service, index) => (
-              <div
-                key={index}
-                className="relative h-full border-t-[5px] border-brand-600 bg-[#f6f6f6] p-2.5 pb-7 md:p-6 md:pb-[5.625rem]"
+              <article
+                key={service.title}
+                className="group relative flex h-full flex-col border border-slate-200 bg-white p-6 shadow-soft transition-all duration-500 hover:-translate-y-1.5 hover:border-brand-300 hover:shadow-lift md:p-8"
               >
-                <p className="text-[10px] sm:text-xs md:text-lg font-semibold uppercase">{service.title}</p>
-                <div className="pr-1 md:pr-4">
-                  <hr className="mb-2 mt-0 border-t border-brand-600" />
-                  <ul className="mt-2 space-y-0 text-[10px] sm:text-xs md:text-lg capitalize leading-4 md:leading-7">
+                <div className="absolute inset-x-0 top-0 h-[5px] bg-brand-600" />
+
+                <div className="mb-6 flex items-start justify-between">
+                  <span className="flex h-12 w-12 items-center justify-center rounded-none bg-brand-50 text-brand-600 transition-all duration-500 group-hover:bg-brand-600 group-hover:text-white">
+                    <svg
+                      className="h-6 w-6"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth={1.8}
+                    >
+                      {service.icon}
+                    </svg>
+                  </span>
+                  <span className="font-display text-5xl font-bold leading-none text-slate-900/5 transition-colors duration-500 group-hover:text-brand-600/10">
+                    0{index + 1}
+                  </span>
+                </div>
+
+                <h3 className="font-display text-2xl font-semibold text-slate-900">{service.title}</h3>
+                <div className="mt-5 border-t border-brand-600 pt-5">
+                  <ul className="space-y-3">
                     {service.list.map((item) => (
-                      <li key={item}>{item}</li>
+                      <li
+                        key={item}
+                        className="flex items-center gap-3 text-sm font-medium capitalize text-slate-700 transition-colors duration-300 group-hover:text-slate-900 md:text-base"
+                      >
+                        <span className="flex h-5 w-5 shrink-0 items-center justify-center bg-brand-600/10 text-brand-600">
+                          <svg
+                            className="h-3 w-3"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth={3}
+                          >
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                        </span>
+                        {item}
+                      </li>
                     ))}
                   </ul>
                 </div>
+
                 <Link
                   href={service.href}
-                  className="absolute bottom-1 right-1.5 md:bottom-5 md:right-7 rounded-none border border-brand-600 bg-white px-1.5 py-0.5 md:px-3 md:py-2 text-[10px] md:text-base transition-all duration-300 hover:scale-[0.97] hover:bg-gray-100 active:scale-[1.02]"
+                  className="mt-auto inline-flex items-center gap-2 pt-7 text-xs font-semibold uppercase tracking-[0.18em] text-brand-600 transition-colors duration-300 group-hover:text-brand-700"
                 >
-                  &#10132;
+                  Explore
+                  <svg
+                    className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
                 </Link>
-              </div>
+              </article>
             ))}
           </div>
         </div>
