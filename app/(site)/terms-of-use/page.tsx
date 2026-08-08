@@ -17,7 +17,7 @@ function TermsOfUsePage() {
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-transparent to-transparent z-10" />
 
           {/* Title overlay directly on the hero image */}
-          <div className="absolute bottom-6 left-6 md:left-12 z-20">
+          <div className="absolute bottom-24 md:bottom-36 left-6 md:left-12 z-20">
             <h1 className="text-3xl md:text-4xl font-extrabold text-white uppercase tracking-tight">
               Terms of Use
             </h1>
