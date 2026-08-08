@@ -44,15 +44,15 @@ export default function Header({ siteName = "SKYTECH GHANA" }) {
       <nav className="max-w-[1600px] mx-auto px-6 py-3 flex items-center justify-between">
         {/* Logo block */}
         <Link href="/site" className="flex items-center gap-3 group z-[60]">
-          <div className="relative h-10 w-10">
-            <Image
-              src="/try1.png"
-              alt="SKYTECH GHANA logo"
-              fill
-              className="object-contain"
-              priority
-            />
-          </div>
+          <Image
+            src="/try1.png"
+            alt="SKYTECH GHANA logo"
+            width={800}
+            height={300}
+            sizes="107px"
+            className="h-10 w-auto object-contain"
+            priority
+          />
           <span className="text-white font-inter text-xl font-bold tracking-wider uppercase">
             SKYTECH GHANA
           </span>

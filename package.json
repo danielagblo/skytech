@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "seed": "npx tsx scripts/seed-pricing.mjs",
-    "seed-networks": "npx tsx scripts/seed-networks.mjs"
+    "seed-networks": "npx tsx scripts/seed-networks.mjs",
+    "seed-hero": "npx tsx scripts/seed-hero.mjs"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1045.0",

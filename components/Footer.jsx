@@ -21,14 +21,14 @@ export default async function Footer({ settings }) {
           {/* Brand Column */}
           <div className="lg:col-span-1 space-y-6">
             <div className="flex items-center gap-3">
-              <div className="relative w-10 h-10">
-                <Image
-                  src="/try1.png"
-                  alt={`${siteName} logo`}
-                  fill
-                  className="object-contain"
-                />
-              </div>
+              <Image
+                src="/try1.png"
+                alt={`${siteName} logo`}
+                width={800}
+                height={300}
+                sizes="107px"
+                className="h-10 w-auto object-contain"
+              />
               <span className="text-xl font-bold tracking-tight">{siteName}</span>
             </div>
             <p className="text-sm text-slate-400 leading-relaxed max-w-xs">

@@ -22,8 +22,9 @@ function NavigationPC({ className }: { className?: string }) {
       <Image
         src="/try1.png"
         alt="SkyTech Logo"
-        width={56}
-        height={56}
+        width={800}
+        height={300}
+        sizes="128px"
         className="h-12 w-auto cursor-pointer transition hover:scale-[1.02]"
         onClick={() => router.push("/site")}
       />

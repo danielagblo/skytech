@@ -38,8 +38,9 @@ function Footer({ latestPosts = [], sponsors = [], settings, whatsapp, className
             <Image
               src="/try1.png"
               alt={`${siteName} Logo`}
-              width={56}
-              height={56}
+              width={800}
+              height={300}
+              sizes="128px"
               className="h-12 w-auto opacity-90"
             />
             <p className="font-display text-lg font-semibold text-white">{siteName}</p>

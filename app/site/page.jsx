@@ -9,6 +9,7 @@ import { getTestimonials } from '../lib/testimonials';
 import { getBlogPosts } from '../admin/blog-actions';
 import { getFAQs } from '../lib/faqs';
 import { getAllBlogPosts } from '../lib/blog';
+import { getHeroData } from '../lib/hero';
 
 import WhyYouNeedUs from "../../components/skytech/sections/WhyYouNeedUs";
 import FAQSection from "../../components/skytech/sections/FAQ";
@@ -51,14 +52,8 @@ export const metadata = {
     "Skytech Ghana builds websites and mobile apps for businesses in Ghana. Web design, SEO, and maintenance services.",
 };
 
-const stats = [
-  { value: 8, suffix: "+", label: "Years in Operation", compact: false },
-  { value: 8, suffix: "+", label: "Satisfied Customers", compact: false },
-  { value: 1000, suffix: "+", label: "Projects Completed", compact: true },
-  { value: 4, suffix: "+", label: "Countries Served", compact: false },
-];
-
 export default async function Home() {
+  const hero = await getHeroData();
   const settings = await getSettings();
   const testimonialsData = await getTestimonials();
   const testimonials = testimonialsData.length > 0 ? testimonialsData : [];
@@ -94,8 +89,8 @@ export default async function Home() {
             {/* Copy */}
             <div className="mx-auto max-w-2xl py-8 text-center text-white md:text-left">
               <h1 className="font-display text-5xl font-bold uppercase leading-none tracking-tight sm:text-6xl md:text-7xl">
-                MANY YEARS
-                <span className="block whitespace-nowrap">IN OPERATION</span>
+                {hero.headline}
+                <span className="block whitespace-nowrap">{hero.headlineSub}</span>
               </h1>
 
               {/* Awards — mobile (on top of the buttons) */}
@@ -120,7 +115,7 @@ export default async function Home() {
               </div>
 
               <p className="mt-6 mb-5 mx-auto max-w-sm text-center text-sm font-medium uppercase leading-relaxed tracking-wide text-slate-200 sm:max-w-md sm:text-base md:mx-0 md:max-w-none md:whitespace-nowrap md:text-left md:text-xl">
-                For Website, Mobile App Development and SEO Growth
+                {hero.subText}
               </p>
             </div>
           </div>
@@ -143,7 +138,7 @@ export default async function Home() {
       <section className="relative z-20 -mt-8 px-4 sm:px-8 md:-mt-6">
         <div className="mx-auto max-w-[80rem] rounded-none border border-slate-200 bg-white p-8 shadow-lift md:p-10">
           <div className="grid grid-cols-2 gap-8 text-center lg:grid-cols-4">
-            {stats.map((s) => (
+            {hero.stats.map((s) => (
               <div key={s.label} className="space-y-2">
                 <p className="font-display text-5xl font-bold tracking-tighter text-slate-950 md:text-6xl">
                   <AnimatedCounter value={s.value} suffix={s.suffix} compact={s.compact} />

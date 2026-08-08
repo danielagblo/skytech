@@ -28,16 +28,32 @@ export async function updateHomeHero(formData: FormData) {
 
     const title = formData.get("title") as string;
     const subtitle = formData.get("subtitle") as string;
+    const headline = formData.get("headline") as string;
+    const headlineSub = formData.get("headlineSub") as string;
+    const subText = formData.get("subText") as string;
+    let stats;
+    const statsRaw = formData.get("stats") as string;
+    if (statsRaw) {
+      try {
+        stats = JSON.parse(statsRaw);
+      } catch {
+        stats = undefined;
+      }
+    }
 
-    await saveHeroData({ 
+    await saveHeroData({
       title,
       subtitle,
-      imageUrl, 
-      updatedAt: new Date() 
+      headline,
+      headlineSub,
+      subText,
+      ...(stats ? { stats } : {}),
+      imageUrl,
+      updatedAt: new Date()
     });
 
-
     revalidatePath("/");
+    revalidatePath("/site");
     return { success: true, imageUrl };
   } catch (error: any) {
     console.error("Hero update error:", error);

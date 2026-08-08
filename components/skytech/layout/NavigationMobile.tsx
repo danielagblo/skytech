@@ -52,8 +52,9 @@ function NavigationMobile({ className }: { className?: string }) {
           <Image
             src="/try1.png"
             alt="SkyTech Logo"
-            width={44}
-            height={44}
+            width={800}
+            height={300}
+            sizes="107px"
             className="h-10 w-auto cursor-pointer transition"
             onClick={() => {
               setIsOpen(false);
