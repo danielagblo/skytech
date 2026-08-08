@@ -51,14 +51,14 @@ export default function FAQSection({ faqs = DEFAULT_FAQS }: { faqs?: GroupedFAQs
       />
 
       {/* Category tabs */}
-      <div className="mb-8 flex flex-wrap justify-center gap-2">
+      <div className="mb-8 flex flex-nowrap overflow-x-auto whitespace-nowrap max-w-full w-full justify-start md:justify-center gap-2 pb-3 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {categories.map((cat) => {
           const isActive = cat === activeCategory;
           return (
             <button
               key={cat}
               onClick={() => handleCategory(cat)}
-              className={`rounded-none px-5 py-2.5 text-sm font-semibold uppercase tracking-[0.12em] transition-all duration-200 ${
+              className={`rounded-none px-5 py-2.5 text-sm font-semibold uppercase tracking-[0.12em] transition-all duration-200 shrink-0 ${
                 isActive
                   ? "bg-slate-950 text-white shadow-soft"
                   : "bg-brand-50 text-slate-600 hover:bg-brand-100 hover:text-brand-700"
