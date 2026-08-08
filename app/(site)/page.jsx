@@ -69,7 +69,7 @@ export default async function Home() {
 
 
       {/* ===== HERO (kept structure: full-bleed + headline + 2 CTAs + awards) ===== */}
-      <section className="relative w-full min-h-[50vh] bg-slate-950 overflow-hidden flex items-center mt-[101px] md:mt-0 pt-16 md:pt-24">
+      <section className="relative w-full min-h-[50vh] bg-slate-950 overflow-hidden flex items-center mt-[127px] md:mt-0 pt-16 md:pt-24">
         <Image
           src="/images/images/homePageBannerImage.png"
           fill
