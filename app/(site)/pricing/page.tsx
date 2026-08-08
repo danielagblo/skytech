@@ -13,15 +13,20 @@ export default async function PricingPage() {
 
   return (
     <div className="text-xl">
-      <Image
-        src="/images/images/AboutBanner.png"
-        alt="Pricing"
-        width={1600}
-        height={160}
-        className="h-40 w-screen object-cover"
-      />
+      {/* Banner Wrapper: dark background matching navbar to prevent white gaps, with top padding so image starts below navbar */}
+      <div className="relative w-full bg-slate-950 pt-[60px] md:pt-[80px]">
+        <div className="relative h-64 md:h-80 w-full">
+          <Image
+            src="/images/images/AboutBanner.png"
+            alt="Pricing"
+            fill
+            className="object-cover"
+            priority
+          />
+        </div>
+      </div>
 
-      <div className="p-6 text-center md:p-10 md:text-left">
+      <div className="relative z-10 -mt-20 md:-mt-32 bg-white p-6 text-center md:p-10 md:text-left">
         <p className="pb-3 text-2xl uppercase md:text-4xl">
           Simple, Transparent Pricing <br className="hidden md:block" /> Built For Your Business
         </p>
