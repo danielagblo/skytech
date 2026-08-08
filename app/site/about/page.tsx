@@ -35,7 +35,7 @@ function AboutPage() {
               <span className="block text-brand-300">powered by people</span>
             </h1>
             <p className="mx-auto max-w-2xl text-lg leading-relaxed text-slate-200 md:mx-0">
-              With nearly a decade of hands on experience in Digital Business
+              With many years of hands-on experience in Digital Business
               Development Solutions and Enterprise Security IT Services,
               we empower businesses to adapt to changing technologies,
               scale operations seamlessly, and thrive in an increasingly

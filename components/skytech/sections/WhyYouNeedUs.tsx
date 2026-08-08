@@ -2,8 +2,8 @@ import Image from "next/image";
 
 const items = [
   {
-    title: "8 Years of Proven Expertise",
-    body: "Nearly a decade of hands-on experience delivering reliable, high-performing software and web solutions across borders.",
+    title: "Many Years of Proven Expertise",
+    body: "Years of hands-on experience delivering reliable, high-performing software and web solutions across borders.",
     icon: (
       <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
     ),

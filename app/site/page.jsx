@@ -31,16 +31,15 @@ const services = [
     href: "/site/services",
   },
   {
-    title: "IT Installations",
-    items: 5,
+    title: "SEO Growth",
+    items: 4,
     list: [
-      "POS (Point of Sale) systems",
-      "Wi-Fi Network Connection",
-      "CCTV surveillance systems",
-      "Inverter & solar panel",
-      "Door and alarm installation",
+      "Search Engine Optimization",
+      "Technical SEO Audits",
+      "Keyword Strategy & Research",
+      "On-page & Off-page SEO",
     ],
-    href: "/site/services/security-systems",
+    href: "/site/seo",
   },
 ];
 
@@ -94,7 +93,7 @@ export default async function Home() {
             {/* Copy */}
             <div className="mx-auto max-w-2xl py-8 text-center text-white md:text-left">
               <h1 className="font-display text-5xl font-bold uppercase leading-none tracking-tight sm:text-6xl md:text-7xl">
-                8+ YEARS
+                MANY YEARS
                 <span className="block whitespace-nowrap">IN OPERATION</span>
               </h1>
 
@@ -120,7 +119,7 @@ export default async function Home() {
               </div>
 
               <p className="mt-6 mb-5 mx-auto max-w-sm text-center text-sm font-medium uppercase leading-relaxed tracking-wide text-slate-200 sm:max-w-md sm:text-base md:mx-0 md:max-w-none md:whitespace-nowrap md:text-left md:text-xl">
-                For Website, Mobile App Development and IT Installations
+                For Website, Mobile App Development and SEO Growth
               </p>
             </div>
           </div>
