@@ -12,7 +12,6 @@ import { getFAQs } from '../lib/faqs';
 import WhyYouNeedUs from "../../components/skytech/sections/WhyYouNeedUs";
 import FAQSection from "../../components/skytech/sections/FAQ";
 import { groupFAQs } from "../../components/skytech/sections/faqGroup";
-import LetsTalkButton from "../../components/skytech/ui/LetsTalkButton";
 import PricingModel from "../../components/skytech/sections/PricingModel";
 import TestimonialsBanner from "../../components/skytech/sections/home/TestimonialsBanner";
 import TopScrollingBanner from "../../components/skytech/sections/home/TopScrollingBanner";
@@ -142,11 +141,11 @@ export default async function Home() {
 
       {/* ===== Stats band (floating over hero) ===== */}
       <section className="relative z-20 -mt-8 px-4 sm:px-8 md:-mt-6">
-        <div className="mx-auto max-w-[80rem] rounded-2xl border border-slate-200 bg-white p-8 shadow-lift md:p-10">
+        <div className="mx-auto max-w-[80rem] rounded-none border border-slate-200 bg-white p-8 shadow-lift md:p-10">
           <div className="grid grid-cols-2 gap-8 text-center lg:grid-cols-4">
             {stats.map((s) => (
               <div key={s.label} className="space-y-2">
-                <p className="font-display text-5xl font-bold tracking-tighter text-brand-600 md:text-6xl">
+                <p className="font-display text-5xl font-bold tracking-tighter text-slate-950 md:text-6xl">
                   <AnimatedCounter value={s.value} suffix={s.suffix} compact={s.compact} />
                 </p>
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">{s.label}</p>
@@ -232,34 +231,35 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* ===== What Services We Offer Best (old style) ===== */}
       <section className="px-6 pt-10 md:pt-[3.75rem]">
-        <p className="text-2xl uppercase md:text-4xl">
-          What services do we <br /> offer best
-        </p>
-        <div className="mt-8 grid max-w-[3000px] grid-cols-1 items-start justify-center gap-4 md:grid-cols-3">
-          {services.map((service, index) => (
-            <div
-              key={index}
-              className="relative h-full border-t-[5px] border-brand-600 bg-[#f6f6f6] p-6 pb-[5.625rem]"
-            >
-              <p className="text-xl font-semibold uppercase">{service.title}</p>
-              <div className="pr-4">
-                <hr className="mb-3 mt-0 border-t border-brand-600" />
-                <ul className="mt-4 space-y-0 text-lg capitalize leading-7">
-                  {service.list.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-              </div>
-              <Link
-                href={service.href}
-                className="absolute bottom-5 right-7 rounded-full border border-brand-600 bg-white px-3 py-2 transition-all duration-300 hover:scale-[0.97] hover:bg-gray-100 active:scale-[1.02]"
+        <div className="mx-auto max-w-[80rem]">
+          <p className="text-2xl uppercase md:text-4xl">
+            What services do we <br /> offer best
+          </p>
+          <div className="mt-8 grid grid-cols-3 gap-2 md:gap-4 items-start justify-center">
+            {services.map((service, index) => (
+              <div
+                key={index}
+                className="relative h-full border-t-[5px] border-brand-600 bg-[#f6f6f6] p-3 pb-16 md:p-6 md:pb-[5.625rem]"
               >
-                &#10132;
-              </Link>
-            </div>
-          ))}
+                <p className="text-xs sm:text-sm md:text-xl font-semibold uppercase">{service.title}</p>
+                <div className="pr-1 md:pr-4">
+                  <hr className="mb-3 mt-0 border-t border-brand-600" />
+                  <ul className="mt-4 space-y-0 text-[10px] sm:text-xs md:text-lg capitalize leading-4 md:leading-7">
+                    {service.list.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
+                </div>
+                <Link
+                  href={service.href}
+                  className="absolute bottom-2 right-2 md:bottom-5 md:right-7 rounded-none border border-brand-600 bg-white px-1.5 py-0.5 md:px-3 md:py-2 text-[10px] md:text-base transition-all duration-300 hover:scale-[0.97] hover:bg-gray-100 active:scale-[1.02]"
+                >
+                  &#10132;
+                </Link>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -280,22 +280,8 @@ export default async function Home() {
         }))}
       />
 
-      {/* ===== Work With Us + FAQs ===== */}
+      {/* ===== FAQs ===== */}
       <section className="bg-white pt-8 md:px-10 md:pt-20">
-        <div className="relative mx-auto flex max-md:w-[90%] max-md:flex-col max-md:items-center max-md:justify-center max-md:pt-[3rem] max-md:pb-[9rem] max-md:bg-[#016DAB] max-md:rounded-2xl md:justify-end md:overflow-visible md:rounded-2xl md:bg-[#016DAB] md:pb-10 md:pr-[10rem]">
-          <Image
-            src="/images/images/workWithUs.png"
-            alt="Work With Us"
-            width={882}
-            height={942}
-            className="absolute object-contain max-md:left-1/2 max-md:h-[26rem] max-md:w-[26rem] max-md:-translate-x-1/2 md:-bottom-[12.5rem] md:-left-[3.75rem] md:mb-0 md:h-[47.5rem] md:w-[47.5rem]"
-          />
-          <LetsTalkButton
-            whatsapp={settings.whatsapp}
-            className="bg-white/20 text-white max-md:absolute max-md:bottom-3 max-md:right-3 md:my-[7.5rem]"
-          />
-        </div>
-
         <FAQSection faqs={groupFAQs(faqs)} />
       </section>
     </div>

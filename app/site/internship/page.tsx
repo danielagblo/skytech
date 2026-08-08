@@ -43,7 +43,7 @@ async function InternshipPage() {
                 alt="Driven by Innovation"
                 width={400}
                 height={400}
-                className="relative h-auto w-full max-w-[25rem] rounded-3xl"
+                className="relative h-auto w-full max-w-[25rem] rounded-none"
               />
             </div>
           </div>

@@ -16,7 +16,7 @@ function BiometricAndAutomatedGate() {
         alt="Biometric & Automated Gate Systems"
         width={1600}
         height={900}
-        className="w-full h-auto rounded-2xl border border-slate-100 object-cover max-h-[500px]"
+        className="w-full h-auto rounded-none border border-slate-100 object-cover max-h-[500px]"
       />
       <h2 className="text-2xl mt-10 mb-4 md:text-4xl uppercase">Access Control Framework</h2>
       <p>
@@ -56,25 +56,25 @@ function BiometricAndAutomatedGate() {
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-        <div className="p-6 border border-slate-100 rounded-2xl bg-slate-50">
+        <div className="p-6 border border-slate-100 rounded-none bg-slate-50">
           <h3 className="text-xl font-semibold mb-2">Time &amp; Attendance Logs</h3>
           <p className="text-slate-600 text-sm">
             Automatically track employee clock-in and clock-out times, syncing directly with standard HR and payroll platforms.
           </p>
         </div>
-        <div className="p-6 border border-slate-100 rounded-2xl bg-slate-50">
+        <div className="p-6 border border-slate-100 rounded-none bg-slate-50">
           <h3 className="text-xl font-semibold mb-2">Visitor Management Systems</h3>
           <p className="text-slate-600 text-sm">
             Generate temporary access PINs or QR codes for visitors, which auto-expire after a set period or single use.
           </p>
         </div>
-        <div className="p-6 border border-slate-100 rounded-2xl bg-slate-50">
+        <div className="p-6 border border-slate-100 rounded-none bg-slate-50">
           <h3 className="text-xl font-semibold mb-2">ANPR (License Plate) Integration</h3>
           <p className="text-slate-600 text-sm">
             Connect high-resolution cameras that read and verify vehicle license plates against a whitelist, opening gates automatically.
           </p>
         </div>
-        <div className="p-6 border border-slate-100 rounded-2xl bg-slate-50">
+        <div className="p-6 border border-slate-100 rounded-none bg-slate-50">
           <h3 className="text-xl font-semibold mb-2">Fail-Safe Safety Protocols</h3>
           <p className="text-slate-600 text-sm">
             Configured to automatically unlock or open in emergency situations (e.g., fire alarm triggers) to guarantee safe evacuation routes.

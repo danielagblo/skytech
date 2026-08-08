@@ -16,7 +16,7 @@ function CyberSecurity() {
         alt="Cyber Security Solutions and Infrastructure"
         width={1600}
         height={900}
-        className="w-full h-auto rounded-2xl border border-slate-100"
+        className="w-full h-auto rounded-none border border-slate-100"
       />
       <h2 className="text-2xl mt-10 mb-4 md:text-4xl uppercase">Security Operations Framework</h2>
       <p>
@@ -56,25 +56,25 @@ function CyberSecurity() {
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-        <div className="p-6 border border-slate-100 rounded-2xl bg-slate-50">
+        <div className="p-6 border border-slate-100 rounded-none bg-slate-50">
           <h3 className="text-xl font-semibold mb-2">Vulnerability Assessments</h3>
           <p className="text-slate-600 text-sm">
             We scan your active servers, websites, and local networks to identify unpatched software or weak configurations before hackers can exploit them.
           </p>
         </div>
-        <div className="p-6 border border-slate-100 rounded-2xl bg-slate-50">
+        <div className="p-6 border border-slate-100 rounded-none bg-slate-50">
           <h3 className="text-xl font-semibold mb-2">Penetration Testing</h3>
           <p className="text-slate-600 text-sm">
             Simulated cyber attacks conducted by our security experts to test the resilience of your defenses and evaluate response times.
           </p>
         </div>
-        <div className="p-6 border border-slate-100 rounded-2xl bg-slate-50">
+        <div className="p-6 border border-slate-100 rounded-none bg-slate-50">
           <h3 className="text-xl font-semibold mb-2">Data Backup &amp; Disaster Recovery</h3>
           <p className="text-slate-600 text-sm">
             Secure, encrypted backup routines that duplicate critical databases to offline and cloud storage, ensuring recovery in case of ransomware incidents.
           </p>
         </div>
-        <div className="p-6 border border-slate-100 rounded-2xl bg-slate-50">
+        <div className="p-6 border border-slate-100 rounded-none bg-slate-50">
           <h3 className="text-xl font-semibold mb-2">Security Awareness Training</h3>
           <p className="text-slate-600 text-sm">
             Educating your team on how to recognize phishing emails, practice safe browsing, and protect access passwords.

@@ -16,7 +16,7 @@ function CCTVSurveillance() {
         alt="CCTV Surveillance"
         width={1600}
         height={900}
-        className="w-full h-auto rounded-2xl"
+        className="w-full h-auto rounded-none"
       />
       <h2 className="text-2xl mt-10 mb-4 md:text-4xl uppercase">Installation framework</h2>
       <p>

@@ -29,19 +29,19 @@ export default async function FAQPage() {
         {faqs.length > 0 ? (
           <FAQSection faqs={groupFAQs(faqs)} />
         ) : (
-          <div className="py-20 text-center bg-white rounded-[2.5rem] border border-dashed border-slate-200 text-slate-400">
+          <div className="py-20 text-center bg-white rounded-none border border-dashed border-slate-200 text-slate-400">
             No FAQs available at the moment.
           </div>
         )}
 
-        <div className="glass-panel rounded-[2.5rem] p-12 text-center space-y-6 border-slate-100 bg-slate-50/50">
+        <div className="glass-panel rounded-none p-12 text-center space-y-6 border-slate-100 bg-slate-50/50">
           <h2 className="text-2xl font-bold text-slate-900">Still have questions?</h2>
           <p className="text-slate-600 max-w-xl mx-auto">
             Can't find the answer you're looking for? Reach out to our team and we'll get back to you as soon as possible.
           </p>
           <div className="flex justify-center gap-4">
-            <Link href="/site/contact" className="btn-primary px-8 py-3 rounded-full text-white font-bold">Contact Support</Link>
-            <Link href="/site/services" className="btn-secondary px-8 py-3 rounded-full border border-slate-200 font-bold">View Services</Link>
+            <Link href="/site/contact" className="btn-primary px-8 py-3 rounded-none text-white font-bold">Contact Support</Link>
+            <Link href="/site/services" className="btn-secondary px-8 py-3 rounded-none border border-slate-200 font-bold">View Services</Link>
           </div>
         </div>
       </div>

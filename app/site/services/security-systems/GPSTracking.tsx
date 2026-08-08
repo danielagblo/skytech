@@ -16,7 +16,7 @@ function GPSTracking() {
         alt="GPS Tracking and Fleet Monitoring"
         width={1600}
         height={900}
-        className="w-full h-auto rounded-2xl border border-slate-100 object-cover max-h-[500px]"
+        className="w-full h-auto rounded-none border border-slate-100 object-cover max-h-[500px]"
       />
       <h2 className="text-2xl mt-10 mb-4 md:text-4xl uppercase">Tracking Framework</h2>
       <p>
@@ -56,25 +56,25 @@ function GPSTracking() {
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-        <div className="p-6 border border-slate-100 rounded-2xl bg-slate-50">
+        <div className="p-6 border border-slate-100 rounded-none bg-slate-50">
           <h3 className="text-xl font-semibold mb-2">Real-Time Geofencing</h3>
           <p className="text-slate-600 text-sm">
             Define precise geographical boundaries. Receive instant SMS or push notifications the moment a vehicle enters or exits designated work zones.
           </p>
         </div>
-        <div className="p-6 border border-slate-100 rounded-2xl bg-slate-50">
+        <div className="p-6 border border-slate-100 rounded-none bg-slate-50">
           <h3 className="text-xl font-semibold mb-2">Remote Engine Immobilization</h3>
           <p className="text-slate-600 text-sm">
             In the event of unauthorized use or theft, safely send a secure command to disable the starter motor, preventing the vehicle from restarting.
           </p>
         </div>
-        <div className="p-6 border border-slate-100 rounded-2xl bg-slate-50">
+        <div className="p-6 border border-slate-100 rounded-none bg-slate-50">
           <h3 className="text-xl font-semibold mb-2">Fuel &amp; Behavior Analytics</h3>
           <p className="text-slate-600 text-sm">
             Monitor idling times, rapid acceleration, harsh braking, and fuel consumption to optimize driver habits and reduce operational costs.
           </p>
         </div>
-        <div className="p-6 border border-slate-100 rounded-2xl bg-slate-50">
+        <div className="p-6 border border-slate-100 rounded-none bg-slate-50">
           <h3 className="text-xl font-semibold mb-2">Historical Route Playback</h3>
           <p className="text-slate-600 text-sm">
             Access up to 90 days of detailed route history, stops, speeds, and idle durations for compliance and incident investigations.

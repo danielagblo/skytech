@@ -127,9 +127,9 @@ function SecuritySystemsPage() {
                 <button
                   key={card.hash}
                   onClick={() => handleSelectTab(card)}
-                  className={`rounded-full px-5 py-2.5 text-sm font-medium transition-all duration-300 ${
+                  className={`rounded-none px-5 py-2.5 text-sm font-medium transition-all duration-300 ${
                     isActive
-                      ? "bg-brand-600 text-white shadow-soft"
+                      ? "bg-slate-950 text-white shadow-soft"
                       : "border border-slate-200 bg-white text-slate-600 hover:border-brand-600 hover:text-brand-600"
                   }`}
                 >
@@ -139,7 +139,7 @@ function SecuritySystemsPage() {
             })}
           </div>
 
-          <div id="security-content" className="scroll-mt-24 rounded-3xl border border-slate-100 bg-white p-6 shadow-soft md:p-10">
+          <div id="security-content" className="scroll-mt-24 rounded-none border border-slate-100 bg-white p-6 shadow-soft md:p-10">
             <h2 className="mb-6 font-display text-3xl font-semibold uppercase leading-tight text-slate-900 md:text-4xl">
               {activeTab.title || activeTab.name || "Unknown Service"}
             </h2>

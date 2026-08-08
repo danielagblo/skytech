@@ -62,7 +62,7 @@ export default function GalleryClient({ projects }) {
             {projects.map((project, idx) => (
               <div
                 key={project._id || idx}
-                className="group relative overflow-hidden rounded-3xl bg-slate-100 border border-slate-200 aspect-[4/5] hover:shadow-2xl transition-all duration-500 project-card"
+                className="group relative overflow-hidden rounded-none bg-slate-100 border border-slate-200 aspect-[4/5] hover:shadow-2xl transition-all duration-500 project-card"
               >
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-900/20 to-transparent z-10 opacity-60 group-hover:opacity-80 transition-opacity" />
                 {project.image ? (
@@ -78,7 +78,7 @@ export default function GalleryClient({ projects }) {
                 )}
 
                 <div className="absolute bottom-0 left-0 right-0 p-8 z-20 translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                  <span className="inline-block px-3 py-1 rounded-full bg-brand-600 text-white text-[10px] font-bold uppercase tracking-wider mb-3">
+                  <span className="inline-block px-3 py-1 rounded-none bg-slate-950 text-white text-[10px] font-bold uppercase tracking-wider mb-3">
                     {project.category}
                   </span>
                   <h3 className="text-2xl font-bold text-white mb-2">{project.title}</h3>
@@ -99,7 +99,7 @@ export default function GalleryClient({ projects }) {
             ))}
           </div>
         ) : (
-          <div className="py-20 text-center border-2 border-dashed border-slate-100 rounded-[2.5rem] text-slate-400">
+          <div className="py-20 text-center border-2 border-dashed border-slate-100 rounded-none text-slate-400">
             No projects in the gallery yet. Check back soon.
           </div>
         )}

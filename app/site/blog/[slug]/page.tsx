@@ -67,7 +67,7 @@ async function BlogPostPage({ params }: BlogPostPageProps) {
       </section>
 
       <div className="grid grid-cols-1 gap-12 px-6 py-16 md:px-12 lg:grid-cols-[2fr_1fr]">
-        <article className="rounded-3xl border border-slate-100 bg-white p-6 shadow-soft md:p-10">
+        <article className="rounded-none border border-slate-100 bg-white p-6 shadow-soft md:p-10">
           <div className="space-y-6 text-lg leading-relaxed text-slate-700">
             <LexicalContent content={post.content} />
           </div>
@@ -85,7 +85,7 @@ async function BlogPostPage({ params }: BlogPostPageProps) {
                 className="group block hover:no-underline"
               >
                 {related.coverImage && (
-                  <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl ring-1 ring-slate-100 shadow-soft transition-shadow group-hover:shadow-lift">
+                  <div className="relative aspect-[4/3] w-full overflow-hidden rounded-none ring-1 ring-slate-100 shadow-soft transition-shadow group-hover:shadow-lift">
                     <Image
                       src={related.coverImage}
                       alt={related.title}

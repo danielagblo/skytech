@@ -46,7 +46,7 @@ async function BlogPage() {
         <div className="grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
           {posts.map((post) => (
             <Link key={post.slug} href={`/site/blog/${post.slug}`} className="group hover:no-underline">
-              <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl ring-1 ring-slate-100 shadow-soft transition-shadow duration-300 group-hover:shadow-lift">
+              <div className="relative aspect-[4/3] w-full overflow-hidden rounded-none ring-1 ring-slate-100 shadow-soft transition-shadow duration-300 group-hover:shadow-lift">
                 <Image
                   src={post.coverImage}
                   alt={post.title}

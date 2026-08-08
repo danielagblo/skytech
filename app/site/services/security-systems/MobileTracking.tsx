@@ -16,7 +16,7 @@ function MobileTracking() {
         alt="Mobile Tracking & Device Management"
         width={1600}
         height={900}
-        className="w-full h-auto rounded-2xl border border-slate-100 object-cover max-h-[500px]"
+        className="w-full h-auto rounded-none border border-slate-100 object-cover max-h-[500px]"
       />
       <h2 className="text-2xl mt-10 mb-4 md:text-4xl uppercase">Mobile Deployment Framework</h2>
       <p>
@@ -56,25 +56,25 @@ function MobileTracking() {
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-        <div className="p-6 border border-slate-100 rounded-2xl bg-slate-50">
+        <div className="p-6 border border-slate-100 rounded-none bg-slate-50">
           <h3 className="text-xl font-semibold mb-2">Job dispatching &amp; Status</h3>
           <p className="text-slate-600 text-sm">
             Assign jobs directly to field agents through the tracking app, with status buttons like "On the way," "Arrived," or "Completed" linked to location coordinates.
           </p>
         </div>
-        <div className="p-6 border border-slate-100 rounded-2xl bg-slate-50">
+        <div className="p-6 border border-slate-100 rounded-none bg-slate-50">
           <h3 className="text-xl font-semibold mb-2">Smart Privacy Scheduling</h3>
           <p className="text-slate-600 text-sm">
             Configure automated tracking schedules so locations are only reported during official working hours, respecting employee privacy.
           </p>
         </div>
-        <div className="p-6 border border-slate-100 rounded-2xl bg-slate-50">
+        <div className="p-6 border border-slate-100 rounded-none bg-slate-50">
           <h3 className="text-xl font-semibold mb-2">Instant SOS Panic Button</h3>
           <p className="text-slate-600 text-sm">
             Equip staff with a quick-access panic button that immediately broadcasts their precise location to the security team during an emergency.
           </p>
         </div>
-        <div className="p-6 border border-slate-100 rounded-2xl bg-slate-50">
+        <div className="p-6 border border-slate-100 rounded-none bg-slate-50">
           <h3 className="text-xl font-semibold mb-2">Travel History &amp; Mileage Reports</h3>
           <p className="text-slate-600 text-sm">
             Automatically log routes and calculate mileage for reimbursement, reducing manual paperwork and entry errors.

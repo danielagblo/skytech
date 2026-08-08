@@ -16,7 +16,7 @@ function HardwareProcurementAndSupply() {
         alt="Hardware Procurement and Supply"
         width={1600}
         height={900}
-        className="w-full h-auto rounded-2xl border border-slate-100 object-cover max-h-[500px]"
+        className="w-full h-auto rounded-none border border-slate-100 object-cover max-h-[500px]"
       />
       <h2 className="text-2xl mt-10 mb-4 md:text-4xl uppercase">Procurement Framework</h2>
       <p>
@@ -56,25 +56,25 @@ function HardwareProcurementAndSupply() {
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-        <div className="p-6 border border-slate-100 rounded-2xl bg-slate-50">
+        <div className="p-6 border border-slate-100 rounded-none bg-slate-50">
           <h3 className="text-xl font-semibold mb-2">1. Hardware Selection</h3>
           <p className="text-slate-600 text-sm">
             We evaluate your technical requirements and select hardware models that fit your performance targets and budget.
           </p>
         </div>
-        <div className="p-6 border border-slate-100 rounded-2xl bg-slate-50">
+        <div className="p-6 border border-slate-100 rounded-none bg-slate-50">
           <h3 className="text-xl font-semibold mb-2">2. OEM Sourcing</h3>
           <p className="text-slate-600 text-sm">
             We source directly from Original Equipment Manufacturers (OEMs) or authorized global distributors, ensuring all hardware is genuine and under warranty.
           </p>
         </div>
-        <div className="p-6 border border-slate-100 rounded-2xl bg-slate-50">
+        <div className="p-6 border border-slate-100 rounded-none bg-slate-50">
           <h3 className="text-xl font-semibold mb-2">3. Pre-Shipment Testing</h3>
           <p className="text-slate-600 text-sm">
             Every critical component undergoes testing in our lab to verify performance and eliminate Out-of-Box Failures (OBF).
           </p>
         </div>
-        <div className="p-6 border border-slate-100 rounded-2xl bg-slate-50">
+        <div className="p-6 border border-slate-100 rounded-none bg-slate-50">
           <h3 className="text-xl font-semibold mb-2">4. On-Site Handover</h3>
           <p className="text-slate-600 text-sm">
             We deliver the hardware directly to your site, provide complete documentation, and offer optional installation and integration support.

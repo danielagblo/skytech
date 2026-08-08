@@ -30,7 +30,7 @@ function AboutPage() {
         <div className="section-shell relative z-10 grid w-full grid-cols-1 items-center gap-10 md:grid-cols-[2fr_1fr]">
           <div className="space-y-6 text-center md:text-left">
             <span className="pill bg-white/10 !text-brand-300 !border-white/10">About Skytech</span>
-            <h1 className="font-display text-4xl font-bold uppercase leading-none tracking-tight sm:text-5xl lg:text-6xl">
+            <h1 className="font-display text-4xl font-bold uppercase leading-none tracking-tight text-white sm:text-5xl lg:text-6xl">
               Driven by innovation
               <span className="block text-brand-300">powered by people</span>
             </h1>
@@ -49,7 +49,7 @@ function AboutPage() {
 
           <div className="relative mx-auto w-full max-w-[20rem] md:max-w-none">
             <div className="absolute inset-0 -m-4 rounded-3xl bg-brand-600/20 blur-2xl" />
-            <div className="relative rounded-3xl border border-white/15 bg-white/5 p-6 backdrop-blur-sm">
+            <div className="relative rounded-none border border-white/15 bg-white/5 p-6 backdrop-blur-sm">
               <Image
                 src="/images/images/DrivenByInnovationImage.png"
                 alt="Driven by Innovation"
@@ -64,10 +64,10 @@ function AboutPage() {
 
       {/* ===== Floating stats band ===== */}
       <section className="relative z-20 -mt-8 px-4 sm:px-8">
-        <div className="mx-auto grid max-w-[80rem] grid-cols-2 gap-8 rounded-2xl border border-slate-200 bg-white p-8 text-center shadow-lift lg:grid-cols-3 md:p-10">
+        <div className="mx-auto grid max-w-[80rem] grid-cols-2 gap-8 rounded-none border border-slate-200 bg-white p-8 text-center shadow-lift lg:grid-cols-3 md:p-10">
           {aboutStats.map((stat) => (
             <div key={stat.label} className="space-y-2">
-              <p className="font-display text-5xl font-bold tracking-tighter text-brand-600 md:text-6xl">
+              <p className="font-display text-5xl font-bold tracking-tighter text-slate-950 md:text-6xl">
                 {stat.value}
               </p>
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">{stat.label}</p>
@@ -80,7 +80,7 @@ function AboutPage() {
       <section className="py-24">
         <div className="section-shell grid grid-cols-1 items-center gap-12 md:grid-cols-2">
           <div className="relative mx-auto w-full max-w-[20rem] md:max-w-none">
-            <div className="relative aspect-square w-full overflow-hidden rounded-3xl shadow-lift ring-1 ring-brand-100">
+            <div className="relative aspect-square w-full overflow-hidden rounded-none shadow-lift ring-1 ring-brand-100">
               <Image
                 src="/images/images/HowSkytechCameToImage.png"
                 alt="How Skytech Came to Be"
@@ -143,7 +143,7 @@ function AboutPage() {
       <section className="py-24">
         <div className="section-shell grid grid-cols-1 items-center gap-12 md:grid-cols-2">
           <div className="order-2 space-y-6 md:order-1">
-            <div className="rounded-3xl border border-slate-100 bg-white p-8 shadow-soft">
+            <div className="rounded-none border border-slate-100 bg-white p-8 shadow-soft">
               <span className="pill">Mission</span>
               <p className="section-lead mt-4">
                 We break the cycle of high costs and vanishing developers by serving as a continuous,
@@ -152,7 +152,7 @@ function AboutPage() {
                 after launch day.
               </p>
             </div>
-            <div className="rounded-3xl bg-brand-600 p-8 text-white shadow-soft">
+            <div className="rounded-none bg-slate-950 p-8 text-white shadow-soft">
               <span className="pill bg-white/10 text-brand-100 border-white/20">Vision</span>
               <p className="mt-4 text-lg leading-relaxed text-brand-50">
                 To be Africa&apos;s most reliable and accessible technology partner, bridging the digital
@@ -162,7 +162,7 @@ function AboutPage() {
             </div>
           </div>
           <div className="relative order-1 mx-auto w-full max-w-[20rem] md:order-2 md:max-w-none">
-            <div className="relative aspect-[4/5] w-full overflow-hidden rounded-3xl shadow-lift ring-1 ring-brand-100">
+            <div className="relative aspect-[4/5] w-full overflow-hidden rounded-none shadow-lift ring-1 ring-brand-100">
               <Image
                 src="/images/images/MissionVisionChessImage.png"
                 alt="Mission and Vision"

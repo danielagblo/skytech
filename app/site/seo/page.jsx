@@ -47,7 +47,7 @@ export default function SEOPage() {
 
       {/* Stats / Results */}
       <section className="relative z-10 bg-slate-50 px-6 pb-16 md:pb-20">
-        <div className="section-shell md:-mt-32 md:rounded-2xl md:border md:border-slate-200 md:bg-white md:p-10 md:shadow-lift">
+        <div className="section-shell md:-mt-32 md:rounded-none md:border md:border-slate-200 md:bg-white md:p-10 md:shadow-lift">
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-3">
             {seoStats.map((stat, idx) => (
               <div key={idx} className="text-center">
@@ -115,9 +115,9 @@ export default function SEOPage() {
             {processSteps.map((step, idx) => (
               <div
                 key={step.title}
-                className="relative rounded-3xl border border-slate-100 bg-white p-8 shadow-soft transition-all duration-500 hover:-translate-y-1 hover:shadow-lift"
+                className="relative rounded-none border border-slate-100 bg-white p-8 shadow-soft transition-all duration-500 hover:-translate-y-1 hover:shadow-lift"
               >
-                <span className="mb-5 inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-brand-600 font-display text-base font-semibold text-white">
+                <span className="mb-5 inline-flex h-11 w-11 items-center justify-center rounded-none bg-slate-950 font-display text-base font-semibold text-white">
                   {String(idx + 1).padStart(2, "0")}
                 </span>
                 <h3 className="mb-3 text-lg font-semibold text-slate-900">{step.title}</h3>
@@ -154,11 +154,11 @@ export default function SEOPage() {
 function FeatureCard({ title, desc, icon, idx }) {
   return (
     <div
-      className={`glass-panel space-y-4 rounded-3xl border-slate-100 bg-white p-8 shadow-soft transition-all duration-500 hover:-translate-y-1 hover:shadow-lift ${
+      className={`glass-panel space-y-4 rounded-none border-slate-100 bg-white p-8 shadow-soft transition-all duration-500 hover:-translate-y-1 hover:shadow-lift ${
         idx % 2 === 1 ? "sm:mt-8" : ""
       }`}
     >
-      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-600/10 text-brand-600">
+      <div className="flex h-12 w-12 items-center justify-center rounded-none bg-brand-600/10 text-brand-600">
         {icon}
       </div>
       <h3 className="font-display text-xl font-semibold text-slate-900">{title}</h3>

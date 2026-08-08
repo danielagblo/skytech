@@ -89,7 +89,7 @@ export default function CaseStudiesClient({ projects }) {
               <div key={study._id || idx} className={`flex flex-col lg:flex-row gap-16 items-center case-study-item ${idx % 2 === 1 ? 'lg:flex-row-reverse' : ''}`}>
                 {/* Visual Spotlight */}
                 <div className="w-full lg:w-1/2 group relative visual-spotlight">
-                  <div className="aspect-[16/10] rounded-[3rem] bg-slate-50 border border-slate-100 overflow-hidden relative shadow-2xl shadow-brand-600/5">
+                  <div className="aspect-[16/10] rounded-none bg-slate-50 border border-slate-100 overflow-hidden relative shadow-2xl shadow-brand-600/5">
                     {study.image ? (
                       <img 
                         src={study.image} 
@@ -104,7 +104,7 @@ export default function CaseStudiesClient({ projects }) {
                     <div className="absolute inset-0 bg-brand-600/5 group-hover:bg-transparent transition-colors z-10" />
                   </div>
                   {/* Impact Chip */}
-                  <div className="absolute -bottom-6 -right-6 lg:right-auto lg:-left-6 bg-white p-6 rounded-3xl shadow-2xl border border-slate-100 z-20">
+                  <div className="absolute -bottom-6 -right-6 lg:right-auto lg:-left-6 bg-white p-6 rounded-none shadow-2xl border border-slate-100 z-20">
                     <p className="text-[10px] font-extrabold uppercase tracking-widest text-brand-600 mb-1">Impact Result</p>
                     <p className="text-xl font-extrabold text-slate-900">{study.impact || "Accelerated Growth"}</p>
                   </div>
@@ -126,14 +126,14 @@ export default function CaseStudiesClient({ projects }) {
 
                   <div className="flex flex-wrap gap-3">
                     {study.metrics?.map(metric => (
-                      <span key={metric} className="px-4 py-2 rounded-xl bg-slate-50 border border-slate-100 text-[10px] font-extrabold uppercase tracking-widest text-slate-600">
+                      <span key={metric} className="px-4 py-2 rounded-none bg-slate-50 border border-slate-100 text-[10px] font-extrabold uppercase tracking-widest text-slate-600">
                         {metric}
                       </span>
                     ))}
                   </div>
 
                   <div className="pt-6">
-                    <Link href="/site/contact" className="inline-flex items-center gap-3 px-8 py-4 bg-slate-900 text-white rounded-full font-extrabold text-sm hover:bg-brand-600 transition-all shadow-xl shadow-slate-900/10">
+                    <Link href="/site/contact" className="inline-flex items-center gap-3 px-8 py-4 bg-slate-900 text-white rounded-none font-extrabold text-sm hover:bg-slate-950 transition-all shadow-xl shadow-slate-900/10">
                       Request Technical Demo
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
@@ -144,14 +144,14 @@ export default function CaseStudiesClient({ projects }) {
               </div>
             ))
           ) : (
-            <div className="py-20 text-center border-2 border-dashed border-slate-100 rounded-[3rem] text-slate-400">
+                <div className="py-20 text-center border-2 border-dashed border-slate-100 rounded-none text-slate-400">
               No case studies published yet. Add them in the dashboard.
             </div>
           )}
         </div>
 
         {/* Global CTA */}
-        <div className="rounded-[4rem] bg-slate-950 p-16 md:p-24 text-center space-y-10 relative overflow-hidden case-cta-section">
+        <div className="rounded-none bg-slate-950 p-16 md:p-24 text-center space-y-10 relative overflow-hidden case-cta-section">
           <div className="absolute inset-0 bg-brand-600/10 blur-[120px]" />
           <div className="relative z-10 space-y-4 max-w-3xl mx-auto case-cta-el">
             <span className="text-brand-500 text-[10px] font-extrabold uppercase tracking-[0.4em]">Get Started</span>
@@ -161,7 +161,7 @@ export default function CaseStudiesClient({ projects }) {
             </p>
           </div>
           <div className="relative z-10 case-cta-el">
-            <Link href="/site/contact" className="inline-flex items-center gap-3 px-12 py-6 bg-brand-600 text-white rounded-full font-extrabold text-lg hover:bg-white hover:text-slate-950 transition-all shadow-2xl shadow-brand-600/20">
+            <Link href="/site/contact" className="inline-flex items-center gap-3 px-12 py-6 bg-slate-950 text-white rounded-none font-extrabold text-lg hover:bg-white hover:text-slate-950 transition-all shadow-2xl shadow-slate-950/20">
               Start Your Project
             </Link>
           </div>
