@@ -132,7 +132,7 @@ export default function FoundationPage() {
   return (
     <div className="overflow-x-hidden bg-white text-slate-800">
       {/* ===== Hero Section ===== */}
-      <section className="relative flex min-h-[60vh] items-center overflow-hidden bg-slate-950 pt-28 pb-20">
+      <section className="relative w-full min-h-[50vh] bg-slate-950 overflow-hidden flex items-center mt-0 pt-[140px] md:pt-[180px] pb-16">
         <Image
           src="/images/images/AboutBanner.png"
           alt="Skytech Foundation Hero"
