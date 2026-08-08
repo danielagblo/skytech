@@ -15,7 +15,7 @@ async function BlogPage() {
 
   return (
     <div className="overflow-x-hidden bg-white">
-      <section className="relative overflow-hidden bg-slate-950 pt-28 pb-16 text-white md:pb-20">
+      <section className="relative overflow-hidden bg-slate-950 pt-36 pb-16 text-white md:pt-48 md:pb-20">
         <Image
           src="/images/images/BlogPageHeader.png"
           alt="Insights"
