@@ -10,6 +10,7 @@ export interface ServiceNavigationItem extends NavigationLink {
 export const navigationLinks: NavigationLink[] = [
   { name: "Home", href: "/" },
   { name: "About", href: "/about" },
+  { name: "Foundation", href: "/foundation" },
   { name: "Services", href: "/services" },
   { name: "Pricing", href: "/pricing" },
   { name: "Insights", href: "/insights" },
