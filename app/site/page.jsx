@@ -16,6 +16,7 @@ import PricingModel from "../../components/skytech/sections/PricingModel";
 import TestimonialsBanner from "../../components/skytech/sections/home/TestimonialsBanner";
 import TopScrollingBanner from "../../components/skytech/sections/home/TopScrollingBanner";
 import AnimatedCounter from "../../components/skytech/sections/home/AnimatedCounter";
+import ClientsCarousel from "../../components/skytech/sections/home/ClientsCarousel";
 
 const services = [
   {
@@ -163,19 +164,7 @@ export default async function Home() {
             <span className="text-brand-600">1000+ brands</span> across two continents
           </p>
         </div>
-        <div className="border-y border-slate-200 bg-slate-50/60 py-10">
-          <div className="section-shell grid grid-cols-3 items-center gap-4 sm:grid-cols-4 md:grid-cols-6">
-            {allPartners.map((partner, idx) => (
-              <div key={`${idx}-${partner.name || partner.logoUrl}`} className="flex items-center justify-center">
-                <img
-                  src={partner.logoUrl}
-                  alt={partner.name || "Brand"}
-                  className="h-12 w-auto max-w-[12.5rem] object-contain md:h-14"
-                />
-              </div>
-            ))}
-          </div>
-        </div>
+        <ClientsCarousel partners={allPartners} />
       </section>
 
       {/* ===== Digital Excellence Awards ===== */}
