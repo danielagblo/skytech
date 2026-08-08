@@ -8,15 +8,16 @@ import { getAffiliates } from '../lib/affiliates';
 import { getTestimonials } from '../lib/testimonials';
 import { getBlogPosts } from '../admin/blog-actions';
 import { getFAQs } from '../lib/faqs';
+import { getAllBlogPosts } from '../lib/blog';
 
 import WhyYouNeedUs from "../../components/skytech/sections/WhyYouNeedUs";
 import FAQSection from "../../components/skytech/sections/FAQ";
 import { groupFAQs } from "../../components/skytech/sections/faqGroup";
 import PricingModel from "../../components/skytech/sections/PricingModel";
 import TestimonialsBanner from "../../components/skytech/sections/home/TestimonialsBanner";
-import TopScrollingBanner from "../../components/skytech/sections/home/TopScrollingBanner";
 import AnimatedCounter from "../../components/skytech/sections/home/AnimatedCounter";
 import ClientsCarousel from "../../components/skytech/sections/home/ClientsCarousel";
+import LatestInsights from "@/components/LatestInsights";
 
 const services = [
   {
@@ -65,6 +66,8 @@ export default async function Home() {
   const partnersData = await getAffiliates();
   const allPartners = (partnersData || []).filter((p) => p?.logoUrl || p?.name);
   const pricing = await getPricing();
+  const posts = await getAllBlogPosts();
+  const latestPosts = posts.slice(0, 3);
 
   return (
     <div className="bg-white min-w-screen min-h-screen overflow-x-hidden relative">
@@ -264,6 +267,9 @@ export default async function Home() {
           title: t.company || "",
         }))}
       />
+
+      {/* ===== Latest Insights ===== */}
+      <LatestInsights latestPosts={latestPosts} />
 
       {/* ===== FAQs ===== */}
       <section className="bg-white pt-8 md:px-10 md:pt-20">

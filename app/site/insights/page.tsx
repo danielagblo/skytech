@@ -1,7 +1,6 @@
 import Image from "next/image";
-import Link from "next/link";
-
-import { getAllBlogPosts, formatBlogDate } from "@/app/lib/blog";
+import { getAllBlogPosts } from "@/app/lib/blog";
+import InsightsClient from "@/components/skytech/sections/insights/InsightsClient";
 
 export const dynamic = "force-dynamic";
 
@@ -42,37 +41,7 @@ async function BlogPage() {
         </div>
       </section>
 
-      <section className="px-6 py-16 md:px-12">
-        <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-6">
-          {posts.map((post) => (
-            <Link key={post.slug} href={`/site/insights/${post.slug}`} className="group hover:no-underline">
-              <div className="relative aspect-[4/3] w-full overflow-hidden rounded-none ring-1 ring-slate-100 shadow-soft transition-shadow duration-300 group-hover:shadow-lift">
-                <Image
-                  src={post.coverImage}
-                  alt={post.title}
-                  fill
-                  className="object-cover transition-transform duration-300 group-hover:scale-105"
-                />
-              </div>
-              <div className="mt-4 flex items-center gap-3 text-sm text-slate-500">
-                <span>{formatBlogDate(post.publishedAt)}</span>
-                <span className="h-1 w-1 rounded-full bg-brand-600" />
-                <span>{post.readTimeMinutes} mins read</span>
-              </div>
-              <h2 className="mt-3 text-lg font-semibold uppercase leading-snug text-slate-900 transition-colors group-hover:text-brand-600">
-                {post.title}
-              </h2>
-              <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-slate-600">{post.excerpt}</p>
-            </Link>
-          ))}
-
-          {posts.length === 0 && (
-            <p className="col-span-full text-center text-slate-500">
-              No articles yet - check back soon.
-            </p>
-          )}
-        </div>
-      </section>
+      <InsightsClient posts={posts} />
     </div>
   );
 }
