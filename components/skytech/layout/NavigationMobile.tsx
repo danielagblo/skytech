@@ -50,7 +50,7 @@ function NavigationMobile({ className }: { className?: string }) {
 
         <div className="relative flex items-center justify-between px-4 py-2">
           <Image
-            src="/images/images/skytechLogo.png"
+            src="/try1.png"
             alt="SkyTech Logo"
             width={44}
             height={44}

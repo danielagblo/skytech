@@ -36,7 +36,7 @@ function Footer({ latestPosts = [], sponsors = [], settings, whatsapp, className
           {/* Brand */}
           <div className="space-y-4">
             <Image
-              src="/images/images/skytechLogo.png"
+              src="/try1.png"
               alt={`${siteName} Logo`}
               width={56}
               height={56}

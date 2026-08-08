@@ -20,7 +20,7 @@ function NavigationPC({ className }: { className?: string }) {
       }}
     >
       <Image
-        src="/images/images/skytechLogo.png"
+        src="/try1.png"
         alt="SkyTech Logo"
         width={56}
         height={56}
