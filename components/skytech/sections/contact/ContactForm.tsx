@@ -83,7 +83,7 @@ export default function ContactForm() {
   };
 
   const inputStyle =
-    "w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-4 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-brand-600 focus:bg-white focus:ring-2 focus:ring-brand-200";
+    "w-full rounded-none border border-slate-200 bg-slate-50 px-4 py-4 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-brand-600 focus:bg-white focus:ring-2 focus:ring-brand-200";
 
   return (
     <section className="bg-slate-50 px-6 py-16 md:py-24">
@@ -101,7 +101,7 @@ export default function ContactForm() {
         <div className="grid gap-12 lg:grid-cols-2">
           <form
             onSubmit={handleSubmit}
-            className="space-y-5 rounded-3xl border border-slate-100 bg-white p-8 shadow-lift lg:p-10"
+            className="space-y-5 rounded-none border border-slate-100 bg-white p-8 shadow-lift lg:p-10"
           >
             <input
               className={inputStyle}
@@ -142,14 +142,14 @@ export default function ContactForm() {
 
             <button
               disabled={loading}
-              className="w-full rounded-xl bg-brand-600 py-4 text-lg font-medium text-white shadow-soft transition hover:bg-brand-700 disabled:cursor-not-allowed disabled:opacity-70"
+              className="w-full rounded-none bg-slate-950 py-4 text-lg font-medium text-white shadow-soft transition hover:bg-slate-900 disabled:cursor-not-allowed disabled:opacity-70"
             >
               {loading ? "Sending..." : "Send Message"}
             </button>
           </form>
 
           <div>
-            <div className="overflow-hidden rounded-2xl shadow-soft ring-1 ring-slate-100">
+            <div className="overflow-hidden rounded-none shadow-soft ring-1 ring-slate-100">
               <iframe
                 title="SkyTech Ghana"
                 src="https://maps.google.com/maps?q=5.6519898,-0.0643809&z=19&output=embed"
@@ -159,7 +159,7 @@ export default function ContactForm() {
               />
             </div>
 
-            <div className="mt-8 rounded-3xl bg-gradient-to-b from-brand-50/60 to-white p-8 ring-1 ring-brand-100">
+            <div className="mt-8 rounded-none bg-gradient-to-b from-brand-50/60 to-white p-8 ring-1 ring-brand-100">
               <h3 className="font-display text-3xl font-semibold leading-tight text-slate-900 md:text-4xl">
                 SPEAK TO OUR
                 <br />

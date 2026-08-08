@@ -22,7 +22,7 @@ function AwardMedallion() {
 function AwardsStatement({ className }: { className?: string }) {
   return (
     <div
-      className={`flex flex-col items-center justify-center gap-10 px-6 py-16 md:flex-row md:justify-between md:gap-0 ${className || ""}`}
+      className={`mx-auto max-w-[80rem] w-full flex flex-col items-center justify-center gap-10 px-6 py-16 md:flex-row md:justify-between md:gap-0 ${className || ""}`}
     >
       <div className="md:hidden">
         <AwardMedallion />

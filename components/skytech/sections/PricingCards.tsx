@@ -79,7 +79,7 @@ export default function PricingCards({
   const [selected, setSelected] = useState(defaultIndex);
 
   return (
-    <div className="mx-auto grid max-w-[80rem] grid-cols-1 gap-6 px-5 pb-16 md:grid-cols-3 lg:px-8">
+    <div className="mx-auto grid max-w-[80rem] grid-cols-1 gap-6 px-5 pb-16 pt-8 md:grid-cols-3 lg:px-8">
       {plans.map((plan, index) => {
         const isSelected = selected === index;
         const isRecommended = plan.recommended;
@@ -88,7 +88,7 @@ export default function PricingCards({
           <div
             key={index}
             onClick={() => setSelected(index)}
-            className={`relative flex cursor-pointer flex-col overflow-hidden rounded-3xl bg-white p-8 transition-all duration-300 ${
+            className={`relative flex cursor-pointer flex-col overflow-hidden rounded-lg bg-white p-8 transition-all duration-300 ${
               isSelected
                 ? "ring-2 ring-brand-600 shadow-lift"
                 : "shadow-soft ring-1 ring-slate-200 hover:-translate-y-1 hover:shadow-lift"
@@ -96,7 +96,7 @@ export default function PricingCards({
           >
             {/* Recommended badge */}
             {isRecommended && (
-              <span className="absolute right-0 top-0 inline-flex items-center gap-1.5 rounded-bl-2xl bg-brand-600 px-4 py-2 text-[0.7rem] font-bold uppercase tracking-widest text-white">
+              <span className="absolute right-0 top-0 inline-flex items-center gap-1.5 rounded-bl-2xl bg-slate-950 px-4 py-2 text-[0.7rem] font-bold uppercase tracking-widest text-white">
                 <svg className="h-3 w-3" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M13 3l1.1 4.1H18l-3.3 2.6 1.2 4.1-3-2.2-3 2.2 1.2-4.1L6 7.1h3.9L13 3z" />
                 </svg>
@@ -129,7 +129,7 @@ export default function PricingCards({
             <ul className="flex-1 space-y-3">
               {plan.features.map((feature, i) => (
                 <li key={i} className="flex items-start gap-3">
-                  <span className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-white ${isSelected ? "bg-brand-600" : "bg-brand-100 text-brand-700"}`}>
+                  <span className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-white ${isSelected ? "bg-slate-950" : "bg-brand-100 text-brand-700"}`}>
                     <svg className="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                     </svg>

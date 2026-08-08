@@ -59,8 +59,8 @@ const audiences: AudienceItem[] = [
 
 function AudienceCard({ number, title, description, image, alt, wide }: AudienceItem) {
   return (
-    <div className="relative flex h-full flex-col gap-6 rounded-3xl border border-slate-100 bg-white p-6 pt-10 shadow-soft transition-all duration-500 hover:-translate-y-1 hover:shadow-lift md:p-8 md:pt-10">
-      <div className="absolute -top-3 -left-2 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand-600 font-display text-sm font-semibold text-white shadow-soft">
+    <div className="relative flex h-full flex-col gap-6 rounded-none border border-slate-100 bg-white p-6 pt-10 shadow-soft transition-all duration-500 hover:-translate-y-1 hover:shadow-lift md:p-8 md:pt-10">
+      <div className="absolute -top-3 -left-2 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-slate-950 font-display text-sm font-semibold text-white shadow-soft">
         {number}
       </div>
 
@@ -78,7 +78,7 @@ function AudienceCard({ number, title, description, image, alt, wide }: Audience
 
         {image && (
           <div
-            className={`shrink-0 overflow-hidden rounded-2xl ${
+            className={`shrink-0 overflow-hidden rounded-none ${
               wide ? "md:h-56 md:w-64 md:scale-[0.8]" : "md:h-28 md:w-28"
             } h-40 w-full`}
           >

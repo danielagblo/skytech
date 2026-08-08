@@ -90,7 +90,7 @@ export default function InternshipForm() {
   };
 
   const inputClass =
-    "w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-4 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-brand-600 focus:bg-white focus:ring-2 focus:ring-brand-200";
+    "w-full rounded-none border border-slate-200 bg-slate-50 px-4 py-4 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-brand-600 focus:bg-white focus:ring-2 focus:ring-brand-200";
 
   return (
     <section className="bg-slate-50 px-6 py-16 md:px-10">
@@ -105,7 +105,7 @@ export default function InternshipForm() {
 
         <form
           onSubmit={handleSubmit}
-          className="mt-12 space-y-5 rounded-3xl border border-slate-100 bg-white p-8 shadow-lift lg:p-10"
+          className="mt-12 space-y-5 rounded-none border border-slate-100 bg-white p-8 shadow-lift lg:p-10"
         >
           <div className="grid gap-5 md:grid-cols-2">
             <input
@@ -200,7 +200,7 @@ export default function InternshipForm() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-xl bg-brand-600 py-4 text-lg font-medium text-white shadow-soft transition hover:bg-brand-700 disabled:cursor-not-allowed disabled:opacity-70"
+            className="w-full rounded-none bg-slate-950 py-4 text-lg font-medium text-white shadow-soft transition hover:bg-slate-900 disabled:cursor-not-allowed disabled:opacity-70"
           >
             {loading ? "Submitting..." : "Apply Now"}
           </button>

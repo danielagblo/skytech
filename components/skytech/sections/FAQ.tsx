@@ -58,9 +58,9 @@ export default function FAQSection({ faqs = DEFAULT_FAQS }: { faqs?: GroupedFAQs
             <button
               key={cat}
               onClick={() => handleCategory(cat)}
-              className={`rounded-full px-5 py-2.5 text-sm font-semibold uppercase tracking-[0.12em] transition-all duration-200 ${
+              className={`rounded-none px-5 py-2.5 text-sm font-semibold uppercase tracking-[0.12em] transition-all duration-200 ${
                 isActive
-                  ? "bg-brand-600 text-white shadow-soft"
+                  ? "bg-slate-950 text-white shadow-soft"
                   : "bg-brand-50 text-slate-600 hover:bg-brand-100 hover:text-brand-700"
               }`}
             >
@@ -71,14 +71,14 @@ export default function FAQSection({ faqs = DEFAULT_FAQS }: { faqs?: GroupedFAQs
       </div>
 
       {/* Accordion */}
-      <div className="mx-auto max-w-3xl overflow-hidden rounded-3xl bg-white ring-1 ring-slate-200 shadow-soft">
+      <div className="mx-auto max-w-3xl divide-y divide-slate-100 border-b border-slate-100">
         {currentFaqs.length === 0 && (
           <p className="px-6 py-10 text-center text-slate-500">No questions in this category yet.</p>
         )}
         {currentFaqs.map((faq, index) => {
           const isOpen = openIndex === index;
           return (
-            <div key={index} className="border-b border-slate-100 last:border-0">
+            <div key={index} className="py-1">
               <button
                 onClick={() => setOpenIndex(isOpen ? null : index)}
                 className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left"
@@ -92,7 +92,7 @@ export default function FAQSection({ faqs = DEFAULT_FAQS }: { faqs?: GroupedFAQs
                 </span>
                 <span
                   className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-2xl font-light transition-all duration-200 ${
-                    isOpen ? "rotate-45 bg-brand-600 text-white" : "bg-slate-100 text-slate-500"
+                    isOpen ? "rotate-45 bg-slate-950 text-white" : "bg-slate-100 text-slate-500"
                   }`}
                 >
                   &#10010;

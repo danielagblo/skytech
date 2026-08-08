@@ -2,7 +2,7 @@ import Image from "next/image";
 
 const items = [
   {
-    bg: "bg-[#00FFF2]",
+    bg: "bg-white",
     title: "8 Years of Proven Expertise",
     body: "Nearly a decade of hands-on experience delivering reliable, high-performing software and web solutions across borders.",
     icon: (
@@ -10,17 +10,15 @@ const items = [
     ),
   },
   {
-    bg: "bg-[#6878B1]",
-    dark: true,
+    bg: "bg-white",
     title: "Our Relationship with You",
-    body: "We plug in like your internal IT department with absolute transparency. We don\u2019t disappear suddenly, we stay.",
+    body: "We plug in like your internal IT department with absolute transparency. We don’t disappear suddenly, we stay.",
     icon: (
       <path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m6-1.13a4 4 0 10-4-4 4 4 0 004 4zm6 0a4 4 0 10-4-4 4 4 0 004 4z" />
     ),
   },
   {
-    bg: "bg-[#FF6B6B]",
-    dark: true,
+    bg: "bg-white",
     title: "Complimentary Maintenance",
     body: "Enjoy peace of mind with free ongoing maintenance to keep your platforms secure, updated, and running smoothly.",
     icon: (
@@ -28,7 +26,7 @@ const items = [
     ),
   },
   {
-    bg: "bg-[#F7CF94]",
+    bg: "bg-white",
     title: "Teamwork",
     body: "We integrate seamlessly with your team, working side by side to support your business goals.",
     icon: (
@@ -81,11 +79,11 @@ function WhyYouNeedUs() {
           {items.map((item) => (
             <div
               key={item.title}
-              className={`flex flex-col rounded-3xl p-6 shadow-soft ${item.bg} ${
+              className={`flex flex-col rounded-none p-6 shadow-soft ${item.bg} ${
                 item.dark ? "text-white" : "text-slate-900"
               }`}
             >
-              <span className={`mb-4 flex h-11 w-11 items-center justify-center rounded-2xl ${
+              <span className={`mb-4 flex h-11 w-11 items-center justify-center rounded-none ${
                 item.dark ? "bg-white/20" : "bg-black/5"
               }`}>
                 <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
@@ -102,7 +100,7 @@ function WhyYouNeedUs() {
 
         {/* Risk reduction strip */}
         <div className="mx-auto mt-5 max-w-[80rem] px-5 lg:px-8">
-          <div className="flex flex-col items-center justify-between gap-4 rounded-2xl bg-white px-6 py-5 text-center shadow-soft sm:flex-row sm:text-left md:px-10">
+          <div className="flex flex-col items-center justify-between gap-4 rounded-none bg-white px-6 py-5 text-center shadow-soft sm:flex-row sm:text-left md:px-10">
             <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand-700">Risk reduction</p>
             <p className="font-display text-2xl font-semibold text-slate-900">100% Transparency</p>
           </div>

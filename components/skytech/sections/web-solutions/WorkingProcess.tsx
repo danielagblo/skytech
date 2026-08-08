@@ -39,7 +39,7 @@ export default function WorkingProcess() {
             {steps.map((step, index) => (
               <div key={index} className="group relative flex flex-col">
                 <div className="relative mx-auto mb-8 shrink-0">
-                  <span className="absolute -top-3 -left-3 z-10 flex h-11 w-11 items-center justify-center rounded-2xl bg-brand-600 font-display text-base font-semibold text-white shadow-soft">
+                  <span className="absolute -top-3 -left-3 z-10 flex h-11 w-11 items-center justify-center rounded-none bg-slate-950 font-display text-base font-semibold text-white shadow-soft">
                     {index + 1}
                   </span>
                   <div className="h-40 w-40 overflow-hidden rounded-full bg-slate-900 md:h-56 md:w-56">

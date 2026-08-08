@@ -20,9 +20,9 @@ export default function ProblemCards() {
         {problems.map((problem, index) => (
           <div
             key={index}
-            className="flex flex-col rounded-3xl border border-slate-100 bg-white p-8 shadow-soft transition-all duration-500 hover:-translate-y-1 hover:shadow-lift"
+            className="flex flex-col rounded-none border border-slate-100 bg-white p-8 shadow-soft transition-all duration-500 hover:-translate-y-1 hover:shadow-lift"
           >
-            <span className="mb-5 inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-brand-600 font-display text-base font-semibold text-white">
+            <span className="mb-5 inline-flex h-11 w-11 items-center justify-center rounded-none bg-slate-950 font-display text-base font-semibold text-white">
               {String(index + 1).padStart(2, "0")}
             </span>
             <h3 className="mb-3 text-xl font-semibold leading-snug text-slate-900">{problem.title}</h3>

@@ -51,7 +51,7 @@ function IndustryCards() {
           {industryCards.map((card, index) => (
             <div
               key={index}
-              className="group flex flex-col overflow-hidden rounded-3xl border border-slate-100 bg-white shadow-soft transition-all duration-500 hover:-translate-y-1 hover:shadow-lift"
+              className="group flex flex-col overflow-hidden rounded-none border border-slate-100 bg-white shadow-soft transition-all duration-500 hover:-translate-y-1 hover:shadow-lift"
             >
               <div className="relative aspect-[4/3] w-full overflow-hidden">
                 <Image

@@ -101,18 +101,18 @@ function PricingModel({
         </div>
       </div>
 
-      <div className="mx-auto mt-10 flex max-w-[80rem] flex-col gap-5 px-5 sm:flex-row sm:items-center sm:justify-between lg:px-8">
+      <div className="mx-auto mt-10 flex max-w-[80rem] flex-col gap-6 px-5 sm:flex-row sm:items-center sm:justify-between lg:px-8 border-b border-slate-100 pb-2">
         {/* Category tabs */}
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap items-center gap-6">
           {items.map((item, i) => (
             <button
               key={item.key}
               type="button"
               onClick={() => setActiveIndex(item.index)}
-              className={`rounded-full px-4 py-2 text-sm font-semibold transition-all duration-300 ${
+              className={`pb-2 text-sm font-semibold transition-all duration-300 border-b-2 -mb-[10px] ${
                 activeIndex === item.index
-                  ? "bg-brand-600 text-white shadow-soft"
-                  : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                  ? "border-brand-600 text-brand-600"
+                  : "border-transparent text-slate-400 hover:text-slate-600 hover:border-slate-300"
               }`}
             >
               {item.label}
@@ -121,14 +121,16 @@ function PricingModel({
         </div>
 
         {/* Currency toggle */}
-        <div className="inline-flex items-center gap-1 rounded-full bg-slate-100 p-1">
+        <div className="flex items-center gap-4">
           {(["GHC", "USD"] as Currency[]).map((c) => (
             <button
               key={c}
               type="button"
               onClick={() => setCurrency(c)}
-              className={`rounded-full px-5 py-2 text-sm font-semibold uppercase transition-all duration-300 ${
-                currency === c ? "bg-brand-600 text-white shadow-soft" : "text-slate-600 hover:text-slate-900"
+              className={`pb-2 text-sm font-semibold uppercase transition-all duration-300 border-b-2 -mb-[10px] ${
+                currency === c
+                  ? "border-brand-600 text-brand-600"
+                  : "border-transparent text-slate-400 hover:text-slate-600 hover:border-slate-300"
               }`}
             >
               {c}
