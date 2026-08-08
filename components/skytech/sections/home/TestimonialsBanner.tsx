@@ -134,10 +134,16 @@ export default function TestimonialsBanner({ testimonials }: { testimonials?: Te
   }, []);
 
   return (
-    <section className="py-16 overflow-hidden bg-white">
-      <h2 className="text-center text-5xl uppercase tracking-tight mb-12">
-        What Our Partners Say
-      </h2>
+    <section className="overflow-hidden bg-white py-16 md:py-24">
+      <div className="section-shell mb-10 text-center md:mb-14">
+        <span className="pill">Testimonials</span>
+        <h2 className="section-title mt-3 text-balance">
+          What our partners say
+        </h2>
+        <p className="section-lead mx-auto mt-4 max-w-2xl">
+          Real words from real businesses we have helped grow across borders.
+        </p>
+      </div>
       <div className="flex flex-col gap-4">
         <ScrollRow items={rows[0] || []} speed={0.4} />
         <ScrollRow items={rows[1] || []} speed={0.4} reverse />
