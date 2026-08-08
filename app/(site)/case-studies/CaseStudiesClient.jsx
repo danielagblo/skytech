@@ -133,7 +133,7 @@ export default function CaseStudiesClient({ projects }) {
                   </div>
 
                   <div className="pt-6">
-                    <Link href="/site/contact" className="inline-flex items-center gap-3 px-8 py-4 bg-slate-900 text-white rounded-none font-extrabold text-sm hover:bg-slate-950 transition-all shadow-xl shadow-slate-900/10">
+                    <Link href="/contact" className="inline-flex items-center gap-3 px-8 py-4 bg-slate-900 text-white rounded-none font-extrabold text-sm hover:bg-slate-950 transition-all shadow-xl shadow-slate-900/10">
                       Request Technical Demo
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
@@ -161,7 +161,7 @@ export default function CaseStudiesClient({ projects }) {
             </p>
           </div>
           <div className="relative z-10 case-cta-el">
-            <Link href="/site/contact" className="inline-flex items-center gap-3 px-12 py-6 bg-slate-950 text-white rounded-none font-extrabold text-lg hover:bg-white hover:text-slate-950 transition-all shadow-2xl shadow-slate-950/20">
+            <Link href="/contact" className="inline-flex items-center gap-3 px-12 py-6 bg-slate-950 text-white rounded-none font-extrabold text-lg hover:bg-white hover:text-slate-950 transition-all shadow-2xl shadow-slate-950/20">
               Start Your Project
             </Link>
           </div>

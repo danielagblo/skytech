@@ -33,7 +33,7 @@ export default function OurStory() {
               </p>
             </div>
             <div className="pt-4">
-              <Link href="/site/about" className="btn-primary px-8 py-4 rounded-full">
+              <Link href="/about" className="btn-primary px-8 py-4 rounded-full">
                 Read our story
               </Link>
             </div>

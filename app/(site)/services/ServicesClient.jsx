@@ -32,10 +32,10 @@ export default function ServicesClient({ servicesContent, whoWeWorkFor, engageme
             {servicesContent.heroSubtitle}
           </p>
           <div className="flex flex-wrap justify-center gap-4 pt-4">
-            <Link href="/site/contact" className="btn-primary border border-white/20">
+            <Link href="/contact" className="btn-primary border border-white/20">
               Start a Project
             </Link>
-            <Link href="/site/services/security-systems" className="inline-flex items-center justify-center rounded-full border border-white/20 bg-white/5 px-7 py-3.5 font-semibold text-white transition-all hover:bg-white/10">
+            <Link href="/services/security-systems" className="inline-flex items-center justify-center rounded-full border border-white/20 bg-white/5 px-7 py-3.5 font-semibold text-white transition-all hover:bg-white/10">
               Security Systems →
             </Link>
           </div>
@@ -179,7 +179,7 @@ export default function ServicesClient({ servicesContent, whoWeWorkFor, engageme
               <p className="text-lg leading-relaxed text-brand-100">
                 Get in touch and we&apos;ll give you a clear plan and honest estimate.
               </p>
-              <Link href="/site/contact" className="inline-flex items-center justify-center rounded-full bg-white px-8 py-4 font-semibold text-brand-600 shadow-lg transition-all hover:-translate-y-0.5 hover:shadow-lift">
+              <Link href="/contact" className="inline-flex items-center justify-center rounded-full bg-white px-8 py-4 font-semibold text-brand-600 shadow-lg transition-all hover:-translate-y-0.5 hover:shadow-lift">
                 Contact Us Today
               </Link>
             </div>

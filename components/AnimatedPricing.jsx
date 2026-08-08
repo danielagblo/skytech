@@ -117,7 +117,7 @@ export default function AnimatedPricing({ pricing }) {
 
               <div className="mt-10">
                 <Link
-                  href="/site/contact"
+                  href="/contact"
                   className={`w-full inline-flex justify-center items-center px-6 py-4 rounded-2xl font-bold transition-all ${pkg.featured || idx === 1
                     ? 'bg-blue-600 text-white hover:bg-white hover:text-slate-900'
                     : 'bg-slate-50 text-slate-900 group-hover:bg-blue-600 group-hover:text-white'
@@ -131,7 +131,7 @@ export default function AnimatedPricing({ pricing }) {
         </div>
 
         <div className="text-center pt-16">
-          <Link href="/site/pricing" className="inline-flex items-center gap-2 text-sm font-extrabold uppercase tracking-widest text-blue-600 hover:gap-3 transition-all">
+          <Link href="/pricing" className="inline-flex items-center gap-2 text-sm font-extrabold uppercase tracking-widest text-blue-600 hover:gap-3 transition-all">
             Not what you're looking for? View full catalog
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />

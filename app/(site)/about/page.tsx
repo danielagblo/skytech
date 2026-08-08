@@ -42,8 +42,8 @@ function AboutPage() {
               competitive world.
             </p>
             <div className="flex flex-wrap justify-center gap-3 md:justify-start">
-              <Link href="/site/contact" className="btn-primary !text-sm">BOOK A MEETING</Link>
-              <Link href="/site/case-studies" className="btn-secondary !border-white/25 !bg-white/10 !text-white backdrop-blur-sm hover:!bg-white/20 !text-sm">SEE OUR WORK</Link>
+              <Link href="/contact" className="btn-primary !text-sm">BOOK A MEETING</Link>
+              <Link href="/case-studies" className="btn-secondary !border-white/25 !bg-white/10 !text-white backdrop-blur-sm hover:!bg-white/20 !text-sm">SEE OUR WORK</Link>
             </div>
           </div>
 

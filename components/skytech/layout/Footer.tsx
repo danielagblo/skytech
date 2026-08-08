@@ -17,7 +17,7 @@ interface FooterProps {
 
 function Footer({ latestPosts = [], sponsors = [], settings, whatsapp, className }: FooterProps) {
   const currentPath = usePathname();
-  const isLandingPage = currentPath === "/site/landing";
+  const isLandingPage = currentPath === "/landing";
 
   if (isLandingPage) return null;
 
@@ -100,7 +100,7 @@ function Footer({ latestPosts = [], sponsors = [], settings, whatsapp, className
                 <ul className="space-y-2.5 text-sm text-slate-300">
                   {latestPosts.map((post) => (
                     <li key={post.slug}>
-                      <a href={`/site/insights/${post.slug}`} className="transition hover:text-brand-300">
+                      <a href={`/insights/${post.slug}`} className="transition hover:text-brand-300">
                         {post.title}
                       </a>
                     </li>
@@ -146,9 +146,11 @@ function Footer({ latestPosts = [], sponsors = [], settings, whatsapp, className
         <div className="mx-auto flex max-w-[80rem] flex-col items-center justify-center gap-1 text-center text-sm text-slate-400 sm:flex-row sm:flex-wrap sm:gap-x-3 sm:gap-y-1">
           <p>Copyright © 2026 {siteName} • All rights reserved</p>
           <p className="flex items-center gap-2">
-            <a href="/site/terms-of-use" className="transition hover:text-white">Terms of use</a>
+            <a href="/terms-of-use" className="transition hover:text-white">Terms of use</a>
             <span aria-hidden>•</span>
-            <a href="/site/privacy-policy" className="transition hover:text-white">Privacy Policy</a>
+            <a href="/privacy-policy" className="transition hover:text-white">Privacy Policy</a>
+            <span aria-hidden>•</span>
+            <a href="/sitemap" className="transition hover:text-white">Sitemap</a>
           </p>
         </div>
       </div>

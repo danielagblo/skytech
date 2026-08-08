@@ -104,13 +104,13 @@ export default function AnimatedHero({ imageUrl, title, subtitle }) {
             >
               <Link
                 className="btn-primary px-10 py-5 text-base font-bold rounded-full shadow-2xl shadow-blue-600/20 active:scale-95 transition-all"
-                href="/site/contact"
+                href="/contact"
               >
                 Start Your Project
               </Link>
               <Link
                 className="btn-secondary bg-white text-blue-600 border-none hover:bg-slate-50 px-10 py-5 text-base font-bold rounded-full shadow-lg transition-all active:scale-95"
-                href="/site/pricing"
+                href="/pricing"
               >
                 View Rate Card
               </Link>

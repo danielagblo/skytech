@@ -53,11 +53,11 @@ export default async function Footer({ settings }) {
             <h4 className="text-sm font-bold uppercase tracking-wider text-white mb-6">Quick Links</h4>
             <ul className="space-y-3">
               {[
-                { href: "/site/about", label: "About Us" },
-                { href: "/site/services", label: "Our Services" },
-                { href: "/site/gallery", label: "Project Gallery" },
-                { href: "/site/insights", label: "Insights" },
-                { href: "/site/contact", label: "Contact Us" },
+                { href: "/about", label: "About Us" },
+                { href: "/services", label: "Our Services" },
+                { href: "/gallery", label: "Project Gallery" },
+                { href: "/insights", label: "Insights" },
+                { href: "/contact", label: "Contact Us" },
               ].map((link) => (
                 <li key={link.href}>
                   <Link href={link.href} className="text-sm text-slate-400 hover:text-white transition-colors duration-300 flex items-center gap-2 group">
@@ -74,10 +74,10 @@ export default async function Footer({ settings }) {
             <h4 className="text-sm font-bold uppercase tracking-wider text-white mb-6">Inquiries</h4>
             <ul className="space-y-3">
               {[
-                { href: "/site/faqs", label: "Common Questions" },
-                { href: "/site/contact", label: "Project Inquiry" },
-                { href: "/site/internship", label: "Careers" },
-                { href: "/site/contact", label: "Partner with Us" },
+                { href: "/faqs", label: "Common Questions" },
+                { href: "/contact", label: "Project Inquiry" },
+                { href: "/internship", label: "Careers" },
+                { href: "/contact", label: "Partner with Us" },
               ].map((link, idx) => (
                 <li key={idx}>
                   <Link href={link.href} className="text-sm text-slate-400 hover:text-white transition-colors duration-300 flex items-center gap-2 group">
@@ -113,7 +113,7 @@ export default async function Footer({ settings }) {
               </div>
             </div>
             <div className="pt-4">
-              <Link href="/site/contact" className="inline-flex items-center gap-2 bg-blue-600 text-white px-5 py-2.5 rounded-full text-sm font-semibold hover:bg-blue-700 transition-all">
+              <Link href="/contact" className="inline-flex items-center gap-2 bg-blue-600 text-white px-5 py-2.5 rounded-full text-sm font-semibold hover:bg-blue-700 transition-all">
                 Start a project
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
               </Link>

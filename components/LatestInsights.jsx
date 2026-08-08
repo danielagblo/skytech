@@ -96,7 +96,7 @@ export default function LatestInsights({ latestPosts = [] }) {
               return (
                 <Link
                   key={post._id || idx}
-                  href={`/site/insights/${post.slug}`}
+                  href={`/insights/${post.slug}`}
                   className={`relative min-h-[300px] h-full flex flex-col justify-end p-8 border-b border-r border-slate-200/80 overflow-hidden group hover:no-underline ${colSpanClass}`}
                 >
                   <Image
@@ -137,7 +137,7 @@ export default function LatestInsights({ latestPosts = [] }) {
             return (
               <Link
                 key={post._id || idx}
-                href={`/site/insights/${post.slug}`}
+                href={`/insights/${post.slug}`}
                 className={`flex flex-col justify-between p-8 border-b border-r border-slate-200/80 min-h-[300px] h-full bg-[#FAF9F6] transition hover:bg-[#F3F1EC] hover:no-underline group ${colSpanClass}`}
               >
                 <div className="space-y-4">
@@ -194,7 +194,7 @@ export default function LatestInsights({ latestPosts = [] }) {
                 return (
                   <Link
                     key={post._id || idx}
-                    href={`/site/insights/${post.slug}`}
+                    href={`/insights/${post.slug}`}
                     className="relative flex-shrink-0 w-[calc(50%-8px)] h-[210px] rounded-none overflow-hidden group shadow-soft"
                   >
                     {post.coverImage ? (

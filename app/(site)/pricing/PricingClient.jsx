@@ -202,7 +202,7 @@ export default function PricingClient({ initialPricing }) {
 
                 <div className="mt-8">
                   <Link
-                    href="/site/contact"
+                    href="/contact"
                     className={`w-full inline-flex justify-center items-center px-6 py-4 rounded-xl font-extrabold text-xs transition-all ${pkg.featured
                       ? "bg-blue-600 text-white hover:bg-white hover:text-slate-900"
                       : "bg-slate-900 text-white hover:bg-blue-600"

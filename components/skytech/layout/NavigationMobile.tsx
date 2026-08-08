@@ -9,7 +9,7 @@ function NavigationMobile({ className }: { className?: string }) {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
   const currentPath = usePathname();
-  const isLandingPage = currentPath === "/site/landing";
+  const isLandingPage = currentPath === "/landing";
 
   useEffect(() => {
     if (!isOpen) return;
@@ -58,7 +58,7 @@ function NavigationMobile({ className }: { className?: string }) {
             className="h-10 w-auto cursor-pointer transition"
             onClick={() => {
               setIsOpen(false);
-              router.push("/site");
+              router.push("/");
             }}
           />
 

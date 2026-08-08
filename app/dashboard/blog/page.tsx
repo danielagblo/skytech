@@ -61,7 +61,7 @@ export default async function BlogDashboard() {
                     </svg>
                   </Link>
                   <a 
-                    href={`/site/insights/${post.slug}`} 
+                    href={`/insights/${post.slug}`} 
                     target="_blank"
                     className="p-2 text-slate-400 hover:text-cyan-600 hover:bg-cyan-50 rounded-lg transition-all"
                     title="View Live"

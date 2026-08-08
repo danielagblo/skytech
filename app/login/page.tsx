@@ -2,6 +2,11 @@ import React from 'react';
 
 export const metadata = {
   title: 'Admin Login',
+  robots: {
+    index: false,
+    follow: false,
+    nocache: true,
+  },
 };
 
 export default function LoginPage({ searchParams }: { searchParams?: { error?: string } }) {
@@ -46,7 +51,7 @@ export default function LoginPage({ searchParams }: { searchParams?: { error?: s
 
           <div className="flex items-center justify-between">
             <button className="px-4 py-2 bg-blue-700 text-white rounded-lg">Sign in</button>
-            <a href="/site" className="text-sm text-slate-500 hover:underline">Return to site</a>
+            <a href="/" className="text-sm text-slate-500 hover:underline">Return to site</a>
           </div>
         </form>
       </div>

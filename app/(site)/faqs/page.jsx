@@ -40,8 +40,8 @@ export default async function FAQPage() {
             Can't find the answer you're looking for? Reach out to our team and we'll get back to you as soon as possible.
           </p>
           <div className="flex justify-center gap-4">
-            <Link href="/site/contact" className="btn-primary px-8 py-3 rounded-none text-white font-bold">Contact Support</Link>
-            <Link href="/site/services" className="btn-secondary px-8 py-3 rounded-none border border-slate-200 font-bold">View Services</Link>
+            <Link href="/contact" className="btn-primary px-8 py-3 rounded-none text-white font-bold">Contact Support</Link>
+            <Link href="/services" className="btn-secondary px-8 py-3 rounded-none border border-slate-200 font-bold">View Services</Link>
           </div>
         </div>
       </div>

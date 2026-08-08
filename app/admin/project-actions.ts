@@ -30,8 +30,8 @@ export async function createProject(formData: FormData) {
   }
 
   await Project.create({ title, category, description, image, client, impact, metrics, order });
-  revalidatePath("/site/gallery");
-  revalidatePath("/site/case-studies");
+  revalidatePath("/gallery");
+  revalidatePath("/case-studies");
   revalidatePath("/dashboard/gallery");
 }
 
@@ -54,8 +54,8 @@ export async function updateProject(id: string, formData: FormData) {
   }
 
   await Project.findByIdAndUpdate(id, { title, category, description, image, client, impact, metrics, order });
-  revalidatePath("/site/gallery");
-  revalidatePath("/site/case-studies");
+  revalidatePath("/gallery");
+  revalidatePath("/case-studies");
   revalidatePath("/dashboard/gallery");
 }
 
@@ -66,7 +66,7 @@ export async function deleteProject(id: string) {
     await deleteFromS3(project.image);
   }
   await Project.findByIdAndDelete(id);
-  revalidatePath("/site/gallery");
+  revalidatePath("/gallery");
   revalidatePath("/dashboard/gallery");
 }
 

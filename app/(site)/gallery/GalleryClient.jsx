@@ -86,7 +86,7 @@ export default function GalleryClient({ projects }) {
                     {project.description}
                   </p>
                   <Link
-                    href="/site/contact"
+                    href="/contact"
                     className="inline-flex items-center gap-2 text-white font-semibold text-sm hover:gap-3 transition-all"
                   >
                     View Case Study

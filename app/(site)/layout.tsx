@@ -44,10 +44,10 @@ export default async function SiteLayout({ children }: { children: ReactNode }) 
 
   return (
     <>
-      <div className="md:fixed top-0 w-full z-30">
+      <div className="fixed top-[56px] md:top-0 w-full z-20 md:z-30">
         <TopScrollingBanner />
       </div>
-      <Navigation className="fixed top-0 left-0 z-30 w-full md:top-10" />
+      <Navigation className="fixed top-0 left-0 z-30 w-full md:top-[45px]" />
       <main>{children}</main>
       <Footer latestPosts={latestPosts} sponsors={sponsors} settings={settings} />
       <FloatingWhatsApp whatsapp={settings.whatsapp} />

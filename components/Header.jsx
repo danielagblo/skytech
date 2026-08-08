@@ -20,17 +20,17 @@ export default function Header({ siteName = "SKYTECH GHANA" }) {
   }, [isOpen]);
 
   const nav = [
-    { href: "/site", label: "Home" },
-    { href: "/site/about", label: "About" },
-    { href: "/site/services", label: "Web-Solutions" },
-    { href: "/site/services/security-systems", label: "Security-Systems" },
-    { href: "/site/pricing", label: "Pricing" },
-    { href: "/site/internship", label: "Internship" },
-    { href: "/site/contact", label: "Contact" },
+    { href: "/", label: "Home" },
+    { href: "/about", label: "About" },
+    { href: "/services", label: "Web-Solutions" },
+    { href: "/services/security-systems", label: "Security-Systems" },
+    { href: "/pricing", label: "Pricing" },
+    { href: "/internship", label: "Internship" },
+    { href: "/contact", label: "Contact" },
   ];
 
   const isActive = (href) => pathname === href;
-  const isHome = pathname === '/site';
+  const isHome = pathname === '/';
 
   return (
     <header className="w-full z-50 relative bg-black">
@@ -43,7 +43,7 @@ export default function Header({ siteName = "SKYTECH GHANA" }) {
 
       <nav className="max-w-[1600px] mx-auto px-6 py-3 flex items-center justify-between">
         {/* Logo block */}
-        <Link href="/site" className="flex items-center gap-3 group z-[60]">
+        <Link href="/" className="flex items-center gap-3 group z-[60]">
           <Image
             src="/try1.png"
             alt="SKYTECH GHANA logo"

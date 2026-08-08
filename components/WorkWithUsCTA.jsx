@@ -19,7 +19,7 @@ export default function WorkWithUsCTA() {
               Have an idea, project, or operational bottleneck we can solve? Let's team up to build digital products that actually drive results.
             </p>
             <div className="pt-4 flex flex-wrap gap-4">
-              <Link href="/site/contact" className="px-8 py-4 bg-white text-blue-600 hover:bg-slate-50 font-bold rounded-full transition-all active:scale-95 shadow-lg">
+              <Link href="/contact" className="px-8 py-4 bg-white text-blue-600 hover:bg-slate-50 font-bold rounded-full transition-all active:scale-95 shadow-lg">
                 Let's Talk
               </Link>
             </div>

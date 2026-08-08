@@ -53,7 +53,7 @@ export async function updateHomeHero(formData: FormData) {
     });
 
     revalidatePath("/");
-    revalidatePath("/site");
+    revalidatePath("/");
     return { success: true, imageUrl };
   } catch (error: any) {
     console.error("Hero update error:", error);
@@ -82,7 +82,7 @@ export async function updatePricingCategory(category: string, packages: any[]) {
     await savePricing(pricing);
 
     // Force Next.js to re-render the pricing page with new data
-    revalidatePath("/site/pricing");
+    revalidatePath("/pricing");
     
     return { success: true };
   } catch (error: any) {
@@ -142,7 +142,7 @@ export async function updateTestimonialsAction(testimonials: ITestimonial[]) {
 export async function updateTeamAction(members: ITeamMember[]) {
   try {
     await saveTeamMembers(members);
-    revalidatePath("/site/about");
+    revalidatePath("/about");
     revalidatePath("/dashboard/team");
     return { success: true };
   } catch (error: any) {
@@ -155,7 +155,7 @@ export async function updateFAQsAction(faqs: IFAQ[]) {
   try {
     const result = await saveFAQs(faqs);
     revalidatePath("/");
-    revalidatePath("/site/faqs");
+    revalidatePath("/faqs");
     revalidatePath("/dashboard/faqs");
     return { success: true, faqs: result.faqs };
   } catch (error: any) {

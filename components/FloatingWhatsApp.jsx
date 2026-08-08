@@ -10,7 +10,7 @@ function toWaDigits(value) {
 
 export default function FloatingWhatsApp({ whatsapp }) {
   const pathname = usePathname();
-  if (pathname === "/site/landing") return null;
+  if (pathname === "/landing") return null;
 
   const digits = toWaDigits(whatsapp);
   if (!digits) return null;

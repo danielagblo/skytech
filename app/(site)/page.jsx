@@ -25,13 +25,13 @@ const services = [
     title: "Website Development",
     items: 4,
     list: ["Corporate business", "E-commerce", "Blog content", "E-learning"],
-    href: "/site/services",
+    href: "/services",
   },
   {
     title: "Mobile App Development",
     items: 4,
     list: ["Corporate business", "E-commerce", "Blog content", "E-learning"],
-    href: "/site/services",
+    href: "/services",
   },
   {
     title: "SEO Growth",
@@ -42,7 +42,7 @@ const services = [
       "Keyword Strategy",
       "On & Off-page SEO",
     ],
-    href: "/site/seo",
+    href: "/seo",
   },
 ];
 
@@ -69,7 +69,7 @@ export default async function Home() {
 
 
       {/* ===== HERO (kept structure: full-bleed + headline + 2 CTAs + awards) ===== */}
-      <section className="relative w-full min-h-[50vh] bg-slate-950 overflow-hidden flex items-center pt-16 md:pt-24">
+      <section className="relative w-full min-h-[50vh] bg-slate-950 overflow-hidden flex items-center mt-[101px] md:mt-0 pt-16 md:pt-24">
         <Image
           src="/images/images/homePageBannerImage.png"
           fill
@@ -106,10 +106,10 @@ export default async function Home() {
               </div>
 
               <div className="mt-5 flex flex-wrap justify-center gap-3 md:mt-6 md:gap-4 md:justify-start">
-                <Link href="/site/contact" className="btn-primary !px-4 !py-2 !text-xs md:!px-6 md:!py-3 md:!text-sm">
+                <Link href="/contact" className="btn-primary !px-4 !py-2 !text-xs md:!px-6 md:!py-3 md:!text-sm">
                   BOOK A MEETING
                 </Link>
-                <Link href="/site/pricing" className="btn-secondary !border-white/25 !bg-white/10 !px-4 !py-2 !text-xs !text-white backdrop-blur-sm hover:!bg-white/20 md:!px-6 md:!py-3 md:!text-sm">
+                <Link href="/pricing" className="btn-secondary !border-white/25 !bg-white/10 !px-4 !py-2 !text-xs !text-white backdrop-blur-sm hover:!bg-white/20 md:!px-6 md:!py-3 md:!text-sm">
                   PRICING
                 </Link>
               </div>
@@ -174,8 +174,8 @@ export default async function Home() {
                 an award-winning agency trusted by businesses worldwide.
               </p>
               <div className="flex flex-wrap gap-3">
-                <Link href="/site/about" className="btn-primary">Learn about us</Link>
-                <Link href="/site/case-studies" className="btn-secondary">See our work</Link>
+                <Link href="/about" className="btn-primary">Learn about us</Link>
+                <Link href="/case-studies" className="btn-secondary">See our work</Link>
               </div>
             </div>
 

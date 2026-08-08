@@ -8,28 +8,28 @@ export interface ServiceNavigationItem extends NavigationLink {
 }
 
 export const navigationLinks: NavigationLink[] = [
-  { name: "Home", href: "/site" },
-  { name: "About", href: "/site/about" },
-  { name: "Services", href: "/site/services" },
-  { name: "Pricing", href: "/site/pricing" },
-  { name: "Insights", href: "/site/insights" },
-  { name: "Internship", href: "/site/internship" },
-  { name: "Contact", href: "/site/contact" },
+  { name: "Home", href: "/" },
+  { name: "About", href: "/about" },
+  { name: "Services", href: "/services" },
+  { name: "Pricing", href: "/pricing" },
+  { name: "Insights", href: "/insights" },
+  { name: "Internship", href: "/internship" },
+  { name: "Contact", href: "/contact" },
 ];
 
 export const servicesNav: ServiceNavigationItem[] = [
-  { name: "Web Solutions", href: "/site/services" },
+  { name: "Web Solutions", href: "/services" },
   {
     name: "Security Systems",
-    href: "/site/services/security-systems",
+    href: "/services/security-systems",
     children: [
-      { name: "CCTV Surveillance", href: "/site/services/security-systems#cctv" },
-      { name: "GPS Tracking", href: "/site/services/security-systems#gps" },
-      { name: "Biometric & Automated Gates", href: "/site/services/security-systems#biometric" },
-      { name: "Cyber Security", href: "/site/services/security-systems#cyber" },
-      { name: "Mobile Tracking", href: "/site/services/security-systems#mobile" },
-      { name: "Hardware Procurement & Supplying", href: "/site/services/security-systems#hardware" },
+      { name: "CCTV Surveillance", href: "/services/security-systems#cctv" },
+      { name: "GPS Tracking", href: "/services/security-systems#gps" },
+      { name: "Biometric & Automated Gates", href: "/services/security-systems#biometric" },
+      { name: "Cyber Security", href: "/services/security-systems#cyber" },
+      { name: "Mobile Tracking", href: "/services/security-systems#mobile" },
+      { name: "Hardware Procurement & Supplying", href: "/services/security-systems#hardware" },
     ],
   },
-  { name: "SEO & Growth", href: "/site/seo" },
+  { name: "SEO & Growth", href: "/seo" },
 ];

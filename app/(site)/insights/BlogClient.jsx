@@ -57,7 +57,7 @@ export default function BlogClient({ posts, featuredPost, gridPosts }) {
         <section className="py-16">
           <div className="section-shell">
             <Link
-              href={`/site/insights/${featuredPost.slug}`}
+              href={`/insights/${featuredPost.slug}`}
               className="group grid grid-cols-1 lg:grid-cols-2 gap-8 rounded-3xl overflow-hidden bg-slate-50 border border-slate-100 card-hover"
             >
               <div className="relative h-64 lg:h-auto overflow-hidden">
@@ -101,7 +101,7 @@ export default function BlogClient({ posts, featuredPost, gridPosts }) {
               {(searchQuery ? filteredPosts : gridPosts).map((post) => (
                 <Link
                   key={post.slug}
-                  href={`/site/insights/${post.slug}`}
+                  href={`/insights/${post.slug}`}
                   className="group rounded-3xl overflow-hidden bg-white border border-slate-100 card-hover"
                 >
                   <div className="relative h-48 overflow-hidden">

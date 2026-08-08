@@ -1,4 +1,4 @@
-﻿import Image from "next/image";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -49,7 +49,7 @@ async function BlogPostPage({ params }: BlogPostPageProps) {
         <div className="section-shell relative">
           <div className="max-w-3xl">
             <Link
-              href="/site/insights"
+              href="/insights"
               className="pill transition hover:bg-brand-50"
             >
               &#x1F878; Back to Insights
@@ -81,7 +81,7 @@ async function BlogPostPage({ params }: BlogPostPageProps) {
             {relatedPosts.map((related) => (
               <Link
                 key={related.slug}
-                href={`/site/insights/${related.slug}`}
+                href={`/insights/${related.slug}`}
                 className="group block hover:no-underline"
               >
                 {related.coverImage && (

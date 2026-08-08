@@ -34,7 +34,7 @@ export default function SEOPage() {
               your business. Our SEO services bring you more traffic, leads, and sales.
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
-              <Link href="/site/contact" className="btn-primary px-8 py-4 text-base">
+              <Link href="/contact" className="btn-primary px-8 py-4 text-base">
                 Book a Free Consultation
               </Link>
               <Link href="#process" className="btn-secondary px-8 py-4 text-base">
@@ -142,7 +142,7 @@ export default function SEOPage() {
             Tell us about your business and we&apos;ll map out a custom SEO roadmap that
             brings measurable traffic, leads, and revenue to your doorstep.
           </p>
-          <Link href="/site/contact" className="btn-primary mt-8 px-10 py-4 text-lg">
+          <Link href="/contact" className="btn-primary mt-8 px-10 py-4 text-lg">
             Talk to Our SEO Team
           </Link>
         </div>

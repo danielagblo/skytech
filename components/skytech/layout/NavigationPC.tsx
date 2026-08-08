@@ -26,7 +26,7 @@ function NavigationPC({ className }: { className?: string }) {
         height={300}
         sizes="128px"
         className="h-12 w-auto cursor-pointer transition hover:scale-[1.02]"
-        onClick={() => router.push("/site")}
+        onClick={() => router.push("/")}
       />
       <nav>
         <ul className="flex items-center gap-6 pr-4">
@@ -41,7 +41,7 @@ function NavigationPC({ className }: { className?: string }) {
                       setServicesOpen((v) => !v);
                     }}
                     className={`relative flex items-center gap-1 whitespace-nowrap text-[0.95rem] text-white transition-colors ${
-                      servicesOpen || currentPath === "/site/services" || currentPath.startsWith("/site/services/")
+                      servicesOpen || currentPath === "/services" || currentPath.startsWith("/services/")
                         ? "font-semibold"
                         : "opacity-90 hover:text-brand-100 hover:opacity-100"
                     }`}
@@ -62,7 +62,7 @@ function NavigationPC({ className }: { className?: string }) {
 
                   <span
                     className={`pointer-events-none absolute -bottom-1.5 left-0 h-0.5 rounded-full bg-white transition-all duration-300 ${
-                      servicesOpen || currentPath === "/site/services" || currentPath.startsWith("/site/services/")
+                      servicesOpen || currentPath === "/services" || currentPath.startsWith("/services/")
                         ? "w-full"
                         : "w-0"
                     }`}
