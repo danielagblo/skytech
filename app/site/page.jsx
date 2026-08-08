@@ -35,10 +35,10 @@ const services = [
     title: "SEO Growth",
     items: 4,
     list: [
-      "Search Engine Optimization",
-      "Technical SEO Audits",
-      "Keyword Strategy & Research",
-      "On-page & Off-page SEO",
+      "SEO Optimization",
+      "Technical SEO",
+      "Keyword Strategy",
+      "On & Off-page SEO",
     ],
     href: "/site/seo",
   },
@@ -221,16 +221,16 @@ export default async function Home() {
 
       <section className="px-6 pt-10 md:pt-[3.75rem]">
         <div className="mx-auto max-w-[80rem]">
-          <p className="text-2xl uppercase md:text-4xl">
+          <p className="text-xl uppercase md:text-3xl">
             What services do we <br /> offer best
           </p>
           <div className="mt-8 grid grid-cols-3 gap-2 md:gap-4 items-start justify-center">
             {services.map((service, index) => (
               <div
                 key={index}
-                className="relative h-full border-t-[5px] border-brand-600 bg-[#f6f6f6] p-3 pb-16 md:p-6 md:pb-[5.625rem]"
+                className="relative h-full border-t-[5px] border-brand-600 bg-[#f6f6f6] p-2.5 pb-9 md:p-6 md:pb-[5.625rem]"
               >
-                <p className="text-xs sm:text-sm md:text-xl font-semibold uppercase">{service.title}</p>
+                <p className="text-[10px] sm:text-xs md:text-lg font-semibold uppercase">{service.title}</p>
                 <div className="pr-1 md:pr-4">
                   <hr className="mb-3 mt-0 border-t border-brand-600" />
                   <ul className="mt-4 space-y-0 text-[10px] sm:text-xs md:text-lg capitalize leading-4 md:leading-7">
@@ -241,7 +241,7 @@ export default async function Home() {
                 </div>
                 <Link
                   href={service.href}
-                  className="absolute bottom-2 right-2 md:bottom-5 md:right-7 rounded-none border border-brand-600 bg-white px-1.5 py-0.5 md:px-3 md:py-2 text-[10px] md:text-base transition-all duration-300 hover:scale-[0.97] hover:bg-gray-100 active:scale-[1.02]"
+                  className="absolute bottom-1.5 right-1.5 md:bottom-5 md:right-7 rounded-none border border-brand-600 bg-white px-1.5 py-0.5 md:px-3 md:py-2 text-[10px] md:text-base transition-all duration-300 hover:scale-[0.97] hover:bg-gray-100 active:scale-[1.02]"
                 >
                   &#10132;
                 </Link>
