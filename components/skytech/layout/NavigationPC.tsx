@@ -74,11 +74,11 @@ function NavigationPC({ className }: { className?: string }) {
                         : "invisible -translate-y-2 opacity-0"
                     }`}
                   >
-                    <div className="w-80 rounded-2xl border border-slate-100 bg-white p-2 shadow-lift">
+                    <div className="w-80 rounded-none border border-slate-100 bg-white p-2 shadow-lift">
                       {servicesNav.map((item) => (
                         <div
                           key={item.name}
-                          className="rounded-xl"
+                          className="rounded-none"
                           onMouseEnter={() =>
                             setSecurityOpen(item.name === "Security Systems")
                           }
@@ -86,7 +86,7 @@ function NavigationPC({ className }: { className?: string }) {
                         >
                           <a
                             href={item.href}
-                            className={`flex items-center justify-between rounded-xl px-4 py-3 text-sm font-medium transition-colors ${
+                            className={`flex items-center justify-between rounded-none px-4 py-3 text-sm font-medium transition-colors ${
                               currentPath === item.href
                                 ? "bg-brand-50 text-brand-700"
                                 : "text-slate-700 hover:bg-brand-50 hover:text-brand-700"

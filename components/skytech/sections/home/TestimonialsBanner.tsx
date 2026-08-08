@@ -15,7 +15,7 @@ export interface TestimonialData {
 
 function TestimonialCard({ quote, name, title }: TestimonialData) {
   return (
-    <div className="shrink-0 w-80 border border-gray-500 rounded-2xl p-6 flex flex-col justify-between gap-4 bg-[#f9f9f9]">
+    <div className="shrink-0 w-80 border border-gray-500 rounded-none p-6 flex flex-col justify-between gap-4 bg-[#f9f9f9]">
       <p className="text-gray-800 text-base leading-relaxed">{quote}</p>
       <div className="text-center">
         <p className="text-xl font-bold font-serif">-{name}</p>

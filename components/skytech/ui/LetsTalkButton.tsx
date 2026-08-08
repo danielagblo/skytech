@@ -17,7 +17,7 @@ function LetsTalkButton({ className, whatsapp }: { className?: string; whatsapp?
       rel="noopener noreferrer"
       className={
         className +
-        " text-center rounded-xl py-2 px-3 hover:scale-[0.97] active:scale-[1.02] cursor-pointer transition-all duration-300 ease-in-out"
+        " text-center rounded-none py-2 px-3 hover:scale-[0.97] active:scale-[1.02] cursor-pointer transition-all duration-300 ease-in-out"
       }
     >
       Click, let&apos;s talk!

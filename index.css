@@ -51,19 +51,19 @@ a {
 }
 
 .pill {
-  @apply inline-flex items-center rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] bg-brand-50 text-brand-700 border border-brand-100;
+  @apply inline-flex items-center rounded-none px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] bg-brand-50 text-brand-700 border border-brand-100;
 }
 
 .btn-primary {
-  @apply inline-flex items-center justify-center rounded-full bg-brand-600 px-7 py-3.5 font-semibold text-white shadow-soft transition-all duration-300 hover:-translate-y-0.5 hover:bg-brand-700 hover:shadow-lift active:translate-y-0;
+  @apply inline-flex items-center justify-center rounded-none bg-slate-950 px-7 py-3.5 font-semibold text-white shadow-soft transition-all duration-300 hover:-translate-y-0.5 hover:bg-slate-800 hover:shadow-lift active:translate-y-0;
 }
 
 .btn-secondary {
-  @apply inline-flex items-center justify-center rounded-full border border-slate-200 bg-white px-7 py-3.5 font-semibold text-slate-700 shadow-soft transition-all duration-300 hover:-translate-y-0.5 hover:border-brand-300 hover:text-brand-700 hover:bg-brand-50 active:translate-y-0;
+  @apply inline-flex items-center justify-center rounded-none border border-slate-200 bg-white px-7 py-3.5 font-semibold text-slate-700 shadow-soft transition-all duration-300 hover:-translate-y-0.5 hover:border-brand-300 hover:text-brand-700 hover:bg-brand-50 active:translate-y-0;
 }
 
 .btn-dark {
-  @apply inline-flex items-center justify-center rounded-full bg-slate-900 px-7 py-3.5 font-semibold text-white shadow-soft transition-all duration-300 hover:-translate-y-0.5 hover:bg-slate-800 active:translate-y-0;
+  @apply inline-flex items-center justify-center rounded-none bg-slate-900 px-7 py-3.5 font-semibold text-white shadow-soft transition-all duration-300 hover:-translate-y-0.5 hover:bg-slate-800 active:translate-y-0;
 }
 
 /* ===== PREMIUM DECORATIVE BACKGROUNDS ===== */

@@ -54,7 +54,7 @@ function Footer({ latestPosts = [], sponsors = [], settings, whatsapp, className
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="WhatsApp"
-                className="flex h-10 w-10 items-center justify-center rounded-full bg-white/5 text-slate-300 ring-1 ring-white/10 transition hover:bg-brand-600 hover:text-white"
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-white/5 text-slate-300 ring-1 ring-white/10 transition hover:bg-slate-900 hover:text-white"
               >
                 <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
                   <path d="M12 2a10 10 0 00-8.66 15L2 22l5.13-1.32A10 10 0 1012 2zm0 18.18a8.15 8.15 0 01-4.14-1.13l-.3-.18-3 .77.8-2.92-.2-.31A8.18 8.18 0 1112 20.18zm4.5-6.14c-.25-.13-1.47-.73-1.7-.81s-.39-.13-.56.12-.63.82-.78.99-.29.18-.53.06a6.6 6.6 0 01-1.92-1.18 7.13 7.13 0 01-1.35-1.68c-.14-.24 0-.38.1-.5s.23-.25.35-.39a1.4 1.4 0 00.18-.3.4.4 0 000-.38c0-.12-.56-1.34-.77-1.84-.19-.49-.39-.44-.56-.44h-.48a.92.92 0 00-.66.31 2.79 2.79 0 00-.86 2.07A4.85 4.85 0 005.72 15a10 10 0 004.31 3.93 5.7 5.7 0 002.36.59 4.28 4.28 0 002.8-1.4c.4-.46.56-.68.6-.9a1.2 1.2 0 00-.2-.78c0-.13-.21-.18-.59-.4z" />
@@ -63,7 +63,7 @@ function Footer({ latestPosts = [], sponsors = [], settings, whatsapp, className
               <a
                 href={`mailto:${contactEmail}`}
                 aria-label="Email"
-                className="flex h-10 w-10 items-center justify-center rounded-full bg-white/5 text-brand-300 ring-1 ring-white/10 transition hover:bg-brand-600 hover:text-white"
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-white/5 text-brand-300 ring-1 ring-white/10 transition hover:bg-slate-900 hover:text-white"
               >
                 <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} aria-hidden>
                   <rect x="3" y="5" width="18" height="14" rx="2" />
@@ -122,7 +122,7 @@ function Footer({ latestPosts = [], sponsors = [], settings, whatsapp, className
 
           {/* Contact */}
           <div className="flex flex-col items-start gap-4">
-            <LetsTalkButton whatsapp={whatsapp ?? settings?.whatsapp} className="bg-brand-600 text-white" />
+            <LetsTalkButton whatsapp={whatsapp ?? settings?.whatsapp} className="bg-slate-950 text-white" />
             <div className="mt-2 space-y-3 text-sm text-slate-300">
               <a href={`mailto:${contactEmail}`} className="flex items-center gap-2 transition hover:text-brand-300">
                 <span className="text-brand-400">@</span>
