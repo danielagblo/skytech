@@ -27,10 +27,10 @@ export default async function PricingPage() {
       </div>
 
       <div className="relative z-10 -mt-20 md:-mt-32 bg-white p-6 text-center md:p-10 md:text-left">
-        <p className="pb-3 text-2xl uppercase md:text-4xl">
+        <h1 className="section-title mt-3">
           Simple, Transparent Pricing <br className="hidden md:block" /> Built For Your Business
-        </p>
-        <p className="text-slate-500">No hidden fees, no surprise renewals — just honest rates for real, custom-built software.</p>
+        </h1>
+        <p className="mt-4 text-slate-500 text-sm md:text-base">No hidden fees, no surprise renewals — just honest rates for real, custom-built software.</p>
       </div>
 
       <PricingModel categories={pricing} showWhyYouNeedUs={false} />
