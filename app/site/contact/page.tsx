@@ -5,6 +5,8 @@ import FAQs from "@/components/skytech/sections/FAQ";
 import { groupFAQs } from "@/components/skytech/sections/faqGroup";
 import { getFAQs } from "@/app/lib/faqs";
 
+export const dynamic = "force-dynamic";
+
 export default async function ContactPage() {
   const faqs = await getFAQs();
 

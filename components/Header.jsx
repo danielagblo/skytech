@@ -34,14 +34,12 @@ export default function Header({ siteName = "SKYTECH GHANA" }) {
 
   return (
     <header className="w-full z-50 relative bg-black">
-      {/* Top Banner Ticker - ONLY on Home page */}
-      {isHome && (
-        <div className="bg-[#000] w-full h-[65px] flex items-center overflow-hidden whitespace-nowrap border-b border-white/5">
-          <div className="animate-marquee inline-block text-[#FFF] font-inter text-lg md:text-xl tracking-[-0.06em] px-4">
-            We help you rank no #1 on Google. Digital Business Development Solutions. Enterprise Security IT Services Risk Reduction, 100% Transparency. &nbsp;&nbsp;&nbsp;&nbsp; We help you rank no #1 on Google. Digital Business Development Solutions. Enterprise Security IT Services Risk Reduction, 100% Transparency.
-          </div>
+      {/* Top Banner Ticker - Show on all pages */}
+      <div className="bg-[#000] w-full h-[65px] flex items-center overflow-hidden whitespace-nowrap border-b border-white/5">
+        <div className="animate-marquee inline-block text-[#FFF] font-inter text-lg md:text-xl tracking-[-0.06em] px-4">
+          We help you rank no #1 on Google. Digital Business Development Solutions. Enterprise Security IT Services Risk Reduction, 100% Transparency. &nbsp;&nbsp;&nbsp;&nbsp; We help you rank no #1 on Google. Digital Business Development Solutions. Enterprise Security IT Services Risk Reduction, 100% Transparency.
         </div>
-      )}
+      </div>
 
       <nav className="max-w-[1600px] mx-auto px-6 py-3 flex items-center justify-between">
         {/* Logo block */}

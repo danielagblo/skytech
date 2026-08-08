@@ -6,6 +6,8 @@ import WorkingProcess from "@/components/skytech/sections/web-solutions/WorkingP
 import TargetMarketAudience from "@/components/skytech/sections/web-solutions/TargetMarket";
 import { getPricing } from "@/app/lib/pricing";
 
+export const dynamic = "force-dynamic";
+
 export default async function WebSolutionsPage() {
   const pricing = await getPricing();
 

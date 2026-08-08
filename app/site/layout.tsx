@@ -5,6 +5,7 @@ import { getSettings } from '../lib/settings';
 import { getLatestBlogPosts } from '../lib/blog';
 import { getAffiliates } from '../lib/affiliates';
 import FloatingWhatsApp from '../../components/FloatingWhatsApp';
+import TopScrollingBanner from '../../components/skytech/sections/home/TopScrollingBanner';
 
 export async function generateMetadata() {
   const settings = await getSettings();
@@ -43,6 +44,9 @@ export default async function SiteLayout({ children }: { children: ReactNode }) 
 
   return (
     <>
+      <div className="md:fixed top-0 w-screen z-30">
+        <TopScrollingBanner />
+      </div>
       <Navigation className="fixed top-0 left-0 z-30 w-screen md:top-10" />
       <main>{children}</main>
       <Footer latestPosts={latestPosts} sponsors={sponsors} settings={settings} />

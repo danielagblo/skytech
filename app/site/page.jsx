@@ -68,10 +68,7 @@ export default async function Home() {
 
   return (
     <div className="bg-white min-w-screen min-h-screen overflow-x-hidden relative">
-      {/* Top Scrolling Banner (kept) */}
-      <div className="md:fixed top-0 w-screen z-30">
-        <TopScrollingBanner />
-      </div>
+
 
       {/* ===== HERO (kept structure: full-bleed + headline + 2 CTAs + awards) ===== */}
       <section className="relative w-full min-h-[50vh] bg-slate-950 overflow-hidden flex items-center pt-16 md:pt-24">

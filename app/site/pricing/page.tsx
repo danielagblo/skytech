@@ -6,6 +6,8 @@ import { groupFAQs } from "@/components/skytech/sections/faqGroup";
 import { getPricing } from "@/app/lib/pricing";
 import { getFAQs } from "@/app/lib/faqs";
 
+export const dynamic = "force-dynamic";
+
 export default async function PricingPage() {
   const [pricing, faqs] = await Promise.all([getPricing(), getFAQs()]);
 
