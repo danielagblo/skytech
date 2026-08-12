@@ -9,7 +9,10 @@
     "lint": "next lint",
     "seed": "npx tsx scripts/seed-pricing.mjs",
     "seed-networks": "npx tsx scripts/seed-networks.mjs",
-    "seed-hero": "npx tsx scripts/seed-hero.mjs"
+    "seed-hero": "npx tsx scripts/seed-hero.mjs",
+    "migrate": "npx tsx scripts/migrate.mjs",
+    "migrate:sync": "npx tsx scripts/migrate.mjs --sync",
+    "migrate:images": "npx tsx scripts/migrate-images.mjs"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1045.0",
@@ -31,6 +34,7 @@
     "lexical": "^0.44.0",
     "lucide-react": "^1.14.0",
     "mongoose": "^9.3.0",
+    "mysql2": "^3.23.3",
     "next": "^16.1.6",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
