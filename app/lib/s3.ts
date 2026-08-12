@@ -1,5 +1,21 @@
-import { S3Client, PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
+import { S3Client, PutObjectCommand, DeleteObjectCommand, GetObjectCommand } from "@aws-sdk/client-s3";
 import sharp from "sharp";
+
+// retrieve raw bytes of a stored object, used by the image proxy when a key isn't in the DB
+export async function getImageFromS3(key: string): Promise<{ mime: string; data: Buffer }> {
+  const response = await s3Client.send(new GetObjectCommand({
+    Bucket: process.env.S3_BUCKET || "",
+    Key: key,
+  }));
+  const chunks: Buffer[] = [];
+  for await (const chunk of response.Body as any) {
+    chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk));
+  }
+  return {
+    mime: response.ContentType || "image/webp",
+    data: Buffer.concat(chunks),
+  };
+}
 
 export const s3Client = new S3Client({
   region: process.env.S3_REGION || "us-east-1",
