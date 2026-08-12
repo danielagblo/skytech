@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import * as dotenv from 'dotenv';
+import net from 'net';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import mysql from 'mysql2/promise';
@@ -27,14 +28,64 @@ if (!MYSQL_HOST || !MYSQL_USER || !MYSQL_DATABASE) {
   process.exit(1);
 }
 
+const resolveMysqlHost = (host) =>
+  !host || host === "localhost" ? "127.0.0.1" : host;
+
 const pool = mysql.createPool({
-  host: MYSQL_HOST || "localhost",
+  host: resolveMysqlHost(MYSQL_HOST),
   port: parseInt(MYSQL_PORT || "3306", 10),
   user: MYSQL_USER,
   password: MYSQL_PASSWORD || "",
   database: MYSQL_DATABASE,
   connectionLimit: 5,
+  connectTimeout: 15000,
+  ...(process.env.MYSQL_SSL === "1" ? { ssl: { rejectUnauthorized: false } } : {}),
 });
+
+function checkConnectivity() {
+  return new Promise((resolve, reject) => {
+    const host = MYSQL_HOST || "localhost";
+    const port = parseInt(MYSQL_PORT || "3306", 10);
+    const socket = net.connect({ host, port });
+    const timer = setTimeout(() => {
+      socket.destroy();
+      reject(new Error(`connection to ${host}:${port} timed out (5s)`));
+    }, 5000);
+    socket.once("connect", () => {
+      clearTimeout(timer);
+      socket.destroy();
+      resolve();
+    });
+    socket.once("error", (err) => {
+      clearTimeout(timer);
+      socket.destroy();
+      reject(err);
+    });
+  });
+}
+
+async function verifyReachable() {
+  console.log(`Verifying MySQL connectivity to ${MYSQL_HOST}:${MYSQL_PORT}...`);
+  try {
+    await checkConnectivity();
+    console.log("MySQL is reachable.");
+  } catch (err) {
+    console.error(`
+MySQL connection FAILED: ${err.message}
+
+Possible causes:
+1. Remote MySQL is NOT enabled in Hostinger hPanel -> Databases -> MySQL
+   -> "Remote MySQL". Add your public IP (whatismyip.com) or '%'.
+2. Wrong host/port. Hostinger may show a hostname like "mysql.hostinger.com"
+   instead of a raw IP; verify in hPanel.
+3. You are deploying to the same Hostinger server as the database - use
+   MYSQL_HOST=localhost there instead.
+
+Once reachable, re-run: npm run migrate
+`);
+    process.exit(1);
+  }
+}
 
 async function createSchema() {
   console.log("Creating MySQL schema (idempotent)...");
@@ -205,6 +256,7 @@ const run = process.argv.includes("--sync");
 
 (async () => {
   try {
+    await verifyReachable();
     await createSchema();
     if (run) await sync();
     await pool.end();

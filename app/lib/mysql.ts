@@ -15,13 +15,30 @@ export function newId(): string {
   return randomUUID();
 }
 
+// Force IPv4 loopback for "localhost": on Hostinger-style setups "localhost"
+// resolves to ::1 (IPv6), but MySQL account grants only match 127.0.0.1.
+function resolveMysqlHost(host: string | undefined): string {
+  if (!host || host === "localhost") return "127.0.0.1";
+  return host;
+}
+
+let debugLogged = false;
+
 export function getPool(): Promise<mysql.Pool> {
   if (cached.pool) return Promise.resolve(cached.pool);
   if (!cached.promise) {
     cached.promise = (async () => {
+      const host = resolveMysqlHost(process.env.MYSQL_HOST);
+      const port = parseInt(process.env.MYSQL_PORT || "3306", 10);
+      if (!debugLogged) {
+        console.info(
+          `[mysql] connecting to ${host}:${port} (ssl=${process.env.MYSQL_SSL === "1" ? "on" : "off"})`,
+        );
+        debugLogged = true;
+      }
       const pool = mysql.createPool({
-        host: process.env.MYSQL_HOST || "localhost",
-        port: parseInt(process.env.MYSQL_PORT || "3306", 10),
+        host,
+        port,
         user: process.env.MYSQL_USER || "root",
         password: process.env.MYSQL_PASSWORD || "",
         database: process.env.MYSQL_DATABASE || "skytech",
@@ -30,6 +47,10 @@ export function getPool(): Promise<mysql.Pool> {
         queueLimit: 0,
         dateStrings: false,
         supportBigNumbers: true,
+        connectTimeout: 15000,
+        ...(process.env.MYSQL_SSL === "1"
+          ? { ssl: { rejectUnauthorized: false } }
+          : {}),
       });
       cached.pool = pool;
       return pool;
