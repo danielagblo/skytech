@@ -19,6 +19,7 @@ import TestimonialsBanner from "../../components/skytech/sections/home/Testimoni
 import AnimatedCounter from "../../components/skytech/sections/home/AnimatedCounter";
 import ClientsCarousel from "../../components/skytech/sections/home/ClientsCarousel";
 import LatestInsights from "@/components/LatestInsights";
+import HeroHeadline from "@/components/skytech/ui/HeroHeadline";
 
 const services = [
   {
@@ -97,10 +98,7 @@ export default async function Home() {
           <div className="grid h-full items-center md:grid-cols-[1.15fr_1fr]">
             {/* Copy */}
             <div className="mx-auto max-w-2xl py-8 text-center text-white md:text-left">
-              <h1 className="font-display text-5xl font-bold uppercase leading-none tracking-tight sm:text-6xl md:text-7xl">
-                {hero.headline}
-                <span className="block whitespace-nowrap">{hero.headlineSub}</span>
-              </h1>
+              <HeroHeadline headline={hero.headline} headlineSub={hero.headlineSub} />
 
               {/* Awards — mobile (on top of the buttons) */}
               <div className="md:hidden mt-6 flex justify-center">

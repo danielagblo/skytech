@@ -23,6 +23,8 @@ export default function AnimatedCounter({
     const el = ref.current;
     if (!el) return;
 
+    const decimals = value % 1 !== 0 ? (value.toString().split(".")[1]?.length || 0) : 0;
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && !started.current) {
@@ -32,7 +34,7 @@ export default function AnimatedCounter({
           const tick = (now: number) => {
             const progress = Math.min((now - start) / duration, 1);
             const eased = 1 - Math.pow(1 - progress, 3);
-            setDisplay(Math.round(value * eased));
+            setDisplay(Number((value * eased).toFixed(decimals)));
             if (progress < 1) requestAnimationFrame(tick);
           };
           requestAnimationFrame(tick);

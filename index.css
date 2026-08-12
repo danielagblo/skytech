@@ -182,6 +182,23 @@ a {
   animation: pulse-soft 3s ease-in-out infinite;
 }
 
+@keyframes hero-pulse {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.12;
+  }
+}
+
+/* Fades out and back in 3 times, then stays visible */
+.animate-hero-pulse {
+  animation: hero-pulse 1.1s ease-in-out 3;
+}
+
 @keyframes float {
 
   0%,
