@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import fs from "fs";
+import { isMysql } from "../../../lib/db";
+import * as mysql from "../../../lib/mysql";
 import { resolveSharedData } from "../../../lib/sharedData";
 
 const corsHeaders = {
@@ -43,6 +45,18 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    if (isMysql()) {
+      await mysql.initSchema();
+      const id = await mysql.insert("contact_submissions", {
+        data: JSON.stringify({ ...submission, id: undefined }),
+        submitted_at: new Date(),
+      });
+      return NextResponse.json(
+        { success: true, id },
+        { headers: corsHeaders },
+      );
+    }
+
     const filePath = resolveSharedData("contact-submissions.json");
     let submissions: any[] = [];
     if (fs.existsSync(filePath)) {
@@ -77,6 +91,22 @@ export async function POST(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   try {
+    if (isMysql()) {
+      await mysql.initSchema();
+      const rows = await mysql.query(
+        "SELECT id, data, submitted_at FROM contact_submissions ORDER BY submitted_at DESC",
+      );
+      const submissions = rows.map((r) => {
+        const data = mysql.parseJson<Record<string, any>>(r.data) || {};
+        return {
+          ...data,
+          id: r.id,
+          submittedAt: r.submitted_at,
+        };
+      });
+      return NextResponse.json(submissions, { headers: corsHeaders });
+    }
+
     const filePath = resolveSharedData("contact-submissions.json");
     if (!fs.existsSync(filePath)) {
       return NextResponse.json([], { headers: corsHeaders });
@@ -104,6 +134,15 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json(
         { error: "Submission ID is required" },
         { status: 400, headers: corsHeaders },
+      );
+    }
+
+    if (isMysql()) {
+      await mysql.initSchema();
+      await mysql.remove("contact_submissions", id);
+      return NextResponse.json(
+        { success: true },
+        { headers: corsHeaders },
       );
     }
 
