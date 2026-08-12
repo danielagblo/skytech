@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
+import { isMysql } from "../../../lib/db";
+import * as mysql from "../../../lib/mysql";
 import dbConnect from "../../../lib/mongodb";
 import InternshipSubmission from "../../../models/InternshipSubmission";
 
@@ -12,35 +14,46 @@ export async function OPTIONS() {
   return new NextResponse(null, { headers: corsHeaders });
 }
 
+async function parseBody(request: NextRequest): Promise<any> {
+  const contentType = (request.headers.get("content-type") || "").toLowerCase();
+  let submission: any = {};
+
+  if (contentType.includes("application/json")) {
+    submission = await request.json();
+  } else if (
+    contentType.includes("application/x-www-form-urlencoded") ||
+    contentType.includes("multipart/form-data")
+  ) {
+    const form = await request.formData();
+    for (const [key, value] of Array.from(form.entries())) {
+      if (typeof value === "string") submission[key] = value;
+      else if (value instanceof File) submission[key] = value.name;
+      else submission[key] = String(value);
+    }
+  } else {
+    submission = await request.json();
+  }
+  return submission;
+}
+
 export async function POST(request: NextRequest) {
   try {
-    await dbConnect();
-    const contentType = (request.headers.get("content-type") || "").toLowerCase();
-    let submission: any = {};
+    const submission = await parseBody(request);
 
-    if (contentType.includes("application/json")) {
-      submission = await request.json();
-    } else if (
-      contentType.includes("application/x-www-form-urlencoded") ||
-      contentType.includes("multipart/form-data")
-    ) {
-      const form = await request.formData();
-      for (const [key, value] of Array.from(form.entries())) {
-        if (typeof value === "string") submission[key] = value;
-        else if (value instanceof File) submission[key] = value.name;
-        else submission[key] = String(value);
-      }
-    } else {
-      try {
-        submission = await request.json();
-      } catch (e) {
-        return NextResponse.json(
-          { error: "Unsupported content type or malformed body" },
-          { status: 400, headers: corsHeaders },
-        );
-      }
+    if (isMysql()) {
+      await mysql.initSchema();
+      const id = await mysql.insert("internship_submissions", {
+        data: JSON.stringify(submission),
+        enrolled: mysql.toBool(submission.enrolled),
+        submitted_at: new Date(),
+      });
+      return NextResponse.json(
+        { success: true, id },
+        { headers: corsHeaders },
+      );
     }
 
+    await dbConnect();
     const newEntry = await InternshipSubmission.create({
       ...submission,
       submittedAt: new Date(),
@@ -61,6 +74,24 @@ export async function POST(request: NextRequest) {
 
 export async function GET() {
   try {
+    if (isMysql()) {
+      await mysql.initSchema();
+      const rows = await mysql.query(
+        "SELECT id, data, enrolled, submitted_at FROM internship_submissions ORDER BY submitted_at DESC",
+      );
+      const formattedSubmissions = rows.map((s) => {
+        const data = mysql.parseJson<Record<string, any>>(s.data) || {};
+        return {
+          ...data,
+          _id: s.id,
+          id: s.id,
+          enrolled: mysql.fromBool(s.enrolled),
+          submittedAt: s.submitted_at,
+        };
+      });
+      return NextResponse.json(formattedSubmissions, { headers: corsHeaders });
+    }
+
     await dbConnect();
     const submissions = await InternshipSubmission.find({}).sort({ submittedAt: -1 }).lean();
     
@@ -82,7 +113,6 @@ export async function GET() {
 
 export async function DELETE(request: NextRequest) {
   try {
-    await dbConnect();
     const { searchParams } = new URL(request.url);
     const id = searchParams.get("id");
 
@@ -93,6 +123,16 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
+    if (isMysql()) {
+      await mysql.initSchema();
+      await mysql.remove("internship_submissions", id);
+      return NextResponse.json(
+        { success: true },
+        { headers: corsHeaders },
+      );
+    }
+
+    await dbConnect();
     await InternshipSubmission.findByIdAndDelete(id);
 
     return NextResponse.json(
@@ -110,7 +150,6 @@ export async function DELETE(request: NextRequest) {
 
 export async function PATCH(request: NextRequest) {
   try {
-    await dbConnect();
     const { id, enrolled } = await request.json();
 
     if (!id) {
@@ -120,6 +159,18 @@ export async function PATCH(request: NextRequest) {
       );
     }
 
+    if (isMysql()) {
+      await mysql.initSchema();
+      await mysql.update("internship_submissions", id, {
+        enrolled: mysql.toBool(enrolled),
+      });
+      return NextResponse.json(
+        { success: true, enrolled: Boolean(enrolled) },
+        { headers: corsHeaders },
+      );
+    }
+
+    await dbConnect();
     const updated = await InternshipSubmission.findByIdAndUpdate(
       id,
       { $set: { enrolled: Boolean(enrolled) } },

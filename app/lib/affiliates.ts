@@ -1,6 +1,8 @@
+import { isMysql } from "./db";
+import * as mysql from "./mysql";
+import { deleteImage } from "./storage";
 import dbConnect from "./mongodb";
 import Affiliate from "../models/Affiliate";
-import { deleteFromS3 } from "./s3";
 
 export interface IAffiliate {
   _id?: string;
@@ -9,7 +11,53 @@ export interface IAffiliate {
   order?: number;
 }
 
+async function getAffiliatesMysql(): Promise<IAffiliate[]> {
+  await mysql.initSchema();
+  const rows = await mysql.query(
+    "SELECT id, name, logo_url, sort_order FROM affiliates ORDER BY sort_order ASC, created_at DESC",
+  );
+  return rows.map((r) => ({
+    _id: r.id,
+    name: r.name || "",
+    logoUrl: r.logo_url || "",
+    order: r.sort_order ?? 0,
+  }));
+}
+
+async function saveAffiliatesMysql(affiliates: IAffiliate[]): Promise<void> {
+  await mysql.initSchema();
+
+  const existing = await mysql.query("SELECT id, logo_url FROM affiliates");
+  const newUrls = new Set(affiliates.map((a) => a.logoUrl));
+
+  for (const item of existing) {
+    if (item.logo_url && !newUrls.has(item.logo_url)) {
+      await deleteImage(item.logo_url);
+    }
+  }
+
+  const validAffiliates = affiliates.filter((a) => a.name && a.name.trim());
+
+  await mysql.clear("affiliates");
+  for (let idx = 0; idx < validAffiliates.length; idx++) {
+    const a = validAffiliates[idx];
+    await mysql.insert("affiliates", {
+      name: a.name,
+      logo_url: a.logoUrl,
+      sort_order: idx,
+    });
+  }
+}
+
 export async function getAffiliates(): Promise<IAffiliate[]> {
+  if (isMysql()) {
+    try {
+      return await getAffiliatesMysql();
+    } catch (error) {
+      console.error("Error fetching affiliates (mysql):", error);
+      return [];
+    }
+  }
   try {
     await dbConnect();
     const affiliates = await Affiliate.find({}).sort({ order: 1, createdAt: -1 }).lean();
@@ -27,6 +75,10 @@ export async function getAffiliates(): Promise<IAffiliate[]> {
 }
 
 export async function saveAffiliates(affiliates: IAffiliate[]): Promise<void> {
+  if (isMysql()) {
+    await saveAffiliatesMysql(affiliates);
+    return;
+  }
   try {
     await dbConnect();
     
@@ -36,7 +88,7 @@ export async function saveAffiliates(affiliates: IAffiliate[]): Promise<void> {
     
     for (const item of existing) {
       if (item.logoUrl && !newUrls.has(item.logoUrl)) {
-        await deleteFromS3(item.logoUrl);
+        await deleteImage(item.logoUrl);
       }
     }
 
@@ -56,4 +108,3 @@ export async function saveAffiliates(affiliates: IAffiliate[]): Promise<void> {
     throw error;
   }
 }
-

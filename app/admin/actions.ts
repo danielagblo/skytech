@@ -1,5 +1,5 @@
 "use server";
-import { processAndUpload, deleteFromS3 } from "../lib/s3";
+import { uploadImage, deleteImage } from "../lib/storage";
 import { getHeroData, saveHeroData } from "../lib/hero";
 import { getPricing, savePricing } from "../lib/pricing";
 import { revalidatePath } from "next/cache";
@@ -20,9 +20,9 @@ export async function updateHomeHero(formData: FormData) {
     if (imageFile && (imageFile as any).size > 0 && typeof imageFile !== 'string') {
       // Delete old image if it exists
       if (currentImageUrl) {
-        await deleteFromS3(currentImageUrl);
+        await deleteImage(currentImageUrl);
       }
-      imageUrl = await processAndUpload(imageFile as any);
+      imageUrl = await uploadImage(imageFile as any);
     }
 
 
@@ -96,7 +96,7 @@ export async function uploadPartnerLogoAction(formData: FormData) {
     const file = formData.get("file") as File;
     if (!file || file.size === 0) throw new Error("No file provided");
     
-    const imageUrl = await processAndUpload(file, "partners");
+    const imageUrl = await uploadImage(file, "partners");
     return { success: true, imageUrl };
   } catch (error: any) {
     console.error("Partner logo upload error:", error);

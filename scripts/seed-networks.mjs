@@ -2,9 +2,14 @@ import mongoose from 'mongoose';
 import * as dotenv from 'dotenv';
 import path from 'path';
 import fs from 'fs';
+import mysql from 'mysql2/promise';
 import { fileURLToPath } from 'url';
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import sharp from "sharp";
+
+const mysqlMod = await import('../app/lib/mysql.ts');
+const SCHEMA = mysqlMod.SCHEMA ?? mysqlMod.default?.SCHEMA ?? [];
+const newId = mysqlMod.newId ?? mysqlMod.default?.newId;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -20,7 +25,13 @@ const {
   S3_SECRET_ACCESS_KEY,
   S3_ENDPOINT,
   S3_BUCKET,
-  NEXT_PUBLIC_BASE_URL
+  NEXT_PUBLIC_BASE_URL,
+  IMAGE_STORAGE,
+  MYSQL_HOST,
+  MYSQL_PORT,
+  MYSQL_USER,
+  MYSQL_PASSWORD,
+  MYSQL_DATABASE,
 } = process.env;
 
 if (!MONGODB_URI) {
@@ -85,6 +96,58 @@ async function uploadToS3(filePath, partnerName) {
 
 async function seed() {
   try {
+    const useDbImages = (IMAGE_STORAGE || "s3") === "db";
+
+    if (process.env.DB_TYPE === "mysql") {
+      const pool = mysql.createPool({
+        host: MYSQL_HOST || "localhost",
+        port: parseInt(MYSQL_PORT || "3306", 10),
+        user: MYSQL_USER || "root",
+        password: MYSQL_PASSWORD || "",
+        database: MYSQL_DATABASE || "skytech",
+      });
+      for (const ddl of SCHEMA) {
+        await pool.query(ddl);
+      }
+      await pool.query("DELETE FROM affiliates");
+
+      let idx = 0;
+      for (const partner of partnersToSeed) {
+        const localPath = path.join(__dirname, '../public/images', partner.file);
+        if (!fs.existsSync(localPath)) {
+          console.warn(`File not found: ${localPath}`);
+          continue;
+        }
+
+        let logoUrl;
+        if (useDbImages) {
+          const buffer = fs.readFileSync(localPath);
+          const optimized = await sharp(buffer)
+            .resize(400, null, { withoutEnlargement: true })
+            .webp({ quality: 85 })
+            .toBuffer();
+          const id = newId();
+          await pool.query(
+            "INSERT INTO images (id, folder, mime, data) VALUES (?, ?, ?, ?)",
+            [id, "partners", "image/webp", Buffer.from(optimized)],
+          );
+          logoUrl = `/api/images/${id}`;
+        } else {
+          logoUrl = await uploadToS3(localPath, partner.name);
+        }
+
+        await pool.query(
+          "INSERT INTO affiliates (id, name, logo_url, sort_order) VALUES (?, ?, ?, ?)",
+          [newId(), partner.name, logoUrl, idx],
+        );
+        console.log(`Seeded partner: ${partner.name} (${logoUrl})`);
+        idx++;
+      }
+      console.log("Partners seeded to MySQL.");
+      await pool.end();
+      process.exit(0);
+    }
+
     await mongoose.connect(MONGODB_URI);
     console.log("Connected to MongoDB...");
 

@@ -1,3 +1,5 @@
+import { isMysql } from "./db";
+import * as mysql from "./mysql";
 import dbConnect from "./mongodb";
 import InternshipSubmission from "../models/InternshipSubmission";
 
@@ -8,7 +10,33 @@ export interface IEnrolledIntern {
   cohort: string;
 }
 
+async function getEnrolledInternsMysql(): Promise<IEnrolledIntern[]> {
+  await mysql.initSchema();
+  const rows = await mysql.query(
+    "SELECT id, data, submitted_at FROM internship_submissions WHERE enrolled = 1 ORDER BY submitted_at DESC",
+  );
+  return rows
+    .map((s) => {
+      const data = mysql.parseJson<Record<string, any>>(s.data) || {};
+      return {
+        _id: s.id,
+        name: data.name || "",
+        university: data.school || "",
+        cohort: data.program || "Skytech Ghana Intern",
+      };
+    })
+    .filter((i) => i.name && i.name.trim().length > 0);
+}
+
 export async function getEnrolledInterns(): Promise<IEnrolledIntern[]> {
+  if (isMysql()) {
+    try {
+      return await getEnrolledInternsMysql();
+    } catch (error) {
+      console.error("Error fetching enrolled interns (mysql):", error);
+      return [];
+    }
+  }
   try {
     await dbConnect();
     const submissions = await InternshipSubmission.find({ enrolled: true })

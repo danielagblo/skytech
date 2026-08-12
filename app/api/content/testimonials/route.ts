@@ -1,11 +1,9 @@
 import { NextResponse } from "next/server";
-import dbConnect from "../../../lib/mongodb";
-import Testimonial from "../../../models/Testimonial";
+import { getTestimonials, saveTestimonials } from "../../../lib/testimonials";
 
 export async function GET() {
   try {
-    await dbConnect();
-    const testimonials = await Testimonial.find({});
+    const testimonials = await getTestimonials();
     return NextResponse.json(testimonials);
   } catch (error) {
     return NextResponse.json(
@@ -18,16 +16,13 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    await dbConnect();
-    
+
     if (Array.isArray(body)) {
-      await Testimonial.deleteMany({});
-      await Testimonial.insertMany(body);
+      await saveTestimonials(body);
     } else {
-      await Testimonial.deleteMany({});
-      await Testimonial.create(body);
+      await saveTestimonials([body]);
     }
-    
+
     return NextResponse.json({ success: true });
   } catch (error) {
     return NextResponse.json(

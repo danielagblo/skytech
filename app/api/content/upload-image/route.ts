@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { mkdir, writeFile } from "fs/promises";
-import path from "path";
+import { uploadImage } from "../../../lib/storage";
 
 const allowedImageTypes = new Set([
   "image/png",
@@ -9,13 +8,6 @@ const allowedImageTypes = new Set([
   "image/webp",
   "image/svg+xml",
 ]);
-
-function safeExt(mime: string) {
-  if (mime === "image/png") return "png";
-  if (mime === "image/webp") return "webp";
-  if (mime === "image/svg+xml") return "svg";
-  return "jpg";
-}
 
 export async function POST(request: NextRequest) {
   try {
@@ -35,22 +27,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-
-    const uploadsDir = path.join(process.cwd(), "public", "uploads", folder);
-    await mkdir(uploadsDir, { recursive: true });
-
-    const timestamp = Date.now();
-    const ext = safeExt(file.type);
-    const filename = `upload-${timestamp}.${ext}`;
-    const filepath = path.join(uploadsDir, filename);
-
-    await writeFile(filepath, buffer);
+    const url = await uploadImage(file, folder);
 
     return NextResponse.json({
       success: true,
-      url: `/uploads/${folder}/${filename}`,
+      url,
     });
   } catch (error) {
     console.error("Upload image error:", error);
@@ -60,4 +41,3 @@ export async function POST(request: NextRequest) {
     );
   }
 }
-

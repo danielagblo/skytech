@@ -1,3 +1,5 @@
+import { isMysql } from "./db";
+import * as mysql from "./mysql";
 import dbConnect from "./mongodb";
 import BlogPostModel from "../models/BlogPost";
 
@@ -49,7 +51,28 @@ function mapPost(post: any): BlogPost {
   };
 }
 
+async function getPublishedMysql(): Promise<any[]> {
+  await mysql.initSchema();
+  const rows = await mysql.query(
+    "SELECT id, title, slug, category, excerpt, content, cover_image, published, author, tags, created_at, updated_at FROM blog_posts WHERE published = 1 ORDER BY created_at DESC",
+  );
+  return rows.map((r) => ({
+    _id: r.id,
+    slug: r.slug,
+    title: r.title,
+    excerpt: r.excerpt || "",
+    content: r.content || "{}",
+    coverImage: r.cover_image || "",
+    author: r.author || "Skytech Team",
+    category: r.category || "Technology",
+    tags: mysql.parseJson(r.tags) || [],
+    createdAt: r.created_at,
+    updatedAt: r.updated_at,
+  }));
+}
+
 async function getPublished(): Promise<any[]> {
+  if (isMysql()) return getPublishedMysql();
   await dbConnect();
   const posts = await BlogPostModel.find({ published: true })
     .sort({ createdAt: -1 })

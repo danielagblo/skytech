@@ -1,4 +1,6 @@
 import fs from "fs";
+import { isMysql } from "../../lib/db";
+import * as mysql from "../../lib/mysql";
 import { resolveSharedData } from "../../lib/sharedData";
 
 interface AnalyticsEvent {
@@ -13,33 +15,74 @@ interface AnalyticsEvent {
   timestamp?: string | Date;
 }
 
+const EMPTY_METRICS = {
+  totalVisitors: 0,
+  totalPageViews: 0,
+  totalInteractions: 0,
+  pages: [],
+  sources: [],
+  deviceTypes: [],
+  browsers: [],
+  countries: [],
+  recentEvents: [],
+};
+
+async function getAnalyticsMysql(): Promise<any[]> {
+  await mysql.initSchema();
+  const rows = await mysql.query(
+    "SELECT type, page, session_id, source, device_type, browser, country, action, timestamp FROM analytics_events ORDER BY timestamp ASC",
+  );
+  return rows.map((r) => ({
+    sessionId: r.session_id,
+    type: r.type,
+    page: r.page,
+    action: r.action,
+    source: r.source,
+    deviceType: r.device_type,
+    browser: r.browser,
+    country: r.country,
+    timestamp: r.timestamp,
+  }));
+}
+
+async function saveAnalyticsMysql(event: any): Promise<void> {
+  await mysql.initSchema();
+  await mysql.insert("analytics_events", {
+    type: event.type || "",
+    page: event.page || "",
+    session_id: event.sessionId || "",
+    source: event.source || "",
+    device_type: event.deviceType || "",
+    browser: event.browser || "",
+    country: event.country || "",
+    action: event.action || "",
+    data: JSON.stringify(event),
+    timestamp: new Date(),
+  });
+}
+
 export async function GET(request: Request) {
   try {
-    const filePath = resolveSharedData("analytics.json");
-    let analytics: any[] = [];
+    let analytics: any[];
 
-    if (fs.existsSync(filePath)) {
-      const data = fs.readFileSync(filePath, "utf8");
-      try {
-        analytics = JSON.parse(data);
-      } catch (e) {
-        console.error("Failed to parse analytics.json:", e);
-        analytics = [];
+    if (isMysql()) {
+      analytics = await getAnalyticsMysql();
+    } else {
+      const filePath = resolveSharedData("analytics.json");
+      analytics = [];
+      if (fs.existsSync(filePath)) {
+        const data = fs.readFileSync(filePath, "utf8");
+        try {
+          analytics = JSON.parse(data);
+        } catch (e) {
+          console.error("Failed to parse analytics.json:", e);
+          analytics = [];
+        }
       }
     }
 
     if (!analytics || analytics.length === 0) {
-      return Response.json({
-        totalVisitors: 0,
-        totalPageViews: 0,
-        totalInteractions: 0,
-        pages: [],
-        sources: [],
-        deviceTypes: [],
-        browsers: [],
-        countries: [],
-        recentEvents: [],
-      });
+      return Response.json(EMPTY_METRICS);
     }
 
     // Calculate aggregated metrics
@@ -68,28 +111,22 @@ export async function GET(request: Request) {
     return Response.json(metrics);
   } catch (error) {
     console.error("Failed to fetch analytics:", error);
-    return Response.json({
-      totalVisitors: 0,
-      totalPageViews: 0,
-      totalInteractions: 0,
-      pages: [],
-      sources: [],
-      deviceTypes: [],
-      browsers: [],
-      countries: [],
-      recentEvents: [],
-    });
+    return Response.json(EMPTY_METRICS);
   }
 }
 
 export async function POST(request: Request) {
   try {
     const event = await request.json();
-    
-    // Check if we should skip saving (e.g. if the user doesn't want to save pages anymore)
-    if (event.type === 'pageview') {
-      // If the user meant "don't save page views in analytics", we can return early here.
-      // But for now, let's just use JSON as the primary fix for the DB error.
+
+    if (isMysql()) {
+      try {
+        await saveAnalyticsMysql(event);
+        return Response.json({ success: true });
+      } catch (error) {
+        console.error("Failed to save analytics event to MySQL:", error);
+        return Response.json({ success: false }, { status: 200 });
+      }
     }
 
     const filePath = resolveSharedData("analytics.json");
