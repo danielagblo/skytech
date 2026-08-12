@@ -45,10 +45,10 @@ export const fetchSettings = async () => {
     return {
       siteName: "Skytech Ghana",
       siteDescription: "Premium software development solutions",
-      contactEmail: "hello@skytech.com",
-      contactPhone: "+1 (555) 123-4567",
-      whatsapp: "+233 20 123 4567",
-      address: "Tech Hub, San Francisco, CA 94105, USA",
+      contactEmail: "info@skytechghana.com",
+      contactPhone: "+233 53 831 1626",
+      whatsapp: "233538311626",
+      address: "Spintex Road, Accra, Ghana",
     };
   }
 };

@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-const DEFAULT_WHATSAPP = "233500000000";
+const DEFAULT_WHATSAPP = "233538311626";
 
 function toWaDigits(value?: string) {
   if (!value) return "";

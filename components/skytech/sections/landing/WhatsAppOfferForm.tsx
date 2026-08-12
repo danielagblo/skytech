@@ -9,7 +9,7 @@ interface WhatsAppOfferFormProps {
   whatsappNumber?: string;
 }
 
-const DEFAULT_WHATSAPP = "233538853087";
+const DEFAULT_WHATSAPP = "2335538311626";
 
 type MeetingAnswer = "Yes" | "No";
 type PublicOfficeAnswer = "Yes" | "No" | "Start-up";
@@ -52,9 +52,8 @@ function PillGroup<T extends string>({
             key={option}
             type="button"
             onClick={() => onChange(option)}
-            className={`rounded-lg border px-3.5 py-2 text-sm transition-colors ${
-              active ? "border-slate-900 font-semibold text-slate-900" : "border-slate-200 text-slate-500 hover:border-slate-300"
-            }`}
+            className={`rounded-lg border px-3.5 py-2 text-sm transition-colors ${active ? "border-slate-900 font-semibold text-slate-900" : "border-slate-200 text-slate-500 hover:border-slate-300"
+              }`}
           >
             {option}
           </button>
@@ -77,9 +76,8 @@ function CheckboxOption<T extends string>({
     <button type="button" onClick={onClick} className="flex items-center gap-2 text-base text-slate-800">
       {label}
       <span
-        className={`flex h-5 w-5 items-center justify-center rounded border ${
-          active ? "border-slate-900 bg-slate-900" : "border-slate-400 bg-white"
-        }`}
+        className={`flex h-5 w-5 items-center justify-center rounded border ${active ? "border-slate-900 bg-slate-900" : "border-slate-400 bg-white"
+          }`}
       >
         {active && (
           <svg viewBox="0 0 16 16" className="h-3.5 w-3.5 fill-none stroke-white" strokeWidth={2}>
@@ -259,9 +257,8 @@ function WhatsAppOfferForm({ packageName, packagePrice, onClose, whatsappNumber 
           type="button"
           onClick={handleSubmit}
           disabled={!isValid || sending}
-          className={`flex-[2] rounded-lg py-3 font-semibold text-white transition-colors ${
-            isValid && !sending ? "bg-emerald-600 hover:bg-emerald-700" : "cursor-not-allowed bg-emerald-300 text-white/80"
-          }`}
+          className={`flex-[2] rounded-lg py-3 font-semibold text-white transition-colors ${isValid && !sending ? "bg-emerald-600 hover:bg-emerald-700" : "cursor-not-allowed bg-emerald-300 text-white/80"
+            }`}
         >
           {sending ? "Sending..." : "Open on What&apos;s App"}
         </button>

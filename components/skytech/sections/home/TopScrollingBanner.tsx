@@ -6,8 +6,8 @@ interface TopScrollingBannerProps {
 
 function TopScrollingBanner({
   className,
-  contactPhone = "+233 55 289 2433",
-  whatsapp = "233552892433",
+  contactPhone = "+233538311626",
+  whatsapp = "233538311626",
 }: TopScrollingBannerProps) {
   // Format WhatsApp number to form a valid wa.me link
   const formattedWhatsapp = whatsapp.replace(/\s+/g, "").replace("+", "");

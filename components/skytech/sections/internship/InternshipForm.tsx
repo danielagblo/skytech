@@ -73,7 +73,7 @@ export default function InternshipForm() {
               `Level: ${formData.level}`,
               `Duration: ${formData.duration}`,
             ].join("\n"),
-            recipients: ["233552892433"],
+            recipients: ["233538311626"],
           }),
         });
       } catch (err) {

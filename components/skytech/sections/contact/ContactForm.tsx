@@ -60,7 +60,7 @@ export default function ContactForm() {
               `Email: ${formData.email}`,
               `Message: ${formData.message}`,
             ].join("\n"),
-            recipients: ["233552892433"],
+            recipients: ["233538311626"],
           }),
         });
       } catch (err) {
@@ -178,7 +178,7 @@ export default function ContactForm() {
                   <Image src="/images/icons/telephoneIcon.svg" alt="Telephone Icon" width={24} height={24} className="inline-block w-full h-full" />
                 </div>
                 &nbsp;&nbsp;
-                <p className="inline-block text-brand-700">+233 55 289 2433</p>
+                <p className="inline-block text-brand-700">+233 53 831 1626</p>
               </div>
 
               <div className="mt-8">
