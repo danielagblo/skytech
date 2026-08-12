@@ -1,9 +1,13 @@
 import mongoose from 'mongoose';
 import * as dotenv from 'dotenv';
 import path from 'path';
+import mysql from 'mysql2/promise';
 import { fileURLToPath } from 'url';
 
-// Setup __dirname for ESM
+const mysqlMod = await import('../app/lib/mysql.ts');
+const SCHEMA = mysqlMod.SCHEMA ?? mysqlMod.default?.SCHEMA ?? [];
+const newId = mysqlMod.newId ?? mysqlMod.default?.newId;
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -258,6 +262,30 @@ const pricingData = {
 
 async function seed() {
   try {
+    if (process.env.DB_TYPE === "mysql") {
+      const pool = mysql.createPool({
+        host: process.env.MYSQL_HOST || "localhost",
+        port: parseInt(process.env.MYSQL_PORT || "3306", 10),
+        user: process.env.MYSQL_USER || "root",
+        password: process.env.MYSQL_PASSWORD || "",
+        database: process.env.MYSQL_DATABASE || "skytech",
+      });
+      for (const ddl of SCHEMA) {
+        await pool.query(ddl);
+      }
+      await pool.query("DELETE FROM pricing");
+      for (const [category, data] of Object.entries(pricingData)) {
+        await pool.query(
+          "INSERT INTO pricing (id, category, label, packages) VALUES (?, ?, ?, ?)",
+          [newId(), category, data.label, JSON.stringify(data.packages)],
+        );
+        console.log(`Seeded category: ${category}`);
+      }
+      console.log("Pricing synchronization complete (MySQL).");
+      await pool.end();
+      process.exit(0);
+    }
+
     await mongoose.connect(MONGODB_URI);
     console.log("Connected to MongoDB for seeding...");
 
