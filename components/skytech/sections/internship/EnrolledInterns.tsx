@@ -182,6 +182,8 @@ function ScrollRow({
 export default function EnrolledInterns({ interns }: { interns: EnrolledIntern[] }) {
   if (!interns || interns.length === 0) return null;
 
+  const isSmallList = interns.length < 5;
+
   return (
     <section className="py-10 overflow-hidden bg-white">
       <div className="flex flex-col items-start gap-4 px-6 mb-8 md:flex-row md:items-center md:justify-between md:px-10">
@@ -191,14 +193,27 @@ export default function EnrolledInterns({ interns }: { interns: EnrolledIntern[]
             <div className="h-full w-1/3 bg-slate-950 rounded-full" />
           </div>
         </div>
-        <span className="text-3xl font-semibold text-gray-900 md:text-5xl">{interns.length}+</span>
+        <span className="text-3xl font-semibold text-gray-900 md:text-5xl">{interns.length}</span>
       </div>
 
-      <div className="flex flex-col gap-3">
-        {ROW_CONFIGS.map((config, i) => (
-          <ScrollRow key={i} items={interns} {...config} />
-        ))}
-      </div>
+      {isSmallList ? (
+        <div className="flex flex-wrap gap-4 px-6 md:px-10">
+          {interns.map((intern, i) => (
+            <InternCard
+              key={i}
+              {...intern}
+              image={intern.image || "/images/images/intern-x.png"}
+              size="large"
+            />
+          ))}
+        </div>
+      ) : (
+        <div className="flex flex-col gap-3">
+          {ROW_CONFIGS.map((config, i) => (
+            <ScrollRow key={i} items={interns} {...config} />
+          ))}
+        </div>
+      )}
     </section>
   );
 }
