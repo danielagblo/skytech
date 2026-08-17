@@ -20,9 +20,9 @@ async function getEnrolledInternsMysql(): Promise<IEnrolledIntern[]> {
       const data = mysql.parseJson<Record<string, any>>(s.data) || {};
       return {
         _id: s.id,
-        name: data.name || "",
-        university: data.school || "",
-        cohort: data.program || "Skytech Ghana Intern",
+        name: data.fullName || data.name || "",
+        university: data.institutionType || data.school || "",
+        cohort: data.programOffering || data.program || "Skytech Ghana Intern",
       };
     })
     .filter((i) => i.name && i.name.trim().length > 0);
@@ -51,9 +51,9 @@ export async function getEnrolledInterns(): Promise<IEnrolledIntern[]> {
     return (submissions as any[])
       .map((s) => ({
         _id: (s._id && s._id.toString ? s._id.toString() : s.id) || undefined,
-        name: s.name || "",
-        university: s.school || "",
-        cohort: s.program || "Skytech Ghana Intern",
+        name: s.fullName || s.name || "",
+        university: s.institutionType || s.school || "",
+        cohort: s.programOffering || s.program || "Skytech Ghana Intern",
       }))
       .filter((i) => i.name && i.name.trim().length > 0);
   } catch (error) {
