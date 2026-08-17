@@ -93,36 +93,67 @@ function ScrollRow({
 
     const measure = () => {
       const outerWidth = outer.clientWidth;
-      const setWidth = track.scrollWidth / repeat;
-      if (setWidth <= 0) return;
-      const needed = Math.max(2, 2 * Math.ceil(outerWidth / setWidth));
-      if (needed !== repeat) setRepeat(needed);
+      const cardWidth = track.scrollWidth / repeat;
+      if (cardWidth <= 0) return;
+      
+      // If the unique items cannot fill the screen width, we do NOT repeat them
+      // This ensures a single intern doesn't show multiple times at once.
+      if (cardWidth < outerWidth) {
+        setRepeat(1);
+        if (posRef.current === 0) {
+          posRef.current = reverse ? -cardWidth : outerWidth;
+        }
+      } else {
+        const needed = Math.max(2, 2 * Math.ceil(outerWidth / cardWidth));
+        if (needed !== repeat) setRepeat(needed);
+      }
     };
 
     measure();
     const observer = new ResizeObserver(measure);
     observer.observe(outer);
     return () => observer.disconnect();
-  }, [repeat, items.length]);
+  }, [repeat, items.length, reverse]);
 
   useEffect(() => {
     const track = trackRef.current;
-    if (!track) return;
+    const outer = outerRef.current;
+    if (!track || !outer) return;
 
     const animate = () => {
       if (!isPausedRef.current) {
-        posRef.current += reverse ? -speed : speed;
-        const half = track.scrollWidth / 2;
-        if (posRef.current >= half) posRef.current = 0;
-        if (posRef.current < 0) posRef.current = half;
-        track.style.transform = `translateX(${-posRef.current}px)`;
+        const outerWidth = outer.clientWidth;
+        const trackWidth = track.scrollWidth / (repeat > 1 ? repeat : 1);
+
+        if (repeat === 1) {
+          // Single-item or low-item count: scroll across the full screen width without repeating on screen
+          if (reverse) {
+            posRef.current += speed;
+            if (posRef.current > outerWidth) {
+              posRef.current = -trackWidth;
+            }
+          } else {
+            posRef.current -= speed;
+            if (posRef.current < -trackWidth) {
+              posRef.current = outerWidth;
+            }
+          }
+          track.style.transform = `translateX(${posRef.current}px)`;
+        } else {
+          // Standard infinite scrolling loop
+          posRef.current += reverse ? -speed : speed;
+          const half = track.scrollWidth / 2;
+          if (posRef.current >= half) posRef.current = 0;
+          if (posRef.current < 0) posRef.current = half;
+          track.style.transform = `translateX(${-posRef.current}px)`;
+        }
       }
       rafRef.current = requestAnimationFrame(animate);
     };
 
     rafRef.current = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(rafRef.current);
-  }, [speed, reverse]);
+  }, [speed, reverse, repeat]);
 
   const onMouseDown = (e: React.MouseEvent) => {
     isDragging.current = true;
@@ -182,7 +213,9 @@ function ScrollRow({
 export default function EnrolledInterns({ interns }: { interns: EnrolledIntern[] }) {
   if (!interns || interns.length === 0) return null;
 
-  const isSmallList = interns.length < 5;
+  // Limit the number of scrolling rows to the number of interns (up to 4 rows)
+  const activeRowsCount = Math.min(ROW_CONFIGS.length, interns.length);
+  const activeConfigs = ROW_CONFIGS.slice(0, activeRowsCount);
 
   return (
     <section className="py-10 overflow-hidden bg-white">
@@ -196,24 +229,11 @@ export default function EnrolledInterns({ interns }: { interns: EnrolledIntern[]
         <span className="text-3xl font-semibold text-gray-900 md:text-5xl">{interns.length}</span>
       </div>
 
-      {isSmallList ? (
-        <div className="flex flex-wrap gap-4 px-6 md:px-10">
-          {interns.map((intern, i) => (
-            <InternCard
-              key={i}
-              {...intern}
-              image={intern.image || "/images/images/intern-x.png"}
-              size="large"
-            />
-          ))}
-        </div>
-      ) : (
-        <div className="flex flex-col gap-3">
-          {ROW_CONFIGS.map((config, i) => (
-            <ScrollRow key={i} items={interns} {...config} />
-          ))}
-        </div>
-      )}
+      <div className="flex flex-col gap-3">
+        {activeConfigs.map((config, i) => (
+          <ScrollRow key={i} items={interns} {...config} />
+        ))}
+      </div>
     </section>
   );
 }
