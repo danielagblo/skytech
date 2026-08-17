@@ -64,10 +64,10 @@ export default function ContactSubmissionsPage() {
 
   const filteredSubmissions = submissions.filter(s => {
     const matchesSearch = 
-      s.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      s.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      s.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      s.message.toLowerCase().includes(searchTerm.toLowerCase());
+      (s.name || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (s.email || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (s.company || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (s.message || "").toLowerCase().includes(searchTerm.toLowerCase());
     
     const matchesType = filterProjectType === 'All' || s.projectType === filterProjectType;
     const matchesUrgency = filterUrgency === 'All' || s.urgency === filterUrgency;

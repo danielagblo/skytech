@@ -91,10 +91,10 @@ export default function InternshipSubmissionsPage() {
 
   const filteredSubmissions = submissions.filter(s => {
     const matchesSearch = 
-      s.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      s.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      s.school.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      s.program.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (s.name || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (s.email || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (s.school || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (s.program || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
       (s.message && s.message.toLowerCase().includes(searchTerm.toLowerCase()));
     
     const matchesProgram = filterProgram === 'All' || s.program === filterProgram;
