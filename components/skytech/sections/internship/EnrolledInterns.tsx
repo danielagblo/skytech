@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import Image from "next/image";
 
 export interface EnrolledIntern {
@@ -77,12 +77,33 @@ function ScrollRow({
   cardSize: CardSize;
 }) {
   const trackRef = useRef<HTMLDivElement>(null);
+  const outerRef = useRef<HTMLDivElement>(null);
   const posRef = useRef(0);
   const rafRef = useRef<number>(0);
   const isPausedRef = useRef(false);
   const isDragging = useRef(false);
   const startX = useRef(0);
   const startScroll = useRef(0);
+  const [repeat, setRepeat] = useState(2);
+
+  useEffect(() => {
+    const outer = outerRef.current;
+    const track = trackRef.current;
+    if (!outer || !track || items.length === 0) return;
+
+    const measure = () => {
+      const outerWidth = outer.clientWidth;
+      const setWidth = track.scrollWidth / repeat;
+      if (setWidth <= 0) return;
+      const needed = Math.max(2, 2 * Math.ceil(outerWidth / setWidth));
+      if (needed !== repeat) setRepeat(needed);
+    };
+
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(outer);
+    return () => observer.disconnect();
+  }, [repeat, items.length]);
 
   useEffect(() => {
     const track = trackRef.current;
@@ -130,10 +151,11 @@ function ScrollRow({
     isPausedRef.current = false;
   };
 
-  const doubled = [...items, ...items];
+  const repeated = Array.from({ length: repeat }).flatMap(() => items);
 
   return (
     <div
+      ref={outerRef}
       className="overflow-hidden cursor-grab active:cursor-grabbing"
       onMouseDown={onMouseDown}
       onMouseMove={onMouseMove}
@@ -144,7 +166,7 @@ function ScrollRow({
       onTouchEnd={onTouchEnd}
     >
       <div ref={trackRef} className="flex flex-row gap-3 w-max will-change-transform" style={{ userSelect: "none" }}>
-        {doubled.map((intern, i) => (
+        {repeated.map((intern, i) => (
           <InternCard
             key={i}
             {...intern}
