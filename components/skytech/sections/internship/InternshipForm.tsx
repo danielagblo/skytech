@@ -50,6 +50,9 @@ export default function InternshipForm() {
         },
         body: JSON.stringify({
           ...formData,
+          name: formData.fullName,
+          school: formData.institutionType,
+          program: formData.programOffering,
           recipient: "info@skytechghana.com",
         }),
       });
