@@ -37,9 +37,15 @@ export default function InternshipSubmissionsPage() {
     try {
       const res = await fetch('/api/content/internship-submissions');
       const data = await res.json();
-      setSubmissions(data); // Already sorted by API
+      if (res.ok && Array.isArray(data)) {
+        setSubmissions(data);
+      } else {
+        console.error('Failed to fetch submissions:', data?.error || 'Unknown error');
+        setSubmissions([]);
+      }
     } catch (error) {
       console.error('Failed to fetch submissions:', error);
+      setSubmissions([]);
     } finally {
       setLoading(false);
     }

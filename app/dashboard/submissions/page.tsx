@@ -32,9 +32,15 @@ export default function ContactSubmissionsPage() {
     try {
       const res = await fetch('/api/content/contact-submissions');
       const data = await res.json();
-      setSubmissions(data.reverse());
+      if (res.ok && Array.isArray(data)) {
+        setSubmissions(data.reverse());
+      } else {
+        console.error('Failed to fetch submissions:', data?.error || 'Unknown error');
+        setSubmissions([]);
+      }
     } catch (error) {
       console.error('Failed to fetch submissions:', error);
+      setSubmissions([]);
     } finally {
       setLoading(false);
     }
