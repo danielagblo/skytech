@@ -71,8 +71,8 @@ export default function ClientsCarousel({ partners }: { partners: Partner[] }) {
   const offset = currentIndex * -100;
 
   return (
-    <div className="relative border-y border-slate-200 bg-slate-50/60 py-10">
-      <div className="section-shell relative flex items-center group px-8">
+    <div className="relative border-y border-slate-200 bg-slate-50/60 py-8 sm:py-10">
+      <div className="section-shell relative flex items-center group px-4 sm:px-8">
         {/* Left Button - Desktop Only */}
         <button
           onClick={prevSlide}
@@ -103,17 +103,17 @@ export default function ClientsCarousel({ partners }: { partners: Partner[] }) {
               return (
                 <div
                   key={slideIdx}
-                  className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-x-4 gap-y-8 w-full shrink-0 items-center justify-center py-4"
+                  className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2 sm:gap-2.5 w-full shrink-0 items-stretch py-2"
                 >
                   {slidePartners.map((partner, idx) => (
                     <div
                       key={`${idx}-${partner.name || partner.logoUrl}`}
-                      className="group/logo flex items-center justify-center"
+                      className="group/logo flex items-center justify-center rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-300"
                     >
                       <img
                         src={partner.logoUrl}
                         alt={partner.name || "Brand"}
-                        className="h-10 w-auto max-w-[10rem] object-contain sm:h-12 md:h-14 md:max-w-[12.5rem] grayscale opacity-60 mix-blend-multiply transition-all duration-500 group-hover/logo:grayscale-0 group-hover/logo:opacity-100"
+                        className="h-8 sm:h-10 md:h-12 w-auto max-w-full object-contain grayscale opacity-50 mix-blend-multiply transition-all duration-500 group-hover/logo:grayscale-0 group-hover/logo:opacity-100"
                       />
                     </div>
                   ))}
