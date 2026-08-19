@@ -158,12 +158,12 @@ export default async function Home() {
       </section>
 
       {/* ===== Sponsors Brand Row ===== */}
-      <section className="bg-slate-950 pt-16 pb-0">
+      <section className="py-16 sm:py-20">
         <div className="section-shell mb-10 text-center">
-          <span className="text-xs font-bold uppercase tracking-[0.2em] text-slate-500">Our Clients</span>
-          <p className="mt-3 text-2xl sm:text-3xl font-bold text-white text-balance">
+          <span className="section-tag">Our Clients</span>
+          <p className="section-title mt-3 text-balance">
             Trusted by over{" "}
-            <span className="text-brand-400">1000+ brands</span> across two continents
+            <span className="text-brand-600">1000+ brands</span> across two continents
           </p>
         </div>
         <ClientsCarousel partners={allPartners} />
