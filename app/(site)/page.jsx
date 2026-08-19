@@ -57,7 +57,7 @@ const services = [
 ];
 
 export const metadata = {
-  title: "Skytech Ghana - Website & Mobile App Developers",
+  title: "Skytech Ghana - Website Development Company in Ghana | Mobile App Developers",
   description:
     "Skytech Ghana builds websites and mobile apps for businesses in Ghana. Web design, SEO, and maintenance services.",
 };

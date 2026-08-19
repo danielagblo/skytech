@@ -104,7 +104,7 @@ export default function ClientsCarousel({ partners }: { partners: Partner[] }) {
                       <img
                         src={partner.logoUrl}
                         alt={partner.name || "Brand"}
-                        className="h-5 sm:h-6 md:h-7 w-auto max-w-[8rem] sm:max-w-[9rem] object-contain brightness-0 invert opacity-70"
+                        className="h-8 sm:h-10 md:h-12 w-auto max-w-[9rem] sm:max-w-[11rem] object-contain"
                       />
                     </div>
                   ))}
