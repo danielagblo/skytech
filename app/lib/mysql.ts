@@ -244,6 +244,9 @@ export const SCHEMA: string[] = [
     name VARCHAR(255) NOT NULL,
     logo_url TEXT,
     sort_order INT DEFAULT 0,
+    col_span INT DEFAULT 1,
+    row_span INT DEFAULT 1,
+    visible TINYINT(1) DEFAULT 1,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
   )`,
   `CREATE TABLE IF NOT EXISTS blog_posts (

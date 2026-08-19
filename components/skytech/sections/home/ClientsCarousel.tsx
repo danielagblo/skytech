@@ -5,58 +5,63 @@ import React, { useState, useEffect } from "react";
 interface Partner {
   name: string;
   logoUrl: string;
+  colSpan?: number;
+  rowSpan?: number;
+  visible?: boolean;
 }
 
 export default function ClientsCarousel({ partners }: { partners: Partner[] }) {
+  const visiblePartners = partners.filter((p) => p.visible !== false);
+
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [itemsPerView, setItemsPerView] = useState(6);
-  const [rowsPerSlide, setRowsPerSlide] = useState(4);
+  const [cols, setCols] = useState(6);
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth < 640) {
-        setItemsPerView(3);
-        setRowsPerSlide(6);
-      } else if (window.innerWidth < 1024) {
-        setItemsPerView(4);
-        setRowsPerSlide(4);
-      } else {
-        setItemsPerView(6);
-        setRowsPerSlide(4);
-      }
+      if (window.innerWidth < 640) setCols(3);
+      else if (window.innerWidth < 1024) setCols(4);
+      else setCols(6);
     };
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const itemsPerSlide = itemsPerView * rowsPerSlide;
-  const totalSlides = Math.ceil(partners.length / itemsPerSlide);
+  // Paginate based on how many "cell units" each partner takes
+  const cellsPerSlide = cols * 4;
+  const slides: Partner[][] = [];
+  let currentSlide: Partner[] = [];
+  let cellCount = 0;
 
-  const nextSlide = () => {
-    setCurrentIndex((prev) => (prev + 1) % totalSlides);
-  };
+  for (const p of visiblePartners) {
+    const span = Math.min(p.colSpan || 1, cols);
+    const rSpan = p.rowSpan || 1;
+    const units = span * rSpan;
+    if (cellCount + units > cellsPerSlide && currentSlide.length > 0) {
+      slides.push(currentSlide);
+      currentSlide = [];
+      cellCount = 0;
+    }
+    currentSlide.push(p);
+    cellCount += units;
+  }
+  if (currentSlide.length > 0) slides.push(currentSlide);
 
-  const prevSlide = () => {
-    setCurrentIndex((prev) => (prev - 1 + totalSlides) % totalSlides);
-  };
+  const totalSlides = slides.length;
+
+  const nextSlide = () => setCurrentIndex((prev) => (prev + 1) % totalSlides);
+  const prevSlide = () => setCurrentIndex((prev) => (prev - 1 + totalSlides) % totalSlides);
 
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
-  const minSwipeDistance = 50;
 
-  const onTouchStart = (e: React.TouchEvent) => {
-    setTouchEnd(null);
-    setTouchStart(e.targetTouches[0].clientX);
-  };
-  const onTouchMove = (e: React.TouchEvent) => {
-    setTouchEnd(e.targetTouches[0].clientX);
-  };
+  const onTouchStart = (e: React.TouchEvent) => { setTouchEnd(null); setTouchStart(e.targetTouches[0].clientX); };
+  const onTouchMove = (e: React.TouchEvent) => { setTouchEnd(e.targetTouches[0].clientX); };
   const onTouchEnd = () => {
     if (!touchStart || !touchEnd) return;
-    const distance = touchStart - touchEnd;
-    if (distance > minSwipeDistance) nextSlide();
-    else if (distance < -minSwipeDistance) prevSlide();
+    const d = touchStart - touchEnd;
+    if (d > 50) nextSlide();
+    else if (d < -50) prevSlide();
   };
 
   const offset = currentIndex * -100;
@@ -67,7 +72,7 @@ export default function ClientsCarousel({ partners }: { partners: Partner[] }) {
         {/* Left Button */}
         <button
           onClick={prevSlide}
-          className="absolute -left-4 z-10 hidden items-center justify-center rounded-full border border-slate-200 bg-white p-2.5 text-slate-500 shadow-sm transition hover:bg-slate-50 hover:text-slate-900 md:group-hover:flex"
+          className="absolute left-2 z-10 hidden items-center justify-center rounded-full border border-slate-200 bg-white p-2.5 text-slate-500 shadow-sm transition hover:bg-slate-50 hover:text-slate-900 md:group-hover:flex"
           aria-label="Previous clients"
         >
           <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
@@ -86,38 +91,47 @@ export default function ClientsCarousel({ partners }: { partners: Partner[] }) {
             className="flex transition-transform duration-500 ease-out"
             style={{ transform: `translateX(${offset}%)` }}
           >
-            {Array.from({ length: totalSlides }).map((_, slideIdx) => {
-              const slidePartners = partners.slice(
-                slideIdx * itemsPerSlide,
-                (slideIdx + 1) * itemsPerSlide
-              );
-              return (
-                <div
-                  key={slideIdx}
-                  className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 w-full shrink-0"
-                >
-                  {slidePartners.map((partner, idx) => (
+            {slides.map((slidePartners, slideIdx) => (
+              <div
+                key={slideIdx}
+                className="w-full shrink-0"
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: `repeat(${cols}, 1fr)`,
+                  gridAutoRows: "1fr",
+                }}
+              >
+                {slidePartners.map((partner, idx) => {
+                  const cSpan = Math.min(partner.colSpan || 1, cols);
+                  const rSpan = partner.rowSpan || 1;
+                  return (
                     <div
                       key={`${idx}-${partner.name || partner.logoUrl}`}
-                      className="flex items-center justify-center border-[0.5px] border-slate-100 px-4 py-7 sm:px-6 sm:py-9 bg-white"
+                      className="flex items-center justify-center border-[0.5px] border-slate-100 bg-white"
+                      style={{
+                        gridColumn: `span ${cSpan}`,
+                        gridRow: `span ${rSpan}`,
+                        padding: `${rSpan * 28}px ${cSpan * 16}px`,
+                      }}
                     >
                       <img
                         src={partner.logoUrl}
                         alt={partner.name || "Brand"}
-                        className="h-8 sm:h-10 md:h-12 w-auto max-w-[9rem] sm:max-w-[11rem] object-contain"
+                        className="w-auto max-w-full object-contain"
+                        style={{ height: `${rSpan * 40}px` }}
                       />
                     </div>
-                  ))}
-                </div>
-              );
-            })}
+                  );
+                })}
+              </div>
+            ))}
           </div>
         </div>
 
         {/* Right Button */}
         <button
           onClick={nextSlide}
-          className="absolute -right-4 z-10 hidden items-center justify-center rounded-full border border-slate-200 bg-white p-2.5 text-slate-500 shadow-sm transition hover:bg-slate-50 hover:text-slate-900 md:group-hover:flex"
+          className="absolute right-2 z-10 hidden items-center justify-center rounded-full border border-slate-200 bg-white p-2.5 text-slate-500 shadow-sm transition hover:bg-slate-50 hover:text-slate-900 md:group-hover:flex"
           aria-label="Next clients"
         >
           <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
@@ -128,7 +142,7 @@ export default function ClientsCarousel({ partners }: { partners: Partner[] }) {
 
       {totalSlides > 1 && (
         <div className="py-4 flex justify-center gap-2">
-          {Array.from({ length: totalSlides }).map((_, slideIdx) => (
+          {slides.map((_, slideIdx) => (
             <button
               key={slideIdx}
               onClick={() => setCurrentIndex(slideIdx)}
