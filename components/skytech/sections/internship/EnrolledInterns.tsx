@@ -42,7 +42,7 @@ function InternCard({
 
   return (
     <div
-                className={`shrink-0 ${s.card} bg-gray-50 rounded-none border border-gray-200 flex items-center gap-4 px-4`}
+      className={`shrink-0 ${s.card} bg-gray-50 rounded-none border border-gray-200 flex items-center gap-4 px-4`}
     >
       <div className={`${s.avatar} rounded-full overflow-hidden shrink-0 bg-gray-200`}>
         <Image
@@ -95,7 +95,7 @@ function ScrollRow({
       const outerWidth = outer.clientWidth;
       const cardWidth = track.scrollWidth / repeat;
       if (cardWidth <= 0) return;
-      
+
       // If the unique items cannot fill the screen width, we do NOT repeat them
       // This ensures a single intern doesn't show multiple times at once.
       if (cardWidth < outerWidth) {
@@ -201,7 +201,7 @@ function ScrollRow({
           <InternCard
             key={i}
             {...intern}
-            image={intern.image || "/images/images/intern-x.png"}
+            image={intern.image || " "}
             size={cardSize}
           />
         ))}
