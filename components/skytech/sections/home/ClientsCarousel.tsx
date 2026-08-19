@@ -108,12 +108,12 @@ export default function ClientsCarousel({ partners }: { partners: Partner[] }) {
                   {slidePartners.map((partner, idx) => (
                     <div
                       key={`${idx}-${partner.name || partner.logoUrl}`}
-                      className="flex items-center justify-center"
+                      className="group/logo flex items-center justify-center"
                     >
                       <img
                         src={partner.logoUrl}
                         alt={partner.name || "Brand"}
-                        className="h-10 w-auto max-w-[10rem] object-contain sm:h-12 md:h-14 md:max-w-[12.5rem]"
+                        className="h-10 w-auto max-w-[10rem] object-contain sm:h-12 md:h-14 md:max-w-[12.5rem] grayscale opacity-60 mix-blend-multiply transition-all duration-500 group-hover/logo:grayscale-0 group-hover/logo:opacity-100"
                       />
                     </div>
                   ))}
