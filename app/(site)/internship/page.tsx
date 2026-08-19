@@ -4,6 +4,8 @@ import EnrolledInterns from "@/components/skytech/sections/internship/EnrolledIn
 import InternshipForm from "@/components/skytech/sections/internship/InternshipForm";
 import { getEnrolledInterns } from "@/app/lib/interns";
 
+export const dynamic = "force-dynamic";
+
 async function InternshipPage() {
   const interns = await getEnrolledInterns();
   return (
