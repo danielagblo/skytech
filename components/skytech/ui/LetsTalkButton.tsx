@@ -1,4 +1,7 @@
+"use client";
+
 import Image from "next/image";
+import { useWhatsAppModal } from "@/components/WhatsAppModal";
 
 const DEFAULT_WHATSAPP = "233538311626";
 
@@ -9,14 +12,13 @@ function toWaDigits(value?: string) {
 
 function LetsTalkButton({ className, whatsapp }: { className?: string; whatsapp?: string }) {
   const digits = toWaDigits(whatsapp) || DEFAULT_WHATSAPP;
+  const { open } = useWhatsAppModal();
 
   return (
-    <a
-      href={`https://wa.me/${digits}`}
-      target="_blank"
-      rel="noopener noreferrer"
+    <button
+      onClick={() => open(digits)}
       className={
-        className +
+        (className ?? "") +
         " text-center rounded-none py-2 px-3 hover:scale-[0.97] active:scale-[1.02] cursor-pointer transition-all duration-300 ease-in-out"
       }
     >
@@ -29,7 +31,7 @@ function LetsTalkButton({ className, whatsapp }: { className?: string; whatsapp?
         className="ml-2 mb-1 h-4 w-4 inline-block"
       />
       &nbsp;&nbsp;&#x276F;
-    </a>
+    </button>
   );
 }
 

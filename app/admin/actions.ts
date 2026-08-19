@@ -94,8 +94,8 @@ export async function updatePricingCategory(category: string, packages: any[]) {
 
     await savePricing(pricing);
 
-    // Force Next.js to re-render the pricing page with new data
     revalidatePath("/pricing");
+    revalidatePath("/");
     
     return { success: true };
   } catch (error: any) {

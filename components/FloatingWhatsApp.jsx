@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { useWhatsAppModal } from "./WhatsAppModal";
 
 function toWaDigits(value) {
   if (!value) return "";
@@ -10,20 +11,18 @@ function toWaDigits(value) {
 
 export default function FloatingWhatsApp({ whatsapp }) {
   const pathname = usePathname();
+  const { open } = useWhatsAppModal();
+
   if (pathname === "/landing") return null;
 
   const digits = toWaDigits(whatsapp);
   if (!digits) return null;
 
-  const href = `https://wa.me/${digits}`;
-
   return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
+    <button
+      onClick={() => open(digits)}
       aria-label="Chat on WhatsApp"
-      className="group fixed bottom-10 right-5 z-50 flex items-center gap-2"
+      className="group fixed bottom-10 right-5 z-50 flex items-center gap-2 cursor-pointer"
     >
       <span className="pointer-events-none max-w-0 overflow-hidden whitespace-nowrap rounded-full bg-slate-900 text-sm font-medium text-white opacity-0 shadow-lg transition-all duration-300 group-hover:max-w-xs group-hover:px-4 group-hover:py-2 group-hover:opacity-100">
         Chat with us
@@ -37,6 +36,6 @@ export default function FloatingWhatsApp({ whatsapp }) {
           className="object-contain"
         />
       </span>
-    </a>
+    </button>
   );
 }
