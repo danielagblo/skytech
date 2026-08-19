@@ -71,12 +71,12 @@ export default function ClientsCarousel({ partners }: { partners: Partner[] }) {
   const offset = currentIndex * -100;
 
   return (
-    <div className="relative border-y border-slate-200 bg-slate-50/60 py-8 sm:py-10">
+    <div className="relative bg-slate-950 py-10 sm:py-14">
       <div className="section-shell relative flex items-center group px-4 sm:px-8">
         {/* Left Button - Desktop Only */}
         <button
           onClick={prevSlide}
-          className="absolute left-0 z-10 hidden items-center justify-center rounded-full border border-slate-200 bg-white p-2.5 text-slate-600 shadow-soft transition hover:bg-slate-50 hover:text-slate-900 md:group-hover:flex"
+          className="absolute left-0 z-10 hidden items-center justify-center rounded-full border border-white/10 bg-white/5 p-2.5 text-slate-400 backdrop-blur-sm transition hover:bg-white/10 hover:text-white md:group-hover:flex"
           aria-label="Previous clients"
         >
           <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
@@ -103,17 +103,17 @@ export default function ClientsCarousel({ partners }: { partners: Partner[] }) {
               return (
                 <div
                   key={slideIdx}
-                  className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2 sm:gap-2.5 w-full shrink-0 items-stretch py-2"
+                  className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 w-full shrink-0 items-stretch"
                 >
                   {slidePartners.map((partner, idx) => (
                     <div
                       key={`${idx}-${partner.name || partner.logoUrl}`}
-                      className="group/logo flex items-center justify-center rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-300"
+                      className="group/logo flex items-center justify-center border border-white/[0.06] px-5 py-6 sm:px-6 sm:py-7 transition-all duration-300 hover:bg-white/[0.04]"
                     >
                       <img
                         src={partner.logoUrl}
                         alt={partner.name || "Brand"}
-                        className="h-8 sm:h-10 md:h-12 w-auto max-w-full object-contain grayscale opacity-50 mix-blend-multiply transition-all duration-500 group-hover/logo:grayscale-0 group-hover/logo:opacity-100"
+                        className="h-6 sm:h-7 md:h-8 w-auto max-w-full object-contain brightness-0 invert opacity-50 transition-all duration-500 group-hover/logo:opacity-90"
                       />
                     </div>
                   ))}
@@ -126,7 +126,7 @@ export default function ClientsCarousel({ partners }: { partners: Partner[] }) {
         {/* Right Button - Desktop Only */}
         <button
           onClick={nextSlide}
-          className="absolute right-0 z-10 hidden items-center justify-center rounded-full border border-slate-200 bg-white p-2.5 text-slate-600 shadow-soft transition hover:bg-slate-50 hover:text-slate-900 md:group-hover:flex"
+          className="absolute right-0 z-10 hidden items-center justify-center rounded-full border border-white/10 bg-white/5 p-2.5 text-slate-400 backdrop-blur-sm transition hover:bg-white/10 hover:text-white md:group-hover:flex"
           aria-label="Next clients"
         >
           <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
@@ -143,7 +143,7 @@ export default function ClientsCarousel({ partners }: { partners: Partner[] }) {
               key={slideIdx}
               onClick={() => setCurrentIndex(slideIdx)}
               className={`h-2 rounded-full transition-all duration-300 ${
-                currentIndex === slideIdx ? "w-6 bg-brand-600" : "w-2 bg-slate-300"
+                currentIndex === slideIdx ? "w-6 bg-white" : "w-2 bg-white/20"
               }`}
               aria-label={`Go to slide ${slideIdx + 1}`}
             />
