@@ -62,12 +62,12 @@ export default function ClientsCarousel({ partners }: { partners: Partner[] }) {
   const offset = currentIndex * -100;
 
   return (
-    <div className="relative bg-[#1a2332] rounded-2xl mx-4 sm:mx-8 lg:mx-auto lg:max-w-[80rem]">
+    <div className="relative bg-white border-y border-slate-200 w-full">
       <div className="relative flex items-center group">
         {/* Left Button */}
         <button
           onClick={prevSlide}
-          className="absolute -left-4 z-10 hidden items-center justify-center rounded-full border border-white/10 bg-[#1a2332] p-2.5 text-slate-400 transition hover:bg-white/10 hover:text-white md:group-hover:flex"
+          className="absolute -left-4 z-10 hidden items-center justify-center rounded-full border border-slate-200 bg-white p-2.5 text-slate-500 shadow-sm transition hover:bg-slate-50 hover:text-slate-900 md:group-hover:flex"
           aria-label="Previous clients"
         >
           <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
@@ -99,7 +99,7 @@ export default function ClientsCarousel({ partners }: { partners: Partner[] }) {
                   {slidePartners.map((partner, idx) => (
                     <div
                       key={`${idx}-${partner.name || partner.logoUrl}`}
-                      className="flex items-center justify-center border-[0.5px] border-white/[0.08] px-4 py-7 sm:px-6 sm:py-9"
+                      className="flex items-center justify-center border-[0.5px] border-slate-100 px-4 py-7 sm:px-6 sm:py-9 bg-white"
                     >
                       <img
                         src={partner.logoUrl}
@@ -117,7 +117,7 @@ export default function ClientsCarousel({ partners }: { partners: Partner[] }) {
         {/* Right Button */}
         <button
           onClick={nextSlide}
-          className="absolute -right-4 z-10 hidden items-center justify-center rounded-full border border-white/10 bg-[#1a2332] p-2.5 text-slate-400 transition hover:bg-white/10 hover:text-white md:group-hover:flex"
+          className="absolute -right-4 z-10 hidden items-center justify-center rounded-full border border-slate-200 bg-white p-2.5 text-slate-500 shadow-sm transition hover:bg-slate-50 hover:text-slate-900 md:group-hover:flex"
           aria-label="Next clients"
         >
           <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
@@ -133,7 +133,7 @@ export default function ClientsCarousel({ partners }: { partners: Partner[] }) {
               key={slideIdx}
               onClick={() => setCurrentIndex(slideIdx)}
               className={`h-1.5 rounded-full transition-all duration-300 ${
-                currentIndex === slideIdx ? "w-6 bg-white/60" : "w-1.5 bg-white/15"
+                currentIndex === slideIdx ? "w-6 bg-brand-600" : "w-1.5 bg-slate-300"
               }`}
               aria-label={`Go to slide ${slideIdx + 1}`}
             />
