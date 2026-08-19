@@ -8,6 +8,7 @@ export interface IEnrolledIntern {
   name: string;
   university: string;
   cohort: string;
+  image?: string;
 }
 
 async function getEnrolledInternsMysql(): Promise<IEnrolledIntern[]> {
@@ -23,6 +24,7 @@ async function getEnrolledInternsMysql(): Promise<IEnrolledIntern[]> {
         name: data.fullName || data.name || "",
         university: data.institutionType || data.school || "",
         cohort: data.programOffering || data.program || "Skytech Ghana Intern",
+        image: data.image || "",
       };
     })
     .filter((i) => i.name && i.name.trim().length > 0);
@@ -54,6 +56,7 @@ export async function getEnrolledInterns(): Promise<IEnrolledIntern[]> {
         name: s.fullName || s.name || "",
         university: s.institutionType || s.school || "",
         cohort: s.programOffering || s.program || "Skytech Ghana Intern",
+        image: s.image || "",
       }))
       .filter((i) => i.name && i.name.trim().length > 0);
   } catch (error) {

@@ -150,7 +150,7 @@ export async function DELETE(request: NextRequest) {
 
 export async function PATCH(request: NextRequest) {
   try {
-    const { id, enrolled } = await request.json();
+    const { id, enrolled, image } = await request.json();
 
     if (!id) {
       return NextResponse.json(
@@ -161,19 +161,38 @@ export async function PATCH(request: NextRequest) {
 
     if (isMysql()) {
       await mysql.initSchema();
-      await mysql.update("internship_submissions", id, {
-        enrolled: mysql.toBool(enrolled),
-      });
+      const updates: Record<string, any> = {};
+      if (typeof enrolled !== "undefined") {
+        updates.enrolled = mysql.toBool(enrolled);
+      }
+      if (typeof image !== "undefined") {
+        const rows = await mysql.query(
+          "SELECT data FROM internship_submissions WHERE id = ? LIMIT 1",
+          [id],
+        );
+        const existing = rows[0]
+          ? mysql.parseJson<Record<string, any>>(rows[0].data) || {}
+          : {};
+        updates.data = JSON.stringify({ ...existing, image });
+      }
+      await mysql.update("internship_submissions", id, updates);
       return NextResponse.json(
-        { success: true, enrolled: Boolean(enrolled) },
+        { success: true, ...updates },
         { headers: corsHeaders },
       );
     }
 
     await dbConnect();
+    const updatePayload: Record<string, any> = {};
+    if (typeof enrolled !== "undefined") {
+      updatePayload.enrolled = Boolean(enrolled);
+    }
+    if (typeof image !== "undefined") {
+      updatePayload.image = image;
+    }
     const updated = await InternshipSubmission.findByIdAndUpdate(
       id,
-      { $set: { enrolled: Boolean(enrolled) } },
+      { $set: updatePayload },
       { new: true },
     );
 
@@ -185,7 +204,7 @@ export async function PATCH(request: NextRequest) {
     }
 
     return NextResponse.json(
-      { success: true, enrolled: updated.enrolled },
+      { success: true, enrolled: updated.enrolled, image: updated.image },
       { headers: corsHeaders },
     );
   } catch (error) {

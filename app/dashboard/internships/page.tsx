@@ -14,6 +14,7 @@ interface Submission {
   duration: string;
   message: string;
   enrolled?: boolean;
+  image?: string;
   submittedAt: string;
 }
 
@@ -87,6 +88,42 @@ export default function InternshipSubmissionsPage() {
     } catch (error) {
       console.error('Error updating enrollment status:', error);
       alert('Error updating enrollment status');
+    }
+  };
+
+  const handleUploadImage = async (submission: Submission, file: File | null) => {
+    if (!file) return;
+
+    try {
+      const uploadData = new FormData();
+      uploadData.append('file', file);
+      uploadData.append('folder', 'interns');
+
+      const uploadRes = await fetch('/api/content/upload-image', {
+        method: 'POST',
+        body: uploadData,
+      });
+      const uploadJson = await uploadRes.json();
+      if (!uploadRes.ok || !uploadJson.url) {
+        alert('Failed to upload image');
+        return;
+      }
+
+      const res = await fetch('/api/content/internship-submissions', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: submission.id, image: uploadJson.url }),
+      });
+      if (res.ok) {
+        setSubmissions(submissions.map((s) =>
+          s.id === submission.id ? { ...s, image: uploadJson.url } : s
+        ));
+      } else {
+        alert('Failed to save image');
+      }
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      alert('Error uploading image');
     }
   };
 
@@ -315,6 +352,31 @@ export default function InternshipSubmissionsPage() {
                     <div>
                       <label className="block text-sm font-semibold text-slate-900 mb-1">Program</label>
                       <p className="text-slate-600">{submission.program}</p>
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-slate-900 mb-1">Profile Photo</label>
+                    <div className="flex items-center gap-4">
+                      <div className="w-20 h-20 rounded-full bg-slate-100 overflow-hidden border border-slate-200 shrink-0">
+                        {submission.image ? (
+                          <img src={submission.image} alt={submission.name} className="w-full h-full object-cover" />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-slate-400 text-2xl font-bold">
+                            {(submission.name || '?').charAt(0).toUpperCase()}
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex flex-col gap-2">
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => handleUploadImage(submission, e.target.files?.[0] || null)}
+                          className="text-sm text-slate-500"
+                        />
+                        <p className="text-xs text-slate-400">
+                          Shown on the internship page intern cards
+                        </p>
+                      </div>
                     </div>
                   </div>
                   <div>
