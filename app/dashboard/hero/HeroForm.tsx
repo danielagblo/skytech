@@ -13,9 +13,20 @@ interface StatRow {
 export default function HeroForm({ initialData }: { initialData: any }) {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const [headlines, setHeadlines] = useState<{ headline: string; headlineSub: string }[]>(
+    Array.isArray(initialData?.headlines) && initialData.headlines.length > 0
+      ? initialData.headlines
+      : [
+          {
+            headline: initialData?.headline ?? "MANY YEARS",
+            headlineSub: initialData?.headlineSub ?? "IN OPERATION",
+          },
+        ],
+  );
+  const [headlineMode, setHeadlineMode] = useState<'slide' | 'typing'>(
+    initialData?.headlineMode === 'typing' ? 'typing' : 'slide',
+  );
   const [currentHero, setCurrentHero] = useState({
-    headline: initialData?.headline ?? "MANY YEARS",
-    headlineSub: initialData?.headlineSub ?? "IN OPERATION",
     subText: initialData?.subText ?? "For Website, Mobile App Development and SEO Growth",
     imageUrl: initialData?.imageUrl ?? "",
     stats: Array.isArray(initialData?.stats) && initialData.stats.length > 0
@@ -51,6 +62,20 @@ export default function HeroForm({ initialData }: { initialData: any }) {
     }));
   }
 
+  function updateHeadline(index: number, field: "headline" | "headlineSub", value: string) {
+    setHeadlines((prev) =>
+      prev.map((h, i) => (i === index ? { ...h, [field]: value } : h))
+    );
+  }
+
+  function addHeadline() {
+    setHeadlines((prev) => [...prev, { headline: "", headlineSub: "" }]);
+  }
+
+  function removeHeadline(index: number) {
+    setHeadlines((prev) => prev.filter((_, i) => i !== index));
+  }
+
   async function handleSubmit(e: any) {
     if (e.preventDefault) e.preventDefault();
     setLoading(true);
@@ -60,8 +85,11 @@ export default function HeroForm({ initialData }: { initialData: any }) {
     const formData = new FormData(target);
 
     const payload = new FormData();
-    payload.append("headline", currentHero.headline);
-    payload.append("headlineSub", currentHero.headlineSub);
+    const first = headlines[0] || { headline: "", headlineSub: "" };
+    payload.append("headline", first.headline);
+    payload.append("headlineSub", first.headlineSub);
+    payload.append("headlines", JSON.stringify(headlines));
+    payload.append("headlineMode", headlineMode);
     payload.append("subText", currentHero.subText);
     payload.append("stats", JSON.stringify(currentHero.stats));
     payload.append("currentImageUrl", currentHero.imageUrl);
@@ -107,26 +135,101 @@ export default function HeroForm({ initialData }: { initialData: any }) {
       )}
 
       <form onSubmit={handleSubmit} className="space-y-8 max-w-4xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
-          <div className="space-y-2">
-            <label className={labelClass}>Headline - Line 1</label>
-            <input
-              name="headline"
-              value={currentHero.headline}
-              onChange={(e) => setCurrentHero({ ...currentHero, headline: e.target.value })}
-              className={inputClass}
-              placeholder="MANY YEARS"
-            />
+        <div className="space-y-3 text-left">
+          <div className="flex items-center justify-between">
+            <label className={labelClass}>Headlines</label>
+            <button
+              type="button"
+              onClick={addHeadline}
+              className="px-4 py-2 rounded-full bg-blue-600 text-white text-xs font-black uppercase tracking-widest hover:bg-blue-700 transition-all"
+            >
+              + Add Headline
+            </button>
           </div>
-          <div className="space-y-2">
-            <label className={labelClass}>Headline - Line 2</label>
-            <input
-              name="headlineSub"
-              value={currentHero.headlineSub}
-              onChange={(e) => setCurrentHero({ ...currentHero, headlineSub: e.target.value })}
-              className={inputClass}
-              placeholder="IN OPERATION"
-            />
+          <p className="text-xs font-bold uppercase tracking-widest text-slate-400">
+            Headlines rotate automatically on the homepage hero.
+          </p>
+          {headlines.map((h, index) => (
+            <div key={index} className="rounded-2xl border border-slate-100 bg-slate-50 p-4 space-y-3">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <label className={labelClass}>Headline - Line 1</label>
+                  <input
+                    value={h.headline}
+                    onChange={(e) => updateHeadline(index, "headline", e.target.value)}
+                    className={inputClass}
+                    placeholder="MANY YEARS"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className={labelClass}>Headline - Line 2</label>
+                  <input
+                    value={h.headlineSub}
+                    onChange={(e) => updateHeadline(index, "headlineSub", e.target.value)}
+                    className={inputClass}
+                    placeholder="IN OPERATION"
+                  />
+                </div>
+              </div>
+              <div className="flex justify-end">
+                <button
+                  type="button"
+                  onClick={() => removeHeadline(index)}
+                  disabled={headlines.length <= 1}
+                  className="px-3 py-2 rounded-xl bg-red-50 text-red-600 text-xs font-black uppercase tracking-widest hover:bg-red-100 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                >
+                  Remove Headline
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="space-y-2 text-left">
+          <label className={labelClass}>Headline Animation</label>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <label
+              className={`flex items-start gap-3 p-4 rounded-2xl border cursor-pointer transition-all ${
+                headlineMode === "slide"
+                  ? "border-blue-600 bg-blue-50/60"
+                  : "border-slate-100 bg-slate-50 hover:border-slate-200"
+              }`}
+            >
+              <input
+                type="radio"
+                name="headlineMode"
+                checked={headlineMode === "slide"}
+                onChange={() => setHeadlineMode("slide")}
+                className="mt-1 w-4 h-4 accent-blue-600"
+              />
+              <span>
+                <span className="block font-bold text-sm text-slate-900">Current animation</span>
+                <span className="block text-xs text-slate-500 mt-0.5">
+                  Numbers count up, headline slides in from the bottom
+                </span>
+              </span>
+            </label>
+            <label
+              className={`flex items-start gap-3 p-4 rounded-2xl border cursor-pointer transition-all ${
+                headlineMode === "typing"
+                  ? "border-blue-600 bg-blue-50/60"
+                  : "border-slate-100 bg-slate-50 hover:border-slate-200"
+              }`}
+            >
+              <input
+                type="radio"
+                name="headlineMode"
+                checked={headlineMode === "typing"}
+                onChange={() => setHeadlineMode("typing")}
+                className="mt-1 w-4 h-4 accent-blue-600"
+              />
+              <span>
+                <span className="block font-bold text-sm text-slate-900">Typing animation</span>
+                <span className="block text-xs text-slate-500 mt-0.5">
+                  Each headline is typed out character by character before switching
+                </span>
+              </span>
+            </label>
           </div>
         </div>
 

@@ -40,6 +40,17 @@ export async function updateHomeHero(formData: FormData) {
         stats = undefined;
       }
     }
+    let headlines;
+    const headlinesRaw = formData.get("headlines") as string;
+    if (headlinesRaw) {
+      try {
+        headlines = JSON.parse(headlinesRaw);
+      } catch {
+        headlines = undefined;
+      }
+    }
+    const headlineMode =
+      formData.get("headlineMode") === "typing" ? "typing" : "slide";
 
     await saveHeroData({
       title,
@@ -48,6 +59,8 @@ export async function updateHomeHero(formData: FormData) {
       headlineSub,
       subText,
       ...(stats ? { stats } : {}),
+      ...(Array.isArray(headlines) ? { headlines } : {}),
+      headlineMode,
       imageUrl,
       updatedAt: new Date()
     });

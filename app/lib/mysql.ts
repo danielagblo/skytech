@@ -154,6 +154,26 @@ async function upgradeSchema(): Promise<void> {
   } catch {
     // table doesn't exist yet; initSchema() will create it
   }
+  try {
+    await pool.query(
+      "ALTER TABLE hero ADD COLUMN headlines JSON DEFAULT NULL AFTER headline_sub",
+    );
+  } catch (error: any) {
+    // ER_DUP_FIELDNAME (1060) means it already exists — safe to ignore
+    if (!error || error.code !== "ER_DUP_FIELDNAME") {
+      throw error;
+    }
+  }
+  try {
+    await pool.query(
+      "ALTER TABLE hero ADD COLUMN headline_mode VARCHAR(20) DEFAULT 'slide' AFTER headlines",
+    );
+  } catch (error: any) {
+    // ER_DUP_FIELDNAME (1060) means it already exists — safe to ignore
+    if (!error || error.code !== "ER_DUP_FIELDNAME") {
+      throw error;
+    }
+  }
 }
 
 export const SCHEMA: string[] = [
@@ -164,6 +184,8 @@ export const SCHEMA: string[] = [
     image_url TEXT,
     headline VARCHAR(255) DEFAULT '',
     headline_sub VARCHAR(255) DEFAULT '',
+    headlines JSON DEFAULT NULL,
+    headline_mode VARCHAR(20) DEFAULT 'slide',
     sub_text TEXT,
     stats JSON,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP

@@ -98,7 +98,7 @@ export default async function Home() {
           <div className="grid h-full items-center md:grid-cols-[1.15fr_1fr]">
             {/* Copy */}
             <div className="mx-auto max-w-2xl py-8 text-center text-white md:text-left">
-              <HeroHeadline headline={hero.headline} headlineSub={hero.headlineSub} />
+              <HeroHeadline headlines={hero.headlines} mode={hero.headlineMode} />
 
               {/* Awards — mobile (on top of the buttons) */}
               <div className="md:hidden mt-6 flex justify-center">
