@@ -70,8 +70,14 @@ export default function FloatingWhatsApp() {
 
             <div className="flex gap-3 pr-4">
               <div className="relative shrink-0">
-                <div className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-emerald-500 to-emerald-700 text-sm font-bold text-white shadow-md">
-                  SK
+                <div className="relative h-11 w-11 overflow-hidden rounded-full shadow-md ring-2 ring-emerald-100">
+                  <Image
+                    src="/images/icons/support-agent.jpg"
+                    alt="Skytech support agent"
+                    fill
+                    sizes="44px"
+                    className="object-cover object-top"
+                  />
                 </div>
                 <span className="absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-white bg-emerald-400" />
               </div>
