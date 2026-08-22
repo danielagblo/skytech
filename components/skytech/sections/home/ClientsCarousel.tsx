@@ -1,7 +1,10 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { getPartnerLogoHeight } from "@/app/lib/partnerLogo";
+import {
+  PARTNER_GRID_ROW_HEIGHT,
+  getPartnerLogoStyle,
+} from "@/app/lib/partnerLogo";
 
 interface Partner {
   name: string;
@@ -100,7 +103,7 @@ export default function ClientsCarousel({ partners }: { partners: Partner[] }) {
                 style={{
                   display: "grid",
                   gridTemplateColumns: `repeat(${cols}, 1fr)`,
-                  gridAutoRows: "1fr",
+                  gridAutoRows: `${PARTNER_GRID_ROW_HEIGHT}px`,
                 }}
               >
                 {slidePartners.map((partner, idx) => {
@@ -109,18 +112,17 @@ export default function ClientsCarousel({ partners }: { partners: Partner[] }) {
                   return (
                     <div
                       key={`${idx}-${partner.name || partner.logoUrl}`}
-                      className="flex items-center justify-center border-[0.5px] border-slate-100 bg-white"
+                      className="flex items-center justify-center overflow-hidden border-[0.5px] border-slate-100 bg-white p-4 min-h-0"
                       style={{
                         gridColumn: `span ${cSpan}`,
                         gridRow: `span ${rSpan}`,
-                        padding: `${rSpan * 28}px ${cSpan * 16}px`,
                       }}
                     >
                       <img
                         src={partner.logoUrl}
                         alt={partner.name || "Brand"}
-                        className="w-auto max-w-full object-contain"
-                        style={{ height: `${getPartnerLogoHeight(partner)}px` }}
+                        className="w-auto max-w-[85%] object-contain"
+                        style={getPartnerLogoStyle(partner.logoScale)}
                       />
                     </div>
                   );

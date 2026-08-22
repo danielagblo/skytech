@@ -3,7 +3,10 @@
 import React, { useState } from "react";
 import { updateAffiliatesAction, uploadPartnerLogoAction } from "../../admin/actions";
 import { IAffiliate } from "../../lib/affiliates";
-import { getPartnerLogoHeight } from "../../lib/partnerLogo";
+import {
+  PARTNER_GRID_ROW_HEIGHT,
+  getPartnerLogoStyle,
+} from "../../lib/partnerLogo";
 
 export default function AffiliateManager({ initialAffiliates }: { initialAffiliates: IAffiliate[] }) {
   const [affiliates, setAffiliates] = useState<IAffiliate[]>(
@@ -119,27 +122,25 @@ export default function AffiliateManager({ initialAffiliates }: { initialAffilia
           style={{
             display: "grid",
             gridTemplateColumns: `repeat(${gridCols}, 1fr)`,
+            gridAutoRows: `${PARTNER_GRID_ROW_HEIGHT}px`,
             gap: 0,
           }}
         >
           {visiblePartners.map((partner, idx) => (
             <div
               key={idx}
-              className="flex items-center justify-center border-[0.5px] border-slate-100 bg-white"
+              className="flex items-center justify-center overflow-hidden border-[0.5px] border-slate-100 bg-white p-4 min-h-0"
               style={{
                 gridColumn: `span ${Math.min(partner.colSpan || 1, gridCols)}`,
                 gridRow: `span ${partner.rowSpan || 1}`,
-                padding: `${(partner.rowSpan || 1) * 28}px ${(partner.colSpan || 1) * 16}px`,
               }}
             >
               {partner.logoUrl ? (
                 <img
                   src={partner.logoUrl}
                   alt={partner.name}
-                  className="max-w-full max-h-full object-contain"
-                  style={{
-                    height: `${getPartnerLogoHeight(partner)}px`,
-                  }}
+                  className="max-w-[85%] w-auto object-contain"
+                  style={getPartnerLogoStyle(partner.logoScale)}
                 />
               ) : (
                 <span className="text-slate-300 text-[10px] font-bold uppercase tracking-widest">

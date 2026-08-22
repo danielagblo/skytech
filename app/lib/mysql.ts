@@ -135,6 +135,16 @@ export async function initSchema(): Promise<void> {
 
 // Make sure the images table has the key_path column for hosts that created
 // the schema before the column was added. Idempotent (ignores duplicate column errors).
+async function addColumnIgnoreDuplicate(pool: Awaited<ReturnType<typeof getPool>>, sql: string): Promise<void> {
+  try {
+    await pool.query(sql);
+  } catch (error: any) {
+    if (!error || error.code !== "ER_DUP_FIELDNAME") {
+      throw error;
+    }
+  }
+}
+
 async function upgradeSchema(): Promise<void> {
   const pool = await getPool();
   try {
@@ -174,15 +184,24 @@ async function upgradeSchema(): Promise<void> {
       throw error;
     }
   }
-  try {
-    await pool.query(
-      "ALTER TABLE affiliates ADD COLUMN logo_scale INT DEFAULT 100 AFTER row_span",
-    );
-  } catch (error: any) {
-    if (!error || error.code !== "ER_DUP_FIELDNAME") {
-      throw error;
-    }
-  }
+
+  // Affiliates grid/layout columns (added after initial production deploy)
+  await addColumnIgnoreDuplicate(
+    pool,
+    "ALTER TABLE affiliates ADD COLUMN col_span INT DEFAULT 1 AFTER sort_order",
+  );
+  await addColumnIgnoreDuplicate(
+    pool,
+    "ALTER TABLE affiliates ADD COLUMN row_span INT DEFAULT 1 AFTER col_span",
+  );
+  await addColumnIgnoreDuplicate(
+    pool,
+    "ALTER TABLE affiliates ADD COLUMN logo_scale INT DEFAULT 100 AFTER row_span",
+  );
+  await addColumnIgnoreDuplicate(
+    pool,
+    "ALTER TABLE affiliates ADD COLUMN visible TINYINT(1) DEFAULT 1 AFTER logo_scale",
+  );
 }
 
 export const SCHEMA: string[] = [
