@@ -1,5 +1,6 @@
 import { getPricing } from "../../lib/pricing";
 import { getAffiliates } from "../../lib/affiliates";
+import { getHeroData } from "../../lib/hero";
 import LandingPageContent from "../../../components/skytech/sections/landing/LandingPageContent";
 
 export const dynamic = "force-dynamic";
@@ -80,14 +81,24 @@ const DEFAULT_CATEGORIES = [
 ];
 
 export default async function LandingPage() {
-  const [pricing, partnersData] = await Promise.all([getPricing(), getAffiliates()]);
-  
-  // Transform to plain object for client
+  const [pricing, partnersData, hero] = await Promise.all([
+    getPricing(),
+    getAffiliates(),
+    getHeroData(),
+  ]);
+
   const serializablePricing = JSON.parse(JSON.stringify(pricing));
   const categories = serializablePricing.length > 0 ? serializablePricing : DEFAULT_CATEGORIES;
-  
+
   const allPartners = (partnersData || []).filter((p) => p?.logoUrl || p?.name);
+  // Same admin-connected hero stats as the homepage
+  const stats = JSON.parse(JSON.stringify(hero.stats || []));
 
-  return <LandingPageContent categories={categories} partners={allPartners} />;
+  return (
+    <LandingPageContent
+      categories={categories}
+      partners={allPartners}
+      stats={stats}
+    />
+  );
 }
-

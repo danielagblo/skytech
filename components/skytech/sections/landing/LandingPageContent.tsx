@@ -6,6 +6,8 @@ import Image from "next/image";
 import BottomSheet from "@/components/skytech/ui/BottomSheet";
 import WhatsAppOfferForm from "@/components/skytech/sections/landing/WhatsAppOfferForm";
 import ClientsCarousel from "@/components/skytech/sections/home/ClientsCarousel";
+import AnimatedCounter from "@/components/skytech/sections/home/AnimatedCounter";
+import type { HeroStat } from "@/app/lib/hero";
 
 export interface Package {
   name: string;
@@ -85,8 +87,19 @@ function PackageCard({ pkg, onSelect }: { pkg: Package; onSelect: (pkg: Package)
 
           <ul className="mb-6 space-y-0.5">
             {pkg.features.map((f) => (
-              <li key={f.text} className={`flex items-start gap-2 ml-2 text-sm ${f.excluded ? "line-through" : ""}`}>
-                &#9679;
+              <li key={f.text} className={`flex items-start gap-2 ml-2 text-sm ${f.excluded ? "line-through text-slate-400" : ""}`}>
+                <svg
+                  className={`mt-0.5 h-4 w-4 shrink-0 ${f.excluded ? "text-slate-300" : "text-[#2f59c1]"}`}
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  aria-hidden
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                    clipRule="evenodd"
+                  />
+                </svg>
                 <span>{f.text}</span>
               </li>
             ))}
@@ -133,9 +146,11 @@ interface Partner {
 export default function LandingPageContent({
   categories,
   partners,
+  stats = [],
 }: {
   categories: PricingCategoryData[];
   partners: Partner[];
+  stats?: HeroStat[];
 }) {
   // Try to find first category with packages to make it active, default to "web"
   const defaultCategory = categories.find(c => c.packages && c.packages.length > 0)?.category || "web";
@@ -202,14 +217,28 @@ export default function LandingPageContent({
         </div>
       </section>
 
+      {stats.length > 0 && (
+        <section className="relative z-20 px-3 py-5 sm:px-6 sm:py-8 md:px-8">
+          <div className="mx-auto max-w-[80rem]">
+            <div className="grid grid-cols-4 gap-2 text-center sm:gap-6 md:gap-8">
+              {stats.slice(0, 4).map((s) => (
+                <div key={s.label} className="min-w-0 space-y-1 sm:space-y-2">
+                  <p className="font-display text-3xl font-bold tracking-tighter text-slate-950 sm:text-6xl md:text-7xl">
+                    <AnimatedCounter value={s.value} suffix={s.suffix} compact={s.compact} />
+                  </p>
+                  <p className="text-[10px] font-semibold uppercase leading-snug tracking-wide text-slate-500 sm:text-sm sm:tracking-[0.18em]">
+                    {s.label}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       <section className="mx-auto max-w-6xl py-6">
-        <div className="text-center mb-6">
-          <p className="text-gray-700">
-            We&apos;ve served many happy clients in 2+ countries
-            <br />
-            with over 1 million beneficiaries of our projects.
-          </p>
-          <h3 className="my-3 text-lg font-bold tracking-wide text-slate-900">LEGACY CLIENTS</h3>
+        <div className="mb-4 text-center">
+          <h3 className="text-lg font-bold tracking-wide text-slate-900">Our Partners</h3>
         </div>
         <ClientsCarousel partners={partners} />
       </section>

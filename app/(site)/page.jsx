@@ -147,7 +147,7 @@ export default async function Home() {
           <div className="grid grid-cols-2 gap-8 text-center lg:grid-cols-4">
             {hero.stats.map((s) => (
               <div key={s.label} className="space-y-2">
-                <p className="font-display text-5xl font-bold tracking-tighter text-slate-950 md:text-6xl">
+                <p className="font-display text-3xl font-bold tracking-tighter text-slate-950 sm:text-6xl md:text-7xl">
                   <AnimatedCounter value={s.value} suffix={s.suffix} compact={s.compact} />
                 </p>
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">{s.label}</p>

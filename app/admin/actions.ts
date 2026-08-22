@@ -66,7 +66,7 @@ export async function updateHomeHero(formData: FormData) {
     });
 
     revalidatePath("/");
-    revalidatePath("/");
+    revalidatePath("/landing");
     return { success: true, imageUrl };
   } catch (error: any) {
     console.error("Hero update error:", error);
