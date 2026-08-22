@@ -4,16 +4,14 @@ import { useRef, useState } from "react";
 import { WHATSAPP_NUMBER } from "@/app/lib/whatsapp";
 
 interface WhatsAppOfferFormProps {
-  packageName: string;
-  packagePrice: string;
+  packageName?: string;
+  packagePrice?: string;
   onClose: () => void;
   whatsappNumber?: string;
 }
 
 const DEFAULT_WHATSAPP = WHATSAPP_NUMBER;
 
-type MeetingAnswer = "Yes" | "No";
-type PublicOfficeAnswer = "Yes" | "No" | "Start-up";
 type LaunchTimeline = "in 1 week" | "1-2 months" | "3+ months";
 
 const INDUSTRIES = [
@@ -64,62 +62,29 @@ function PillGroup<T extends string>({
   );
 }
 
-function CheckboxOption<T extends string>({
-  label,
-  active,
-  onClick,
-}: {
-  label: T;
-  active: boolean;
-  onClick: () => void;
-}) {
-  return (
-    <button type="button" onClick={onClick} className="flex items-center gap-2 text-base text-slate-800">
-      {label}
-      <span
-        className={`flex h-5 w-5 items-center justify-center rounded border ${active ? "border-slate-900 bg-slate-900" : "border-slate-400 bg-white"
-          }`}
-      >
-        {active && (
-          <svg viewBox="0 0 16 16" className="h-3.5 w-3.5 fill-none stroke-white" strokeWidth={2}>
-            <path d="M3.5 8.5l3 3 6-6.5" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        )}
-      </span>
-    </button>
-  );
-}
-
-function WhatsAppOfferForm({ packageName, packagePrice, onClose, whatsappNumber = DEFAULT_WHATSAPP }: WhatsAppOfferFormProps) {
+function WhatsAppOfferForm({
+  packageName,
+  packagePrice,
+  onClose,
+  whatsappNumber = DEFAULT_WHATSAPP,
+}: WhatsAppOfferFormProps) {
   const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [meeting, setMeeting] = useState<MeetingAnswer | null>(null);
-  const [publicOffice, setPublicOffice] = useState<PublicOfficeAnswer | null>(null);
   const [timeline, setTimeline] = useState<LaunchTimeline | null>(null);
   const [industry, setIndustry] = useState<string | null>(null);
   const [showErrors, setShowErrors] = useState(false);
   const [sending, setSending] = useState(false);
   const nameRef = useRef<HTMLInputElement | null>(null);
-  const phoneRef = useRef<HTMLInputElement | null>(null);
-  const meetingRef = useRef<HTMLDivElement | null>(null);
-  const publicOfficeRef = useRef<HTMLDivElement | null>(null);
   const industryRef = useRef<HTMLDivElement | null>(null);
 
-  const isValid = Boolean(name.trim() && phone.trim() && meeting && publicOffice && industry);
+  const isValid = Boolean(name.trim() && industry);
 
   const scrollToFirstInvalidField = () => {
     const firstInvalidField =
       !name.trim()
         ? nameRef.current
-        : !phone.trim()
-          ? phoneRef.current
-          : !meeting
-            ? meetingRef.current
-            : !publicOffice
-              ? publicOfficeRef.current
-              : !industry
-                ? industryRef.current
-                : null;
+        : !industry
+          ? industryRef.current
+          : null;
 
     firstInvalidField?.scrollIntoView({ behavior: "smooth", block: "center" });
   };
@@ -131,13 +96,14 @@ function WhatsAppOfferForm({ packageName, packagePrice, onClose, whatsappNumber 
       return;
     }
 
+    const interestLine = packageName
+      ? `Hi Skytech Ghana, I'd like to select the *${packageName}${packagePrice ? ` (${packagePrice})` : ""}*.\n`
+      : `Hi Skytech Ghana, I'd like to chat about your services.\n`;
+
     const lines = [
-      `Hi Skytech Ghana, I'd like to select the *${packageName} (${packagePrice})*.\n`,
+      interestLine,
       ``,
       `Name: ${name}`,
-      `Number: ${phone}`,
-      `Can we arrange a meeting: ${meeting}`,
-      `Public office address: ${publicOffice}`,
       timeline ? `Launch timeline: ${timeline}` : null,
       `Industry: ${industry}`,
     ].filter(Boolean);
@@ -191,44 +157,6 @@ function WhatsAppOfferForm({ packageName, packagePrice, onClose, whatsappNumber 
         </div>
 
         <div>
-          <input
-            ref={phoneRef}
-            type="text"
-            value={phone}
-            autoComplete="tel"
-            pattern="^\+?\d{7,15}$"
-            placeholder="Your Phone Number *"
-            onChange={(e) => setPhone(e.target.value)}
-            className={`w-full rounded-full border bg-transparent px-4 py-2.5 text-center outline-none focus:border-slate-400 ${errorRing(!phone.trim())}`}
-          />
-        </div>
-
-        <div>
-          <div ref={meetingRef}>
-            <p className="mb-2 text-base text-slate-800 text-center">
-              Can we arrange a meeting with you? <RequiredMark />
-            </p>
-            <div className="flex justify-center gap-8">
-              <CheckboxOption label="Yes" active={meeting === "Yes"} onClick={() => setMeeting("Yes")} />
-              <CheckboxOption label="No" active={meeting === "No"} onClick={() => setMeeting("No")} />
-            </div>
-          </div>
-        </div>
-
-        <div>
-          <div ref={publicOfficeRef}>
-            <p className="mb-2 text-base text-slate-800 text-center">
-              Do you have a public office address? <RequiredMark />
-            </p>
-            <div className="flex justify-center gap-6">
-              <CheckboxOption label="Yes" active={publicOffice === "Yes"} onClick={() => setPublicOffice("Yes")} />
-              <CheckboxOption label="No" active={publicOffice === "No"} onClick={() => setPublicOffice("No")} />
-              <CheckboxOption label="Start-up" active={publicOffice === "Start-up"} onClick={() => setPublicOffice("Start-up")} />
-            </div>
-          </div>
-        </div>
-
-        <div>
           <p className="mb-2 text-base text-slate-800 text-center">How soon do you plan to launch a website?</p>
           <PillGroup options={TIMELINES} value={timeline} onChange={setTimeline} />
         </div>
@@ -261,7 +189,7 @@ function WhatsAppOfferForm({ packageName, packagePrice, onClose, whatsappNumber 
           className={`flex-[2] rounded-lg py-3 font-semibold text-white transition-colors ${isValid && !sending ? "bg-emerald-600 hover:bg-emerald-700" : "cursor-not-allowed bg-emerald-300 text-white/80"
             }`}
         >
-          {sending ? "Sending..." : "Open on What&apos;s App"}
+          {sending ? "Sending..." : "Open on What's App"}
         </button>
       </div>
     </div>
