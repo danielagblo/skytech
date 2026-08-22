@@ -62,13 +62,28 @@ const Affiliate = mongoose.models.Affiliate || mongoose.model("Affiliate", Affil
 
 
 const partnersToSeed = [
-  { name: "Atlas Rent-A-Car", file: "Logo-DPCrdneV.png" },
-  { name: "K-Consult", file: "k-logo.png" },
-  { name: "Favicon Group", file: "favicon (1).png" },
-  { name: "Skytech Global", file: "logo.png" },
-  { name: "Skytech WebP", file: "logo.webp" },
-  { name: "Main Favicon", file: "favicon.png" },
-  { name: "Transparent Corp", file: "logo-transparent.png" },
+  { name: "Accord Industrial Services", file: "clients/accord-industrial.png" },
+  { name: "Atlas Rent-A-Car", file: "clients/atlas-rent-a-car.png" },
+  { name: "Star Pace Car Rental", file: "clients/star-pace.png" },
+  { name: "Kambel Consult", file: "clients/kambel-consult.png" },
+  { name: "Bricsky", file: "clients/bricsky.png" },
+  { name: "Très Jolie", file: "clients/tres-jolie.png" },
+  { name: "Finlays", file: "clients/finlays.png" },
+  { name: "Gold Recovery Ghana", file: "partners/gold-recovery-ghana.jpg" },
+  { name: "GHACEM", file: "partners/ghacem.png" },
+  { name: "Flour Mills of Ghana", file: "partners/flour-mills-ghana.png" },
+  { name: "Bunge Loders Croklaan", file: "partners/bunge-loders-croklaan.jpg" },
+  { name: "Afrotropic Cocoa", file: "partners/afrotropic-cocoa.jpg" },
+  { name: "Cocoa Touton", file: "partners/cocoa-touton.png" },
+  { name: "Meridian Port Services", file: "partners/meridian-port-services.jpg" },
+  { name: "GB Foods", file: "partners/gb-foods.png" },
+  { name: "SGS Laboratory", file: "partners/sgs-laboratory.png" },
+  { name: "VRA", file: "partners/vra.png" },
+  { name: "Dzata Cement", file: "partners/dzata-cement.png" },
+  { name: "GPHA", file: "partners/gpha.png" },
+  { name: "PSC Tema Shipyard", file: "partners/psc-tema-shipyard.png" },
+  { name: "Accra Marriott", file: "partners/accra-marriott.png" },
+  { name: "Contracta", file: "partners/contracta.jpg" },
 ];
 
 async function uploadToS3(filePath, partnerName) {

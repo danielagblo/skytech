@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { getSettings } from '../lib/settings';
 import { getPricing } from '../lib/pricing';
-import { getAffiliates } from '../lib/affiliates';
+import { DEFAULT_PARTNERS } from '../lib/defaultPartners';
 import { getTestimonials } from '../lib/testimonials';
 import { getBlogPosts } from '../admin/blog-actions';
 import { getFAQs } from '../lib/faqs';
@@ -68,8 +68,7 @@ export default async function Home() {
   const testimonialsData = await getTestimonials();
   const testimonials = testimonialsData.length > 0 ? testimonialsData : [];
   const faqs = await getFAQs();
-  const partnersData = await getAffiliates();
-  const allPartners = (partnersData || []).filter((p) => p?.logoUrl || p?.name);
+  const allPartners = DEFAULT_PARTNERS.filter((p) => p?.logoUrl || p?.name);
   const pricing = await getPricing();
   const posts = await getAllBlogPosts();
   const latestPosts = posts.slice(0, 3);
@@ -162,8 +161,8 @@ export default async function Home() {
         <div className="section-shell mb-10 text-center">
           <span className="section-tag">Our Clients</span>
           <p className="section-title mt-3 text-balance">
-            Trusted by over{" "}
-            <span className="text-brand-600">1000+ brands</span> across two continents
+            Projects delivered for leading brands, trusted by industry leaders across{" "}
+            <span className="text-brand-600">Ghana and West Africa</span>
           </p>
         </div>
         <ClientsCarousel partners={allPartners} />

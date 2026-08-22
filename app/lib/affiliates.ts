@@ -3,6 +3,7 @@ import * as mysql from "./mysql";
 import { deleteImage } from "./storage";
 import dbConnect from "./mongodb";
 import Affiliate from "../models/Affiliate";
+import { DEFAULT_PARTNERS } from "./defaultPartners";
 
 export interface IAffiliate {
   _id?: string;
@@ -61,10 +62,11 @@ async function saveAffiliatesMysql(affiliates: IAffiliate[]): Promise<void> {
 export async function getAffiliates(): Promise<IAffiliate[]> {
   if (isMysql()) {
     try {
-      return await getAffiliatesMysql();
+      const affiliates = await getAffiliatesMysql();
+      return affiliates.length > 0 ? affiliates : DEFAULT_PARTNERS;
     } catch (error) {
       console.error("Error fetching affiliates (mysql):", error);
-      return [];
+      return DEFAULT_PARTNERS;
     }
   }
   try {
@@ -73,13 +75,13 @@ export async function getAffiliates(): Promise<IAffiliate[]> {
     
     if (!affiliates || affiliates.length === 0) {
       console.log("No affiliates found in database.");
-      return [];
+      return DEFAULT_PARTNERS;
     }
 
     return JSON.parse(JSON.stringify(affiliates));
   } catch (error) {
     console.error("Error fetching affiliates:", error);
-    return [];
+    return DEFAULT_PARTNERS;
   }
 }
 
