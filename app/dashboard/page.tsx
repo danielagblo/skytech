@@ -1,65 +1,98 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 
+interface TrafficSummary {
+  totalVisitors: number;
+  totalPageViews: number;
+  todayVisitors: number;
+  todayPageViews: number;
+  totalInteractions: number;
+  bounceRate: number;
+  sources: Array<{ source: string; count: number }>;
+  pages: Array<{ page: string; count: number }>;
+}
+
 export default function DashboardPage() {
+  const [traffic, setTraffic] = useState<TrafficSummary | null>(null);
+
+  useEffect(() => {
+    let active = true;
+    (async () => {
+      try {
+        const res = await fetch('/api/analytics');
+        const data = await res.json();
+        if (active) setTraffic(data);
+      } catch {
+        // keep null
+      }
+    })();
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const topSource = traffic?.sources?.[0]?.source || '—';
+  const topPage = traffic?.pages?.[0]?.page || '—';
+
   return (
     <div className="space-y-8">
-      {/* Header */}
       <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-8 border border-blue-100 shadow-sm">
-        <h1 className="text-4xl font-extrabold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Dashboard Overview</h1>
-        <p className="text-slate-600 mt-3 text-lg">Welcome back! Here's what's happening with your site.</p>
+        <h1 className="text-4xl font-extrabold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+          Dashboard Overview
+        </h1>
+        <p className="text-slate-600 mt-3 text-lg">Welcome back! Here&apos;s what&apos;s happening with your site.</p>
       </div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="stat-card group cursor-pointer">
-          <div className="flex items-center justify-between mb-3">
-            <div className="text-slate-500 text-sm font-semibold uppercase tracking-wide">Total Pages</div>
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center text-xl shadow-sm group-hover:shadow-md transition-shadow">📄</div>
-          </div>
-          <div className="text-4xl font-extrabold text-slate-900 mt-2">4</div>
-          <p className="text-sm text-slate-500 mt-3">Home, About, Services, Contact</p>
-          <div className="mt-4 pt-4 border-t border-slate-100">
-            <span className="text-xs text-green-600 font-semibold">✓ All Active</span>
-          </div>
+      <div>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl font-bold text-slate-900">Website Traffic</h2>
+          <Link href="/dashboard/analytics" className="text-sm font-semibold text-blue-600 hover:text-blue-700">
+            View full analytics →
+          </Link>
         </div>
-        <div className="stat-card group cursor-pointer">
-          <div className="flex items-center justify-between mb-3">
-            <div className="text-slate-500 text-sm font-semibold uppercase tracking-wide">Team Members</div>
-            <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center text-xl shadow-sm group-hover:shadow-md transition-shadow">👥</div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="stat-card">
+            <div className="flex items-center justify-between mb-3">
+              <div className="text-slate-500 text-sm font-semibold uppercase tracking-wide">Visitors</div>
+              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center text-xl shadow-sm">👥</div>
+            </div>
+            <div className="text-4xl font-extrabold text-slate-900 mt-2">{traffic?.totalVisitors ?? '—'}</div>
+            <p className="text-sm text-slate-500 mt-3">{traffic?.todayVisitors ?? 0} today</p>
           </div>
-          <div className="text-4xl font-extrabold text-slate-900 mt-2">3</div>
-          <p className="text-sm text-slate-500 mt-3">Core team leads</p>
-          <div className="mt-4 pt-4 border-t border-slate-100">
-            <span className="text-xs text-blue-600 font-semibold">→ View All</span>
+          <div className="stat-card">
+            <div className="flex items-center justify-between mb-3">
+              <div className="text-slate-500 text-sm font-semibold uppercase tracking-wide">Page Views</div>
+              <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-lg flex items-center justify-center text-xl shadow-sm">👁️</div>
+            </div>
+            <div className="text-4xl font-extrabold text-slate-900 mt-2">{traffic?.totalPageViews ?? '—'}</div>
+            <p className="text-sm text-slate-500 mt-3">{traffic?.todayPageViews ?? 0} today</p>
           </div>
-        </div>
-        <div className="stat-card group cursor-pointer">
-          <div className="flex items-center justify-between mb-3">
-            <div className="text-slate-500 text-sm font-semibold uppercase tracking-wide">Services</div>
-            <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-lg flex items-center justify-center text-xl shadow-sm group-hover:shadow-md transition-shadow">⚙️</div>
+          <div className="stat-card">
+            <div className="flex items-center justify-between mb-3">
+              <div className="text-slate-500 text-sm font-semibold uppercase tracking-wide">Interactions</div>
+              <div className="w-10 h-10 bg-gradient-to-br from-violet-500 to-violet-600 rounded-lg flex items-center justify-center text-xl shadow-sm">🖱️</div>
+            </div>
+            <div className="text-4xl font-extrabold text-slate-900 mt-2">{traffic?.totalInteractions ?? '—'}</div>
+            <p className="text-sm text-slate-500 mt-3">Clicks, forms, scrolls</p>
           </div>
-          <div className="text-4xl font-extrabold text-slate-900 mt-2">5</div>
-          <p className="text-sm text-slate-500 mt-3">Active service offerings</p>
-          <div className="mt-4 pt-4 border-t border-slate-100">
-            <span className="text-xs text-emerald-600 font-semibold">✓ Published</span>
-          </div>
-        </div>
-        <div className="stat-card group cursor-pointer">
-          <div className="flex items-center justify-between mb-3">
-            <div className="text-slate-500 text-sm font-semibold uppercase tracking-wide">Testimonials</div>
-            <div className="w-10 h-10 bg-gradient-to-br from-amber-500 to-amber-600 rounded-lg flex items-center justify-center text-xl shadow-sm group-hover:shadow-md transition-shadow">⭐</div>
-          </div>
-          <div className="text-4xl font-extrabold text-slate-900 mt-2">6</div>
-          <p className="text-sm text-slate-500 mt-3">Client testimonials</p>
-          <div className="mt-4 pt-4 border-t border-slate-100">
-            <span className="text-xs text-amber-600 font-semibold">★ 5.0 Avg</span>
+          <div className="stat-card">
+            <div className="flex items-center justify-between mb-3">
+              <div className="text-slate-500 text-sm font-semibold uppercase tracking-wide">Top Source</div>
+              <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-lg flex items-center justify-center text-xl shadow-sm">🌐</div>
+            </div>
+            <div className="text-2xl font-extrabold text-slate-900 mt-2 truncate capitalize">{topSource}</div>
+            <p className="text-sm text-slate-500 mt-3 truncate">Top page: {topPage}</p>
+            <div className="mt-4 pt-4 border-t border-slate-100">
+              <span className="text-xs text-slate-600 font-semibold">
+                Bounce {traffic?.bounceRate ?? 0}%
+              </span>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Quick Actions */}
       <div className="bg-white rounded-2xl border border-slate-200 p-8 shadow-lg">
         <div className="flex items-center justify-between mb-6">
           <div>
@@ -69,6 +102,16 @@ export default function DashboardPage() {
           <span className="text-3xl">⚡</span>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <Link
+            href="/dashboard/analytics"
+            className="group p-6 border-2 border-slate-200 rounded-xl hover:border-indigo-500 hover:shadow-lg transition-all duration-200 hover:-translate-y-1 bg-gradient-to-br from-white to-indigo-50/30"
+          >
+            <div className="w-12 h-12 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-xl flex items-center justify-center text-2xl mb-4 shadow-sm group-hover:shadow-md transition-shadow">📈</div>
+            <div className="font-bold text-slate-900 text-lg group-hover:text-indigo-600 transition-colors">Traffic & Analytics</div>
+            <p className="text-sm text-slate-600 mt-2">Views, sources, and visitor behavior</p>
+            <div className="mt-4 text-xs text-indigo-600 font-semibold opacity-0 group-hover:opacity-100 transition-opacity">→ Open Analytics</div>
+          </Link>
+
           <Link
             href="/dashboard/hero"
             className="group p-6 border-2 border-slate-200 rounded-xl hover:border-blue-500 hover:shadow-lg transition-all duration-200 hover:-translate-y-1 bg-gradient-to-br from-white to-blue-50/30"
@@ -107,16 +150,6 @@ export default function DashboardPage() {
             <div className="font-bold text-slate-900 text-lg group-hover:text-amber-600 transition-colors">Blog</div>
             <p className="text-sm text-slate-600 mt-2">Manage blog posts</p>
             <div className="mt-4 text-xs text-amber-600 font-semibold opacity-0 group-hover:opacity-100 transition-opacity">→ Go to Blog</div>
-          </Link>
-
-          <Link
-            href="/dashboard/team"
-            className="group p-6 border-2 border-slate-200 rounded-xl hover:border-slate-500 hover:shadow-lg transition-all duration-200 hover:-translate-y-1 bg-gradient-to-br from-white to-slate-50/30"
-          >
-            <div className="w-12 h-12 bg-gradient-to-br from-slate-500 to-slate-600 rounded-xl flex items-center justify-center text-2xl mb-4 shadow-sm group-hover:shadow-md transition-shadow">👥</div>
-            <div className="font-bold text-slate-900 text-lg group-hover:text-slate-600 transition-colors">Team</div>
-            <p className="text-sm text-slate-600 mt-2">Manage team members</p>
-            <div className="mt-4 text-xs text-slate-600 font-semibold opacity-0 group-hover:opacity-100 transition-opacity">→ Go to Team</div>
           </Link>
 
           <Link
