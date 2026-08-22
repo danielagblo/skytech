@@ -9,7 +9,6 @@ function NavigationMobile({ className }: { className?: string }) {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
   const currentPath = usePathname();
-  const isLandingPage = currentPath === "/landing";
 
   useEffect(() => {
     if (!isOpen) return;
@@ -62,31 +61,29 @@ function NavigationMobile({ className }: { className?: string }) {
             }}
           />
 
-          {!isLandingPage && (
-            <button
-              type="button"
-              aria-label={isOpen ? "Close menu" : "Open menu"}
-              aria-expanded={isOpen}
-              onClick={() => setIsOpen((v) => !v)}
-              className="relative ml-auto flex h-10 w-10 flex-col items-center justify-center gap-1.5"
-            >
-              <span
-                className={`h-0.5 w-6 bg-white transition-all duration-300 ${
-                  isOpen ? "translate-y-2 rotate-45" : ""
-                }`}
-              />
-              <span
-                className={`h-0.5 w-6 bg-white transition-all duration-300 ${
-                  isOpen ? "opacity-0" : "opacity-100"
-                }`}
-              />
-              <span
-                className={`h-0.5 w-6 bg-white transition-all duration-300 ${
-                  isOpen ? "-translate-y-2 -rotate-45" : ""
-                }`}
-              />
-            </button>
-          )}
+          <button
+            type="button"
+            aria-label={isOpen ? "Close menu" : "Open menu"}
+            aria-expanded={isOpen}
+            onClick={() => setIsOpen((v) => !v)}
+            className="relative ml-auto flex h-10 w-10 flex-col items-center justify-center gap-1.5"
+          >
+            <span
+              className={`h-0.5 w-6 bg-white transition-all duration-300 ${
+                isOpen ? "translate-y-2 rotate-45" : ""
+              }`}
+            />
+            <span
+              className={`h-0.5 w-6 bg-white transition-all duration-300 ${
+                isOpen ? "opacity-0" : "opacity-100"
+              }`}
+            />
+            <span
+              className={`h-0.5 w-6 bg-white transition-all duration-300 ${
+                isOpen ? "-translate-y-2 -rotate-45" : ""
+              }`}
+            />
+          </button>
         </div>
       </div>
 
