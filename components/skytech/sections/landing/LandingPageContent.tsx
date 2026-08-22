@@ -7,16 +7,6 @@ import BottomSheet from "@/components/skytech/ui/BottomSheet";
 import WhatsAppOfferForm from "@/components/skytech/sections/landing/WhatsAppOfferForm";
 import ClientsCarousel from "@/components/skytech/sections/home/ClientsCarousel";
 
-const GHC_USD_MULTIPLIER = 3;
-
-function parseAmount(value: string | undefined): number {
-  return parseInt(String(value || "0").replace(/,/g, ""), 10) || 0;
-}
-
-function formatAmount(value: number): string {
-  return value.toLocaleString("en-US");
-}
-
 export interface Package {
   name: string;
   audience: string;
@@ -164,23 +154,19 @@ export default function LandingPageContent({
     });
 
     const isUSD = currency === "USD";
-    const usdAmount = parseAmount(pkg.usd);
-    const usdRenewal = pkg.renewal ? Math.round(parseAmount(pkg.renewal) / 14) : 0;
-
-    const priceStr = isUSD
-      ? `USD ${pkg.usd || "0"}`
-      : `GHC ${formatAmount(usdAmount * GHC_USD_MULTIPLIER)}`;
+    const priceStr = isUSD ? `USD ${pkg.usd || "0"}` : `GHC ${pkg.price || "0"}`;
 
     let renewalStr = "";
     if (pkg.renewal) {
       if (isUSD) {
-        renewalStr = usdRenewal
-          ? `Renews only at USD ${formatAmount(usdRenewal)}/yr`
-          : pkg.renewal;
+        const numeric = parseInt(pkg.renewal.replace(/,/g, ""), 10);
+        if (!isNaN(numeric)) {
+          renewalStr = `Renews only at USD ${Math.round(numeric / 14)}/yr`;
+        } else {
+          renewalStr = pkg.renewal;
+        }
       } else {
-        renewalStr = usdRenewal
-          ? `Renews only at GHC ${formatAmount(usdRenewal * GHC_USD_MULTIPLIER)}/yr`
-          : `Renews only at GHC ${pkg.renewal}/yr`;
+        renewalStr = `Renews only at GHC ${pkg.renewal}/yr`;
       }
     }
 
