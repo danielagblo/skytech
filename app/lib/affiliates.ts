@@ -16,25 +16,57 @@ export interface IAffiliate {
   visible?: boolean;
 }
 
+function buildAffiliateSelect(columns: Set<string>): string {
+  const fields = ["id", "name", "logo_url", "sort_order"];
+  if (columns.has("col_span")) fields.push("col_span");
+  if (columns.has("row_span")) fields.push("row_span");
+  if (columns.has("logo_scale")) fields.push("logo_scale");
+  if (columns.has("visible")) fields.push("visible");
+  return fields.join(", ");
+}
+
+function mapAffiliateRow(r: Record<string, unknown>): IAffiliate {
+  return {
+    _id: r.id as string,
+    name: (r.name as string) || "",
+    logoUrl: (r.logo_url as string) || "",
+    order: (r.sort_order as number) ?? 0,
+    colSpan: r.col_span !== undefined ? Number(r.col_span) : 1,
+    rowSpan: r.row_span !== undefined ? Number(r.row_span) : 1,
+    logoScale: r.logo_scale !== undefined ? Number(r.logo_scale) : 100,
+    visible: r.visible !== undefined ? Boolean(r.visible) : true,
+  };
+}
+
+function buildAffiliateInsert(
+  a: IAffiliate,
+  idx: number,
+  columns: Set<string>,
+): Record<string, unknown> {
+  const record: Record<string, unknown> = {
+    name: a.name,
+    logo_url: a.logoUrl,
+    sort_order: idx,
+  };
+  if (columns.has("col_span")) record.col_span = a.colSpan ?? 1;
+  if (columns.has("row_span")) record.row_span = a.rowSpan ?? 1;
+  if (columns.has("logo_scale")) record.logo_scale = a.logoScale ?? 100;
+  if (columns.has("visible")) record.visible = a.visible !== false ? 1 : 0;
+  return record;
+}
+
 async function getAffiliatesMysql(): Promise<IAffiliate[]> {
   await mysql.initSchema();
+  const columns = await mysql.getTableColumns("affiliates");
   const rows = await mysql.query(
-    "SELECT id, name, logo_url, sort_order, col_span, row_span, logo_scale, visible FROM affiliates ORDER BY sort_order ASC, created_at DESC",
+    `SELECT ${buildAffiliateSelect(columns)} FROM affiliates ORDER BY sort_order ASC, created_at DESC`,
   );
-  return rows.map((r) => ({
-    _id: r.id,
-    name: r.name || "",
-    logoUrl: r.logo_url || "",
-    order: r.sort_order ?? 0,
-    colSpan: r.col_span ?? 1,
-    rowSpan: r.row_span ?? 1,
-    logoScale: r.logo_scale ?? 100,
-    visible: r.visible !== undefined ? Boolean(r.visible) : true,
-  }));
+  return rows.map(mapAffiliateRow);
 }
 
 async function saveAffiliatesMysql(affiliates: IAffiliate[]): Promise<void> {
   await mysql.initSchema();
+  const columns = await mysql.getTableColumns("affiliates");
 
   const existing = await mysql.query("SELECT id, logo_url FROM affiliates");
   const newUrls = new Set(affiliates.map((a) => a.logoUrl));
@@ -50,15 +82,7 @@ async function saveAffiliatesMysql(affiliates: IAffiliate[]): Promise<void> {
   await mysql.clear("affiliates");
   for (let idx = 0; idx < validAffiliates.length; idx++) {
     const a = validAffiliates[idx];
-    await mysql.insert("affiliates", {
-      name: a.name,
-      logo_url: a.logoUrl,
-      sort_order: idx,
-      col_span: a.colSpan ?? 1,
-      row_span: a.rowSpan ?? 1,
-      logo_scale: a.logoScale ?? 100,
-      visible: a.visible !== false ? 1 : 0,
-    });
+    await mysql.insert("affiliates", buildAffiliateInsert(a, idx, columns));
   }
 }
 

@@ -9,7 +9,11 @@ let cached: {
 } = (global as any).__skytech_mysql || { promise: null, pool: null };
 (global as any).__skytech_mysql = cached;
 
-let schemaInitialized = false;
+export async function getTableColumns(table: string): Promise<Set<string>> {
+  await initSchema();
+  const rows = await query(`SHOW COLUMNS FROM \`${table}\``);
+  return new Set(rows.map((r) => String(r.Field)));
+}
 
 export function newId(): string {
   return randomUUID();
@@ -114,7 +118,6 @@ let schemaOnce: Promise<void> | null = null;
 
 export async function initSchema(): Promise<void> {
   if (process.env.DB_TYPE !== "mysql") return;
-  if (schemaInitialized) return;
   if (!schemaOnce) {
     schemaOnce = (async () => {
       const pool = await getPool();
@@ -126,10 +129,10 @@ export async function initSchema(): Promise<void> {
       } finally {
         conn.release();
       }
-      schemaInitialized = true;
     })();
   }
   await schemaOnce;
+  // Always run — idempotent ALTERs; must not skip after first initSchema call
   await upgradeSchema();
 }
 
@@ -188,19 +191,19 @@ async function upgradeSchema(): Promise<void> {
   // Affiliates grid/layout columns (added after initial production deploy)
   await addColumnIgnoreDuplicate(
     pool,
-    "ALTER TABLE affiliates ADD COLUMN col_span INT DEFAULT 1 AFTER sort_order",
+    "ALTER TABLE affiliates ADD COLUMN col_span INT NOT NULL DEFAULT 1",
   );
   await addColumnIgnoreDuplicate(
     pool,
-    "ALTER TABLE affiliates ADD COLUMN row_span INT DEFAULT 1 AFTER col_span",
+    "ALTER TABLE affiliates ADD COLUMN row_span INT NOT NULL DEFAULT 1",
   );
   await addColumnIgnoreDuplicate(
     pool,
-    "ALTER TABLE affiliates ADD COLUMN logo_scale INT DEFAULT 100 AFTER row_span",
+    "ALTER TABLE affiliates ADD COLUMN logo_scale INT NOT NULL DEFAULT 100",
   );
   await addColumnIgnoreDuplicate(
     pool,
-    "ALTER TABLE affiliates ADD COLUMN visible TINYINT(1) DEFAULT 1 AFTER logo_scale",
+    "ALTER TABLE affiliates ADD COLUMN visible TINYINT(1) NOT NULL DEFAULT 1",
   );
 }
 
