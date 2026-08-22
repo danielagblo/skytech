@@ -18,6 +18,21 @@ interface Submission {
   submittedAt: string;
 }
 
+function getApplicationMonthKey(submittedAt: string): string | null {
+  if (!submittedAt) return null;
+  const date = new Date(submittedAt);
+  if (Number.isNaN(date.getTime())) return null;
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  return `${year}-${month}`;
+}
+
+function formatApplicationMonth(key: string): string {
+  const [year, month] = key.split("-");
+  const date = new Date(Number(year), Number(month) - 1, 1);
+  return date.toLocaleDateString("en-US", { month: "long", year: "numeric" });
+}
+
 export default function InternshipSubmissionsPage() {
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [loading, setLoading] = useState(true);
@@ -27,6 +42,7 @@ export default function InternshipSubmissionsPage() {
   const [filterLevel, setFilterLevel] = useState('All');
   const [filterDuration, setFilterDuration] = useState('All');
   const [filterStartDate, setFilterStartDate] = useState('All');
+  const [filterApplicationMonth, setFilterApplicationMonth] = useState('All');
   const [sortField, setSortField] = useState<string>('submittedAt');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
@@ -131,6 +147,16 @@ export default function InternshipSubmissionsPage() {
   const levels = ['All', ...Array.from(new Set(submissions.map(s => s.level).filter(Boolean))).sort()];
   const durations = ['All', ...Array.from(new Set(submissions.map(s => s.duration).filter(Boolean))).sort()];
   const startDates = ['All', ...Array.from(new Set(submissions.map(s => s.startDate).filter(Boolean))).sort()];
+  const applicationMonths = [
+    'All',
+    ...Array.from(
+      new Set(
+        submissions
+          .map((s) => getApplicationMonthKey(s.submittedAt))
+          .filter((value): value is string => Boolean(value))
+      )
+    ).sort((a, b) => b.localeCompare(a)),
+  ];
 
   const filteredSubmissions = submissions.filter(s => {
     const matchesSearch = 
@@ -144,8 +170,11 @@ export default function InternshipSubmissionsPage() {
     const matchesLevel = filterLevel === 'All' || s.level === filterLevel;
     const matchesDuration = filterDuration === 'All' || s.duration === filterDuration;
     const matchesStartDate = filterStartDate === 'All' || s.startDate === filterStartDate;
+    const matchesApplicationMonth =
+      filterApplicationMonth === 'All' ||
+      getApplicationMonthKey(s.submittedAt) === filterApplicationMonth;
 
-    return matchesSearch && matchesProgram && matchesLevel && matchesDuration && matchesStartDate;
+    return matchesSearch && matchesProgram && matchesLevel && matchesDuration && matchesStartDate && matchesApplicationMonth;
   }).sort((a, b) => {
     let comparison = 0;
     const field = sortField as keyof Submission;
@@ -218,7 +247,7 @@ export default function InternshipSubmissionsPage() {
 
           {/* Clear Button */}
           <div className="lg:col-span-3 flex justify-end pb-1">
-            { (searchTerm || filterProgram !== 'All' || filterLevel !== 'All' || filterDuration !== 'All' || filterStartDate !== 'All' || sortField !== 'submittedAt' || sortOrder !== 'desc') && (
+            { (searchTerm || filterProgram !== 'All' || filterLevel !== 'All' || filterDuration !== 'All' || filterStartDate !== 'All' || filterApplicationMonth !== 'All' || sortField !== 'submittedAt' || sortOrder !== 'desc') && (
               <button 
                 onClick={() => {
                   setSearchTerm('');
@@ -226,6 +255,7 @@ export default function InternshipSubmissionsPage() {
                   setFilterLevel('All');
                   setFilterDuration('All');
                   setFilterStartDate('All');
+                  setFilterApplicationMonth('All');
                   setSortField('submittedAt');
                   setSortOrder('desc');
                 }}
@@ -238,7 +268,21 @@ export default function InternshipSubmissionsPage() {
         </div>
 
         {/* Filter Dropdowns Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4 border-t border-slate-100">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 pt-4 border-t border-slate-100">
+          <div>
+            <label className="block text-xs font-semibold text-slate-500 mb-2 uppercase tracking-wider">Application Month</label>
+            <select
+              value={filterApplicationMonth}
+              onChange={(e) => setFilterApplicationMonth(e.target.value)}
+              className="w-full px-3 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm bg-white"
+            >
+              {applicationMonths.map((month) => (
+                <option key={month} value={month}>
+                  {month === 'All' ? 'All Months' : formatApplicationMonth(month)}
+                </option>
+              ))}
+            </select>
+          </div>
           <div>
             <label className="block text-xs font-semibold text-slate-500 mb-2 uppercase tracking-wider">Program</label>
             <select
