@@ -5,6 +5,7 @@ import Image from "next/image";
 
 import BottomSheet from "@/components/skytech/ui/BottomSheet";
 import WhatsAppOfferForm from "@/components/skytech/sections/landing/WhatsAppOfferForm";
+import ClientsCarousel from "@/components/skytech/sections/home/ClientsCarousel";
 
 const SERVICES: string[] = [
   "Website design",
@@ -24,6 +25,29 @@ export interface Package {
   renewal: string;
   featured?: boolean;
 }
+
+export interface PricingPackageData {
+  name: string;
+  tier: string;
+  price: string;
+  usd: string;
+  renewal: string;
+  interval?: string;
+  featured?: boolean;
+  highlights: string[];
+}
+
+export interface PricingCategoryData {
+  category: string;
+  label: string;
+  packages: PricingPackageData[];
+}
+
+const CATEGORY_LABELS: Record<string, string> = {
+  marketing: "Marketing Rates",
+  mobile: "Mobile App Rates",
+  web: "Website Rates",
+};
 
 function PackageCard({ pkg, onSelect }: { pkg: Package; onSelect: (pkg: Package) => void }) {
   return (
@@ -80,9 +104,9 @@ function PackageCard({ pkg, onSelect }: { pkg: Package; onSelect: (pkg: Package)
           <div className="relative">
             <div className="flex items-center justify-end gap-3 mb-2">
               <div className="flex-1 h-px bg-[#1E5AC8]" />
-              <span className="text-4xl font-black text-[#1E5AC8]">GHC {pkg.price.split(" ")[1]}</span>
+              <span className="text-4xl font-black text-[#1E5AC8]">{pkg.price}</span>
             </div>
-            <p className="text-xs text-slate-600 text-right leading-5 whitespace-pre-line">{pkg.renewal}</p>
+            {pkg.renewal && <p className="text-xs text-slate-600 text-right leading-5 whitespace-pre-line">{pkg.renewal}</p>}
             <p className="text-xs text-right text-slate-600">Free regular maintenance</p>
             <p className="text-xs text-right text-slate-600">No Hidden Fees</p>
           </div>
@@ -106,19 +130,76 @@ function PackageCard({ pkg, onSelect }: { pkg: Package; onSelect: (pkg: Package)
   );
 }
 
-export default function LandingPageContent({ packages }: { packages: Package[] }) {
+interface Partner {
+  name: string;
+  logoUrl: string;
+  colSpan?: number;
+  rowSpan?: number;
+  logoScale?: number;
+  visible?: boolean;
+}
+
+export default function LandingPageContent({
+  categories,
+  partners,
+}: {
+  categories: PricingCategoryData[];
+  partners: Partner[];
+}) {
+  // Try to find first category with packages to make it active, default to "web"
+  const defaultCategory = categories.find(c => c.packages && c.packages.length > 0)?.category || "web";
+  const [activeCategory, setActiveCategory] = useState<string>(defaultCategory);
+  const [currency, setCurrency] = useState<"GHC" | "USD">("GHC");
   const [selectedPackage, setSelectedPackage] = useState<Package | null>(null);
+
+  const activeCategoryData = categories.find((cat) => cat.category === activeCategory);
+
+  const packagesToDisplay: Package[] = (activeCategoryData?.packages || []).map((pkg) => {
+    const features = (pkg.highlights || []).map((h) => {
+      if (h.endsWith(" [EXCLUDED]")) {
+        return { text: h.replace(" [EXCLUDED]", ""), excluded: true };
+      }
+      return { text: h };
+    });
+
+    const isUSD = currency === "USD";
+    const priceStr = isUSD ? `USD ${pkg.usd || "0"}` : `GHC ${pkg.price || "0"}`;
+    
+    let renewalStr = "";
+    if (pkg.renewal) {
+      if (isUSD) {
+        const numeric = parseInt(pkg.renewal.replace(/,/g, ""), 10);
+        if (!isNaN(numeric)) {
+          renewalStr = `Renews only at USD ${Math.round(numeric / 14)}/yr`;
+        } else {
+          renewalStr = pkg.renewal;
+        }
+      } else {
+        renewalStr = `Renews only at GHC ${pkg.renewal}/yr`;
+      }
+    }
+
+    return {
+      name: pkg.name,
+      audience: pkg.tier || "Skytech Ghana",
+      timeline: pkg.interval || "1 - 2 weeks",
+      features,
+      price: priceStr,
+      renewal: renewalStr,
+      featured: !!pkg.featured,
+    };
+  });
 
   return (
     <main className="min-h-screen overflow-x-hidden bg-slate-50">
-      <section className="relative">
-        <div className="relative w-full h-auto aspect-[3/1]">
+      <section className="relative w-full bg-slate-950 pt-[80px] md:pt-[110px]">
+        <div className="relative h-64 w-full">
           <Image
             src="/images/images/landingPageBanner.png"
             alt="Skytech Ghana"
             fill
             priority
-            className="object-cover"
+            className="object-cover object-top"
           />
         </div>
         <div className="bg-[#2f59c1] px-1 py-2 text-center whitespace-nowrap">
@@ -142,16 +223,8 @@ export default function LandingPageContent({ packages }: { packages: Package[] }
 
       <hr className="mt-4 mb-1 border-gray-400 border w-full" />
 
-      <section className="mx-auto max-w-4xl sm:px-6">
-        <Image
-          src="/images/images/sponsors/sponsorsBigPicture.png"
-          alt="Sponsors"
-          width={1200}
-          height={400}
-          className="w-full"
-        />
-
-        <div className="mt-2 text-center">
+      <section className="mx-auto max-w-6xl py-6">
+        <div className="text-center mb-6">
           <p className="text-gray-700">
             We&apos;ve served many happy clients in 2+ countries
             <br />
@@ -159,6 +232,7 @@ export default function LandingPageContent({ packages }: { packages: Package[] }
           </p>
           <h3 className="my-3 text-lg font-bold tracking-wide text-slate-900">LEGACY CLIENTS</h3>
         </div>
+        <ClientsCarousel partners={partners} />
       </section>
 
       <section
@@ -176,13 +250,59 @@ export default function LandingPageContent({ packages }: { packages: Package[] }
             <span className="max-sm:whitespace-nowrap"> our WhatsApp Chat</span>
           </h2>
 
-          <div className="mx-auto grid max-w-md grid-cols-1 gap-8 md:max-w-none md:grid-cols-3 md:items-start md:gap-6">
-            {packages.map((pkg, i) => (
-              <div key={`${pkg.name}-${i}`} className="w-full">
-                <PackageCard pkg={pkg} onSelect={setSelectedPackage} />
-              </div>
-            ))}
+          {/* Controls Bar */}
+          <div className="mx-auto mb-10 flex max-w-md flex-col gap-6 sm:flex-row sm:items-center sm:justify-between md:max-w-none border-b border-white/20 pb-4">
+            {/* Category tabs */}
+            <div className="flex flex-wrap items-center gap-6">
+              {["web", "mobile", "marketing"].map((catKey) => (
+                <button
+                  key={catKey}
+                  type="button"
+                  onClick={() => setActiveCategory(catKey)}
+                  className={`pb-2 text-sm font-semibold transition-all duration-300 border-b-2 -mb-[18px] relative ${
+                    activeCategory === catKey
+                      ? "border-white text-white"
+                      : "border-transparent text-white/60 hover:text-white hover:border-white/40"
+                  }`}
+                >
+                  {CATEGORY_LABELS[catKey]}
+                </button>
+              ))}
+            </div>
+
+            {/* Currency toggle */}
+            <div className="flex items-center gap-4">
+              {(["GHC", "USD"] as const).map((c) => (
+                <button
+                  key={c}
+                  type="button"
+                  onClick={() => setCurrency(c)}
+                  className={`pb-2 text-sm font-semibold uppercase transition-all duration-300 border-b-2 -mb-[18px] ${
+                    currency === c
+                      ? "border-white text-white"
+                      : "border-transparent text-white/60 hover:text-white hover:border-white/40"
+                  }`}
+                >
+                  {c}
+                </button>
+              ))}
+            </div>
           </div>
+
+          {packagesToDisplay.length === 0 ? (
+            <div className="text-center py-16 text-white bg-white/5 rounded-lg border border-white/10 backdrop-blur-sm">
+              <p className="text-lg font-medium text-white/80">No packages available for this category yet.</p>
+              <p className="text-sm text-white/60 mt-1">Please contact us on WhatsApp to discuss custom packages.</p>
+            </div>
+          ) : (
+            <div className="mx-auto grid max-w-md grid-cols-1 gap-8 md:max-w-none md:grid-cols-3 md:items-start md:gap-6">
+              {packagesToDisplay.map((pkg, i) => (
+                <div key={`${pkg.name}-${i}`} className="w-full">
+                  <PackageCard pkg={pkg} onSelect={setSelectedPackage} />
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 

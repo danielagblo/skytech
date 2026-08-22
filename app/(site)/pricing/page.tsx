@@ -15,12 +15,12 @@ export default async function PricingPage() {
     <div className="text-xl">
       {/* Banner Wrapper: dark background matching navbar to prevent white gaps, with top padding so image starts below navbar */}
       <div className="relative w-full bg-slate-950 pt-[60px] md:pt-[80px]">
-        <div className="relative h-64 md:h-80 w-full">
+        <div className="relative h-64 w-full">
           <Image
             src="/images/images/AboutBanner.png"
             alt="Pricing"
             fill
-            className="object-cover"
+            className="object-cover object-top"
             priority
           />
         </div>
