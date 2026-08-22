@@ -7,14 +7,15 @@ import BottomSheet from "@/components/skytech/ui/BottomSheet";
 import WhatsAppOfferForm from "@/components/skytech/sections/landing/WhatsAppOfferForm";
 import ClientsCarousel from "@/components/skytech/sections/home/ClientsCarousel";
 
-const SERVICES: string[] = [
-  "Website design",
-  "Mobile app design",
-  "Custom software",
-  "CCTV Installations",
-  "Electric fencing",
-  "Car tracking",
-];
+const GHC_USD_MULTIPLIER = 3;
+
+function parseAmount(value: string | undefined): number {
+  return parseInt(String(value || "0").replace(/,/g, ""), 10) || 0;
+}
+
+function formatAmount(value: number): string {
+  return value.toLocaleString("en-US");
+}
 
 export interface Package {
   name: string;
@@ -163,19 +164,23 @@ export default function LandingPageContent({
     });
 
     const isUSD = currency === "USD";
-    const priceStr = isUSD ? `USD ${pkg.usd || "0"}` : `GHC ${pkg.price || "0"}`;
-    
+    const usdAmount = parseAmount(pkg.usd);
+    const usdRenewal = pkg.renewal ? Math.round(parseAmount(pkg.renewal) / 14) : 0;
+
+    const priceStr = isUSD
+      ? `USD ${pkg.usd || "0"}`
+      : `GHC ${formatAmount(usdAmount * GHC_USD_MULTIPLIER)}`;
+
     let renewalStr = "";
     if (pkg.renewal) {
       if (isUSD) {
-        const numeric = parseInt(pkg.renewal.replace(/,/g, ""), 10);
-        if (!isNaN(numeric)) {
-          renewalStr = `Renews only at USD ${Math.round(numeric / 14)}/yr`;
-        } else {
-          renewalStr = pkg.renewal;
-        }
+        renewalStr = usdRenewal
+          ? `Renews only at USD ${formatAmount(usdRenewal)}/yr`
+          : pkg.renewal;
       } else {
-        renewalStr = `Renews only at GHC ${pkg.renewal}/yr`;
+        renewalStr = usdRenewal
+          ? `Renews only at GHC ${formatAmount(usdRenewal * GHC_USD_MULTIPLIER)}/yr`
+          : `Renews only at GHC ${pkg.renewal}/yr`;
       }
     }
 
@@ -210,27 +215,6 @@ export default function LandingPageContent({
           </p>
         </div>
       </section>
-
-      <section className="mx-auto max-w-3xl px-2 py-6 text-center sm:py-8 lg:max-w-5xl lg:px-8 lg:py-12">
-        <h2 className="mb-3 font-medium text-slate-900 text-lg lg:mb-8 lg:text-2xl lg:font-bold lg:tracking-tight">
-          Our services
-        </h2>
-        <ul className="mx-auto flex max-w-xl flex-wrap justify-center gap-x-6 gap-y-1.5 text-sm text-slate-700 max-sm:grid max-sm:grid-cols-3 max-sm:gap-x-1 sm:text-base lg:grid lg:max-w-4xl lg:grid-cols-3 lg:gap-5 lg:text-left">
-          {SERVICES.map((service) => (
-            <li
-              key={service}
-              className="flex items-center gap-1 whitespace-nowrap max-sm:justify-center lg:gap-3 lg:whitespace-normal lg:rounded-xl lg:border lg:border-slate-200/80 lg:bg-white lg:px-5 lg:py-4 lg:shadow-sm lg:ring-1 lg:ring-slate-100 lg:transition-all lg:duration-200 lg:hover:-translate-y-0.5 lg:hover:border-[#2f59c1]/30 lg:hover:shadow-md"
-            >
-              <span className="h-1 w-1 shrink-0 rounded-full bg-[#2f59c1] lg:h-2 lg:w-2" aria-hidden />
-              <span className="lg:text-[0.9375rem] lg:font-semibold lg:leading-snug lg:text-slate-800">
-                {service}
-              </span>
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      <hr className="mt-4 mb-1 border-gray-400 border w-full" />
 
       <section className="mx-auto max-w-6xl py-6">
         <div className="text-center mb-6">
