@@ -1,13 +1,10 @@
 import Image from "next/image";
 
-import EnrolledInterns from "@/components/skytech/sections/internship/EnrolledInterns";
 import InternshipForm from "@/components/skytech/sections/internship/InternshipForm";
-import { getEnrolledInterns } from "@/app/lib/interns";
 
 export const dynamic = "force-dynamic";
 
-async function InternshipPage() {
-  const interns = await getEnrolledInterns();
+function InternshipPage() {
   return (
     <div className="overflow-x-hidden bg-white">
       <section className="relative overflow-hidden bg-slate-950 pt-24 pb-12 text-white sm:pt-28 sm:pb-16 md:pb-20">
@@ -53,7 +50,6 @@ async function InternshipPage() {
         </div>
       </section>
 
-      <EnrolledInterns interns={interns} />
       <InternshipForm />
     </div>
   );
