@@ -37,7 +37,7 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   siteDescription: "No 1# website development company in Ghana.",
   contactEmail: "hello@skytechgh.com",
   contactPhone: "+233 53 831 1626",
-  whatsapp: "+233 53 831 1626",
+  whatsapp: "233538311626",
   address: "Accra, Ghana",
   pricingBookletUrl: "/static/pricing.pdf",
   pricing: {

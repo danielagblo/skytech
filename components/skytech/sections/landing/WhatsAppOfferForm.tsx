@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { WHATSAPP_NUMBER } from "@/app/lib/whatsapp";
 
 interface WhatsAppOfferFormProps {
   packageName: string;
@@ -9,7 +10,7 @@ interface WhatsAppOfferFormProps {
   whatsappNumber?: string;
 }
 
-const DEFAULT_WHATSAPP = "233538311626";
+const DEFAULT_WHATSAPP = WHATSAPP_NUMBER;
 
 type MeetingAnswer = "Yes" | "No";
 type PublicOfficeAnswer = "Yes" | "No" | "Start-up";
