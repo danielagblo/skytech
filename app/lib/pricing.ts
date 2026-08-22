@@ -77,27 +77,39 @@ async function savePricingMysql(pricing: PricingCategory[]): Promise<void> {
 }
 
 export async function getPricing(): Promise<PricingCategory[]> {
+  let categories: PricingCategory[] = [];
   if (isMysql()) {
     try {
-      return await getPricingMysql();
+      categories = await getPricingMysql();
     } catch (error) {
       console.error("Failed to fetch pricing from MySQL:", error);
-      return DEFAULT_PRICING;
+      categories = DEFAULT_PRICING;
+    }
+  } else {
+    try {
+      await dbConnect();
+      const pricing = await Pricing.find({}).lean();
+      
+      if (!pricing || pricing.length === 0) {
+        categories = DEFAULT_PRICING;
+      } else {
+        categories = JSON.parse(JSON.stringify(pricing));
+      }
+    } catch (error) {
+      console.error("Failed to fetch pricing from MongoDB:", error);
+      categories = DEFAULT_PRICING;
     }
   }
-  try {
-    await dbConnect();
-    const pricing = await Pricing.find({}).lean();
-    
-    if (!pricing || pricing.length === 0) {
-      return DEFAULT_PRICING;
-    }
-    
-    return JSON.parse(JSON.stringify(pricing));
-  } catch (error) {
-    console.error("Failed to fetch pricing from MongoDB:", error);
-    return DEFAULT_PRICING;
-  }
+
+  // Rearrange categories: Website (web), Mobile App (mobile), Marketing (marketing)
+  const categoryOrder = ["web", "mobile", "marketing"];
+  return categories.sort((a, b) => {
+    const indexA = categoryOrder.indexOf(a.category);
+    const indexB = categoryOrder.indexOf(b.category);
+    const posA = indexA === -1 ? 999 : indexA;
+    const posB = indexB === -1 ? 999 : indexB;
+    return posA - posB;
+  });
 }
 
 export async function savePricing(pricing: PricingCategory[]): Promise<void> {
