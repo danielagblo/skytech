@@ -10,7 +10,7 @@ async function InternshipPage() {
   const interns = await getEnrolledInterns();
   return (
     <div className="overflow-x-hidden bg-white">
-      <section className="relative overflow-hidden bg-slate-950 pt-28 pb-16 text-white md:pb-20">
+      <section className="relative overflow-hidden bg-slate-950 pt-24 pb-12 text-white sm:pt-28 sm:pb-16 md:pb-20">
         <Image
           src="/images/images/AboutBanner.png"
           alt="Skytech Ghana Internships"
@@ -23,14 +23,14 @@ async function InternshipPage() {
         <div className="absolute inset-0 bg-grid opacity-20" />
         <div className="absolute -top-20 right-1/4 h-72 w-72 rounded-full bg-brand-600/40 blur-[120px]" />
 
-        <div className="section-shell relative">
-          <div className="grid grid-cols-1 items-center gap-10 md:grid-cols-[2fr_1fr]">
-            <div>
+        <div className="section-shell relative px-4 sm:px-6">
+          <div className="grid grid-cols-1 items-center gap-8 sm:gap-10 md:grid-cols-[2fr_1fr]">
+            <div className="order-2 md:order-1">
               <span className="pill">Internship &amp; Attachment</span>
-              <h1 className="font-display mt-5 text-4xl font-semibold uppercase leading-[1.1] text-white sm:text-5xl">
-                INTERNSHIPS &amp; ATTACHMENT <br className="hidden md:block" /> PROGRAMS AS CSR
+              <h1 className="font-display mt-4 text-2xl font-semibold uppercase leading-tight text-white sm:mt-5 sm:text-3xl md:text-4xl lg:text-5xl">
+                Internships &amp; Attachment Programs as CSR
               </h1>
-              <p className="mt-5 max-w-xl text-lg leading-relaxed text-slate-300">
+              <p className="mt-4 text-base leading-relaxed text-slate-300 sm:mt-5 sm:text-lg md:max-w-xl">
                 At SkyTech Ghana, we don&apos;t believe in fetching coffee or filing
                 paperwork. We believe in building. Our internship and industrial
                 attachment programs are designed for ambitious students and
@@ -38,14 +38,15 @@ async function InternshipPage() {
                 classroom theory and real-world tech developing.
               </p>
             </div>
-            <div className="relative mx-auto w-full max-w-[25rem]">
-              <div className="absolute inset-0 -m-6 rounded-3xl bg-brand-600/20 blur-2xl" />
+            <div className="relative order-1 mx-auto w-full max-w-[16rem] sm:max-w-[20rem] md:order-2 md:max-w-[25rem]">
+              <div className="absolute inset-0 -m-4 rounded-3xl bg-brand-600/20 blur-2xl sm:-m-6" />
               <Image
                 src="/images/images/internshipsAndAttachments.png"
                 alt="Driven by Innovation"
                 width={400}
                 height={400}
-                className="relative h-auto w-full max-w-[25rem] rounded-none"
+                className="relative h-auto w-full rounded-none"
+                priority
               />
             </div>
           </div>

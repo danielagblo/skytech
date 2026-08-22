@@ -20,9 +20,24 @@ const ROW_CONFIGS = [
 type CardSize = "large" | "medium" | "small";
 
 const SIZE_MAP: Record<CardSize, { card: string; avatar: string; name: string; sub: string }> = {
-  large: { card: "w-80 h-28", avatar: "w-20 h-20", name: "text-xl", sub: "text-xs" },
-  medium: { card: "w-64 h-24", avatar: "w-16 h-16", name: "text-lg", sub: "text-xs" },
-  small: { card: "w-52 h-20", avatar: "w-14 h-14", name: "text-base", sub: "text-xs" },
+  large: {
+    card: "w-[17.5rem] sm:w-72 md:w-80 h-24 sm:h-28",
+    avatar: "w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20",
+    name: "text-base sm:text-lg md:text-xl",
+    sub: "text-[10px] sm:text-xs",
+  },
+  medium: {
+    card: "w-[15rem] sm:w-60 md:w-64 h-20 sm:h-24",
+    avatar: "w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16",
+    name: "text-sm sm:text-base md:text-lg",
+    sub: "text-[10px] sm:text-xs",
+  },
+  small: {
+    card: "w-[13rem] sm:w-48 md:w-52 h-[4.5rem] sm:h-20",
+    avatar: "w-11 h-11 sm:w-12 sm:h-12 md:w-14 md:h-14",
+    name: "text-sm sm:text-base",
+    sub: "text-[10px] sm:text-xs",
+  },
 };
 
 function InternCard({
@@ -42,7 +57,7 @@ function InternCard({
 
   return (
     <div
-      className={`shrink-0 ${s.card} bg-gray-50 rounded-none border border-gray-200 flex items-center gap-4 px-4`}
+      className={`shrink-0 ${s.card} bg-gray-50 rounded-none border border-gray-200 flex items-center gap-3 px-3 sm:gap-4 sm:px-4`}
     >
       <div className={`${s.avatar} rounded-full overflow-hidden shrink-0 bg-gray-200`}>
         <Image
@@ -187,7 +202,7 @@ function ScrollRow({
   return (
     <div
       ref={outerRef}
-      className="overflow-hidden cursor-grab active:cursor-grabbing"
+      className="overflow-hidden cursor-grab active:cursor-grabbing touch-pan-x"
       onMouseDown={onMouseDown}
       onMouseMove={onMouseMove}
       onMouseUp={onMouseUp}
@@ -211,25 +226,34 @@ function ScrollRow({
 }
 
 export default function EnrolledInterns({ interns }: { interns: EnrolledIntern[] }) {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 640);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
   if (!interns || interns.length === 0) return null;
 
-  // Limit the number of scrolling rows to the number of interns (up to 4 rows)
-  const activeRowsCount = Math.min(ROW_CONFIGS.length, interns.length);
+  const maxRows = isMobile ? 2 : ROW_CONFIGS.length;
+  const activeRowsCount = Math.min(maxRows, interns.length);
   const activeConfigs = ROW_CONFIGS.slice(0, activeRowsCount);
 
   return (
-    <section className="py-10 overflow-hidden bg-white">
-      <div className="flex flex-col items-start gap-4 px-6 mb-8 md:flex-row md:items-center md:justify-between md:px-10">
-        <div className="flex items-center gap-3 md:gap-4">
-          <span className="text-lg font-medium text-gray-800 md:text-2xl">Enrolled interns</span>
-          <div className="w-24 h-2 bg-gray-200 rounded-full overflow-hidden md:w-48">
-            <div className="h-full w-1/3 bg-slate-950 rounded-full" />
+    <section className="overflow-hidden bg-white py-8 sm:py-10">
+      <div className="mb-6 flex flex-col items-start gap-3 px-4 sm:mb-8 sm:gap-4 sm:px-6 md:flex-row md:items-center md:justify-between md:px-10">
+        <div className="flex w-full items-center gap-3 sm:gap-4 md:w-auto">
+          <span className="text-base font-medium text-gray-800 sm:text-lg md:text-2xl">Enrolled interns</span>
+          <div className="h-2 flex-1 overflow-hidden rounded-full bg-gray-200 sm:w-48 sm:flex-none md:w-48">
+            <div className="h-full w-1/3 rounded-full bg-slate-950" />
           </div>
         </div>
-        <span className="text-3xl font-semibold text-gray-900 md:text-5xl">{interns.length}</span>
+        <span className="text-2xl font-semibold text-gray-900 sm:text-3xl md:text-5xl">{interns.length}</span>
       </div>
 
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-2 sm:gap-3">
         {activeConfigs.map((config, i) => (
           <ScrollRow key={i} items={interns} {...config} />
         ))}

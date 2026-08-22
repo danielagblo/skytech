@@ -162,25 +162,25 @@ export default function InternshipForm() {
   };
 
   const inputClass =
-    "w-full rounded-none border border-slate-200 bg-slate-50 px-4 py-4 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-brand-600 focus:bg-white focus:ring-2 focus:ring-brand-200";
+    "w-full rounded-none border border-slate-200 bg-slate-50 px-4 py-3.5 text-base text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-brand-600 focus:bg-white focus:ring-2 focus:ring-brand-200 sm:py-4";
 
   return (
-    <section className="bg-slate-50 px-6 py-16 md:px-10">
+    <section className="bg-slate-50 px-4 py-10 sm:px-6 sm:py-14 md:px-10 md:py-16">
       <div className="mx-auto max-w-6xl">
         <div className="text-center">
           <span className="section-tag justify-center">Internship</span>
-          <h1 className="section-title mt-4 text-3xl text-balance sm:text-4xl lg:text-5xl">
+          <h1 className="section-title mt-3 text-2xl text-balance sm:mt-4 sm:text-3xl md:text-4xl lg:text-5xl">
             Internship Form
           </h1>
-          <p className="section-lead mt-3">Please fill in your details</p>
+          <p className="section-lead mt-2 text-sm sm:mt-3 sm:text-base">Please fill in your details</p>
         </div>
 
         <form
           onSubmit={handleSubmit}
-          className="mt-12 space-y-5 rounded-none border border-slate-100 bg-white p-8 shadow-lift lg:p-10"
+          className="mt-8 space-y-4 rounded-none border border-slate-100 bg-white p-4 shadow-lift sm:mt-10 sm:space-y-5 sm:p-6 md:p-8 lg:p-10"
         >
-          <div className="flex flex-col items-center gap-4 border-b border-slate-100 pb-8 sm:flex-row sm:items-start">
-            <div className="relative h-28 w-28 shrink-0 overflow-hidden rounded-full border-2 border-slate-200 bg-slate-100">
+          <div className="flex flex-col items-center gap-4 border-b border-slate-100 pb-6 sm:flex-row sm:items-start sm:pb-8">
+            <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-full border-2 border-slate-200 bg-slate-100 sm:h-28 sm:w-28">
               {photoPreview ? (
                 <Image
                   src={photoPreview}
@@ -240,7 +240,7 @@ export default function InternshipForm() {
             </div>
           </div>
 
-          <div className="grid gap-5 md:grid-cols-2">
+          <div className="grid grid-cols-1 gap-4 sm:gap-5 md:grid-cols-2">
             <input
               className={inputClass}
               type="text"
@@ -301,14 +301,20 @@ export default function InternshipForm() {
               required
             />
 
-            <input
-              className={inputClass}
-              type="date"
-              name="startDate"
-              value={formData.startDate}
-              onChange={handleChange}
-              required
-            />
+            <div>
+              <label htmlFor="startDate" className="mb-2 block text-sm font-semibold text-slate-900">
+                Start Date
+              </label>
+              <input
+                id="startDate"
+                className={inputClass}
+                type="date"
+                name="startDate"
+                value={formData.startDate}
+                onChange={handleChange}
+                required
+              />
+            </div>
 
             <input
               className={inputClass}
@@ -322,7 +328,7 @@ export default function InternshipForm() {
           </div>
 
           <textarea
-            className={`${inputClass} min-h-[11.25rem] resize-none`}
+            className={`${inputClass} min-h-[9rem] resize-none sm:min-h-[11.25rem]`}
             name="message"
             placeholder="Your Skills Interests, and why you want the internship"
             value={formData.message}
@@ -333,7 +339,7 @@ export default function InternshipForm() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-none bg-slate-950 py-4 text-lg font-medium text-white shadow-soft transition hover:bg-slate-900 disabled:cursor-not-allowed disabled:opacity-70"
+            className="w-full rounded-none bg-slate-950 py-3.5 text-base font-medium text-white shadow-soft transition hover:bg-slate-900 disabled:cursor-not-allowed disabled:opacity-70 sm:py-4 sm:text-lg"
           >
             {loading ? "Submitting..." : "Apply Now"}
           </button>
