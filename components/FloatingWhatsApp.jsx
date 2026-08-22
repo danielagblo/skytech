@@ -1,26 +1,17 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useWhatsAppModal } from "./WhatsAppModal";
 
-function toWaDigits(value) {
-  if (!value) return "";
-  return String(value).replace(/[^\d]/g, "");
-}
-
-export default function FloatingWhatsApp({ whatsapp }) {
+export default function FloatingWhatsApp() {
   const pathname = usePathname();
-  const { open } = useWhatsAppModal();
 
   if (pathname === "/landing") return null;
 
-  const digits = toWaDigits(whatsapp);
-  if (!digits) return null;
-
   return (
-    <button
-      onClick={() => open(digits)}
+    <Link
+      href="/landing"
       aria-label="Chat on WhatsApp"
       className="group fixed bottom-10 right-5 z-50 flex items-center gap-2 cursor-pointer"
     >
@@ -36,6 +27,6 @@ export default function FloatingWhatsApp({ whatsapp }) {
           className="object-contain"
         />
       </span>
-    </button>
+    </Link>
   );
 }
