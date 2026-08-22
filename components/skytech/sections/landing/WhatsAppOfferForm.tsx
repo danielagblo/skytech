@@ -157,7 +157,7 @@ function WhatsAppOfferForm({
         </div>
 
         <div>
-          <p className="mb-2 text-base text-slate-800 text-center">How urgent do you need a digital solution?</p>
+          <p className="mb-2 text-base text-slate-800">How urgent do you need a digital solution?</p>
           <PillGroup options={URGENCY_OPTIONS} value={urgency} onChange={setUrgency} />
         </div>
 
