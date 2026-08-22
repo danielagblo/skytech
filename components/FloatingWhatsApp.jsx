@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { getWhatsAppUrl } from "@/app/lib/whatsapp";
+import { WHATSAPP_NUMBER } from "@/app/lib/whatsapp";
 
 export default function FloatingWhatsApp() {
   const pathname = usePathname();
@@ -11,7 +11,7 @@ export default function FloatingWhatsApp() {
 
   return (
     <a
-      href={getWhatsAppUrl()}
+      href={`https://wa.me/${WHATSAPP_NUMBER}`}
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Chat on WhatsApp"
