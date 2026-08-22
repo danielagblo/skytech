@@ -1,6 +1,7 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
+import Image from "next/image";
 
 interface InternshipFormData {
   fullName: string;
@@ -26,9 +27,21 @@ const EMPTY_FORM: InternshipFormData = {
   message: "",
 };
 
+const MAX_PHOTO_SIZE = 5 * 1024 * 1024; // 5MB
+const ALLOWED_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+
 export default function InternshipForm() {
   const [formData, setFormData] = useState<InternshipFormData>(EMPTY_FORM);
+  const [profilePhoto, setProfilePhoto] = useState<File | null>(null);
+  const [photoPreview, setPhotoPreview] = useState<string | null>(null);
+  const [photoError, setPhotoError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    return () => {
+      if (photoPreview) URL.revokeObjectURL(photoPreview);
+    };
+  }, [photoPreview]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
@@ -37,12 +50,67 @@ export default function InternshipForm() {
     });
   };
 
+  const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    setPhotoError("");
+
+    if (!file) {
+      setProfilePhoto(null);
+      if (photoPreview) URL.revokeObjectURL(photoPreview);
+      setPhotoPreview(null);
+      return;
+    }
+
+    if (!ALLOWED_TYPES.includes(file.type)) {
+      setPhotoError("Please upload a JPG, PNG, or WebP image.");
+      e.target.value = "";
+      return;
+    }
+
+    if (file.size > MAX_PHOTO_SIZE) {
+      setPhotoError("Photo must be 5MB or smaller.");
+      e.target.value = "";
+      return;
+    }
+
+    setProfilePhoto(file);
+    if (photoPreview) URL.revokeObjectURL(photoPreview);
+    setPhotoPreview(URL.createObjectURL(file));
+  };
+
+  const resetForm = () => {
+    setFormData(EMPTY_FORM);
+    setProfilePhoto(null);
+    if (photoPreview) URL.revokeObjectURL(photoPreview);
+    setPhotoPreview(null);
+    setPhotoError("");
+  };
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+
+    if (!profilePhoto) {
+      setPhotoError("Please upload a profile picture.");
+      return;
+    }
 
     setLoading(true);
 
     try {
+      const uploadData = new FormData();
+      uploadData.append("file", profilePhoto);
+      uploadData.append("folder", "interns");
+
+      const uploadRes = await fetch("/api/content/upload-image", {
+        method: "POST",
+        body: uploadData,
+      });
+      const uploadJson = await uploadRes.json();
+
+      if (!uploadRes.ok || !uploadJson.url) {
+        throw new Error(uploadJson.error || "Failed to upload profile picture");
+      }
+
       const response = await fetch("/api/content/internship-submissions", {
         method: "POST",
         headers: {
@@ -53,6 +121,7 @@ export default function InternshipForm() {
           name: formData.fullName,
           school: formData.institutionType,
           program: formData.programOffering,
+          image: uploadJson.url,
           recipient: "info@skytechghana.com",
         }),
       });
@@ -84,9 +153,9 @@ export default function InternshipForm() {
       }
 
       alert("Application submitted successfully!");
-      setFormData(EMPTY_FORM);
+      resetForm();
     } catch (err) {
-      alert("Something went wrong. Please try again.");
+      alert(err instanceof Error ? err.message : "Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -110,6 +179,67 @@ export default function InternshipForm() {
           onSubmit={handleSubmit}
           className="mt-12 space-y-5 rounded-none border border-slate-100 bg-white p-8 shadow-lift lg:p-10"
         >
+          <div className="flex flex-col items-center gap-4 border-b border-slate-100 pb-8 sm:flex-row sm:items-start">
+            <div className="relative h-28 w-28 shrink-0 overflow-hidden rounded-full border-2 border-slate-200 bg-slate-100">
+              {photoPreview ? (
+                <Image
+                  src={photoPreview}
+                  alt="Profile preview"
+                  fill
+                  className="object-cover"
+                  unoptimized
+                />
+              ) : (
+                <div className="flex h-full w-full items-center justify-center text-slate-400">
+                  <svg className="h-10 w-10" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                  </svg>
+                </div>
+              )}
+            </div>
+
+            <div className="flex-1 text-center sm:text-left">
+              <label htmlFor="profilePhoto" className="block text-sm font-semibold text-slate-900">
+                Profile Picture <span className="text-red-500">*</span>
+              </label>
+              <p className="mt-1 text-sm text-slate-500">
+                Upload a clear headshot. JPG, PNG, or WebP up to 5MB.
+              </p>
+              <div className="mt-4 flex flex-wrap items-center justify-center gap-3 sm:justify-start">
+                <label
+                  htmlFor="profilePhoto"
+                  className="cursor-pointer rounded-none border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm font-medium text-slate-700 transition hover:border-brand-600 hover:bg-white"
+                >
+                  {profilePhoto ? "Change Photo" : "Upload Photo"}
+                </label>
+                {profilePhoto && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setProfilePhoto(null);
+                      if (photoPreview) URL.revokeObjectURL(photoPreview);
+                      setPhotoPreview(null);
+                      setPhotoError("");
+                    }}
+                    className="text-sm font-medium text-red-600 hover:text-red-700"
+                  >
+                    Remove
+                  </button>
+                )}
+              </div>
+              <input
+                id="profilePhoto"
+                type="file"
+                accept="image/jpeg,image/jpg,image/png,image/webp"
+                onChange={handlePhotoChange}
+                className="hidden"
+              />
+              {photoError && (
+                <p className="mt-2 text-sm text-red-600">{photoError}</p>
+              )}
+            </div>
+          </div>
+
           <div className="grid gap-5 md:grid-cols-2">
             <input
               className={inputClass}
