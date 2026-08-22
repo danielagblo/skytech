@@ -1,12 +1,14 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { getPartnerLogoHeight } from "@/app/lib/partnerLogo";
 
 interface Partner {
   name: string;
   logoUrl: string;
   colSpan?: number;
   rowSpan?: number;
+  logoScale?: number;
   visible?: boolean;
 }
 
@@ -118,7 +120,7 @@ export default function ClientsCarousel({ partners }: { partners: Partner[] }) {
                         src={partner.logoUrl}
                         alt={partner.name || "Brand"}
                         className="w-auto max-w-full object-contain"
-                        style={{ height: `${rSpan * 40}px` }}
+                        style={{ height: `${getPartnerLogoHeight(partner)}px` }}
                       />
                     </div>
                   );

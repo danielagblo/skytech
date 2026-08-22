@@ -36,6 +36,7 @@ function withDefaults(partners: Omit<IAffiliate, "order">[], startOrder = 0): IA
     order: startOrder + index,
     colSpan: 1,
     rowSpan: 1,
+    logoScale: 100,
     visible: true,
   }));
 }

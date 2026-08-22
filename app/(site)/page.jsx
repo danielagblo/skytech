@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { getSettings } from '../lib/settings';
 import { getPricing } from '../lib/pricing';
-import { DEFAULT_PARTNERS } from '../lib/defaultPartners';
+import { getAffiliates } from '../lib/affiliates';
 import { getTestimonials } from '../lib/testimonials';
 import { getBlogPosts } from '../admin/blog-actions';
 import { getFAQs } from '../lib/faqs';
@@ -68,7 +68,8 @@ export default async function Home() {
   const testimonialsData = await getTestimonials();
   const testimonials = testimonialsData.length > 0 ? testimonialsData : [];
   const faqs = await getFAQs();
-  const allPartners = DEFAULT_PARTNERS.filter((p) => p?.logoUrl || p?.name);
+  const partnersData = await getAffiliates();
+  const allPartners = (partnersData || []).filter((p) => p?.logoUrl || p?.name);
   const pricing = await getPricing();
   const posts = await getAllBlogPosts();
   const latestPosts = posts.slice(0, 3);

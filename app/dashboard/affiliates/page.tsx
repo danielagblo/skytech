@@ -12,7 +12,7 @@ export default async function AffiliateDashboardPage() {
     <div className="space-y-8">
       <div>
         <h1 className="text-3xl font-black text-slate-900">Affiliate Network</h1>
-        <p className="text-slate-500">Manage multinational and local partner logos. All assets are optimized and stored on AWS S3.</p>
+        <p className="text-slate-500">Manage partner logos, size, visibility, and grid layout. Changes appear on the homepage after saving.</p>
       </div>
 
       <AffiliateManager initialAffiliates={affiliates} />

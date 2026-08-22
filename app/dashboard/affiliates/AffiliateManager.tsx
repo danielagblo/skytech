@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { updateAffiliatesAction, uploadPartnerLogoAction } from "../../admin/actions";
 import { IAffiliate } from "../../lib/affiliates";
+import { getPartnerLogoHeight } from "../../lib/partnerLogo";
 
 export default function AffiliateManager({ initialAffiliates }: { initialAffiliates: IAffiliate[] }) {
   const [affiliates, setAffiliates] = useState<IAffiliate[]>(
@@ -10,6 +11,7 @@ export default function AffiliateManager({ initialAffiliates }: { initialAffilia
       ...a,
       colSpan: a.colSpan ?? 1,
       rowSpan: a.rowSpan ?? 1,
+      logoScale: a.logoScale ?? 100,
       visible: a.visible !== false,
     }))
   );
@@ -19,7 +21,7 @@ export default function AffiliateManager({ initialAffiliates }: { initialAffilia
   const [gridCols, setGridCols] = useState(6);
 
   const handleAdd = () => {
-    setAffiliates([...affiliates, { name: "", logoUrl: "", colSpan: 1, rowSpan: 1, visible: true }]);
+    setAffiliates([...affiliates, { name: "", logoUrl: "", colSpan: 1, rowSpan: 1, logoScale: 100, visible: true }]);
   };
 
   const handleDelete = (index: number) => {
@@ -136,7 +138,7 @@ export default function AffiliateManager({ initialAffiliates }: { initialAffilia
                   alt={partner.name}
                   className="max-w-full max-h-full object-contain"
                   style={{
-                    height: `${(partner.rowSpan || 1) * 40}px`,
+                    height: `${getPartnerLogoHeight(partner)}px`,
                   }}
                 />
               ) : (
@@ -213,6 +215,25 @@ export default function AffiliateManager({ initialAffiliates }: { initialAffilia
                   </div>
 
                   <div className="flex items-center gap-4 flex-wrap">
+                    {/* Logo Size */}
+                    <div className="flex items-center gap-3 min-w-[200px]">
+                      <label className="text-[9px] font-black uppercase tracking-widest text-slate-400 whitespace-nowrap">
+                        Logo Size
+                      </label>
+                      <input
+                        type="range"
+                        min={50}
+                        max={200}
+                        step={5}
+                        value={partner.logoScale ?? 100}
+                        onChange={(e) => handleChange(pIdx, "logoScale", Number(e.target.value))}
+                        className="flex-1 h-1.5 accent-blue-600 cursor-pointer"
+                      />
+                      <span className="text-xs font-bold text-slate-600 w-10 text-right tabular-nums">
+                        {partner.logoScale ?? 100}%
+                      </span>
+                    </div>
+
                     {/* Column Span */}
                     <div className="flex items-center gap-2">
                       <label className="text-[9px] font-black uppercase tracking-widest text-slate-400">Col Span</label>

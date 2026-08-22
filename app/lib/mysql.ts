@@ -174,6 +174,15 @@ async function upgradeSchema(): Promise<void> {
       throw error;
     }
   }
+  try {
+    await pool.query(
+      "ALTER TABLE affiliates ADD COLUMN logo_scale INT DEFAULT 100 AFTER row_span",
+    );
+  } catch (error: any) {
+    if (!error || error.code !== "ER_DUP_FIELDNAME") {
+      throw error;
+    }
+  }
 }
 
 export const SCHEMA: string[] = [
@@ -246,6 +255,7 @@ export const SCHEMA: string[] = [
     sort_order INT DEFAULT 0,
     col_span INT DEFAULT 1,
     row_span INT DEFAULT 1,
+    logo_scale INT DEFAULT 100,
     visible TINYINT(1) DEFAULT 1,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
   )`,

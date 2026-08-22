@@ -12,13 +12,14 @@ export interface IAffiliate {
   order?: number;
   colSpan?: number;
   rowSpan?: number;
+  logoScale?: number;
   visible?: boolean;
 }
 
 async function getAffiliatesMysql(): Promise<IAffiliate[]> {
   await mysql.initSchema();
   const rows = await mysql.query(
-    "SELECT id, name, logo_url, sort_order, col_span, row_span, visible FROM affiliates ORDER BY sort_order ASC, created_at DESC",
+    "SELECT id, name, logo_url, sort_order, col_span, row_span, logo_scale, visible FROM affiliates ORDER BY sort_order ASC, created_at DESC",
   );
   return rows.map((r) => ({
     _id: r.id,
@@ -27,6 +28,7 @@ async function getAffiliatesMysql(): Promise<IAffiliate[]> {
     order: r.sort_order ?? 0,
     colSpan: r.col_span ?? 1,
     rowSpan: r.row_span ?? 1,
+    logoScale: r.logo_scale ?? 100,
     visible: r.visible !== undefined ? Boolean(r.visible) : true,
   }));
 }
@@ -54,6 +56,7 @@ async function saveAffiliatesMysql(affiliates: IAffiliate[]): Promise<void> {
       sort_order: idx,
       col_span: a.colSpan ?? 1,
       row_span: a.rowSpan ?? 1,
+      logo_scale: a.logoScale ?? 100,
       visible: a.visible !== false ? 1 : 0,
     });
   }
@@ -113,6 +116,7 @@ export async function saveAffiliates(affiliates: IAffiliate[]): Promise<void> {
         order: idx,
         colSpan: a.colSpan ?? 1,
         rowSpan: a.rowSpan ?? 1,
+        logoScale: a.logoScale ?? 100,
         visible: a.visible !== false,
       })));
     }
