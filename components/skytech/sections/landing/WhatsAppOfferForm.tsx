@@ -9,7 +9,7 @@ interface WhatsAppOfferFormProps {
   whatsappNumber?: string;
 }
 
-const DEFAULT_WHATSAPP = "2335538311626";
+const DEFAULT_WHATSAPP = "233538311626";
 
 type MeetingAnswer = "Yes" | "No";
 type PublicOfficeAnswer = "Yes" | "No" | "Start-up";
