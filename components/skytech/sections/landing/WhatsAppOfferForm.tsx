@@ -12,7 +12,7 @@ interface WhatsAppOfferFormProps {
 
 const DEFAULT_WHATSAPP = WHATSAPP_NUMBER;
 
-type LaunchTimeline = "in 1 week" | "1-2 months" | "3+ months";
+type Urgency = "Very urgent" | "Urgent" | "Soon";
 
 const INDUSTRIES = [
   "Hospitality",
@@ -27,7 +27,7 @@ const INDUSTRIES = [
   "Other",
 ];
 
-const TIMELINES: LaunchTimeline[] = ["in 1 week", "1-2 months", "3+ months"];
+const URGENCY_OPTIONS: Urgency[] = ["Very urgent", "Urgent", "Soon"];
 
 function RequiredMark() {
   return <span className="text-red-500">*</span>;
@@ -69,7 +69,7 @@ function WhatsAppOfferForm({
   whatsappNumber = DEFAULT_WHATSAPP,
 }: WhatsAppOfferFormProps) {
   const [name, setName] = useState("");
-  const [timeline, setTimeline] = useState<LaunchTimeline | null>(null);
+  const [urgency, setUrgency] = useState<Urgency | null>(null);
   const [industry, setIndustry] = useState<string | null>(null);
   const [showErrors, setShowErrors] = useState(false);
   const [sending, setSending] = useState(false);
@@ -104,7 +104,7 @@ function WhatsAppOfferForm({
       interestLine,
       ``,
       `Name: ${name}`,
-      timeline ? `Launch timeline: ${timeline}` : null,
+      urgency ? `Urgency: ${urgency}` : null,
       `Industry: ${industry}`,
     ].filter(Boolean);
 
@@ -130,7 +130,7 @@ function WhatsAppOfferForm({
     onClose();
   };
 
-  const errorRing = (invalid: boolean) => (showErrors && invalid ? "border-red-300" : "border-emerald-200");
+  const errorRing = (invalid: boolean) => (showErrors && invalid ? "border-red-300" : "border-slate-200");
 
   return (
     <div className="text-center">
@@ -151,14 +151,14 @@ function WhatsAppOfferForm({
             value={name}
             autoComplete="name"
             onChange={(e) => setName(e.target.value)}
-            placeholder="Your Name *"
-            className={`w-full rounded-full border bg-transparent px-4 py-2.5 text-center outline-none focus:border-slate-400 ${errorRing(!name.trim())}`}
+            placeholder="Name"
+            className={`w-full rounded-lg border bg-transparent px-3.5 py-2.5 text-sm text-slate-800 outline-none transition-colors placeholder:text-slate-500 focus:border-slate-900 ${errorRing(!name.trim())}`}
           />
         </div>
 
         <div>
-          <p className="mb-2 text-base text-slate-800 text-center">How soon do you plan to launch a website?</p>
-          <PillGroup options={TIMELINES} value={timeline} onChange={setTimeline} />
+          <p className="mb-2 text-base text-slate-800 text-center">How urgent do you need a digital solution?</p>
+          <PillGroup options={URGENCY_OPTIONS} value={urgency} onChange={setUrgency} />
         </div>
 
         <div>
