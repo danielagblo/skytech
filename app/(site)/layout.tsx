@@ -46,7 +46,7 @@ export default async function SiteLayout({ children }: { children: ReactNode }) 
   return (
     <WhatsAppModalProvider whatsapp={settings.whatsapp}>
       <div className="fixed top-[56px] md:top-0 w-full z-20 md:z-30">
-        <TopScrollingBanner contactPhone={settings.contactPhone} whatsapp={settings.whatsapp} />
+        <TopScrollingBanner />
       </div>
       <Navigation className="fixed top-0 left-0 z-30 w-full md:top-[45px]" />
       <main>{children}</main>
