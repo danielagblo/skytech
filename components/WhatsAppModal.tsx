@@ -1,9 +1,10 @@
 "use client";
 
-import { createContext, useContext, useCallback, type ReactNode } from "react";
-import { getWhatsAppUrl } from "@/app/lib/whatsapp";
-
-/* Kept for compatibility — open() now goes straight to WhatsApp (no package form). */
+import { useCallback, useState, type ReactNode } from "react";
+import { createContext, useContext } from "react";
+import BottomSheet from "@/components/skytech/ui/BottomSheet";
+import WhatsAppOfferForm from "@/components/skytech/sections/landing/WhatsAppOfferForm";
+import { WHATSAPP_NUMBER } from "@/app/lib/whatsapp";
 
 export interface WhatsAppPackageGroup {
   group: string;
@@ -12,9 +13,15 @@ export interface WhatsAppPackageGroup {
 
 interface ModalCtx {
   open: (whatsappDigits?: string) => void;
+  close: () => void;
+  isOpen: boolean;
 }
 
-const Ctx = createContext<ModalCtx>({ open: () => {} });
+const Ctx = createContext<ModalCtx>({
+  open: () => {},
+  close: () => {},
+  isOpen: false,
+});
 
 export function useWhatsAppModal() {
   return useContext(Ctx);
@@ -28,13 +35,23 @@ export function WhatsAppModalProvider({
   whatsapp?: string;
   packages?: WhatsAppPackageGroup[];
 }) {
-  const open = useCallback(
-    (d?: string) => {
-      const url = getWhatsAppUrl(d || whatsapp);
-      window.open(url, "_blank", "noopener,noreferrer");
-    },
-    [whatsapp]
-  );
+  const [isOpen, setIsOpen] = useState(false);
+  const number = whatsapp || WHATSAPP_NUMBER;
 
-  return <Ctx.Provider value={{ open }}>{children}</Ctx.Provider>;
+  const open = useCallback(() => {
+    setIsOpen(true);
+  }, []);
+
+  const close = useCallback(() => {
+    setIsOpen(false);
+  }, []);
+
+  return (
+    <Ctx.Provider value={{ open, close, isOpen }}>
+      {children}
+      <BottomSheet isOpen={isOpen} onClose={close}>
+        <WhatsAppOfferForm onClose={close} whatsappNumber={number} />
+      </BottomSheet>
+    </Ctx.Provider>
+  );
 }

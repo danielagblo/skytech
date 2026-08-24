@@ -1,152 +1,28 @@
 "use client";
 
 import Image from "next/image";
-import { FormEvent, useState } from "react";
 
 import FlagsList from "@/components/skytech/ui/FlagsList";
-
-interface ContactFormData {
-  fullName: string;
-  phone: string;
-  email: string;
-  message: string;
-}
+import WhatsAppOfferForm from "@/components/skytech/sections/landing/WhatsAppOfferForm";
 
 export default function ContactForm() {
-  const [loading, setLoading] = useState(false);
-
-  const [formData, setFormData] = useState<ContactFormData>({
-    fullName: "",
-    phone: "",
-    email: "",
-    message: "",
-  });
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
-  };
-
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-
-    setLoading(true);
-
-    try {
-      const response = await fetch("/api/content/contact-submissions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          ...formData,
-          recipient: "info@skytechghana.com",
-        }),
-      });
-
-      if (!response.ok) throw new Error("Submission failed");
-
-      try {
-        await fetch("/api/sms/send", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            message: [
-              "New contact message:",
-              `Name: ${formData.fullName}`,
-              `Phone: ${formData.phone}`,
-              `Email: ${formData.email}`,
-              `Message: ${formData.message}`,
-            ].join("\n"),
-            recipients: ["233538311626"],
-          }),
-        });
-      } catch (err) {
-        console.error("Failed to send Arkesel SMS:", err);
-      }
-
-      alert("Message sent!");
-
-      setFormData({
-        fullName: "",
-        phone: "",
-        email: "",
-        message: "",
-      });
-    } catch {
-      alert("Unable to send message.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const inputStyle =
-    "w-full rounded-none border border-slate-200 bg-slate-50 px-4 py-4 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-brand-600 focus:bg-white focus:ring-2 focus:ring-brand-200";
-
   return (
     <section className="bg-slate-50 px-6 py-16 md:py-24">
       <div className="mx-auto max-w-7xl">
         <div className="mb-12 flex flex-col items-center text-center">
           <span className="section-tag">Get in Touch</span>
           <h2 className="section-title mt-4 text-3xl text-balance sm:text-4xl lg:text-5xl">
-            Send us a message
+            Start a WhatsApp chat
           </h2>
           <p className="section-lead mt-3 max-w-xl">
-            Fill in the form and our team will get back to you shortly.
+            Share a few details and we&apos;ll open WhatsApp so you can talk with our team right away.
           </p>
         </div>
 
         <div className="grid gap-12 lg:grid-cols-2">
-          <form
-            onSubmit={handleSubmit}
-            className="space-y-5 rounded-none border border-slate-100 bg-white p-8 shadow-lift lg:p-10"
-          >
-            <input
-              className={inputStyle}
-              name="fullName"
-              placeholder="Full Name"
-              value={formData.fullName}
-              onChange={handleChange}
-              required
-            />
-
-            <input
-              className={inputStyle}
-              name="phone"
-              placeholder="Phone Number"
-              value={formData.phone}
-              onChange={handleChange}
-              required
-            />
-
-            <input
-              className={inputStyle}
-              type="email"
-              name="email"
-              placeholder="Email Address"
-              value={formData.email}
-              onChange={handleChange}
-              required
-            />
-
-            <textarea
-              className={`${inputStyle} min-h-[10.625rem] resize-none`}
-              name="message"
-              placeholder="Message"
-              value={formData.message}
-              onChange={handleChange}
-              required
-            />
-
-            <button
-              disabled={loading}
-              className="w-full rounded-none bg-slate-950 py-4 text-lg font-medium text-white shadow-soft transition hover:bg-slate-900 disabled:cursor-not-allowed disabled:opacity-70"
-            >
-              {loading ? "Sending..." : "Send Message"}
-            </button>
-          </form>
+          <div className="rounded-none border border-slate-100 bg-white p-8 shadow-lift lg:p-10">
+            <WhatsAppOfferForm showReturn={false} />
+          </div>
 
           <div>
             <div className="overflow-hidden rounded-none shadow-soft ring-1 ring-slate-100">

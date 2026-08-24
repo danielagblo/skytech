@@ -6,8 +6,10 @@ import { WHATSAPP_NUMBER } from "@/app/lib/whatsapp";
 interface WhatsAppOfferFormProps {
   packageName?: string;
   packagePrice?: string;
-  onClose: () => void;
+  onClose?: () => void;
   whatsappNumber?: string;
+  /** Hide the Return button (e.g. embedded on the contact page). */
+  showReturn?: boolean;
 }
 
 const DEFAULT_WHATSAPP = WHATSAPP_NUMBER;
@@ -67,6 +69,7 @@ function WhatsAppOfferForm({
   packagePrice,
   onClose,
   whatsappNumber = DEFAULT_WHATSAPP,
+  showReturn = true,
 }: WhatsAppOfferFormProps) {
   const [name, setName] = useState("");
   const [urgency, setUrgency] = useState<Urgency | null>(null);
@@ -127,7 +130,7 @@ function WhatsAppOfferForm({
     }
 
     window.open(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`, "_blank");
-    onClose();
+    onClose?.();
   };
 
   const errorRing = (invalid: boolean) => (showErrors && invalid ? "border-red-300" : "border-slate-200");
@@ -172,21 +175,23 @@ function WhatsAppOfferForm({
       </div>
 
       <div className="mt-8 flex items-center gap-3">
-        <button
-          type="button"
-          onClick={onClose}
-          className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-slate-300 py-3 font-semibold text-slate-800"
-        >
-          <svg viewBox="0 0 24 24" className="h-4 w-4 fill-none stroke-slate-800" strokeWidth={2}>
-            <path d="M19 12H5M11 6l-6 6 6 6" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-          Return
-        </button>
+        {showReturn && onClose && (
+          <button
+            type="button"
+            onClick={onClose}
+            className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-slate-300 py-3 font-semibold text-slate-800"
+          >
+            <svg viewBox="0 0 24 24" className="h-4 w-4 fill-none stroke-slate-800" strokeWidth={2}>
+              <path d="M19 12H5M11 6l-6 6 6 6" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+            Return
+          </button>
+        )}
         <button
           type="button"
           onClick={handleSubmit}
           disabled={!isValid || sending}
-          className={`flex-[2] rounded-lg py-3 font-semibold text-white transition-colors ${isValid && !sending ? "bg-emerald-600 hover:bg-emerald-700" : "cursor-not-allowed bg-emerald-300 text-white/80"
+          className={`${showReturn && onClose ? "flex-[2]" : "w-full"} rounded-lg py-3 font-semibold text-white transition-colors ${isValid && !sending ? "bg-emerald-600 hover:bg-emerald-700" : "cursor-not-allowed bg-emerald-300 text-white/80"
             }`}
         >
           {sending ? "Sending..." : "Open on What's App"}

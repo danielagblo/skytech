@@ -3,6 +3,8 @@
 import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 
+const UTM_KEY = "analytics_utm";
+
 function getSessionId() {
   if (typeof window === "undefined") return "";
   let id = sessionStorage.getItem("analytics_session_id");
@@ -31,21 +33,43 @@ function getBrowserName() {
   return "Other";
 }
 
-function normalizeSource() {
+function readStoredUtm() {
+  try {
+    const raw = sessionStorage.getItem(UTM_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
+}
+
+function captureUtm() {
   const params = new URLSearchParams(window.location.search);
-  const utm = params.get("utm_source") || params.get("source") || params.get("ref");
-  if (utm) return utm.toLowerCase();
+  const utm = {
+    source: (params.get("utm_source") || params.get("source") || params.get("ref") || "").toLowerCase(),
+    medium: (params.get("utm_medium") || "").toLowerCase(),
+    campaign: (params.get("utm_campaign") || "").slice(0, 80),
+    content: (params.get("utm_content") || "").slice(0, 80),
+  };
+  if (utm.source || utm.medium || utm.campaign) {
+    sessionStorage.setItem(UTM_KEY, JSON.stringify(utm));
+    return utm;
+  }
+  return readStoredUtm();
+}
+
+function normalizeSource() {
+  const utm = captureUtm();
+  if (utm?.source) return utm.source;
 
   const referrer = document.referrer;
   if (!referrer) return "direct";
 
   try {
     const host = new URL(referrer).hostname.replace(/^www\./, "").toLowerCase();
-    if (host.includes(window.location.hostname.replace(/^www\./, ""))) return "internal";
+    const here = window.location.hostname.replace(/^www\./, "").toLowerCase();
+    if (host.includes(here) || here.includes(host)) return "internal";
     if (host.includes("google")) return "google";
     if (host.includes("bing")) return "bing";
-    if (host.includes("yahoo")) return "yahoo";
-    if (host.includes("duckduckgo")) return "duckduckgo";
     if (host.includes("facebook") || host.includes("fb.")) return "facebook";
     if (host.includes("instagram")) return "instagram";
     if (host.includes("twitter") || host.includes("x.com") || host.includes("t.co")) return "twitter";
@@ -63,6 +87,7 @@ function shouldSkip(pathname) {
   return (
     pathname.startsWith("/dashboard") ||
     pathname.startsWith("/login") ||
+    pathname.startsWith("/admin") ||
     pathname.startsWith("/api")
   );
 }
@@ -75,6 +100,42 @@ function actionLabel(el) {
   if (text) return text.slice(0, 80);
   if (el.tagName === "A" && el.getAttribute("href")) return `link:${el.getAttribute("href")}`;
   return `${el.tagName?.toLowerCase() || "element"}_click`;
+}
+
+function gtagEvent(name, params) {
+  if (typeof window === "undefined" || typeof window.gtag !== "function") return;
+  window.gtag("event", name, params);
+}
+
+function conversionForAction(action, page) {
+  const a = String(action || "").toLowerCase();
+  if (a.includes("apply now") || page.includes("internship")) {
+    if (a.includes("apply")) {
+      gtagEvent("generate_lead", { event_category: "internship", event_label: action });
+      return;
+    }
+  }
+  if (a.includes("whatsapp") || a.includes("chat with us") || a.includes("start chat")) {
+    gtagEvent("generate_lead", { event_category: "whatsapp", event_label: action });
+    return;
+  }
+  if (a.includes("book a meeting") || a.includes("form_submit")) {
+    gtagEvent("generate_lead", { event_category: "contact", event_label: action });
+  }
+}
+
+function contextPayload() {
+  const utm = captureUtm() || {};
+  return {
+    sessionId: getSessionId(),
+    source: normalizeSource(),
+    medium: utm.medium || "",
+    campaign: utm.campaign || "",
+    content: utm.content || "",
+    deviceType: getDeviceType(),
+    browser: getBrowserName(),
+    timestamp: new Date().toISOString(),
+  };
 }
 
 async function postEvent(payload) {
@@ -104,12 +165,9 @@ export default function AnalyticsTracker() {
     postEvent({
       type: "pageview",
       page: pathname,
-      sessionId: getSessionId(),
-      source: normalizeSource(),
-      deviceType: getDeviceType(),
-      browser: getBrowserName(),
-      timestamp: new Date().toISOString(),
+      ...contextPayload(),
     });
+    gtagEvent("page_view", { page_path: pathname });
   }, [pathname]);
 
   useEffect(() => {
@@ -120,31 +178,28 @@ export default function AnalyticsTracker() {
       if (!target) return;
       if (target.closest("[data-no-track]")) return;
 
+      const action = actionLabel(target);
+      const page = window.location.pathname;
       postEvent({
         type: "interaction",
-        action: actionLabel(target),
-        page: window.location.pathname,
-        sessionId: getSessionId(),
-        source: normalizeSource(),
-        deviceType: getDeviceType(),
-        browser: getBrowserName(),
-        timestamp: new Date().toISOString(),
+        action,
+        page,
+        ...contextPayload(),
       });
+      conversionForAction(action, page);
     };
 
     const handleFormSubmit = (e) => {
       if (e.target.tagName !== "FORM") return;
       const formName = e.target.getAttribute("name") || e.target.id || e.target.action || "form";
+      const action = `form_submit:${String(formName).slice(0, 60)}`;
       postEvent({
         type: "interaction",
-        action: `form_submit:${String(formName).slice(0, 60)}`,
+        action,
         page: window.location.pathname,
-        sessionId: getSessionId(),
-        source: normalizeSource(),
-        deviceType: getDeviceType(),
-        browser: getBrowserName(),
-        timestamp: new Date().toISOString(),
+        ...contextPayload(),
       });
+      conversionForAction(action, window.location.pathname);
     };
 
     const handleScroll = () => {
@@ -159,11 +214,7 @@ export default function AnalyticsTracker() {
             type: "interaction",
             action: `scroll_${mark}%`,
             page: window.location.pathname,
-            sessionId: getSessionId(),
-            source: normalizeSource(),
-            deviceType: getDeviceType(),
-            browser: getBrowserName(),
-            timestamp: new Date().toISOString(),
+            ...contextPayload(),
           });
         }
       }

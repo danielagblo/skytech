@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import ProblemCards from "@/components/skytech/sections/about/ProblemCards";
 import AwardsStatement from "@/components/skytech/sections/AwardsStatement";
+import BookMeetingButton from "@/components/skytech/ui/BookMeetingButton";
 
 const aboutStats = [
   { label: "Projects Completed", value: "180+" },
@@ -42,7 +43,7 @@ function AboutPage() {
               competitive world.
             </p>
             <div className="flex flex-wrap justify-center gap-3 md:justify-start">
-              <Link href="/contact" className="btn-primary !text-sm">BOOK A MEETING</Link>
+              <BookMeetingButton className="btn-primary !text-sm">BOOK A MEETING</BookMeetingButton>
               <Link href="/case-studies" className="btn-secondary !border-white/25 !bg-white/10 !text-white backdrop-blur-sm hover:!bg-white/20 !text-sm">SEE OUR WORK</Link>
             </div>
           </div>

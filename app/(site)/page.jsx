@@ -2,6 +2,7 @@ import React from "react";
 export const dynamic = 'force-dynamic';
 import Link from "next/link";
 import Image from "next/image";
+import BookMeetingButton from "@/components/skytech/ui/BookMeetingButton";
 import { getSettings } from '../lib/settings';
 import { getPricing } from '../lib/pricing';
 import { getAffiliates } from '../lib/affiliates';
@@ -113,9 +114,9 @@ export default async function Home() {
               </div>
 
               <div className="mt-5 flex flex-wrap justify-center gap-3 md:mt-6 md:gap-4 md:justify-start">
-                <Link href="/contact" className="btn-primary !px-4 !py-2 !text-xs md:!px-6 md:!py-3 md:!text-sm">
+                <BookMeetingButton className="btn-primary !px-4 !py-2 !text-xs md:!px-6 md:!py-3 md:!text-sm">
                   BOOK A MEETING
-                </Link>
+                </BookMeetingButton>
                 <Link href="/pricing" className="btn-secondary !border-white/25 !bg-white/10 !px-4 !py-2 !text-xs !text-white backdrop-blur-sm hover:!bg-white/20 md:!px-6 md:!py-3 md:!text-sm">
                   PRICING
                 </Link>

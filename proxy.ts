@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { campaignIntentPath } from "./app/lib/analyticsNormalize";
 
 export function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
@@ -28,7 +29,16 @@ export function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // All other routes are public pages served at the root
+  // Paid / social UTMs on the homepage go to intent pages (landing, internship, pricing)
+  if (pathname === "/") {
+    const intent = campaignIntentPath(request.nextUrl.searchParams);
+    if (intent && intent !== "/") {
+      const dest = request.nextUrl.clone();
+      dest.pathname = intent;
+      return NextResponse.redirect(dest);
+    }
+  }
+
   return NextResponse.next();
 }
 
