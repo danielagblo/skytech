@@ -2,15 +2,13 @@
 
 import { usePathname } from "next/navigation";
 import Navigation from "@/components/skytech/layout/Navigation";
-import FormsHeader from "@/components/skytech/layout/FormsHeader";
 import TopScrollingBanner from "@/components/skytech/sections/home/TopScrollingBanner";
 
 export default function SiteChrome() {
   const pathname = usePathname();
-  const isFormsPage = pathname === "/forms";
 
-  if (isFormsPage) {
-    return <FormsHeader />;
+  if (pathname === "/forms") {
+    return null;
   }
 
   return (

@@ -17,7 +17,7 @@ interface Partner {
 export default function FormsPageContent({ partners }: { partners: Partner[] }) {
   return (
     <main className="min-h-screen overflow-x-hidden bg-white">
-      <section className="relative w-full bg-slate-950 pt-14 md:pt-16">
+      <section className="relative w-full bg-slate-950">
         <div className="relative w-full leading-none">
           <Image
             src="/images/images/landing-hero.jpg"
@@ -44,6 +44,7 @@ export default function FormsPageContent({ partners }: { partners: Partner[] }) 
         <div className="mx-auto max-w-lg rounded-2xl border border-slate-200 bg-white p-5 shadow-lg sm:p-8">
           <WhatsAppOfferForm
             showReturn={false}
+            showWhatsAppLabel={false}
             subtitle="Kindly complete the form to proceed"
           />
         </div>
