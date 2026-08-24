@@ -18,7 +18,8 @@ interface FooterProps {
 
 function Footer({ latestPosts = [], sponsors = [], settings, whatsapp, className }: FooterProps) {
   const currentPath = usePathname();
-  const isLandingPage = currentPath === "/landing" || currentPath === "/forms";
+  const isLandingPage =
+    currentPath === "/landing" || currentPath === "/forms" || currentPath === "/thank-you";
 
   if (isLandingPage) return null;
 

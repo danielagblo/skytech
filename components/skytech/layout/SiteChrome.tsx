@@ -7,7 +7,7 @@ import TopScrollingBanner from "@/components/skytech/sections/home/TopScrollingB
 export default function SiteChrome() {
   const pathname = usePathname();
 
-  if (pathname === "/forms") {
+  if (pathname === "/forms" || pathname === "/thank-you") {
     return null;
   }
 

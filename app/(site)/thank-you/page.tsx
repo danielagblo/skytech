@@ -6,9 +6,5 @@ export const metadata = {
 };
 
 export default function ThankYouPage() {
-  return (
-    <div className="min-h-screen bg-slate-50 pt-[100px] md:pt-[120px]">
-      <ThankYouClient />
-    </div>
-  );
+  return <ThankYouClient />;
 }

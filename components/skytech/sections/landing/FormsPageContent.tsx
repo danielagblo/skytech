@@ -43,6 +43,7 @@ export default function FormsPageContent({ partners }: { partners: Partner[] }) 
       <section className="px-4 pb-12 pt-4 sm:px-6 sm:pb-16 sm:pt-6">
         <div className="mx-auto max-w-lg rounded-2xl border border-slate-200 bg-white p-5 shadow-lg sm:p-8">
           <WhatsAppOfferForm
+            extended
             showReturn={false}
             showWhatsAppLabel={false}
             subtitle="Kindly complete the form to proceed"
