@@ -50,7 +50,7 @@ export function WhatsAppModalProvider({
     <Ctx.Provider value={{ open, close, isOpen }}>
       {children}
       <BottomSheet isOpen={isOpen} onClose={close}>
-        <WhatsAppOfferForm onClose={close} whatsappNumber={number} />
+        <WhatsAppOfferForm extended onClose={close} whatsappNumber={number} />
       </BottomSheet>
     </Ctx.Provider>
   );

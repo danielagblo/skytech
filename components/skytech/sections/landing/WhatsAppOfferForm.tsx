@@ -17,7 +17,7 @@ interface WhatsAppOfferFormProps {
   subtitle?: string;
   /** Show the green WhatsApp chat label under the subtitle. */
   showWhatsAppLabel?: boolean;
-  /** Extra fields used on /forms (what you're building, project type, budget, phone). */
+  /** Full lead fields (phone, building, budget, coupon, referral). Default on everywhere. */
   extended?: boolean;
 }
 
@@ -135,7 +135,7 @@ function WhatsAppOfferForm({
   showReturn = true,
   subtitle = "One last step to get on",
   showWhatsAppLabel = true,
-  extended = false,
+  extended = true,
 }: WhatsAppOfferFormProps) {
   const router = useRouter();
   const [name, setName] = useState("");
@@ -250,19 +250,46 @@ function WhatsAppOfferForm({
     ].filter(Boolean);
 
     const message = lines.join("\n");
+    const source =
+      typeof window !== "undefined" ? window.location.pathname : extended ? "/forms" : "whatsapp-offer";
 
     setSending(true);
     try {
-      await fetch("/api/sms/send", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          message,
-          recipients: [whatsappNumber],
+      await Promise.allSettled([
+        fetch("/api/content/contact-submissions", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: name.trim(),
+            phone: extended && phoneOk ? fullPhone : "",
+            email: "",
+            company: "",
+            industry: industry || "",
+            building: building || "",
+            projectType: projectType || packageName || "",
+            budget: budget || packagePrice || "",
+            timeline: "",
+            urgency: urgency || "",
+            coupon: !promoBudgetSelected && appliedCoupon ? appliedCoupon.code : "",
+            couponLabel: !promoBudgetSelected && appliedCoupon ? appliedCoupon.label : "",
+            referral: referral || "",
+            packageName: packageName || "",
+            packagePrice: packagePrice || "",
+            source,
+            message,
+          }),
         }),
-      });
+        fetch("/api/sms/send", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            message,
+            recipients: [whatsappNumber],
+          }),
+        }),
+      ]);
     } catch (error) {
-      console.error("Failed to send Arkesel SMS:", error);
+      console.error("Failed to save lead / send SMS:", error);
     } finally {
       setSending(false);
     }

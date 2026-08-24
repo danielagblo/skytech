@@ -317,6 +317,7 @@ export default function LandingPageContent({
       <BottomSheet isOpen={!!selectedPackage} onClose={() => setSelectedPackage(null)}>
         {selectedPackage && (
           <WhatsAppOfferForm
+            extended
             packageName={selectedPackage.name}
             packagePrice={selectedPackage.price}
             onClose={() => setSelectedPackage(null)}

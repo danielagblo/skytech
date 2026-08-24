@@ -21,7 +21,7 @@ export default function ContactForm() {
 
         <div className="grid gap-12 lg:grid-cols-2">
           <div className="rounded-none border border-slate-100 bg-white p-8 shadow-lift lg:p-10">
-            <WhatsAppOfferForm showReturn={false} />
+            <WhatsAppOfferForm extended showReturn={false} />
           </div>
 
           <div>
