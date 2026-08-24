@@ -28,6 +28,7 @@ export interface SessionStats {
 const PAGE_LABELS: Record<string, string> = {
   "/": "Home",
   "/landing": "Landing",
+  "/forms": "Forms",
   "/pricing": "Pricing",
   "/internship": "Internship",
   "/about": "About",

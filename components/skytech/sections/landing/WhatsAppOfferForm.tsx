@@ -1,7 +1,9 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { WHATSAPP_NUMBER } from "@/app/lib/whatsapp";
+import { WA_THANKYOU_KEY } from "@/app/lib/waThankYou";
 
 interface WhatsAppOfferFormProps {
   packageName?: string;
@@ -71,6 +73,7 @@ function WhatsAppOfferForm({
   whatsappNumber = DEFAULT_WHATSAPP,
   showReturn = true,
 }: WhatsAppOfferFormProps) {
+  const router = useRouter();
   const [name, setName] = useState("");
   const [urgency, setUrgency] = useState<Urgency | null>(null);
   const [industry, setIndustry] = useState<string | null>(null);
@@ -129,8 +132,21 @@ function WhatsAppOfferForm({
       setSending(false);
     }
 
-    window.open(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`, "_blank");
+    try {
+      sessionStorage.setItem(
+        WA_THANKYOU_KEY,
+        JSON.stringify({
+          message,
+          number: whatsappNumber,
+          name: name.trim(),
+        }),
+      );
+    } catch {
+      // ignore storage failures
+    }
+
     onClose?.();
+    router.push("/thank-you");
   };
 
   const errorRing = (invalid: boolean) => (showErrors && invalid ? "border-red-300" : "border-slate-200");
@@ -194,7 +210,7 @@ function WhatsAppOfferForm({
           className={`${showReturn && onClose ? "flex-[2]" : "w-full"} rounded-lg py-3 font-semibold text-white transition-colors ${isValid && !sending ? "bg-emerald-600 hover:bg-emerald-700" : "cursor-not-allowed bg-emerald-300 text-white/80"
             }`}
         >
-          {sending ? "Sending..." : "Open on What's App"}
+          {sending ? "Sending..." : "Submit"}
         </button>
       </div>
     </div>

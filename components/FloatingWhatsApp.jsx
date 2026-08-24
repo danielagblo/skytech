@@ -13,14 +13,14 @@ export default function FloatingWhatsApp() {
   const [bubbleDismissed, setBubbleDismissed] = useState(false);
 
   useEffect(() => {
-    if (pathname === "/landing" || isOpen || bubbleDismissed) return;
+    if (pathname === "/landing" || pathname === "/forms" || isOpen || bubbleDismissed) return;
 
     const showTimer = setTimeout(() => setShowBubble(true), 3500);
     return () => clearTimeout(showTimer);
   }, [pathname, isOpen, bubbleDismissed]);
 
   useEffect(() => {
-    if (pathname === "/landing" || isOpen) return;
+    if (pathname === "/landing" || pathname === "/forms" || isOpen) return;
 
     const shakeOnce = () => {
       setShake(true);
@@ -36,7 +36,7 @@ export default function FloatingWhatsApp() {
     };
   }, [pathname, isOpen]);
 
-  if (pathname === "/landing") return null;
+  if (pathname === "/landing" || pathname === "/forms") return null;
 
   const openChat = () => {
     setShowBubble(false);
