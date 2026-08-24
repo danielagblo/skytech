@@ -16,8 +16,8 @@ interface Partner {
 
 export default function FormsPageContent({ partners }: { partners: Partner[] }) {
   return (
-    <main className="min-h-screen overflow-x-hidden bg-slate-50">
-      <section className="relative w-full bg-slate-950 pt-[80px] md:pt-[110px]">
+    <main className="min-h-screen overflow-x-hidden bg-white">
+      <section className="relative w-full bg-slate-950 pt-14 md:pt-16">
         <div className="relative w-full leading-none">
           <Image
             src="/images/images/landing-hero.jpg"
@@ -29,23 +29,23 @@ export default function FormsPageContent({ partners }: { partners: Partner[] }) 
             className="block h-auto w-full object-contain"
           />
         </div>
-        <div className="bg-[#2f59c1] px-1 py-2 text-center whitespace-nowrap">
-          <p className="text-xs font-medium text-white sm:text-base">
-            Get a website that helps your business rank no1# on Google search.
-          </p>
-        </div>
       </section>
 
-      <section className="mx-auto max-w-6xl py-4 sm:py-6">
-        <div className="mb-3 text-center sm:mb-4">
-          <h3 className="text-lg font-bold tracking-wide text-slate-900">Our Partners</h3>
+      <section className="mx-auto max-w-6xl px-4 pb-2 pt-6 sm:px-6 sm:pt-8">
+        <div className="mb-4 text-center sm:mb-5">
+          <h3 className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-500">
+            Trusted by
+          </h3>
         </div>
         <ClientsCarousel partners={partners} />
       </section>
 
-      <section className="bg-white px-4 pb-10 pt-2 sm:px-6 sm:pb-14 sm:pt-4">
+      <section className="px-4 pb-12 pt-4 sm:px-6 sm:pb-16 sm:pt-6">
         <div className="mx-auto max-w-lg rounded-2xl border border-slate-200 bg-white p-5 shadow-lg sm:p-8">
-          <WhatsAppOfferForm showReturn={false} />
+          <WhatsAppOfferForm
+            showReturn={false}
+            subtitle="Kindly complete the form to proceed"
+          />
         </div>
       </section>
     </main>

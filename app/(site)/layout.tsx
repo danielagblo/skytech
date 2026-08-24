@@ -1,11 +1,10 @@
 import { ReactNode } from 'react';
-import Navigation from '../../components/skytech/layout/Navigation';
 import Footer from '../../components/skytech/layout/Footer';
 import { getSettings } from '../lib/settings';
 import { getLatestBlogPosts } from '../lib/blog';
 import { getAffiliates } from '../lib/affiliates';
 import FloatingWhatsApp from '../../components/FloatingWhatsApp';
-import TopScrollingBanner from '../../components/skytech/sections/home/TopScrollingBanner';
+import SiteChrome from '../../components/skytech/layout/SiteChrome';
 import { WhatsAppModalProvider } from '../../components/WhatsAppModal';
 
 export async function generateMetadata() {
@@ -45,10 +44,7 @@ export default async function SiteLayout({ children }: { children: ReactNode }) 
 
   return (
     <WhatsAppModalProvider whatsapp={settings.whatsapp}>
-      <div className="fixed top-[56px] md:top-0 w-full z-20 md:z-30">
-        <TopScrollingBanner />
-      </div>
-      <Navigation className="fixed top-0 left-0 z-30 w-full md:top-[45px]" />
+      <SiteChrome />
       <main>{children}</main>
       <Footer latestPosts={latestPosts} sponsors={sponsors} settings={settings} />
       <FloatingWhatsApp />

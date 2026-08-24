@@ -12,6 +12,8 @@ interface WhatsAppOfferFormProps {
   whatsappNumber?: string;
   /** Hide the Return button (e.g. embedded on the contact page). */
   showReturn?: boolean;
+  /** Override the line under "Well done!" */
+  subtitle?: string;
 }
 
 const DEFAULT_WHATSAPP = WHATSAPP_NUMBER;
@@ -72,6 +74,7 @@ function WhatsAppOfferForm({
   onClose,
   whatsappNumber = DEFAULT_WHATSAPP,
   showReturn = true,
+  subtitle = "One last step to get on",
 }: WhatsAppOfferFormProps) {
   const router = useRouter();
   const [name, setName] = useState("");
@@ -154,7 +157,7 @@ function WhatsAppOfferForm({
   return (
     <div className="text-center">
       <h2 className="text-2xl mt-2 font-bold text-slate-800">Well done!</h2>
-      <p className="text-lg text-slate-600">One last step to get on</p>
+      <p className="text-lg text-slate-600">{subtitle}</p>
       <p className="flex items-center justify-center gap-1.5 text-lg font-bold text-emerald-600">
         <svg viewBox="0 0 24 24" className="h-5 w-5 fill-emerald-600">
           <path d="M12 2a10 10 0 00-8.5 15.2L2 22l4.9-1.5A10 10 0 1012 2zm0 18a8 8 0 01-4.1-1.1l-.3-.2-3 .9.9-2.9-.2-.3A8 8 0 1112 20zm4.4-5.9c-.2-.1-1.4-.7-1.7-.8-.2-.1-.4-.1-.6.1-.2.2-.6.8-.8 1-.1.2-.3.2-.5.1-.2-.1-1-.4-1.9-1.2-.7-.6-1.2-1.4-1.3-1.6-.1-.2 0-.4.1-.5.1-.1.2-.3.4-.4.1-.1.2-.2.2-.4.1-.2 0-.3 0-.4-.1-.1-.6-1.4-.8-1.9-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.4.1-.6.3-.2.2-.8.8-.8 1.9s.8 2.2.9 2.4c.1.2 1.6 2.5 4 3.4.6.2 1 .4 1.3.5.6.2 1.1.1 1.5.1.5-.1 1.4-.6 1.6-1.1.2-.5.2-1 .1-1.1 0-.1-.2-.2-.4-.3z" />
