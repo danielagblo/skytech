@@ -84,6 +84,7 @@ function normalizeSource() {
 }
 
 function shouldSkip(pathname) {
+  if (!pathname) return true;
   return (
     pathname.startsWith("/dashboard") ||
     pathname.startsWith("/login") ||

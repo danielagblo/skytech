@@ -253,7 +253,9 @@ export default function ContactSubmissionsPage() {
                       </span>
                     ) : null}
                     <p className="text-xs text-slate-600 mt-2">
-                      {new Date(submission.submittedAt).toLocaleString()}
+                      {submission.submittedAt
+                        ? new Date(submission.submittedAt).toLocaleString()
+                        : ""}
                     </p>
                   </div>
                 </div>
