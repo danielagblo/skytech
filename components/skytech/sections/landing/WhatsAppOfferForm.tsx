@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { WHATSAPP_NUMBER } from "@/app/lib/whatsapp";
 import { WA_THANKYOU_KEY } from "@/app/lib/waThankYou";
+import { trackGtagLead } from "@/app/lib/gtag";
 import { lookupCoupon, type CouponOffer } from "@/app/lib/coupons";
 
 interface WhatsAppOfferFormProps {
@@ -252,6 +253,12 @@ function WhatsAppOfferForm({
     const message = lines.join("\n");
     const source =
       typeof window !== "undefined" ? window.location.pathname : extended ? "/forms" : "whatsapp-offer";
+
+    trackGtagLead({
+      eventLabel: source === "/forms" ? "forms_lead_submit" : "lead_submit",
+      eventCategory: "contact",
+      pagePath: source,
+    });
 
     setSending(true);
     try {

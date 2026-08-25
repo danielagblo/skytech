@@ -1,7 +1,9 @@
 "use client";
 
+import { useEffect } from "react";
 import Image from "next/image";
 
+import { trackGtagPageView } from "@/app/lib/gtag";
 import WhatsAppOfferForm from "@/components/skytech/sections/landing/WhatsAppOfferForm";
 import ClientsCarousel from "@/components/skytech/sections/home/ClientsCarousel";
 
@@ -15,6 +17,10 @@ interface Partner {
 }
 
 export default function FormsPageContent({ partners }: { partners: Partner[] }) {
+  useEffect(() => {
+    trackGtagPageView("/forms");
+  }, []);
+
   return (
     <main className="min-h-screen overflow-x-hidden bg-white">
       <section className="relative w-full bg-slate-950">
