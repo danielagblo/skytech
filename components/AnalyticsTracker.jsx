@@ -7,12 +7,19 @@ const UTM_KEY = "analytics_utm";
 
 function getSessionId() {
   if (typeof window === "undefined") return "";
-  let id = sessionStorage.getItem("analytics_session_id");
-  if (!id) {
-    id = crypto.randomUUID();
-    sessionStorage.setItem("analytics_session_id", id);
+  try {
+    let id = sessionStorage.getItem("analytics_session_id");
+    if (!id) {
+      id =
+        typeof crypto !== "undefined" && typeof crypto.randomUUID === "function"
+          ? crypto.randomUUID()
+          : `sess_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+      sessionStorage.setItem("analytics_session_id", id);
+    }
+    return id;
+  } catch {
+    return `sess_${Date.now()}`;
   }
-  return id;
 }
 
 function getDeviceType() {

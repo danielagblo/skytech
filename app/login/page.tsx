@@ -1,5 +1,4 @@
-import React, { Suspense } from "react";
-import LoginErrorBanner from "./LoginErrorBanner";
+import React from "react";
 
 export const metadata = {
   title: "Admin Login",
@@ -10,7 +9,13 @@ export const metadata = {
   },
 };
 
-export default function LoginPage() {
+export default async function LoginPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ error?: string }>;
+}) {
+  const { error } = await searchParams;
+
   return (
     <div className="min-h-screen flex items-center justify-center p-6 bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -29,9 +34,9 @@ export default function LoginPage() {
           </div>
         </div>
 
-        <Suspense fallback={null}>
-          <LoginErrorBanner />
-        </Suspense>
+        {error ? (
+          <div className="text-sm text-red-600 mb-3">Invalid username or password.</div>
+        ) : null}
 
         <form method="post" action="/api/auth/login">
           <label className="block text-sm font-medium text-slate-700 mb-2">Username</label>

@@ -1,4 +1,5 @@
-import { ReactNode } from 'react';
+import { ReactNode, Suspense } from 'react';
+import AnalyticsTracker from '../../components/AnalyticsTracker';
 import Footer from '../../components/skytech/layout/Footer';
 import { getSettings } from '../lib/settings';
 import { getLatestBlogPosts } from '../lib/blog';
@@ -44,6 +45,9 @@ export default async function SiteLayout({ children }: { children: ReactNode }) 
 
   return (
     <WhatsAppModalProvider whatsapp={settings.whatsapp}>
+      <Suspense fallback={null}>
+        <AnalyticsTracker />
+      </Suspense>
       <SiteChrome />
       <main>{children}</main>
       <Footer latestPosts={latestPosts} sponsors={sponsors} settings={settings} />
