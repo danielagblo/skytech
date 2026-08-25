@@ -11,9 +11,11 @@ export interface RawFAQ {
   category?: string;
 }
 
-export function groupFAQs(faqs: RawFAQ[]): GroupedFAQs {
+export function groupFAQs(faqs: RawFAQ[] | null | undefined): GroupedFAQs {
   const grouped: GroupedFAQs = {};
+  if (!Array.isArray(faqs)) return grouped;
   for (const faq of faqs) {
+    if (!faq) continue;
     const cat = faq.category || "General";
     if (!grouped[cat]) grouped[cat] = [];
     grouped[cat].push({ question: faq.question, answer: faq.answer });
