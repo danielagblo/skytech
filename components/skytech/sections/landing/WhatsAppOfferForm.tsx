@@ -260,32 +260,46 @@ function WhatsAppOfferForm({
       pagePath: source,
     });
 
+    const leadPayload = {
+      name: name.trim(),
+      phone: extended && phoneOk ? fullPhone : "",
+      email: "",
+      company: "",
+      industry: industry || "",
+      building: building || "",
+      projectType: projectType || packageName || "",
+      budget: budget || packagePrice || "",
+      timeline: "",
+      urgency: urgency || "",
+      coupon: !promoBudgetSelected && appliedCoupon ? appliedCoupon.code : "",
+      couponLabel: !promoBudgetSelected && appliedCoupon ? appliedCoupon.label : "",
+      referral: referral || "",
+      packageName: packageName || "",
+      packagePrice: packagePrice || "",
+      source,
+      message,
+    };
+
+    const crmBackendUrl = process.env.NEXT_PUBLIC_CRM_BACKEND_URL;
+    const crmRequests = crmBackendUrl
+      ? [
+          fetch(`${crmBackendUrl}/api/v1/public/landing-page-leads`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(leadPayload),
+          }).catch((error) => console.error("Failed to save lead to CRM:", error)),
+        ]
+      : [];
+
     setSending(true);
     try {
       await Promise.allSettled([
         fetch("/api/content/contact-submissions", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            name: name.trim(),
-            phone: extended && phoneOk ? fullPhone : "",
-            email: "",
-            company: "",
-            industry: industry || "",
-            building: building || "",
-            projectType: projectType || packageName || "",
-            budget: budget || packagePrice || "",
-            timeline: "",
-            urgency: urgency || "",
-            coupon: !promoBudgetSelected && appliedCoupon ? appliedCoupon.code : "",
-            couponLabel: !promoBudgetSelected && appliedCoupon ? appliedCoupon.label : "",
-            referral: referral || "",
-            packageName: packageName || "",
-            packagePrice: packagePrice || "",
-            source,
-            message,
-          }),
+          body: JSON.stringify(leadPayload),
         }),
+        ...crmRequests,
         fetch("/api/sms/send", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
