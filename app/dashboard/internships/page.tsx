@@ -88,20 +88,60 @@ export default function InternshipSubmissionsPage() {
   };
 
   const handleToggleEnrolled = async (submission: Submission) => {
+    const enrolling = !submission.enrolled;
+    let popup: Window | null = null;
+
+    if (enrolling) {
+      popup = window.open('', '_blank');
+    }
+
     try {
       const res = await fetch('/api/content/internship-submissions', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: submission.id, enrolled: !submission.enrolled }),
+        body: JSON.stringify({ id: submission.id, enrolled: enrolling }),
       });
-      if (res.ok) {
-        setSubmissions(submissions.map((s) =>
-          s.id === submission.id ? { ...s, enrolled: !s.enrolled } : s
-        ));
-      } else {
+      if (!res.ok) {
+        if (popup) popup.close();
         alert('Failed to update enrollment status');
+        return;
+      }
+
+      setSubmissions(submissions.map((s) =>
+        s.id === submission.id ? { ...s, enrolled: enrolling } : s
+      ));
+
+      if (enrolling) {
+        try {
+          const notifyRes = await fetch('/api/internship/approve-notify', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id: submission.id }),
+          });
+          const notifyJson = await notifyRes.json();
+
+          if (notifyRes.ok && notifyJson.whatsappUrl) {
+            if (popup) popup.location.href = notifyJson.whatsappUrl;
+            alert(
+              notifyJson.sms?.sent
+                ? 'Applicant enrolled. Approval SMS sent and WhatsApp chat opened.'
+                : 'Applicant enrolled. WhatsApp chat opened, but the approval SMS could not be sent.',
+            );
+          } else {
+            if (popup) popup.close();
+            alert(
+              'Applicant enrolled, but sending the approval failed: ' +
+                (notifyJson.error || 'Unknown error'),
+            );
+          }
+        } catch (error) {
+          if (popup) popup.close();
+          console.error('Error sending approval notifications:', error);
+          alert('Applicant enrolled, but sending the approval failed.');
+        }
       }
     } catch (error) {
+      if (popup) popup.close();
       console.error('Error updating enrollment status:', error);
       alert('Error updating enrollment status');
     }
