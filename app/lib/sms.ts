@@ -35,7 +35,7 @@ export async function sendSms(options: {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey}`,
+        "api-key": apiKey,
       },
       body: JSON.stringify({
         sender: senderId,

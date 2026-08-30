@@ -73,7 +73,11 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         success: true,
-        sms: { sent: sms.ok, error: sms.error },
+        sms: {
+          sent: sms.ok,
+          error: sms.error,
+          details: sms.data,
+        },
         whatsappUrl,
       },
       { headers: corsHeaders },
