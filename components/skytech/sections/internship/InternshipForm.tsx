@@ -29,6 +29,62 @@ const EMPTY_FORM: InternshipFormData = {
 
 const MAX_PHOTO_SIZE = 5 * 1024 * 1024; // 5MB
 const ALLOWED_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+const MAX_IMAGE_DIMENSION = 1024;
+const IMAGE_QUALITY = 0.8;
+
+async function compressImageFile(file: File): Promise<File> {
+  let source: CanvasImageSource;
+  let width: number;
+  let height: number;
+
+  const bitmap = await createImageBitmap(file).catch(() => null);
+  if (bitmap) {
+    source = bitmap;
+    width = bitmap.width;
+    height = bitmap.height;
+  } else {
+    const url = URL.createObjectURL(file);
+    try {
+      const img = await new Promise<HTMLImageElement>((resolve, reject) => {
+        const el = document.createElement("img");
+        el.onload = () => resolve(el);
+        el.onerror = () => reject(new Error("Could not read the selected image."));
+        el.src = url;
+      });
+      source = img;
+      width = img.naturalWidth;
+      height = img.naturalHeight;
+    } finally {
+      URL.revokeObjectURL(url);
+    }
+  }
+
+  const scale = Math.min(1, MAX_IMAGE_DIMENSION / Math.max(width, height));
+  const outW = Math.max(1, Math.round(width * scale));
+  const outH = Math.max(1, Math.round(height * scale));
+
+  const canvas = document.createElement("canvas");
+  canvas.width = outW;
+  canvas.height = outH;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) {
+    if (bitmap) bitmap.close();
+    throw new Error("Could not compress the selected image.");
+  }
+  ctx.drawImage(source, 0, 0, outW, outH);
+
+  const blob = await new Promise<Blob>((resolve, reject) => {
+    canvas.toBlob(
+      (b) => (b ? resolve(b) : reject(new Error("Could not compress the selected image."))),
+      "image/jpeg",
+      IMAGE_QUALITY,
+    );
+  });
+
+  if (bitmap) bitmap.close();
+  const baseName = (file.name || "photo").replace(/\.[^.]+$/, "") || "photo";
+  return new File([blob], `${baseName}.jpg`, { type: "image/jpeg" });
+}
 
 export default function InternshipForm() {
   const [formData, setFormData] = useState<InternshipFormData>(EMPTY_FORM);
@@ -97,41 +153,69 @@ export default function InternshipForm() {
     setLoading(true);
 
     try {
-      const uploadData = new FormData();
-      uploadData.append("file", profilePhoto);
-      uploadData.append("folder", "interns");
-
-      const uploadRes = await fetch("/api/content/upload-image", {
-        method: "POST",
-        body: uploadData,
-      });
-      const uploadJson = await uploadRes.json();
-
-      if (!uploadRes.ok || !uploadJson.url) {
-        throw new Error(uploadJson.error || "Failed to upload profile picture");
+      let compressed: File;
+      try {
+        compressed = await compressImageFile(profilePhoto);
+      } catch (err) {
+        throw new Error(
+          `Could not process the photo: ${err instanceof Error ? err.message : "Unknown error"}`,
+        );
       }
 
-      const response = await fetch("/api/content/internship-submissions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          ...formData,
-          name: formData.fullName,
-          school: formData.institutionType,
-          program: formData.programOffering,
-          image: uploadJson.url,
-          recipient: "info@skytechghana.com",
-        }),
-      });
+      const uploadData = new FormData();
+      uploadData.append("file", compressed);
+      uploadData.append("folder", "interns");
+
+      let uploadRes: Response;
+      try {
+        uploadRes = await fetch("/api/content/upload-image", {
+          method: "POST",
+          body: uploadData,
+        });
+      } catch (err) {
+        throw new Error(
+          `Photo upload failed (network): ${err instanceof Error ? err.message : "Unknown error"}`,
+        );
+      }
+
+      const uploadJson = await uploadRes.json().catch(() => ({}));
+      if (!uploadRes.ok || !uploadJson.url) {
+        throw new Error(
+          `Photo upload failed (HTTP ${uploadRes.status}): ${uploadJson.error || "Unknown error"}`,
+        );
+      }
+
+      let response: Response;
+      try {
+        response = await fetch("/api/content/internship-submissions", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            ...formData,
+            name: formData.fullName,
+            school: formData.institutionType,
+            program: formData.programOffering,
+            image: uploadJson.url,
+            recipient: "info@skytechghana.com",
+          }),
+        });
+      } catch (err) {
+        throw new Error(
+          `Submission failed (network): ${err instanceof Error ? err.message : "Unknown error"}`,
+        );
+      }
 
       if (!response.ok) {
-        throw new Error("Submission failed");
+        const errJson = await response.json().catch(() => ({}));
+        throw new Error(
+          `Submission failed (HTTP ${response.status}): ${errJson.error || "Unknown error"}`,
+        );
       }
 
       try {
-        await fetch("/api/sms/send", {
+        const smsRes = await fetch("/api/sms/send", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -148,6 +232,10 @@ export default function InternshipForm() {
             recipients: ["233538311626"],
           }),
         });
+        if (!smsRes.ok) {
+          const smsErr = await smsRes.json().catch(() => ({}));
+          console.error("Failed to send Arkesel SMS:", smsRes.status, smsErr);
+        }
       } catch (err) {
         console.error("Failed to send Arkesel SMS:", err);
       }
