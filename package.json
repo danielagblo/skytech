@@ -56,7 +56,7 @@
     "jsonwebtoken": "^9.0.3",
     "lexical": "^0.44.0",
     "lucide-react": "^1.14.0",
-    "mongoose": "^9.3.0",
+    "mongoose": "^9.11.4",
     "mysql2": "^3.23.3",
     "next": "^16.4.3",
     "next-themes": "^0.4.6",
@@ -77,7 +77,10 @@
     "source-map-js": "^1.2.2",
     "nanoid": "^3.3.12",
     "browserslist": "^4.28.7",
-    "postcss": "^8.5.6"
+    "postcss": "^8.5.32",
+    "esbuild": "^0.28.2",
+    "picomatch": "^4.0.7",
+    "postcss-selector-parser": "^7.1.7"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
@@ -86,7 +89,7 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "autoprefixer": "^10.4.23",
-    "postcss": "^8.5.6",
+    "postcss": "^8.5.32",
     "tsx": "^4.21.0",
     "typescript": "^5"
   }
