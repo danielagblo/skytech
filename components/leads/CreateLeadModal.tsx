@@ -1,0 +1,477 @@
+"use client";
+
+import { useEffect, useMemo } from "react";
+import { useForm, useWatch } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import type { Lead, LaunchTimeline } from "@/types/lead.types";
+import type { LeadSource, Priority } from "@/types/api.types";
+import type { User } from "@/types/user.types";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
+import { useCreateLead, useUpdateLead } from "@/hooks/useLeads";
+import { LEAD_INDUSTRIES } from "@/lib/crm-options";
+
+const schema = z
+  .object({
+    assigneeIds: z.array(z.string()).default([]),
+    firstName: z.string().trim().min(1, "Enter a first name."),
+    lastName: z.string(),
+    birthday: z
+      .string()
+      .regex(/^\d{2}-\d{2}$/, "Enter the birthday as MM-DD.")
+      .refine((value) => {
+        const [month, day] = value.split("-").map(Number);
+        const date = new Date(Date.UTC(2000, month - 1, day));
+        return date.getUTCMonth() === month - 1 && date.getUTCDate() === day;
+      }, "Enter a valid month and day."),
+    role: z.string(),
+    leadSource: z.enum([
+      "SMS",
+      "EMAIL",
+      "FACEBOOK",
+      "GOOGLE",
+      "BANNER",
+      "META_ADS",
+    ]),
+    priority: z.enum(["LOW", "MEDIUM", "HIGH"]),
+    companyName: z.string(),
+    industry: z.string(),
+    phone1: z.string().trim().min(7, "Enter a contact phone number."),
+    phone2: z.string().optional(),
+    whatsapp: z.string().optional(),
+    emailAddress: z.union([
+      z.literal(""),
+      z.string().email("Enter a valid email."),
+    ]),
+    address: z.string(),
+    launchTimeline: z.enum([
+      "IN_1_WEEK",
+      "ONE_TO_TWO_MONTHS",
+      "THREE_PLUS_MONTHS",
+    ]),
+    meetingArranged: z.boolean(),
+    hasPublicOffice: z.boolean(),
+    smsOptIn: z.boolean(),
+    emailOptIn: z.boolean(),
+    newsletterOptIn: z.boolean(),
+    description: z.string(),
+  })
+  .superRefine((values, context) => {
+    if (values.smsOptIn && values.phone1.trim().length < 8)
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["phone1"],
+        message: "Enter a valid phone number for SMS communication.",
+      });
+    if (
+      (values.emailOptIn || values.newsletterOptIn) &&
+      !values.emailAddress.trim()
+    )
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["emailAddress"],
+        message: "Email is required for email communication or the newsletter.",
+      });
+  });
+type Values = z.infer<typeof schema>;
+
+const defaults: Values = {
+  assigneeIds: [],
+  firstName: "",
+  lastName: "",
+  birthday: "",
+  role: "",
+  leadSource: "SMS",
+  priority: "MEDIUM",
+  companyName: "",
+  industry: "",
+  phone1: "",
+  phone2: "",
+  whatsapp: "",
+  emailAddress: "",
+  address: "",
+  launchTimeline: "ONE_TO_TWO_MONTHS",
+  meetingArranged: true,
+  hasPublicOffice: true,
+  smsOptIn: false,
+  emailOptIn: false,
+  newsletterOptIn: false,
+  description: "",
+};
+
+export const CreateLeadModal = ({
+  open,
+  onOpenChange,
+  lead,
+  users = [],
+}: {
+  open: boolean;
+  onOpenChange: (value: boolean) => void;
+  lead?: Lead | null;
+  users?: User[];
+}) => {
+  const create = useCreateLead();
+  const update = useUpdateLead();
+  const eligibleUsers = useMemo(
+    () => users.filter((user) => user.active),
+    [users],
+  );
+  const eligibleUserIds = useMemo(
+    () => new Set(eligibleUsers.map((user) => user.id)),
+    [eligibleUsers],
+  );
+  const {
+    register,
+    control,
+    setValue,
+    reset,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Values>({
+    resolver: zodResolver(schema),
+    mode: "onBlur",
+    defaultValues: defaults,
+  });
+  const toggles = useWatch({ control });
+  useEffect(() => {
+    if (!open) return;
+    reset(
+      lead
+        ? {
+            assigneeIds: (lead.assignedTo ?? []).filter((id) =>
+              eligibleUserIds.has(id),
+            ),
+            firstName: lead.firstName ?? "",
+            lastName: lead.lastName ?? "",
+            birthday: lead.birthday?.slice(-5) ?? "",
+            role: lead.role ?? "",
+            leadSource: lead.leadSource ?? "SMS",
+            priority: lead.priority ?? "MEDIUM",
+            companyName: lead.companyName ?? "",
+            industry: lead.industry ?? lead.category ?? "",
+            phone1: lead.phone1 ?? "",
+            phone2: lead.phone2 ?? "",
+            whatsapp: lead.whatsapp ?? "",
+            emailAddress: lead.email ?? "",
+            address: lead.address ?? "",
+            launchTimeline: lead.launchTimeline ?? "ONE_TO_TWO_MONTHS",
+            meetingArranged: Boolean(lead.meetingArranged),
+            hasPublicOffice: Boolean(lead.hasPublicOffice),
+            smsOptIn: lead.smsOptIn,
+            emailOptIn: lead.emailOptIn,
+            newsletterOptIn: lead.newsletterOptIn,
+            description: lead.description ?? "",
+          }
+        : defaults,
+    );
+  }, [eligibleUserIds, lead, open, reset]);
+
+  const submit = handleSubmit((values) => {
+    const data = {
+      assignedTo: values.assigneeIds.filter((id) => eligibleUserIds.has(id)),
+      firstName: values.firstName,
+      lastName: values.lastName,
+      birthday: values.birthday || undefined,
+      role: values.role,
+      leadSource: values.leadSource as LeadSource,
+      priority: values.priority as Priority,
+      companyName: values.companyName,
+      industry: values.industry,
+      category: values.industry,
+      phone1: values.phone1,
+      phone2: values.phone2 || undefined,
+      whatsapp: values.whatsapp || undefined,
+      email: values.emailAddress || undefined,
+      address: values.address,
+      launchTimeline: values.launchTimeline as LaunchTimeline,
+      meetingArranged: values.meetingArranged,
+      hasPublicOffice: values.hasPublicOffice,
+      smsOptIn: values.smsOptIn,
+      emailOptIn: values.emailOptIn,
+      newsletterOptIn: values.newsletterOptIn,
+      description: values.description,
+    };
+    if (lead)
+      update.mutate(
+        { id: lead.id, data },
+        { onSuccess: () => onOpenChange(false) },
+      );
+    else
+      create.mutate(data, {
+        onSuccess: () => {
+          reset(defaults);
+          onOpenChange(false);
+        },
+      });
+  });
+  const pending = create.isPending || update.isPending;
+  const error = (name: keyof Values) =>
+    errors[name] && (
+      <p className="text-xs text-danger">{errors[name]?.message}</p>
+    );
+  const selectedAssignees = new Set(toggles.assigneeIds ?? []);
+  const toggleAssignee = (id: string) => {
+    const next = selectedAssignees.has(id)
+      ? (toggles.assigneeIds ?? []).filter((value) => value !== id)
+      : [...(toggles.assigneeIds ?? []), id];
+    setValue("assigneeIds", next, { shouldValidate: true });
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-h-[90vh] sm:max-w-4xl overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle>{lead ? "Edit lead" : "Create lead"}</DialogTitle>
+        </DialogHeader>
+        <form className="space-y-5" onSubmit={submit}>
+          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+            <div className="sm:col-span-2 xl:col-span-3">
+              <Label>Assign to</Label>
+              <div className="mt-2">
+                <label className="mb-2 flex items-center gap-3 text-sm">
+                  <Checkbox
+                    checked={eligibleUsers.length > 0 && selectedAssignees.size === eligibleUsers.length}
+                    onCheckedChange={(value) =>
+                      setValue(
+                        "assigneeIds",
+                        value ? eligibleUsers.map((u) => u.id) : [],
+                        { shouldValidate: true },
+                      )
+                    }
+                  />
+                  <span>Select all ({eligibleUsers.length})</span>
+                </label>
+                <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
+                  {eligibleUsers.map((user) => (
+                    <label
+                      key={user.id}
+                      className="flex items-center gap-3 rounded-xl border px-3 py-2 text-sm"
+                    >
+                      <Checkbox
+                        checked={selectedAssignees.has(user.id)}
+                        onCheckedChange={() => toggleAssignee(user.id)}
+                      />
+                      <span>
+                        {user.firstName} {user.lastName}
+                      </span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+            </div>
+            <div>
+              <Label>First name</Label>
+              <Input {...register("firstName")} />
+              {error("firstName")}
+            </div>
+            <div>
+              <Label>Last name</Label>
+              <Input {...register("lastName")} />
+              {error("lastName")}
+            </div>
+            <div>
+              <Label>Birthday (month and day)</Label>
+              <Input
+                inputMode="numeric"
+                placeholder="MM-DD"
+                maxLength={5}
+                {...register("birthday")}
+              />
+              {error("birthday")}
+            </div>
+            <div>
+              <Label>Role</Label>
+              <Input {...register("role")} />
+              {error("role")}
+            </div>
+            <div>
+              <Label>Lead source</Label>
+              <Select
+                value={toggles.leadSource}
+                onValueChange={(value: LeadSource) =>
+                  setValue("leadSource", value)
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {(
+                    [
+                      "SMS",
+                      "EMAIL",
+                      "FACEBOOK",
+                      "GOOGLE",
+                      "BANNER",
+                      "META_ADS",
+                    ] as const
+                  ).map((value) => (
+                    <SelectItem key={value} value={value}>
+                      {value.replace("_", " ")}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label>Priority</Label>
+              <Select
+                value={toggles.priority}
+                onValueChange={(value: Priority) => setValue("priority", value)}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="LOW">Low</SelectItem>
+                  <SelectItem value="MEDIUM">Medium</SelectItem>
+                  <SelectItem value="HIGH">High</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label>Company name</Label>
+              <Input {...register("companyName")} />
+              {error("companyName")}
+            </div>
+            <div>
+              <Label>Industry</Label>
+              <Select
+                value={toggles.industry}
+                onValueChange={(value) =>
+                  setValue("industry", value, { shouldValidate: true })
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select an industry" />
+                </SelectTrigger>
+                <SelectContent>
+                  {LEAD_INDUSTRIES.map((industry) => (
+                    <SelectItem key={industry} value={industry}>
+                      {industry}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {error("industry")}
+            </div>
+            <div>
+              <Label>Contact (phone)</Label>
+              <Input {...register("phone1")} />
+              {error("phone1")}
+            </div>
+            <div>
+              <Label>Secondary phone</Label>
+              <Input {...register("phone2")} />
+            </div>
+            <div>
+              <Label>WhatsApp line</Label>
+              <Input {...register("whatsapp")} />
+            </div>
+            <div>
+              <Label>Email</Label>
+              <Input type="email" {...register("emailAddress")} />
+              {error("emailAddress")}
+            </div>
+            <div className="sm:col-span-2">
+              <Label>Address</Label>
+              <Input {...register("address")} />
+              {error("address")}
+            </div>
+          </div>
+          <div>
+            <Label>How soon to launch?</Label>
+            <div className="mt-2 flex flex-wrap gap-2">
+              {(
+                [
+                  ["IN_1_WEEK", "In 1 week"],
+                  ["ONE_TO_TWO_MONTHS", "1–2 months"],
+                  ["THREE_PLUS_MONTHS", "3+ months"],
+                ] as const
+              ).map(([value, label]) => (
+                <label
+                  key={value}
+                  className="rounded-lg border px-3 py-2 text-sm"
+                >
+                  <input
+                    type="radio"
+                    value={value}
+                    className="mr-2"
+                    {...register("launchTimeline")}
+                  />
+                  {label}
+                </label>
+              ))}
+            </div>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2">
+            {(
+              [
+                ["Can we arrange a meeting?", "meetingArranged"],
+                ["Do you have a public office?", "hasPublicOffice"],
+              ] as const
+            ).map(([label, key]) => (
+              <div
+                key={key}
+                className="flex items-center justify-between rounded-lg border p-3"
+              >
+                <Label>{label}</Label>
+                <Switch
+                  checked={Boolean(toggles[key])}
+                  onCheckedChange={(value) => setValue(key, value)}
+                />
+              </div>
+            ))}
+          </div>
+          <div className="flex flex-wrap gap-5 rounded-xl bg-muted p-4">
+              {(
+                [
+                  ["Communications by SMS", "smsOptIn"],
+                  ["Communications by email", "emailOptIn"],
+                  ["Subscribe to newsletter", "newsletterOptIn"],
+                ] as const
+              ).map(([label, key]) => (
+                <label key={key} className="flex items-center gap-2 text-sm">
+                  <Switch
+                    checked={Boolean(toggles[key])}
+                    onCheckedChange={(value) => setValue(key, value)}
+                  />
+                  {label}
+                </label>
+              ))}
+          </div>
+          <p className="text-xs text-muted-foreground">
+            These choices only save the lead&apos;s communication consent.
+            Creating the lead will not send an SMS or email.
+          </p>
+          <div>
+            <Label>Description</Label>
+            <Textarea {...register("description")} />
+            {error("description")}
+          </div>
+          <Button className="w-full" disabled={pending} type="submit">
+            {pending ? "Saving…" : "Save lead"}
+          </Button>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
+};

@@ -1,0 +1,114 @@
+"use client";
+import { CalendarClock, MessageSquare, Phone, UserRound } from "lucide-react";
+import { useEffect, useState } from "react";
+import type { Deal, DealLog } from "@/types/deal.types";
+import type { Lead } from "@/types/lead.types";
+import type { User, UserSummary } from "@/types/user.types";
+import { PriorityBadge } from "@/components/shared/PriorityBadge";
+import { AssigneeStack } from "@/components/shared/AssigneeStack";
+import { formatCurrency, formatDate } from "@/lib/utils";
+import { isLeadSeen } from "@/lib/seenLeads";
+
+export const DealCard = ({
+  deal,
+  lead,
+  assignee,
+  logs,
+  onClick,
+}: {
+  deal: Deal;
+  lead?: Lead;
+  assignee?: User;
+  logs: DealLog[];
+  onClick: () => void;
+}) => {
+  const followUp = (() => {
+    const dates = logs
+      .map((log) => log.followUpAt || log.settlementFollowUp)
+      .filter((d): d is string => Boolean(d))
+      .map((d) => new Date(d).toISOString())
+      .sort();
+    if (dates.length === 0) return null;
+    return dates[dates.length - 1];
+  })();
+  const services = [
+    ["DOMAIN", deal.domainExpiry, deal.domainCost],
+    ["HOSTING", deal.hostingExpiry, deal.hostingCost],
+    ["MAINTENANCE", deal.maintenanceExpiry, deal.maintenanceCost],
+  ] as const;
+  const [isSeen, setIsSeen] = useState(true);
+  useEffect(() => {
+    setIsSeen(lead ? isLeadSeen(lead.id) : true);
+  }, [lead]);
+  return (
+    <button
+      onClick={onClick}
+      className="w-full rounded-md border bg-card p-3 text-left shadow-[0_1px_2px_rgba(15,23,42,.04)] transition hover:-translate-y-0.5 hover:border-primary/60 hover:shadow-md"
+    >
+      <div className="flex items-start justify-between gap-2">
+        <h4 className="line-clamp-2 text-sm font-semibold">{deal.title}</h4>
+        {deal.priority && <PriorityBadge priority={deal.priority} />}
+      </div>
+      <p className="mt-1 text-xs font-semibold text-green-700 dark:text-green-400">
+        {formatCurrency(deal.contractValue)}
+      </p>
+      <div className="mt-3 space-y-1.5 text-xs text-muted-foreground">
+        <p className="flex items-center gap-2">
+          <UserRound className="h-3.5 w-3.5" />
+          {lead ? (
+            <span className="flex items-center gap-2">
+              {!isSeen && (
+                <span className="inline-block h-2 w-2 shrink-0 rounded-full bg-primary/80" />
+              )}
+              <span>{`${lead.firstName || "Unnamed"} · ${lead.role || "Contact"}`}</span>
+            </span>
+          ) : (
+            "No linked lead"
+          )}
+        </p>
+        <p className="flex items-center gap-2">
+          <Phone className="h-3.5 w-3.5" />
+          {lead?.phone1 || "No phone number"}
+        </p>
+        <p className="flex items-center gap-2">
+          <CalendarClock className="h-3.5 w-3.5" />
+          {followUp
+            ? `Follow-up ${formatDate(followUp)}`
+            : `Issued ${formatDate(deal.createdAt)}`}
+        </p>
+      </div>
+      {deal.stage === "PAYMENT" && (
+        <p
+          className={`mt-3 rounded-md px-2 py-1 text-xs font-semibold ${deal.paidInFull ? "bg-green-50 text-green-700 dark:bg-green-950/40 dark:text-green-300" : "bg-red-50 text-red-700 dark:bg-red-950/40 dark:text-red-300"}`}
+        >
+          {deal.paidInFull
+            ? "Paid in full"
+            : `${formatCurrency(deal.arrears)} in arrears`}
+        </p>
+      )}
+      {deal.stage === "CLIENT_RETENTION" && (
+        <div className="mt-3 space-y-1 border-t pt-2 text-[10px] text-muted-foreground">
+          {services.map(
+            ([type, expiry, cost]) =>
+              expiry && (
+                <p key={type}>
+                  {type}: {formatDate(expiry)} · {formatCurrency(cost)}
+                </p>
+              ),
+          )}
+        </div>
+      )}
+      <div className="mt-3 flex items-center justify-between border-t pt-2">
+        {assignee ? (
+          <AssigneeStack users={[assignee as UserSummary]} />
+        ) : (
+          <span className="text-[10px] text-muted-foreground">Unassigned</span>
+        )}
+        <span className="flex items-center gap-1 text-[10px] text-muted-foreground">
+          <MessageSquare className="h-3 w-3" />
+          {deal.notes ? 1 : 0}
+        </span>
+      </div>
+    </button>
+  );
+};

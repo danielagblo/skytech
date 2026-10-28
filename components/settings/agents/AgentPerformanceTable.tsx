@@ -1,0 +1,63 @@
+"use client";
+import { useUserPerformance } from "@/hooks/useUsers";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { formatCurrency, formatDuration } from "@/lib/utils";
+import { EmptyState } from "@/components/shared/EmptyState";
+export const AgentPerformanceTable = ({ userId }: { userId?: string }) => {
+  const performance = useUserPerformance(userId ?? "");
+  const rows = Object.entries(performance.data?.byMonth ?? {});
+  return (
+    <section className="surface overflow-hidden">
+      <div className="p-4">
+        <h3 className="font-semibold">Performance Snapshot</h3>
+        <p className="text-xs text-muted-foreground">
+          {userId
+            ? "Selected agent performance"
+            : "Select an agent to view performance"}
+        </p>
+      </div>
+      {!userId || rows.length === 0 ? (
+        <EmptyState
+          title="No monthly performance yet"
+          message="Monthly revenue appears after the selected agent closes and receives payments on deals."
+        />
+      ) : (
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Rank</TableHead>
+              <TableHead>Deals Closed</TableHead>
+              <TableHead>Revenue</TableHead>
+              <TableHead>Logged Call Time</TableHead>
+              <TableHead>Active CRM Session</TableHead>
+              <TableHead>Month</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {rows.map(([month, revenue]) => (
+              <TableRow key={month}>
+                <TableCell>{performance.data?.rank}</TableCell>
+                <TableCell>{performance.data?.closedDeals}</TableCell>
+                <TableCell>{formatCurrency(revenue)}</TableCell>
+                <TableCell>
+                  {formatDuration(performance.data?.loggedCallSeconds ?? 0)}
+                </TableCell>
+                <TableCell>
+                  {formatDuration(performance.data?.activeSessionSeconds ?? 0)}
+                </TableCell>
+                <TableCell>{month}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      )}
+    </section>
+  );
+};

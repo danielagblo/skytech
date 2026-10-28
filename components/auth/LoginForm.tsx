@@ -1,0 +1,118 @@
+"use client";
+
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Eye, EyeOff, LockKeyhole, Mail } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useLogin } from "@/hooks/useAuth";
+import { demoUser, useAuthStore } from "@/store/authStore";
+
+const schema = z.object({
+  email: z.string().email("Enter a valid work email."),
+  password: z.string().min(8, "Password must contain at least 8 characters."),
+});
+type Values = z.infer<typeof schema>;
+
+export const LoginForm = () => {
+  const [visible, setVisible] = useState(false);
+  const login = useLogin();
+  const setAuth = useAuthStore((state) => state.setAuth);
+  const demoEnabled = process.env.NEXT_PUBLIC_ENABLE_DEMO_AUTH === "true";
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Values>({ resolver: zodResolver(schema), mode: "onBlur" });
+  const submit = (data: Values) => {
+    sessionStorage.setItem("skytech_login_attempt", JSON.stringify(data));
+    login.mutate(data);
+  };
+  const enterDemo = () => {
+    setAuth(demoUser, "demo-development-access", "demo-development-refresh");
+    // A full navigation guarantees the freshly-written auth cookie reaches the
+    // route proxy on the first protected request.
+    window.location.assign("/home");
+  };
+  return (
+    <form className="space-y-5" onSubmit={handleSubmit(submit)}>
+      <div className="space-y-2">
+        <Label htmlFor="email" className="sr-only">
+          Email address
+        </Label>
+        <div className="relative">
+          <Mail className="absolute left-5 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-600" />
+          <Input
+            id="email"
+            type="email"
+            autoComplete="email"
+            placeholder="name@skytech.com"
+            className="h-16 rounded-2xl border-slate-500/35 bg-white/20 pl-14 text-lg placeholder:text-slate-700 focus-visible:bg-white/35"
+            {...register("email")}
+          />
+        </div>
+        {errors.email && (
+          <p className="text-xs text-danger">{errors.email.message}</p>
+        )}
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="password" className="sr-only">
+          Password
+        </Label>
+        <div className="relative">
+          <LockKeyhole className="absolute left-5 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-600" />
+          <Input
+            id="password"
+            type={visible ? "text" : "password"}
+            autoComplete="current-password"
+            placeholder="Enter your password"
+            className="h-16 rounded-2xl border-slate-500/35 bg-white/20 px-14 text-lg placeholder:text-slate-700 focus-visible:bg-white/35"
+            {...register("password")}
+          />
+          <button
+            type="button"
+            onClick={() => setVisible((value) => !value)}
+            className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-600"
+            aria-label={visible ? "Hide password" : "Show password"}
+          >
+            {visible ? (
+              <EyeOff className="h-4 w-4" />
+            ) : (
+              <Eye className="h-4 w-4" />
+            )}
+          </button>
+        </div>
+        {errors.password && (
+          <p className="text-xs text-danger">{errors.password.message}</p>
+        )}
+      </div>
+      <Button
+        className="h-16 w-full rounded-2xl text-lg font-normal"
+        type="submit"
+        disabled={login.isPending}
+      >
+        {login.isPending ? "Signing in…" : "Login"}
+      </Button>
+      {demoEnabled && (
+        <>
+          <div className="flex items-center gap-3 text-xs text-muted-foreground">
+            <span className="h-px flex-1 bg-border" />
+            Development only
+            <span className="h-px flex-1 bg-border" />
+          </div>
+          <Button
+            className="w-full"
+            type="button"
+            variant="outline"
+            onClick={enterDemo}
+          >
+            Enter demo workspace
+          </Button>
+        </>
+      )}
+    </form>
+  );
+};
