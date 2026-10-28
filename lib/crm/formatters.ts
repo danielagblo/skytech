@@ -1,11 +1,12 @@
 import { MysqlRow } from "./db";
 import { Lead } from "@/types/lead.types";
-import { Deal } from "@/types/deal.types";
+import { Deal, DealLog } from "@/types/deal.types";
 import { Task } from "@/types/task.types";
 import { Invoice } from "@/types/invoice.types";
 import { CalendarEvent } from "@/types/calendar.types";
 import { AppNotification } from "@/types/notification.types";
 import { Broadcast } from "@/types/broadcast.types";
+import { Automation } from "@/types/automation.types";
 import { TaskStatus } from "@/types/api.types";
 
 export function formatLead(row: MysqlRow): Lead {
@@ -188,6 +189,58 @@ export function formatBroadcast(row: MysqlRow): Broadcast {
     createdById: row.created_by ? String(row.created_by) : "",
     scheduledAt: row.scheduled_for ? new Date(row.scheduled_for).toISOString() : null,
     sentAt: row.sent_at ? new Date(row.sent_at).toISOString() : null,
+    createdAt: row.created_at ? new Date(row.created_at).toISOString() : new Date().toISOString(),
+  };
+}
+
+export function formatDealLog(row: MysqlRow): DealLog {
+  return {
+    id: String(row.id),
+    dealId: String(row.deal_id),
+    createdById: row.created_by ? String(row.created_by) : "",
+    logType: row.log_type || "NEGOTIATION",
+    contactMode: row.contact_mode || null,
+    responseType: row.response_type || null,
+    callDirection: null,
+    callDurationSeconds: null,
+    callOutcome: null,
+    followUpAt: row.follow_up_at ? new Date(row.follow_up_at).toISOString() : null,
+    settlementValue: row.settlement_value ? Number(row.settlement_value) : null,
+    settlementFollowUp: row.settlement_follow_up ? new Date(row.settlement_follow_up).toISOString() : null,
+    specialConditions: row.special_conditions || null,
+    amountPaid: row.amount_paid ? Number(row.amount_paid) : null,
+    paymentMode: row.payment_mode || null,
+    invoiceNumber: row.invoice_number || null,
+    receiptNumber: row.receipt_number || null,
+    invoiceIssued: Boolean(row.invoice_issued),
+    serviceType: row.service_type || null,
+    expiryDate: row.expiry_date ? new Date(row.expiry_date).toISOString().slice(0, 10) : null,
+    retentionAmount: row.retention_amount ? Number(row.retention_amount) : null,
+    retentionInvoice: row.retention_invoice || null,
+    retentionReceipt: row.retention_receipt || null,
+    autoReviewScore: row.auto_review_score || null,
+    body: row.body || null,
+    createdAt: row.created_at ? new Date(row.created_at).toISOString() : new Date().toISOString(),
+  };
+}
+
+export function formatAutomation(row: MysqlRow): Automation {
+  let cfg: any = {};
+  if (typeof row.config === "string") {
+    try { cfg = JSON.parse(row.config); } catch {}
+  } else if (typeof row.config === "object" && row.config !== null) {
+    cfg = row.config;
+  }
+
+  return {
+    id: String(row.id),
+    automationType: (row.trigger_type || "BIRTHDAY") as any,
+    name: row.name || "Untitled Automation",
+    active: Boolean(row.is_active),
+    triggerConfig: cfg.triggerConfig || {},
+    contactIds: cfg.contactIds || [],
+    steps: cfg.steps || [],
+    createdById: row.created_by ? String(row.created_by) : "",
     createdAt: row.created_at ? new Date(row.created_at).toISOString() : new Date().toISOString(),
   };
 }

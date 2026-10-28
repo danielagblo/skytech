@@ -1,38 +1,7 @@
 import { NextRequest } from "next/server";
 import { getAuthUser, apiSuccess, apiError } from "@/lib/crm/auth";
 import { crmExecute, crmQuery, initCrmSchema, MysqlRow, newId } from "@/lib/crm/db";
-import { DealLog } from "@/types/deal.types";
-
-export function formatDealLog(row: MysqlRow): DealLog {
-  return {
-    id: String(row.id),
-    dealId: String(row.deal_id),
-    createdById: row.created_by ? String(row.created_by) : "",
-    logType: row.log_type || "NEGOTIATION",
-    contactMode: row.contact_mode || null,
-    responseType: row.response_type || null,
-    callDirection: null,
-    callDurationSeconds: null,
-    callOutcome: null,
-    followUpAt: row.follow_up_at ? new Date(row.follow_up_at).toISOString() : null,
-    settlementValue: row.settlement_value ? Number(row.settlement_value) : null,
-    settlementFollowUp: row.settlement_follow_up ? new Date(row.settlement_follow_up).toISOString() : null,
-    specialConditions: row.special_conditions || null,
-    amountPaid: row.amount_paid ? Number(row.amount_paid) : null,
-    paymentMode: row.payment_mode || null,
-    invoiceNumber: row.invoice_number || null,
-    receiptNumber: row.receipt_number || null,
-    invoiceIssued: Boolean(row.invoice_issued),
-    serviceType: row.service_type || null,
-    expiryDate: row.expiry_date ? new Date(row.expiry_date).toISOString().slice(0, 10) : null,
-    retentionAmount: row.retention_amount ? Number(row.retention_amount) : null,
-    retentionInvoice: row.retention_invoice || null,
-    retentionReceipt: row.retention_receipt || null,
-    autoReviewScore: row.auto_review_score || null,
-    body: row.body || null,
-    createdAt: row.created_at ? new Date(row.created_at).toISOString() : new Date().toISOString(),
-  };
-}
+import { formatDealLog } from "@/lib/crm/formatters";
 
 export async function GET(
   request: NextRequest,

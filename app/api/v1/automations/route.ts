@@ -1,28 +1,7 @@
 import { NextRequest } from "next/server";
 import { getAuthUser, apiSuccess, apiError } from "@/lib/crm/auth";
 import { crmExecute, crmQuery, initCrmSchema, MysqlRow, newId } from "@/lib/crm/db";
-import { Automation } from "@/types/automation.types";
-
-export function formatAutomation(row: MysqlRow): Automation {
-  let cfg: any = {};
-  if (typeof row.config === "string") {
-    try { cfg = JSON.parse(row.config); } catch {}
-  } else if (typeof row.config === "object" && row.config !== null) {
-    cfg = row.config;
-  }
-
-  return {
-    id: String(row.id),
-    automationType: (row.trigger_type || "BIRTHDAY") as any,
-    name: row.name || "Untitled Automation",
-    active: Boolean(row.is_active),
-    triggerConfig: cfg.triggerConfig || {},
-    contactIds: cfg.contactIds || [],
-    steps: cfg.steps || [],
-    createdById: row.created_by ? String(row.created_by) : "",
-    createdAt: row.created_at ? new Date(row.created_at).toISOString() : new Date().toISOString(),
-  };
-}
+import { formatAutomation } from "@/lib/crm/formatters";
 
 export async function GET(request: NextRequest) {
   try {

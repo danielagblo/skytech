@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import { getAuthUser, apiSuccess, apiError } from "@/lib/crm/auth";
 import { crmExecute, crmQuery, initCrmSchema, MysqlRow } from "@/lib/crm/db";
-import { formatDealLog } from "../route";
+import { formatDealLog } from "@/lib/crm/formatters";
 
 export async function GET(
   request: NextRequest,
