@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  darkMode: ["class"],
   content: [
     './app/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
@@ -7,6 +8,39 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        border: "hsl(var(--border))",
+        input: "hsl(var(--input))",
+        ring: "hsl(var(--ring))",
+        background: "hsl(var(--background))",
+        foreground: "hsl(var(--foreground))",
+        primary: { DEFAULT: "#4ADE80", foreground: "#000000" },
+        secondary: {
+          DEFAULT: "hsl(var(--secondary))",
+          foreground: "hsl(var(--secondary-foreground))",
+        },
+        muted: {
+          DEFAULT: "hsl(var(--muted))",
+          foreground: "hsl(var(--muted-foreground))",
+        },
+        accent: {
+          DEFAULT: "hsl(var(--accent))",
+          foreground: "hsl(var(--accent-foreground))",
+        },
+        destructive: { DEFAULT: "#EF4444", foreground: "#FFFFFF" },
+        card: {
+          DEFAULT: "hsl(var(--card))",
+          foreground: "hsl(var(--card-foreground))",
+        },
+        success: "#22C55E",
+        warning: "#F59E0B",
+        danger: "#EF4444",
+        info: "#3B82F6",
+        sidebar: "#F8FAF8",
+        prospecting: "#8B5CF6",
+        negotiation: "#3B82F6",
+        settlement: "#F59E0B",
+        payment: "#22C55E",
+        retention: "#EC4899",
         slate: {
           50: '#f8fafc',
           100: '#f1f5f9',
@@ -52,5 +86,5 @@ module.exports = {
       },
     },
   },
-  plugins: [],
-}
+  plugins: [require("tailwindcss-animate")],
+};
