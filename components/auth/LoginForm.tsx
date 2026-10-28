@@ -35,7 +35,11 @@ export const LoginForm = () => {
     setAuth(demoUser, "demo-development-access", "demo-development-refresh");
     // A full navigation guarantees the freshly-written auth cookie reaches the
     // route proxy on the first protected request.
-    window.location.assign("/home");
+    window.location.assign(
+      typeof window !== "undefined" && window.location.pathname.startsWith("/crm")
+        ? "/crm/home"
+        : "/home",
+    );
   };
   return (
     <form className="space-y-5" onSubmit={handleSubmit(submit)}>

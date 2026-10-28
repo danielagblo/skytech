@@ -33,7 +33,11 @@ export function proxy(request: NextRequest) {
   const host = (request.headers.get("host") || "").toLowerCase();
   const isCrmSubdomain = host.startsWith("crm.") || request.nextUrl.searchParams.get("__crm") === "1";
   const isCrmPath = pathname.startsWith("/crm");
-  const isCrm = isCrmSubdomain || isCrmPath;
+  const isCrmDirectRoute =
+    crmProtectedRoutes.some(
+      (route) => pathname === route || pathname.startsWith(`${route}/`)
+    ) || pathname === "/verify-otp";
+  const isCrm = isCrmSubdomain || isCrmPath || isCrmDirectRoute;
 
   // Allow static assets, next internal files, and public assets to pass through
   const isStaticAsset = /\.(png|jpg|jpeg|gif|svg|ico|webmanifest|pdf|txt)$/.test(pathname);
@@ -75,7 +79,7 @@ export function proxy(request: NextRequest) {
     }
 
     // Root path on CRM: redirect to home or login
-    if (effectivePath === "/") {
+    if (effectivePath === "/" && (isCrmSubdomain || isCrmPath)) {
       const targetUrl = new URL(
         authenticated ? (isCrmSubdomain ? "/home" : "/crm/home") : (isCrmSubdomain ? "/login" : "/crm/login"),
         request.url
@@ -83,8 +87,8 @@ export function proxy(request: NextRequest) {
       return NextResponse.redirect(targetUrl);
     }
 
-    // If on crm.skytechgh.com subdomain, rewrite path to /crm/...
-    if (isCrmSubdomain && !isCrmPath) {
+    // If accessing CRM route without /crm prefix (subdomain or direct /home), rewrite path to /crm/...
+    if (!isCrmPath) {
       return NextResponse.rewrite(new URL(`/crm${pathname}`, request.url));
     }
 

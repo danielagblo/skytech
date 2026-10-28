@@ -53,11 +53,14 @@ export const Sidebar = () => {
         <nav className="flex-1 pt-5">
           {available.map((item) => {
             const active =
-              path === item.href || path.startsWith(`${item.href}/`);
+              path === item.href ||
+              path === `/crm${item.href}` ||
+              path.startsWith(`${item.href}/`) ||
+              path.startsWith(`/crm${item.href}/`);
             return (
               <Link
                 key={item.href}
-                href={item.href}
+                href={path.startsWith("/crm") ? `/crm${item.href}` : item.href}
                 aria-current={active ? "page" : undefined}
                 className={cn(
                   "group flex h-[74px] flex-col items-center justify-center gap-1.5 text-[10px] text-muted-foreground transition-colors hover:bg-primary/15 hover:text-foreground",

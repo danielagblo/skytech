@@ -33,7 +33,11 @@ export const OtpForm = () => {
         toast.success(
           "Signed in successfully. No verification code is needed.",
         );
-        router.replace("/home");
+        router.replace(
+          typeof window !== "undefined" && window.location.pathname.startsWith("/crm")
+            ? "/crm/home"
+            : "/home",
+        );
         return;
       }
       sessionStorage.setItem("skytech_user_id", data.data.userId);

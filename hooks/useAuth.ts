@@ -22,12 +22,20 @@ export const useLogin = () => {
             ? `Welcome, ${data.data.user.firstName}.`
             : "Welcome to Skytech CRM.",
         );
-        window.location.assign("/home");
+        window.location.assign(
+          typeof window !== "undefined" && window.location.pathname.startsWith("/crm")
+            ? "/crm/home"
+            : "/home",
+        );
         return;
       }
       sessionStorage.setItem("skytech_user_id", data.data.userId);
       toast.success("Password accepted. Enter the six-digit code we sent you.");
-      router.push("/verify-otp");
+      router.push(
+        typeof window !== "undefined" && window.location.pathname.startsWith("/crm")
+          ? "/crm/verify-otp"
+          : "/verify-otp",
+      );
     },
     onError: (error) =>
       toast.error(
@@ -48,7 +56,11 @@ export const useVerifyOtp = () => {
       sessionStorage.removeItem("skytech_login_attempt");
       sessionStorage.removeItem("skytech_user_id");
       toast.success(`Welcome, ${data.data.user.firstName}.`);
-      window.location.assign("/home");
+      window.location.assign(
+        typeof window !== "undefined" && window.location.pathname.startsWith("/crm")
+          ? "/crm/home"
+          : "/home",
+      );
     },
     onError: (error) =>
       toast.error(
