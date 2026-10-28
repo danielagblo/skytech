@@ -29,7 +29,7 @@ export default function HeroSlideshow() {
         return (
           <div
             key={img}
-            className="absolute inset-0 transition-transform duration-[1200ms] ease-[cubic-bezier(0.77,0,0.175,1)]"
+            className="absolute inset-0 transition-transform [transition-duration:1200ms] [transition-timing-function:cubic-bezier(0.77,0,0.175,1)]"
             style={{
               transform: `translateX(${offset * 100}%)`,
               zIndex: idx === currentIndex ? 10 : 5,
