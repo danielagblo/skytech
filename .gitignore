@@ -1,5 +1,6 @@
 # Logs
-logs
+/logs
+!components/pipeline/logs
 *.log
 *.tsbuildinfo
 npm-debug.log*
