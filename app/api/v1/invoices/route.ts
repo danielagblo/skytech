@@ -4,8 +4,6 @@ import { crmExecute, crmQuery, initCrmSchema, MysqlRow, newId } from "@/lib/crm/
 import { formatInvoice } from "@/lib/crm/formatters";
 import { Invoice } from "@/types/invoice.types";
 
-export { formatInvoice };
-
 export async function GET(request: NextRequest) {
   try {
     const user = await getAuthUser(request);

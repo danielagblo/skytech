@@ -3,8 +3,6 @@ import { getAuthUser, apiSuccess, apiError } from "@/lib/crm/auth";
 import { crmExecute, crmQuery, initCrmSchema, MysqlRow, newId } from "@/lib/crm/db";
 import { formatTask } from "@/lib/crm/formatters";
 
-export { formatTask };
-
 export async function GET(request: NextRequest) {
   try {
     const user = await getAuthUser(request);
