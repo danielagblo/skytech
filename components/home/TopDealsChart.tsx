@@ -10,14 +10,15 @@ import {
 } from "recharts";
 import type { TopDeal } from "@/types/deal.types";
 import { formatCurrency } from "@/lib/utils";
+
 const Chart = ({ data, color }: { data: TopDeal[]; color: string }) => (
-  <div className="h-48">
+  <div className="h-48 w-full min-w-0">
     {data.length === 0 ? (
       <div className="flex h-full items-center justify-center text-xs text-muted-foreground">
         No closed-deal data yet
       </div>
     ) : (
-      <ResponsiveContainer width="100%" height="100%">
+      <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={180}>
         <BarChart data={data.slice(0, 6)}>
           <CartesianGrid strokeDasharray="3 3" vertical={false} />
           <XAxis dataKey="title" tick={false} />
@@ -31,6 +32,7 @@ const Chart = ({ data, color }: { data: TopDeal[]; color: string }) => (
     )}
   </div>
 );
+
 export const TopDealsChart = ({
   sixMonths,
   year,

@@ -25,15 +25,15 @@ export const LeadsOverview = () => {
         remains usable.
       </div>
     );
+  const counts = stats.data.countsByStatus || {};
   const cards = [
-    ["New leads added", stats.data.countsByStatus.NEW ?? 0],
+    ["New leads added", counts.NEW ?? 0],
     [
       "Waiting leads",
-      (stats.data.countsByStatus.CONTACTED ?? 0) +
-        (stats.data.countsByStatus.QUALIFIED ?? 0),
+      (counts.CONTACTED ?? 0) + (counts.QUALIFIED ?? 0),
     ],
-    ["Successful leads", stats.data.countsByStatus.CONVERTED ?? 0],
-    ["Lead not successful", stats.data.countsByStatus.LOST ?? 0],
+    ["Successful leads", counts.CONVERTED ?? 0],
+    ["Lead not successful", counts.LOST ?? 0],
   ] as const;
   return (
     <div className="grid border-b bg-card xl:grid-cols-[minmax(0,1.45fr)_minmax(430px,.75fr)]">
@@ -55,8 +55,8 @@ export const LeadsOverview = () => {
         ))}
       </div>
       <LeadSourceStats
-        breakdown={stats.data.sourceBreakdown}
-        total={stats.data.total}
+        breakdown={stats.data.sourceBreakdown || {}}
+        total={stats.data.total || 0}
       />
     </div>
   );

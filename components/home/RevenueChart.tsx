@@ -10,6 +10,7 @@ import {
 } from "recharts";
 import type { DashboardOverview } from "@/types/dashboard.types";
 import { formatCurrency } from "@/lib/utils";
+
 export const RevenueChart = ({
   data,
 }: {
@@ -25,13 +26,13 @@ export const RevenueChart = ({
         Revenue
       </span>
     </div>
-    <div className="h-64">
+    <div className="h-64 w-full min-w-0">
       {data.length === 0 ? (
         <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
           Revenue appears after payments are recorded.
         </div>
       ) : (
-        <ResponsiveContainer width="100%" height="100%">
+        <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={240}>
           <BarChart
             data={data.map((item) => ({
               ...item,
