@@ -116,7 +116,7 @@ export default function AgentsPage() {
                   updateAssignment.mutate(
                     {
                       enabled,
-                      config: assignment.data?.config ?? {},
+                      config: assignment.data?.config ?? { strategy: "LEAST_LOADED" },
                     },
                     { onError: () => setAssignmentOverride(null) },
                   );
@@ -129,7 +129,7 @@ export default function AgentsPage() {
                   Assignment strategy
                 </p>
                 <Select
-                  value={assignment.data?.config.strategy ?? "LEAST_LOADED"}
+                  value={assignment.data?.config?.strategy ?? "LEAST_LOADED"}
                   disabled={updateAssignment.isPending}
                   onValueChange={(
                     strategy: "LEAST_LOADED" | "ROUND_ROBIN",

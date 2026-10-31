@@ -384,10 +384,15 @@ export async function initCrmSchema() {
       issuer_tax_id VARCHAR(100),
       payment_instructions TEXT,
       sms_sender_id VARCHAR(50) DEFAULT 'Skytech',
+      lead_assignment JSON,
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
       updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     );
   `);
+
+  try {
+    await pool.query("ALTER TABLE settings ADD COLUMN lead_assignment JSON");
+  } catch {}
 
   await pool.query(`
     CREATE TABLE IF NOT EXISTS automations (

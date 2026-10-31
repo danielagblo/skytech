@@ -17,13 +17,21 @@ export async function GET(request: NextRequest) {
       issuer_email: "info@skytechghana.com",
     };
 
+    const leadAssignmentRaw = rows.length ? rows[0].lead_assignment : null;
+    const parsedAssignment = leadAssignmentRaw
+      ? (typeof leadAssignmentRaw === "string" ? JSON.parse(leadAssignmentRaw) : leadAssignmentRaw)
+      : null;
+
+    const leadAssignment = {
+      enabled: Boolean(parsedAssignment?.enabled ?? true),
+      config: {
+        strategy: parsedAssignment?.config?.strategy || parsedAssignment?.strategy || "LEAST_LOADED",
+      },
+    };
+
     return apiSuccess({
       general,
-      leadAssignment: {
-        mode: "ROUND_ROBIN",
-        activeAgentIds: [],
-        enabled: true,
-      },
+      leadAssignment,
     });
   } catch (error: any) {
     return apiError(error.message, 500);
@@ -81,13 +89,21 @@ export async function PUT(request: NextRequest) {
     }
 
     const updated = await crmQuery<MysqlRow>("SELECT * FROM settings LIMIT 1");
+    const leadAssignmentRaw = updated.length ? updated[0].lead_assignment : null;
+    const parsedAssignment = leadAssignmentRaw
+      ? (typeof leadAssignmentRaw === "string" ? JSON.parse(leadAssignmentRaw) : leadAssignmentRaw)
+      : null;
+
+    const leadAssignment = {
+      enabled: Boolean(parsedAssignment?.enabled ?? true),
+      config: {
+        strategy: parsedAssignment?.config?.strategy || parsedAssignment?.strategy || "LEAST_LOADED",
+      },
+    };
+
     return apiSuccess({
       general: updated[0],
-      leadAssignment: {
-        mode: "ROUND_ROBIN",
-        activeAgentIds: [],
-        enabled: true,
-      },
+      leadAssignment,
     }, "Settings updated");
   } catch (error: any) {
     return apiError(error.message, 500);
