@@ -58,7 +58,7 @@ export const ContactSegmentSelector = ({
             <div className="grid gap-2 sm:grid-cols-2">
               {options.slice(1).map(([id, name]) => {
                 const count =
-                  id === "all" ? 0 : (segments.data?.byStage[id] ?? 0);
+                  id === "all" ? (segments.data?.all ?? 0) : (segments.data?.byStage?.[id] ?? 0);
                 return (
                   <label
                     key={id}
