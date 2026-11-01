@@ -3,7 +3,6 @@ import Script from 'next/script';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import '../index.css';
-import { ChunkErrorListener } from '@/components/shared/ChunkErrorListener';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -31,7 +30,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <body className={`${inter.className} bg-slate-950`} suppressHydrationWarning>
-        <ChunkErrorListener />
         {children}
 
         {/* Google Analytics */}
