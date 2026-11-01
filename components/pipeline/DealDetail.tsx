@@ -1,11 +1,11 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Calendar, Mail, MapPin, Phone, UserRound } from "lucide-react";
+import { Calendar, Mail, MapPin, Phone, UserRound, DollarSign } from "lucide-react";
 import type { Deal } from "@/types/deal.types";
 import type { Lead } from "@/types/lead.types";
 import type { User, UserSummary } from "@/types/user.types";
 import type { DealStage } from "@/types/api.types";
-import { useDealLogs } from "@/hooks/useDeals";
+import { useDeal, useDealLogs } from "@/hooks/useDeals";
 import {
   Sheet,
   SheetContent,
@@ -36,7 +36,7 @@ const order: DealStage[] = [
 ];
 
 export const DealDetail = ({
-  deal,
+  deal: initialDeal,
   lead,
   users,
   open,
@@ -50,6 +50,10 @@ export const DealDetail = ({
 }) => {
   const [expanded, setExpanded] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
+  
+  const liveDeal = useDeal(initialDeal?.id ?? "");
+  const deal = liveDeal.data ?? initialDeal;
+  
   const logs = useDealLogs(deal?.id ?? "");
   useEffect(() => {
     if (open && lead) markLeadSeen(lead.id);
@@ -75,7 +79,7 @@ export const DealDetail = ({
   return (
     <>
       <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent className="max-w-xl p-0 sm:max-w-[min(56rem,50vw)]">
+      <SheetContent className="max-w-xl p-0 sm:max-w-[min(56rem,50vw)] overflow-y-auto">
         <div className="p-6">
           <SheetHeader>
             <div className="flex items-center justify-between">
@@ -97,7 +101,30 @@ export const DealDetail = ({
               </Button>
             </div>
           </SheetHeader>
-          <div className="rounded-2xl bg-muted/60 p-4">
+
+          {/* Prominent Financial Breakdown */}
+          <div className="mt-4 grid grid-cols-3 gap-2 rounded-xl border bg-muted/30 p-3 text-center">
+            <div className="border-r pr-2">
+              <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Contract Deal</p>
+              <p className="mt-1 text-sm font-bold text-green-700 dark:text-green-400">
+                {formatCurrency(deal.contractValue)}
+              </p>
+            </div>
+            <div className="border-r pr-2">
+              <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Total Paid</p>
+              <p className="mt-1 text-sm font-bold text-foreground">
+                {formatCurrency(deal.totalPaid)}
+              </p>
+            </div>
+            <div>
+              <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Arrears (Due)</p>
+              <p className={`mt-1 text-sm font-bold ${deal.arrears > 0 ? "text-red-600 dark:text-red-400" : "text-muted-foreground"}`}>
+                {formatCurrency(deal.arrears)}
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-4 rounded-2xl bg-muted/60 p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="eyebrow">Assignee</p>

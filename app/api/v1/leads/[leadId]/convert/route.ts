@@ -23,23 +23,26 @@ export async function POST(
     const lead = leads[0];
 
     const dealId = newId();
-    const title = body.title || `${lead.company_name || lead.first_name || "New"} Deal`;
+    const leadName = `${lead.company_name || `${lead.first_name || ""} ${lead.last_name || ""}`.trim() || "New"} Deal`;
+    const title = body.title?.trim() || leadName;
     const contractValue = parseCurrencyAmount(body.contractValue);
     const currency = body.currency || "GHS";
+    const assignedTo = body.assignedToId || lead.assigned_to || user.id;
+    const priority = body.priority || lead.priority || "MEDIUM";
 
     await crmExecute(
       `INSERT INTO deals (
         id, company_id, lead_id, created_by, assigned_to,
         title, stage, priority, currency, contract_value, total_paid, arrears, is_paid_in_full
-      ) VALUES (?, ?, ?, ?, ?, ?, 'PROSPECTING', ?, ?, ?, ?, 0, ?, 0)`,
+      ) VALUES (?, ?, ?, ?, ?, ?, 'PROSPECTING', ?, ?, ?, 0, ?, 0)`,
       [
         dealId,
         user.companyId || null,
         leadId,
         user.id,
-        user.id,
+        assignedTo,
         title,
-        lead.priority || "MEDIUM",
+        priority,
         currency,
         contractValue,
         contractValue,

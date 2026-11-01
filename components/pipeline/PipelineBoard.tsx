@@ -155,7 +155,7 @@ export const PipelineBoard = () => {
         </div>
       </DragDropContext>
       <DealDetail
-        deal={selected}
+        deal={selected ? items.find((d) => d.id === selected.id) ?? selected : null}
         lead={(leads.data?.content ?? []).find(
           (lead) => lead.id === selected?.leadId,
         )}

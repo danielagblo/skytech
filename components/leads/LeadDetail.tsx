@@ -22,9 +22,10 @@ import { AssigneeStack } from "@/components/shared/AssigneeStack";
 import { PriorityBadge } from "@/components/shared/PriorityBadge";
 import { Button } from "@/components/ui/button";
 import { CreateLeadModal } from "./CreateLeadModal";
+import { ConvertLeadModal } from "./ConvertLeadModal";
 import { ConfirmModal } from "@/components/shared/ConfirmModal";
 import { usePermission } from "@/hooks/usePermission";
-import { useConvertLead, useDeleteLead } from "@/hooks/useLeads";
+import { useDeleteLead } from "@/hooks/useLeads";
 import { markLeadSeen } from "@/lib/seenLeads";
 
 export const LeadDetail = ({
@@ -39,10 +40,11 @@ export const LeadDetail = ({
   onOpenChange: (value: boolean) => void;
 }) => {
   const [edit, setEdit] = useState(false);
-  const [action, setAction] = useState<"delete" | "convert" | null>(null);
+  const [convertOpen, setConvertOpen] = useState(false);
+  const [deleteConfirm, setDeleteConfirm] = useState(false);
   const { can } = usePermission();
   const remove = useDeleteLead();
-  const convert = useConvertLead();
+
   useEffect(() => {
     if (open && lead) markLeadSeen(lead.id);
   }, [open, lead]);
@@ -61,26 +63,16 @@ export const LeadDetail = ({
     [MapPin, lead.address || "Not provided"],
     [Calendar, lead.launchTimeline?.replaceAll("_", " ") || "Not set"],
   ] as const;
-  const confirm = () => {
-    if (action === "delete")
-      remove.mutate(lead.id, {
-        onSuccess: () => {
-          setAction(null);
-          onOpenChange(false);
-        },
-      });
-    if (action === "convert")
-      convert.mutate(
-        { id: lead.id },
-        {
-          onSuccess: () => {
-            setAction(null);
-            onOpenChange(false);
-          },
-        },
-      );
+
+  const handleDelete = () => {
+    remove.mutate(lead.id, {
+      onSuccess: () => {
+        setDeleteConfirm(false);
+        onOpenChange(false);
+      },
+    });
   };
-  const pending = remove.isPending || convert.isPending;
+
   return (
     <>
       <Sheet open={open} onOpenChange={onOpenChange}>
@@ -94,89 +86,38 @@ export const LeadDetail = ({
               {assignees.length ? (
                 <AssigneeStack users={assignees} />
               ) : (
-                <span className="text-sm text-muted-foreground">
+                <span className="text-xs text-muted-foreground">
                   Unassigned
                 </span>
               )}
-              <button
-                onClick={() => setEdit(true)}
-                className="rounded-full border p-1"
-                aria-label="Change assignee"
-              >
-                <Plus className="h-4 w-4" />
-              </button>
             </div>
-            <h2 className="mt-5 text-xl font-semibold">
-              {lead.firstName || "Unnamed"} {lead.lastName || ""}
-            </h2>
-            <p className="text-sm text-muted-foreground">
-              {lead.category || "Uncategorized"} · {lead.status}
+            <p className="mt-3 text-xs text-muted-foreground">
+              Created by {creator ? `${creator.firstName} ${creator.lastName}` : "CRM user"}
             </p>
-            {creator && (
-              <p className="mt-1 text-xs text-muted-foreground">
-                Created by {creator.firstName} {creator.lastName}
-              </p>
-            )}
           </div>
-          <div className="mt-6 space-y-3">
-            {rows.map(([Icon, value]) => (
-              <div
-                key={value}
-                className="flex items-center gap-3 rounded-xl bg-muted p-3 text-sm"
-              >
-                <Icon className="h-4 w-4 text-muted-foreground" />
-                {value}
-              </div>
-            ))}
-          </div>
-          <div className="mt-6 grid grid-cols-2 gap-3 text-sm">
+          <div className="mt-6 flex items-center justify-between border-b pb-4">
             <div>
               <p className="eyebrow">Priority</p>
               <div className="mt-2">
-                {lead.priority ? (
-                  <PriorityBadge priority={lead.priority} />
-                ) : (
-                  "Not set"
-                )}
+                <PriorityBadge priority={lead.priority || "MEDIUM"} />
               </div>
             </div>
-            <div>
-              <p className="eyebrow">Lead source</p>
-              <p className="mt-2">
-                {lead.leadSource?.replace("_", " ") || "Not set"}
-              </p>
-            </div>
-            <div>
-              <p className="eyebrow">Birthday</p>
-              <p className="mt-2 font-medium">
-                {lead.birthday ? (lead.birthday.length > 5 ? lead.birthday.slice(-5) : lead.birthday) : "Not set"}
-              </p>
-            </div>
-            <div>
-              <p className="eyebrow">Public office</p>
-              <p className="mt-2">{lead.hasPublicOffice ? "Yes" : "No"}</p>
-            </div>
-            <div>
-              <p className="eyebrow">Meeting</p>
-              <p className="mt-2">{lead.meetingArranged ? "Yes" : "No"}</p>
-            </div>
-            <div>
-              <p className="eyebrow">SMS / Email</p>
-              <p className="mt-2">
-                {lead.smsOptIn ? "SMS" : "No SMS"} ·{" "}
-                {lead.emailOptIn ? "Email" : "No email"}
-              </p>
-            </div>
-            <div>
-              <p className="eyebrow">Newsletter</p>
-              <p className="mt-2">
-                {lead.newsletterOptIn ? "Subscribed" : "Not subscribed"}
-              </p>
+            <div className="text-right">
+              <p className="eyebrow">Status</p>
+              <p className="mt-2 text-xs font-semibold">{lead.status}</p>
             </div>
           </div>
-          <div className="mt-6">
-            <p className="eyebrow">Description</p>
-            <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+          <div className="mt-6 space-y-3 text-sm">
+            {rows.map(([Icon, label], index) => (
+              <p key={index} className="flex items-center gap-2">
+                <Icon className="h-4 w-4 text-muted-foreground" />
+                <span>{label}</span>
+              </p>
+            ))}
+          </div>
+          <div className="mt-6 border-t pt-4">
+            <p className="eyebrow">Notes</p>
+            <p className="mt-2 text-xs text-muted-foreground">
               {lead.description || "No description provided."}
             </p>
           </div>
@@ -185,7 +126,7 @@ export const LeadDetail = ({
               Edit details
             </Button>
             {lead.status !== "CONVERTED" && (
-              <Button variant="outline" onClick={() => setAction("convert")}>
+              <Button variant="outline" onClick={() => setConvertOpen(true)}>
                 <Workflow className="h-4 w-4" />
                 Convert
               </Button>
@@ -194,7 +135,7 @@ export const LeadDetail = ({
               <Button
                 variant="destructive"
                 size="icon"
-                onClick={() => setAction("delete")}
+                onClick={() => setDeleteConfirm(true)}
                 aria-label="Delete lead"
               >
                 <Trash2 className="h-4 w-4" />
@@ -209,22 +150,21 @@ export const LeadDetail = ({
         lead={lead}
         users={users}
       />
+      <ConvertLeadModal
+        open={convertOpen}
+        onOpenChange={setConvertOpen}
+        lead={lead}
+        users={users}
+        onSuccess={() => onOpenChange(false)}
+      />
       <ConfirmModal
-        open={Boolean(action)}
-        onOpenChange={(value) => !value && setAction(null)}
-        title={
-          action === "delete"
-            ? "Delete this lead?"
-            : "Convert this lead to a deal?"
-        }
-        description={
-          action === "delete"
-            ? "This removes the lead from active CRM records. This action cannot be undone."
-            : "A new prospecting deal will be created and this lead will be marked as converted."
-        }
-        confirmLabel={action === "delete" ? "Delete lead" : "Convert lead"}
-        onConfirm={confirm}
-        pending={pending}
+        open={deleteConfirm}
+        onOpenChange={setDeleteConfirm}
+        title="Delete this lead?"
+        description="This removes the lead from active CRM records. This action cannot be undone."
+        confirmLabel="Delete lead"
+        onConfirm={handleDelete}
+        pending={remove.isPending}
       />
     </>
   );

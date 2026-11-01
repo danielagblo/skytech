@@ -25,8 +25,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import type { DealStage, Priority } from "@/types/api.types";
+
 const schema = z.object({
-  title: z.string().min(3),
+  title: z.string().min(3, "Enter a descriptive deal title."),
   leadId: z.string().optional(),
   assignedToId: z.string().optional(),
   stage: z.enum([
@@ -37,15 +38,18 @@ const schema = z.object({
     "CLIENT_RETENTION",
   ]),
   priority: z.enum(["LOW", "MEDIUM", "HIGH"]),
-  contractValue: z.union([z.number(), z.string()]).transform((val) => {
-    if (typeof val === "number") return Math.max(0, val);
+  contractValue: z.preprocess((val) => {
+    if (val === null || val === undefined || val === "") return 0;
+    if (typeof val === "number") return isNaN(val) ? 0 : Math.max(0, val);
     const clean = String(val).replace(/[^0-9.-]/g, "").trim();
     const parsed = parseFloat(clean);
     return isNaN(parsed) ? 0 : Math.max(0, parsed);
-  }),
+  }, z.number().min(0, "Contract value cannot be negative.")),
   notes: z.string().optional(),
 });
+
 type Values = z.infer<typeof schema>;
+
 export const CreateDealButton = () => {
   const [open, setOpen] = useState(false);
   const create = useCreateDeal();
@@ -67,7 +71,7 @@ export const CreateDealButton = () => {
       assignedToId: "",
       stage: "PROSPECTING",
       priority: "MEDIUM",
-      contractValue: 0,
+      contractValue: "" as any,
       notes: "",
     },
   });
@@ -80,7 +84,8 @@ export const CreateDealButton = () => {
         assignedToId: data.assignedToId || undefined,
         stage: data.stage as DealStage,
         priority: data.priority as Priority,
-        contractValue: data.contractValue,
+        contractValue: Number(data.contractValue || 0),
+        currency: "GHS",
         notes: data.notes || undefined,
       },
       {
@@ -107,8 +112,8 @@ export const CreateDealButton = () => {
               <Label>Deal title</Label>
               <Input {...register("title")} />
               {errors.title && (
-                <p className="text-xs text-danger">
-                  Enter a descriptive deal title.
+                <p className="mt-1 text-xs text-danger">
+                  {errors.title.message}
                 </p>
               )}
             </div>
@@ -203,7 +208,7 @@ export const CreateDealButton = () => {
               </div>
             </div>
             <div>
-              <Label>Contract value (GH¢)</Label>
+              <Label>Contract value / Price (GH¢)</Label>
               <div className="relative mt-1">
                 <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-xs font-semibold text-muted-foreground">
                   GH¢
@@ -216,6 +221,11 @@ export const CreateDealButton = () => {
                   {...register("contractValue")}
                 />
               </div>
+              {errors.contractValue && (
+                <p className="mt-1 text-xs text-danger">
+                  {errors.contractValue.message}
+                </p>
+              )}
             </div>
             <div>
               <Label>Notes</Label>

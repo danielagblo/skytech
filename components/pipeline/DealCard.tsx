@@ -49,10 +49,13 @@ export const DealCard = ({
         <h4 className="line-clamp-2 text-sm font-semibold">{deal.title}</h4>
         {deal.priority && <PriorityBadge priority={deal.priority} />}
       </div>
-      <p className="mt-1 text-xs font-semibold text-green-700 dark:text-green-400">
-        {formatCurrency(deal.contractValue)}
-      </p>
-      <div className="mt-3 space-y-1.5 text-xs text-muted-foreground">
+      <div className="mt-2 flex items-center justify-between rounded-md bg-muted/40 px-2 py-1 text-xs">
+        <span className="text-[11px] font-medium text-muted-foreground">Contract Deal:</span>
+        <span className="font-bold text-green-700 dark:text-green-400">
+          {formatCurrency(deal.contractValue)}
+        </span>
+      </div>
+      <div className="mt-2.5 space-y-1.5 text-xs text-muted-foreground">
         <p className="flex items-center gap-2">
           <UserRound className="h-3.5 w-3.5" />
           {lead ? (

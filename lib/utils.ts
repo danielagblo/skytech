@@ -6,11 +6,19 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export const formatCurrency = (value: number) =>
-  `GH\u00A2 ${new Intl.NumberFormat("en-GH", {
+export const formatCurrency = (value: any) => {
+  const num =
+    typeof value === "number"
+      ? (isNaN(value) ? 0 : value)
+      : typeof value === "string"
+      ? (parseFloat(value.replace(/[^0-9.-]/g, "")) || 0)
+      : 0;
+  return `GH\u00A2 ${new Intl.NumberFormat("en-GH", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
-  }).format(value)}`;
+  }).format(num)}`;
+};
+
 export const formatDate = (value: string | Date) =>
   format(new Date(value), "do MMMM yyyy");
 export const formatTime = (value: string | Date) =>

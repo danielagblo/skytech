@@ -14,15 +14,13 @@ import { Textarea } from "@/components/ui/textarea";
 
 const schema = z.object({
   conditions: z.string().min(5, "Add a short summary."),
-  value: z
-    .union([z.number(), z.string()])
-    .transform((val) => {
-      if (typeof val === "number") return Math.max(0, val);
-      const clean = String(val).replace(/[^0-9.-]/g, "").trim();
-      const parsed = parseFloat(clean);
-      return isNaN(parsed) ? 0 : Math.max(0, parsed);
-    })
-    .refine((v) => v > 0, "Enter a positive contract value."),
+  value: z.preprocess((val) => {
+    if (val === null || val === undefined || val === "") return 0;
+    if (typeof val === "number") return isNaN(val) ? 0 : Math.max(0, val);
+    const clean = String(val).replace(/[^0-9.-]/g, "").trim();
+    const parsed = parseFloat(clean);
+    return isNaN(parsed) ? 0 : Math.max(0, parsed);
+  }, z.number().min(0.01, "Enter a positive contract value.")),
   followUp: z.string().min(1, "Choose a payment follow-up date."),
 });
 
@@ -57,7 +55,7 @@ export const SettlementLog = ({
         data: {
           logType: "SETTLEMENT",
           specialConditions: data.conditions,
-          settlementValue: data.value,
+          settlementValue: Number(data.value),
           settlementFollowUp: new Date(data.followUp).toISOString(),
           body: data.conditions,
         },
