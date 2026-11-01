@@ -2,6 +2,7 @@ import { NextRequest } from "next/server";
 import { getAuthUser, apiSuccess, apiError } from "@/lib/crm/auth";
 import { crmExecute, crmQuery, initCrmSchema, MysqlRow, newId } from "@/lib/crm/db";
 import { RatingLinkResponse } from "@/types/rating.types";
+import { camelize } from "@/lib/case-conversion";
 
 export async function POST(request: NextRequest) {
   try {
@@ -9,9 +10,22 @@ export async function POST(request: NextRequest) {
     if (!user) return apiError("Unauthorized", 401);
 
     await initCrmSchema();
-    const body = await request.json();
-    const dealId = body.dealId;
-    if (!dealId) return apiError("dealId is required", 400);
+    const rawBody = await request.json().catch(() => ({}));
+    const body = (camelize(rawBody) || {}) as any;
+    const url = new URL(request.url);
+
+    const dealId = 
+      body.dealId || 
+      rawBody.deal_id || 
+      rawBody.dealId || 
+      body.id || 
+      rawBody.id || 
+      url.searchParams.get("dealId") || 
+      url.searchParams.get("deal_id");
+
+    if (!dealId || typeof dealId !== "string") {
+      return apiError("dealId is required", 400);
+    }
 
     const dealRows = await crmQuery<MysqlRow>(
       `SELECT d.*, l.email as client_email, l.first_name, l.last_name
@@ -40,7 +54,7 @@ export async function POST(request: NextRequest) {
       ]
     );
 
-    const host = request.headers.get("host") || "crm.skytechgh.com";
+    const host = request.headers.get("host") || "crm.skytechghana.com";
     const proto = request.headers.get("x-forwarded-proto") || "https";
     const link = `${proto}://${host}/rate-me/${token}`;
 

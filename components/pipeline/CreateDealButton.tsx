@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { zodResolver } from "@/lib/zodResolver";
 import { Plus } from "lucide-react";
 import { useCreateDeal } from "@/hooks/useDeals";
 import { useLeads } from "@/hooks/useLeads";

@@ -3,6 +3,7 @@ import { getAuthUser, apiSuccess, apiError } from "@/lib/crm/auth";
 import { crmExecute, crmQuery, initCrmSchema, MysqlRow, newId } from "@/lib/crm/db";
 import { formatInvoice } from "@/lib/crm/formatters";
 import { Invoice } from "@/types/invoice.types";
+import { camelize } from "@/lib/case-conversion";
 
 export async function GET(request: NextRequest) {
   try {
@@ -11,7 +12,7 @@ export async function GET(request: NextRequest) {
 
     await initCrmSchema();
     const url = new URL(request.url);
-    const dealId = url.searchParams.get("deal_id");
+    const dealId = url.searchParams.get("deal_id") || url.searchParams.get("dealId");
 
     let whereSql = "WHERE 1=1";
     const params: any[] = [];
@@ -51,21 +52,23 @@ export async function POST(request: NextRequest) {
     if (!user) return apiError("Unauthorized", 401);
 
     await initCrmSchema();
-    const body = await request.json();
+    const rawBody = await request.json().catch(() => ({}));
+    const body = (camelize(rawBody) || {}) as any;
     const invoiceId = newId();
     const invoiceNumber = `INV-${Date.now().toString().slice(-6)}`;
 
     const items = Array.isArray(body.items) ? body.items : [];
     let subtotal = 0;
     items.forEach((it: any) => {
-      subtotal += (Number(it.quantity) || 1) * (Number(it.unitPrice) || 0);
+      subtotal += (Number(it.quantity) || 1) * (Number(it.unitPrice ?? it.unit_price) || 0);
     });
 
-    const taxRate = Number(body.taxRate) || 0;
+    const taxRate = Number(body.taxRate ?? rawBody.tax_rate) || 0;
     const taxAmount = (subtotal * taxRate) / 100;
-    const discountAmount = Number(body.discountAmount) || 0;
+    const discountAmount = Number(body.discountAmount ?? rawBody.discount_amount) || 0;
     const total = Math.max(0, subtotal + taxAmount - discountAmount);
     const balanceDue = total;
+    const dealId = body.dealId ?? rawBody.deal_id ?? rawBody.dealId ?? null;
 
     await crmExecute(
       `INSERT INTO invoices (
@@ -77,41 +80,40 @@ export async function POST(request: NextRequest) {
       [
         invoiceId,
         user.companyId || null,
-        body.dealId,
+        dealId,
         user.id,
         invoiceNumber,
-        body.recipientName || "Valued Client",
-        body.recipientCompany || null,
-        body.recipientEmail || null,
-        body.recipientAddress || null,
-        body.dueDate ? new Date(body.dueDate) : null,
+        body.recipientName || rawBody.recipient_name || "Valued Client",
+        body.recipientCompany || rawBody.recipient_company || null,
+        body.recipientEmail || rawBody.recipient_email || null,
+        body.recipientAddress || rawBody.recipient_address || null,
+        (body.dueDate || rawBody.due_date) ? new Date(body.dueDate || rawBody.due_date) : null,
         subtotal,
         taxRate,
         taxAmount,
         discountAmount,
         total,
         balanceDue,
-        body.notes || null,
-        body.terms || null,
+        body.notes || rawBody.notes || null,
+        body.terms || rawBody.terms || null,
       ]
     );
 
     for (let i = 0; i < items.length; i++) {
       const it = items[i];
-      const itemId = newId();
-      const qty = Number(it.quantity) || 1;
-      const price = Number(it.unitPrice) || 0;
+      const unitPrice = Number(it.unitPrice ?? it.unit_price) || 0;
+      const quantity = Number(it.quantity) || 1;
+      const itemTotal = unitPrice * quantity;
       await crmExecute(
-        `INSERT INTO invoice_items (id, company_id, invoice_id, description, quantity, unit_price, amount, position)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-        [itemId, user.companyId || null, invoiceId, it.description || "", qty, price, qty * price, i]
+        `INSERT INTO invoice_items (id, invoice_id, description, quantity, unit_price, total)
+         VALUES (?, ?, ?, ?, ?, ?)`,
+        [newId(), invoiceId, it.description || "Service", quantity, unitPrice, itemTotal]
       );
     }
 
-    const createdRows = await crmQuery<MysqlRow>("SELECT * FROM invoices WHERE id = ?", [invoiceId]);
+    const created = await crmQuery<MysqlRow>("SELECT * FROM invoices WHERE id = ?", [invoiceId]);
     const createdItems = await crmQuery<MysqlRow>("SELECT * FROM invoice_items WHERE invoice_id = ?", [invoiceId]);
-
-    return apiSuccess(formatInvoice(createdRows[0], createdItems, []), "Invoice created", 201);
+    return apiSuccess(formatInvoice(created[0], createdItems, []), "Invoice created successfully", 201);
   } catch (error: any) {
     return apiError(error.message, 500);
   }

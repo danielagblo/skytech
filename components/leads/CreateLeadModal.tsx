@@ -3,7 +3,7 @@
 import { useEffect, useMemo } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { zodResolver } from "@/lib/zodResolver";
 import type { Lead, LaunchTimeline } from "@/types/lead.types";
 import type { LeadSource, Priority } from "@/types/api.types";
 import type { User } from "@/types/user.types";

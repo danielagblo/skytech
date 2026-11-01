@@ -1,7 +1,7 @@
 "use client";
 import { useForm, useWatch } from "react-hook-form";
 import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { zodResolver } from "@/lib/zodResolver";
 import type { Deal, DealLog } from "@/types/deal.types";
 import type { User } from "@/types/user.types";
 import type { ContactMode, ResponseType } from "@/types/api.types";

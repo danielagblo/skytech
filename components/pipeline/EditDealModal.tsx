@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { zodResolver } from "@/lib/zodResolver";
 import type { Deal } from "@/types/deal.types";
 import type { DealStage, Priority } from "@/types/api.types";
 import { useUpdateDeal } from "@/hooks/useDeals";
