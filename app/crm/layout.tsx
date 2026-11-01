@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Providers } from "@/components/providers";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export const metadata: Metadata = {
   title: { default: "Skytech CRM", template: "%s | Skytech CRM" },
   description: "Skytech customer relationship management workspace",
