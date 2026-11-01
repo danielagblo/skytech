@@ -117,6 +117,7 @@ export async function initCrmSchema() {
       category VARCHAR(100),
       lead_source VARCHAR(100),
       priority VARCHAR(20) DEFAULT 'MEDIUM',
+      currency VARCHAR(10) DEFAULT 'GHS',
       status VARCHAR(50) DEFAULT 'NEW',
       launch_timeline VARCHAR(50),
       has_public_office BOOLEAN DEFAULT FALSE,
@@ -160,6 +161,10 @@ export async function initCrmSchema() {
       updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     );
   `);
+
+    try {
+    await pool.query("ALTER TABLE deals ADD COLUMN currency VARCHAR(10) DEFAULT 'GHS'");
+  } catch {}
 
   await pool.query(`
     CREATE TABLE IF NOT EXISTS deal_logs (

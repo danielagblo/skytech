@@ -2,6 +2,7 @@
 import { useForm, useWatch } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useQueryClient } from "@tanstack/react-query";
 import type { Deal, DealLog } from "@/types/deal.types";
 import type { User } from "@/types/user.types";
 import type { PaymentMode } from "@/types/api.types";
@@ -19,9 +20,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+
 const schema = z
   .object({
-    amount: z.coerce.number().positive("Enter an amount greater than zero."),
+    amount: z
+      .union([z.number(), z.string()])
+      .transform((val) => {
+        if (typeof val === "number") return Math.max(0, val);
+        const clean = String(val).replace(/[^0-9.-]/g, "").trim();
+        const parsed = parseFloat(clean);
+        return isNaN(parsed) ? 0 : Math.max(0, parsed);
+      })
+      .refine((v) => v > 0, "Enter an amount greater than zero."),
     invoiceIssued: z.boolean(),
     invoice: z.string().optional(),
     receipt: z.string().min(1, "Enter a receipt number."),
@@ -36,7 +46,9 @@ const schema = z
         message: "Enter the issued invoice number.",
       });
   });
+
 type Values = z.infer<typeof schema>;
+
 export const PaymentLog = ({
   deal,
   logs,
@@ -47,6 +59,7 @@ export const PaymentLog = ({
   users: User[];
 }) => {
   const mutation = useAddDealLog();
+  const queryClient = useQueryClient();
   const {
     register,
     control,
@@ -64,6 +77,7 @@ export const PaymentLog = ({
     },
   });
   const values = useWatch({ control });
+
   const submit = handleSubmit((data) =>
     mutation.mutate(
       {
@@ -78,9 +92,19 @@ export const PaymentLog = ({
           body: `${data.paymentType.replaceAll("_", " ")} payment recorded.`,
         },
       },
-      { onSuccess: () => reset() },
+      {
+        onSuccess: () => {
+          void Promise.all([
+            queryClient.invalidateQueries({ queryKey: ["deals"] }),
+            queryClient.invalidateQueries({ queryKey: ["pipeline"] }),
+            queryClient.invalidateQueries({ queryKey: ["deal-logs", deal.id] }),
+          ]);
+          reset();
+        },
+      },
     ),
   );
+
   return (
     <div className="space-y-5">
       <div className="grid grid-cols-3 rounded-xl bg-gray-900 p-3 text-white">
@@ -99,8 +123,19 @@ export const PaymentLog = ({
       </div>
       <form onSubmit={submit} className="space-y-3 border-b pb-4">
         <div>
-          <Label>Amount</Label>
-          <Input type="number" step="0.01" {...register("amount")} />
+          <Label>Amount (GH¢)</Label>
+          <div className="relative mt-1">
+            <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-xs font-semibold text-muted-foreground">
+              GH¢
+            </span>
+            <Input
+              type="text"
+              inputMode="decimal"
+              placeholder="0.00"
+              className="pl-12"
+              {...register("amount")}
+            />
+          </div>
           {errors.amount && (
             <p className="text-xs text-danger">{errors.amount.message}</p>
           )}
@@ -118,30 +153,32 @@ export const PaymentLog = ({
             “Invoice reception confirmed” only after the client definitely receives it.
           </p>
         )}
-        <div className="grid grid-cols-2 gap-3">
+        {values.invoiceIssued && (
           <div>
             <Label>Invoice number</Label>
-            <Input {...register("invoice")} />
+            <Input
+              placeholder="INV-0001"
+              disabled={!values.invoiceIssued}
+              {...register("invoice")}
+            />
             {errors.invoice && (
               <p className="text-xs text-danger">{errors.invoice.message}</p>
             )}
           </div>
-          <div>
-            <Label>Receipt number</Label>
-            <Input {...register("receipt")} />
-            {errors.receipt && (
-              <p className="text-xs text-danger">{errors.receipt.message}</p>
-            )}
-          </div>
+        )}
+        <div>
+          <Label>Receipt number</Label>
+          <Input placeholder="REC-0001" {...register("receipt")} />
+          {errors.receipt && (
+            <p className="text-xs text-danger">{errors.receipt.message}</p>
+          )}
         </div>
         <div className="grid grid-cols-2 gap-3">
           <div>
             <Label>Payment type</Label>
             <Select
               value={values.paymentType}
-              onValueChange={(value: Values["paymentType"]) =>
-                setValue("paymentType", value)
-              }
+              onValueChange={(val: any) => setValue("paymentType", val)}
             >
               <SelectTrigger>
                 <SelectValue />
@@ -157,13 +194,13 @@ export const PaymentLog = ({
             <Label>Payment mode</Label>
             <Select
               value={values.mode}
-              onValueChange={(value: PaymentMode) => setValue("mode", value)}
+              onValueChange={(val: any) => setValue("mode", val)}
             >
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="MOMO">MoMo</SelectItem>
+                <SelectItem value="MOMO">Mobile money</SelectItem>
                 <SelectItem value="BANK_TRANSFER">Bank transfer</SelectItem>
                 <SelectItem value="CASH">Cash</SelectItem>
                 <SelectItem value="CHEQUE">Cheque</SelectItem>
@@ -172,7 +209,7 @@ export const PaymentLog = ({
           </div>
         </div>
         <Button type="submit" className="w-full" disabled={mutation.isPending}>
-          {mutation.isPending ? "Saving…" : "Save payment"}
+          {mutation.isPending ? "Recording…" : "Record payment"}
         </Button>
       </form>
       <LogFeed dealId={deal.id} logs={logs} users={users} />

@@ -1,3 +1,28 @@
+export function parseCurrencyAmount(val: any): number {
+  if (val === null || val === undefined) return 0;
+  if (typeof val === "number") return isNaN(val) ? 0 : val;
+  if (typeof val === "string") {
+    const clean = val.replace(/[^0-9.-]/g, "").trim();
+    if (!clean) return 0;
+    const parsed = parseFloat(clean);
+    return isNaN(parsed) ? 0 : parsed;
+  }
+  return 0;
+}
+
+function parseDateOnly(val: any): string | null {
+  if (!val) return null;
+  if (val instanceof Date) {
+    const y = val.getFullYear();
+    const m = String(val.getMonth() + 1).padStart(2, "0");
+    const d = String(val.getDate()).padStart(2, "0");
+    return y + "-" + m + "-" + d;
+  }
+  const str = String(val).trim();
+  if (/^\d{4}-\d{2}-\d{2}/.test(str)) return str.slice(0, 10);
+  return null;
+}
+
 import { MysqlRow } from "./db";
 import { Lead } from "@/types/lead.types";
 import { Deal, DealLog, Comment } from "@/types/deal.types";
@@ -43,7 +68,7 @@ export function formatLead(row: MysqlRow): Lead {
     launchTimeline: row.launch_timeline || null,
     hasPublicOffice: Boolean(row.has_public_office),
     meetingArranged: Boolean(row.meeting_arranged),
-    birthday: row.birthday ? new Date(row.birthday).toISOString().slice(0, 10) : null,
+    birthday: parseDateOnly(row.birthday),
     smsOptIn: Boolean(row.sms_opt_in),
     emailOptIn: Boolean(row.email_opt_in),
     newsletterOptIn: Boolean(row.newsletter_opt_in),
@@ -64,6 +89,7 @@ export function formatDeal(row: MysqlRow): Deal {
     title: row.title || "",
     stage: row.stage || "PROSPECTING",
     priority: row.priority || "MEDIUM",
+    currency: row.currency || "GHS",
     contractValue: Number(row.contract_value || 0),
     totalPaid: Number(row.total_paid || 0),
     arrears: Number(row.arrears || 0),

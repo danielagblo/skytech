@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import { getAuthUser, apiSuccess, apiError } from "@/lib/crm/auth";
 import { crmExecute, crmQuery, initCrmSchema, MysqlRow } from "@/lib/crm/db";
-import { formatDeal } from "@/lib/crm/formatters";
+import { formatDeal, parseCurrencyAmount } from "@/lib/crm/formatters";
 
 export async function GET(
   request: NextRequest,
@@ -43,16 +43,22 @@ export async function PUT(
     );
     if (!existing.length) return apiError("Deal not found", 404);
 
-    const contractValue = body.contractValue !== undefined ? Number(body.contractValue) : Number(existing[0].contract_value);
-    const totalPaid = body.totalPaid !== undefined ? Number(body.totalPaid) : Number(existing[0].total_paid);
+    const contractValue = body.contractValue !== undefined 
+      ? parseCurrencyAmount(body.contractValue) 
+      : Number(existing[0].contract_value || 0);
+    const totalPaid = body.totalPaid !== undefined 
+      ? parseCurrencyAmount(body.totalPaid) 
+      : Number(existing[0].total_paid || 0);
     const arrears = Math.max(0, contractValue - totalPaid);
     const isPaidInFull = arrears === 0 && contractValue > 0;
+    const currency = body.currency || existing[0].currency || "GHS";
 
     await crmExecute(
       `UPDATE deals SET
         title = COALESCE(?, title),
         stage = COALESCE(?, stage),
         priority = COALESCE(?, priority),
+        currency = ?,
         contract_value = ?,
         total_paid = ?,
         arrears = ?,
@@ -65,6 +71,7 @@ export async function PUT(
         body.title ?? null,
         body.stage ?? null,
         body.priority ?? null,
+        currency,
         contractValue,
         totalPaid,
         arrears,

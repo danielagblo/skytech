@@ -7,15 +7,18 @@ import { PageHeader } from "@/components/shared/PageHeader";
 import { EmptyState } from "@/components/shared/EmptyState";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { formatCurrency } from "@/lib/utils";
 import { NegotiationLog } from "./logs/NegotiationLog";
 import { SettlementLog } from "./logs/SettlementLog";
 import { PaymentLog } from "./logs/PaymentLog";
 import { ClientRetentionLog } from "./logs/ClientRetentionLog";
+
 export const DealDetailPage = ({ dealId }: { dealId: string }) => {
   const deal = useDeal(dealId);
   const logs = useDealLogs(dealId);
   const users = useUsers({ page: 0, size: 100 });
   const lead = useLead(deal.data?.leadId ?? "");
+
   if (deal.isLoading) return <Skeleton className="h-96 max-w-3xl" />;
   if (deal.isError || !deal.data)
     return (
@@ -25,15 +28,37 @@ export const DealDetailPage = ({ dealId }: { dealId: string }) => {
         message="It may have been deleted or you may not have permission to view it."
       />
     );
+
   const item = deal.data;
   const team = users.data?.content ?? [];
   const allLogs = logs.data ?? [];
+
   return (
     <div className="space-y-5">
       <PageHeader
         title={item.title}
         description={`${lead.data?.companyName || "No linked company"} · ${lead.data?.firstName || "No linked contact"}`}
       />
+      <div className="grid grid-cols-3 gap-3 rounded-2xl bg-card border p-4 text-center">
+        <div>
+          <p className="eyebrow">Agreed Value</p>
+          <p className="text-base font-bold text-green-700 dark:text-green-400">
+            {formatCurrency(item.contractValue)}
+          </p>
+        </div>
+        <div>
+          <p className="eyebrow">Total Paid</p>
+          <p className="text-base font-bold text-foreground">
+            {formatCurrency(item.totalPaid)}
+          </p>
+        </div>
+        <div>
+          <p className="eyebrow">Left (Arrears)</p>
+          <p className={`text-base font-bold ${item.arrears > 0 ? "text-red-600" : "text-foreground"}`}>
+            {formatCurrency(item.arrears)}
+          </p>
+        </div>
+      </div>
       <Tabs defaultValue="negotiation" className="w-full">
         <TabsList className="grid h-auto w-full grid-cols-2 sm:grid-cols-4">
           <TabsTrigger value="negotiation">Negotiation</TabsTrigger>

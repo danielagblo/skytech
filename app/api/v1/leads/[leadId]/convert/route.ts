@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import { getAuthUser, apiSuccess, apiError } from "@/lib/crm/auth";
 import { crmExecute, crmQuery, initCrmSchema, MysqlRow, newId } from "@/lib/crm/db";
-import { formatDeal } from "@/lib/crm/formatters";
+import { formatDeal, parseCurrencyAmount } from "@/lib/crm/formatters";
 
 export async function POST(
   request: NextRequest,
@@ -24,13 +24,14 @@ export async function POST(
 
     const dealId = newId();
     const title = body.title || `${lead.company_name || lead.first_name || "New"} Deal`;
-    const contractValue = body.contractValue || 0;
+    const contractValue = parseCurrencyAmount(body.contractValue);
+    const currency = body.currency || "GHS";
 
     await crmExecute(
       `INSERT INTO deals (
         id, company_id, lead_id, created_by, assigned_to,
-        title, stage, priority, contract_value, total_paid, arrears, is_paid_in_full
-      ) VALUES (?, ?, ?, ?, ?, ?, 'PROSPECTING', ?, ?, 0, ?, 0)`,
+        title, stage, priority, currency, contract_value, total_paid, arrears, is_paid_in_full
+      ) VALUES (?, ?, ?, ?, ?, ?, 'PROSPECTING', ?, ?, ?, ?, 0, ?, 0)`,
       [
         dealId,
         user.companyId || null,
@@ -39,6 +40,7 @@ export async function POST(
         user.id,
         title,
         lead.priority || "MEDIUM",
+        currency,
         contractValue,
         contractValue,
       ]

@@ -84,36 +84,64 @@ export async function POST(request: NextRequest) {
 
     const assignedTo = Array.isArray(body.assignedTo) ? JSON.stringify(body.assignedTo) : JSON.stringify([]);
 
+    let firstName = (body.firstName || body.first_name || "").trim();
+    let lastName = (body.lastName || body.last_name || "").trim();
+
+    // Fallbacks if single name/fullName string was passed
+    if (!firstName && !lastName && (body.name || body.fullName)) {
+      const parts = String(body.name || body.fullName).trim().split(/\s+/);
+      firstName = parts[0] || "";
+      lastName = parts.slice(1).join(" ");
+    }
+    // If user typed full name into first name input and left last name blank
+    if (firstName && !lastName && firstName.includes(" ")) {
+      const parts = firstName.split(/\s+/);
+      firstName = parts[0] || "";
+      lastName = parts.slice(1).join(" ");
+    }
+
+    // Birthday parsing: supports MM-DD (stored as 2000-MM-DD for MySQL DATE) and YYYY-MM-DD
+    let birthday: string | null = null;
+    if (body.birthday) {
+      const bStr = String(body.birthday).trim();
+      if (/^\d{2}-\d{2}$/.test(bStr)) {
+        birthday = `2000-${bStr}`;
+      } else if (/^\d{4}-\d{2}-\d{2}/.test(bStr)) {
+        birthday = bStr.slice(0, 10);
+      }
+    }
+
     await crmExecute(
       `INSERT INTO leads (
         id, company_id, assigned_to, created_by,
         first_name, last_name, email, phone_1, phone_2, whatsapp,
         company_name, role, address, industry, category, lead_source,
         priority, status, launch_timeline, has_public_office, meeting_arranged,
-        sms_opt_in, email_opt_in, newsletter_opt_in, description, conversion_score
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        birthday, sms_opt_in, email_opt_in, newsletter_opt_in, description, conversion_score
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         leadId,
         user.companyId || null,
         assignedTo,
         user.id,
-        body.firstName || null,
-        body.lastName || null,
-        body.email || null,
-        body.phone1 || null,
+        firstName || null,
+        lastName || null,
+        body.email || body.emailAddress || null,
+        body.phone1 || body.phone || null,
         body.phone2 || null,
         body.whatsapp || null,
-        body.companyName || null,
+        body.companyName || body.company || null,
         body.role || null,
         body.address || null,
         body.industry || null,
-        body.category || null,
-        body.leadSource || null,
+        body.category || body.industry || null,
+        body.leadSource || body.source || "SMS",
         body.priority || "MEDIUM",
         body.status || "NEW",
         body.launchTimeline || null,
         body.hasPublicOffice ? 1 : 0,
         body.meetingArranged ? 1 : 0,
+        birthday,
         body.smsOptIn ? 1 : 0,
         body.emailOptIn ? 1 : 0,
         body.newsletterOptIn ? 1 : 0,

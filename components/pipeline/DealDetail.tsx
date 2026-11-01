@@ -18,7 +18,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { AssigneeStack } from "@/components/shared/AssigneeStack";
 import { PriorityBadge } from "@/components/shared/PriorityBadge";
 import { StageBadge } from "@/components/shared/StageBadge";
-import { formatDate } from "@/lib/utils";
+import { formatCurrency, formatDate } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { EditDealModal } from "./EditDealModal";
 import { NegotiationLog } from "./logs/NegotiationLog";
 
 import { markLeadSeen } from "@/lib/seenLeads";
@@ -47,6 +49,7 @@ export const DealDetail = ({
   onOpenChange: (value: boolean) => void;
 }) => {
   const [expanded, setExpanded] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
   const logs = useDealLogs(deal?.id ?? "");
   useEffect(() => {
     if (open && lead) markLeadSeen(lead.id);
@@ -70,15 +73,29 @@ export const DealDetail = ({
     type: "NEGOTIATION" | "SETTLEMENT" | "PAYMENT" | "CLIENT_RETENTION",
   ) => (logs.data ?? []).filter((log) => log.logType === type);
   return (
-    <Sheet open={open} onOpenChange={onOpenChange}>
+    <>
+      <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent className="max-w-xl p-0 sm:max-w-[min(56rem,50vw)]">
         <div className="p-6">
           <SheetHeader>
-            <div className="flex items-center gap-2">
-              <StageBadge stage={deal.stage} />
-              {deal.priority && <PriorityBadge priority={deal.priority} />}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <StageBadge stage={deal.stage} />
+                {deal.priority && <PriorityBadge priority={deal.priority} />}
+              </div>
+              <div className="text-right">
+                <p className="eyebrow">Agreed Value</p>
+                <p className="text-base font-bold text-green-700 dark:text-green-400">
+                  {formatCurrency(deal.contractValue)}
+                </p>
+              </div>
             </div>
-            <SheetTitle className="mt-2 text-xl">{deal.title}</SheetTitle>
+            <div className="mt-2 flex items-center justify-between gap-2">
+              <SheetTitle className="text-xl">{deal.title}</SheetTitle>
+              <Button size="sm" variant="outline" onClick={() => setEditOpen(true)}>
+                Edit deal
+              </Button>
+            </div>
           </SheetHeader>
           <div className="rounded-2xl bg-muted/60 p-4">
             <div className="flex items-center justify-between">
@@ -245,5 +262,7 @@ export const DealDetail = ({
         )}
       </SheetContent>
     </Sheet>
+    <EditDealModal deal={deal} open={editOpen} onOpenChange={setEditOpen} />
+    </>
   );
 };

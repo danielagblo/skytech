@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import { getAuthUser, apiSuccess, apiError } from "@/lib/crm/auth";
 import { crmExecute, crmQuery, initCrmSchema, MysqlRow, newId } from "@/lib/crm/db";
-import { formatDeal } from "@/lib/crm/formatters";
+import { formatDeal, parseCurrencyAmount } from "@/lib/crm/formatters";
 
 export async function GET(request: NextRequest) {
   try {
@@ -74,17 +74,18 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const dealId = newId();
 
-    const contractValue = body.contractValue || 0;
-    const totalPaid = body.totalPaid || 0;
+    const contractValue = parseCurrencyAmount(body.contractValue);
+    const totalPaid = parseCurrencyAmount(body.totalPaid);
     const arrears = Math.max(0, contractValue - totalPaid);
     const isPaidInFull = arrears === 0 && contractValue > 0;
+    const currency = body.currency || "GHS";
 
     await crmExecute(
       `INSERT INTO deals (
         id, company_id, lead_id, created_by, assigned_to,
-        title, stage, priority, contract_value, total_paid, arrears,
+        title, stage, priority, currency, contract_value, total_paid, arrears,
         is_paid_in_full, notes
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         dealId,
         user.companyId || null,
@@ -94,6 +95,7 @@ export async function POST(request: NextRequest) {
         body.title || "Untitled Deal",
         body.stage || "PROSPECTING",
         body.priority || "MEDIUM",
+        currency,
         contractValue,
         totalPaid,
         arrears,

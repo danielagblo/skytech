@@ -18,6 +18,7 @@ export interface Deal {
   title: string;
   stage: DealStage;
   priority: Priority | null;
+  currency?: string;
   contractValue: number;
   totalPaid: number;
   arrears: number;
@@ -47,6 +48,7 @@ export interface CreateDealRequest {
   title: string;
   stage?: DealStage;
   priority?: Priority;
+  currency?: string;
   contractValue?: number;
   totalPaid?: number;
   hostingExpiry?: string;

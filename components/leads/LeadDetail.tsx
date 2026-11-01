@@ -147,6 +147,12 @@ export const LeadDetail = ({
               </p>
             </div>
             <div>
+              <p className="eyebrow">Birthday</p>
+              <p className="mt-2 font-medium">
+                {lead.birthday ? (lead.birthday.length > 5 ? lead.birthday.slice(-5) : lead.birthday) : "Not set"}
+              </p>
+            </div>
+            <div>
               <p className="eyebrow">Public office</p>
               <p className="mt-2">{lead.hasPublicOffice ? "Yes" : "No"}</p>
             </div>

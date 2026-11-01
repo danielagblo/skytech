@@ -58,6 +58,7 @@ export const LeadDetailPage = ({ leadId }: { leadId: string }) => {
           {[
             ["Phone", lead.phone1 || "—"],
             ["Email", lead.email || "—"],
+            ["Birthday", lead.birthday ? (lead.birthday.length > 5 ? lead.birthday.slice(-5) : lead.birthday) : "—"],
             ["Location", lead.address || "—"],
             ["Category", lead.category || "—"],
             ["Lead source", lead.leadSource || "—"],

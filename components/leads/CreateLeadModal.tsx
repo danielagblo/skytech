@@ -36,12 +36,15 @@ const schema = z
     lastName: z.string(),
     birthday: z
       .string()
-      .regex(/^\d{2}-\d{2}$/, "Enter the birthday as MM-DD.")
+      .trim()
       .refine((value) => {
+        if (!value) return true;
+        if (!/^\d{2}-\d{2}$/.test(value)) return false;
         const [month, day] = value.split("-").map(Number);
+        if (month < 1 || month > 12 || day < 1 || day > 31) return false;
         const date = new Date(Date.UTC(2000, month - 1, day));
         return date.getUTCMonth() === month - 1 && date.getUTCDate() === day;
-      }, "Enter a valid month and day."),
+      }, "Enter birthday as MM-DD (e.g. 05-24) or leave blank."),
     role: z.string(),
     leadSource: z.enum([
       "SMS",
@@ -161,7 +164,7 @@ export const CreateLeadModal = ({
             ),
             firstName: lead.firstName ?? "",
             lastName: lead.lastName ?? "",
-            birthday: lead.birthday?.slice(-5) ?? "",
+            birthday: lead.birthday ? (lead.birthday.length > 5 ? lead.birthday.slice(-5) : lead.birthday) : "",
             role: lead.role ?? "",
             leadSource: lead.leadSource ?? "SMS",
             priority: lead.priority ?? "MEDIUM",
@@ -189,7 +192,7 @@ export const CreateLeadModal = ({
       assignedTo: values.assigneeIds.filter((id) => eligibleUserIds.has(id)),
       firstName: values.firstName,
       lastName: values.lastName,
-      birthday: values.birthday || undefined,
+      birthday: values.birthday ? values.birthday.trim() : (lead ? "" : undefined),
       role: values.role,
       leadSource: values.leadSource as LeadSource,
       priority: values.priority as Priority,
@@ -291,7 +294,7 @@ export const CreateLeadModal = ({
               <Label>Birthday (month and day)</Label>
               <Input
                 inputMode="numeric"
-                placeholder="MM-DD"
+                placeholder="MM-DD (e.g. 05-24)"
                 maxLength={5}
                 {...register("birthday")}
               />
