@@ -73,7 +73,8 @@ export default function InvoicePreview({
 }: {
   data?: InvoiceData;
 }) {
-  const subtotal = data.items.reduce((sum, i) => sum + i.rate * i.qty, 0);
+  const items = Array.isArray(data?.items) ? data.items : [];
+  const subtotal = items.reduce((sum, i) => sum + i.rate * i.qty, 0);
   const tax = subtotal * ((data.taxRatePercent ?? 0) / 100);
   const discount = data.discountAmount ?? 0;
   const total = Math.max(subtotal + tax - discount, 0);
@@ -180,7 +181,7 @@ export default function InvoicePreview({
               <span className="text-right">TOTAL</span>
             </div>
 
-            {data.items.map((item, idx) => (
+            {items.map((item, idx) => (
               <div
                 key={idx}
                 className="grid grid-cols-[1fr_80px_60px_100px] md:grid-cols-[1fr_100px_100px_120px] text-xs md:text-sm text-neutral-700 py-3 border-b border-neutral-100"

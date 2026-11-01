@@ -36,7 +36,7 @@ export const LogFeed = ({
       queryFn: () => dealsService.getComments(dealId, log.id),
       select: (
         response: Awaited<ReturnType<typeof dealsService.getComments>>,
-      ) => response.data.data.content,
+      ) => response?.data?.data?.content ?? [],
     })),
   });
   const add = useAddDealLogComment();

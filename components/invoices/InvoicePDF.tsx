@@ -156,7 +156,8 @@ export function InvoicePDFDocument({
 }: {
   data: InvoiceData;
 }) {
-  const subtotal = data.items.reduce((sum, i) => sum + i.rate * i.qty, 0);
+  const items = Array.isArray(data.items) ? data.items : [];
+  const subtotal = items.reduce((sum, i) => sum + i.rate * i.qty, 0);
   const tax = subtotal * ((data.taxRatePercent ?? 0) / 100);
   const discount = data.discountAmount ?? 0;
   const total = Math.max(subtotal + tax - discount, 0);
@@ -269,7 +270,7 @@ export function InvoicePDFDocument({
             <Text style={[styles.colTotal, styles.tableHeaderText]}>TOTAL</Text>
           </View>
 
-          {data.items.map((item, idx) => (
+          {items.map((item, idx) => (
             <View style={styles.tableRow} key={idx}>
               <View style={[styles.colDescription, { paddingRight: 6 }]}>
                 <Text style={styles.tableCellText}>{item.description}</Text>

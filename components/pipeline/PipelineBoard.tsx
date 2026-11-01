@@ -49,7 +49,7 @@ export const PipelineBoard = () => {
       queryKey: ["deal-logs", deal.id],
       queryFn: () => dealsService.getLogs(deal.id),
       select: (response: Awaited<ReturnType<typeof dealsService.getLogs>>) =>
-        response.data.data.content,
+        response?.data?.data?.content ?? [],
       staleTime: 60_000,
     })),
   });

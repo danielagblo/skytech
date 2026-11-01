@@ -103,14 +103,14 @@ export const TaskBoard = () => {
         queryFn: () => tasksService.getSubtasks(task.id),
         select: (
           response: Awaited<ReturnType<typeof tasksService.getSubtasks>>,
-        ) => response.data.data.totalElements,
+        ) => response?.data?.data?.totalElements ?? 0,
       },
       {
         queryKey: ["task-comments", task.id],
         queryFn: () => tasksService.getComments(task.id),
         select: (
           response: Awaited<ReturnType<typeof tasksService.getComments>>,
-        ) => response.data.data.totalElements,
+        ) => response?.data?.data?.totalElements ?? 0,
       },
     ]),
   });

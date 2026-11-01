@@ -97,7 +97,7 @@ export const CreateTaskModal = ({
           status: "TODO",
           ...linked,
         },
-        subtasks: data.subTasks.map((subtask) => ({
+        subtasks: (data.subTasks || []).map((subtask) => ({
           ...subtask,
           complete: false,
         })),

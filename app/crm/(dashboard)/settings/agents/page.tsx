@@ -53,7 +53,7 @@ export default function AgentsPage() {
           : usersService.getPerformance(item.id),
       select: (
         response: Awaited<ReturnType<typeof usersService.getPerformance>>,
-      ) => response.data.data,
+      ) => response?.data?.data,
     })),
   });
   const performance = Object.fromEntries(

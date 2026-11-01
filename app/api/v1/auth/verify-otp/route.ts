@@ -38,6 +38,7 @@ export async function POST(request: NextRequest) {
       {
         accessToken: tokens.accessToken,
         refreshToken: tokens.refreshToken,
+        user,
       },
       "OTP verified successfully"
     );
