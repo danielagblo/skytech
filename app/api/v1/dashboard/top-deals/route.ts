@@ -18,6 +18,7 @@ export async function GET(request: NextRequest) {
     const content = rows.map((r) => ({
       id: String(r.id),
       title: String(r.title),
+      value: Number(r.contractValue || 0),
       contractValue: Number(r.contractValue || 0),
       stage: String(r.stage || "PROSPECTING"),
       totalPaid: Number(r.totalPaid || 0),

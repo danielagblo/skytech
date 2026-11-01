@@ -1,7 +1,7 @@
 import { MysqlRow } from "./db";
 import { Lead } from "@/types/lead.types";
-import { Deal, DealLog } from "@/types/deal.types";
-import { Task } from "@/types/task.types";
+import { Deal, DealLog, Comment } from "@/types/deal.types";
+import { Task, SubTask } from "@/types/task.types";
 import { Invoice } from "@/types/invoice.types";
 import { CalendarEvent } from "@/types/calendar.types";
 import { AppNotification } from "@/types/notification.types";
@@ -99,6 +99,31 @@ export function formatTask(row: MysqlRow, assigneeIds: string[] = []): Task {
     version: Number(row.version || 0),
     createdAt: row.created_at ? new Date(row.created_at).toISOString() : new Date().toISOString(),
     updatedAt: row.updated_at ? new Date(row.updated_at).toISOString() : new Date().toISOString(),
+  };
+}
+
+export function formatSubTask(row: MysqlRow): SubTask {
+  return {
+    id: String(row.id),
+    taskId: String(row.task_id),
+    title: row.title || "",
+    description: row.description || null,
+    priority: row.priority || "LOW",
+    complete: Boolean(row.complete),
+    createdAt: row.created_at ? new Date(row.created_at).toISOString() : new Date().toISOString(),
+    updatedAt: row.updated_at ? new Date(row.updated_at).toISOString() : new Date().toISOString(),
+  };
+}
+
+export function formatComment(row: MysqlRow): Comment {
+  return {
+    id: String(row.id),
+    parentCommentId: row.parent_comment_id ? String(row.parent_comment_id) : null,
+    authorId: String(row.author_id),
+    authorName: row.author_name || "User",
+    authorProfilePhotoUrl: row.author_photo || null,
+    body: row.body || "",
+    createdAt: row.created_at ? new Date(row.created_at).toISOString() : new Date().toISOString(),
   };
 }
 

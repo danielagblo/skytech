@@ -233,6 +233,35 @@ export async function initCrmSchema() {
   `);
 
   await pool.query(`
+    CREATE TABLE IF NOT EXISTS task_subtasks (
+      id VARCHAR(36) PRIMARY KEY,
+      company_id VARCHAR(36),
+      task_id VARCHAR(36) NOT NULL,
+      title VARCHAR(255) NOT NULL,
+      description TEXT,
+      priority VARCHAR(20) DEFAULT 'LOW',
+      complete BOOLEAN DEFAULT FALSE,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+      INDEX idx_task_subtasks_task_id (task_id)
+    );
+  `);
+
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS task_comments (
+      id VARCHAR(36) PRIMARY KEY,
+      company_id VARCHAR(36),
+      task_id VARCHAR(36) NOT NULL,
+      parent_comment_id VARCHAR(36),
+      author_id VARCHAR(36) NOT NULL,
+      body TEXT NOT NULL,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+      INDEX idx_task_comments_task_id (task_id)
+    );
+  `);
+
+  await pool.query(`
     CREATE TABLE IF NOT EXISTS calendar_events (
       id VARCHAR(36) PRIMARY KEY,
       company_id VARCHAR(36),
