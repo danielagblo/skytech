@@ -1,138 +1,95 @@
 import { NextRequest } from "next/server";
-import * as React from "react";
-import { Document, Page, Text, View, StyleSheet, renderToBuffer } from "@react-pdf/renderer";
 import { getAuthUser, apiError } from "@/lib/crm/auth";
 import { crmQuery, initCrmSchema, MysqlRow } from "@/lib/crm/db";
 
-const styles = StyleSheet.create({
-  page: {
-    padding: 40,
-    fontFamily: "Helvetica",
-    fontSize: 10,
-    color: "#1e293b",
-  },
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 24,
-    borderBottomWidth: 1,
-    borderBottomColor: "#e2e8f0",
-    paddingBottom: 16,
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "#0f172a",
-  },
-  subtitle: {
-    fontSize: 10,
-    color: "#64748b",
-    marginTop: 4,
-  },
-  meta: {
-    textAlign: "right",
-  },
-  metaText: {
-    fontSize: 10,
-    color: "#475569",
-    marginBottom: 2,
-  },
-  section: {
-    marginBottom: 20,
-  },
-  sectionTitle: {
-    fontSize: 11,
-    fontWeight: "bold",
-    color: "#334155",
-    marginBottom: 6,
-    textTransform: "uppercase",
-  },
-  table: {
-    width: "100%",
-    marginTop: 10,
-    borderWidth: 1,
-    borderColor: "#e2e8f0",
-    borderRadius: 4,
-  },
-  tableHeader: {
-    flexDirection: "row",
-    backgroundColor: "#f8fafc",
-    paddingVertical: 8,
-    paddingHorizontal: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: "#e2e8f0",
-    fontWeight: "bold",
-    fontSize: 9,
-    color: "#475569",
-  },
-  tableRow: {
-    flexDirection: "row",
-    paddingVertical: 8,
-    paddingHorizontal: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: "#f1f5f9",
-    fontSize: 9,
-  },
-  colDesc: { flex: 4 },
-  colQty: { flex: 1, textAlign: "right" },
-  colPrice: { flex: 2, textAlign: "right" },
-  colTotal: { flex: 2, textAlign: "right" },
-  summaryRow: {
-    flexDirection: "row",
-    justifyContent: "flex-end",
-    paddingVertical: 4,
-    paddingHorizontal: 10,
-  },
-  summaryLabel: {
-    width: 100,
-    textAlign: "right",
-    color: "#64748b",
-    fontSize: 9,
-    paddingRight: 10,
-  },
-  summaryVal: {
-    width: 100,
-    textAlign: "right",
-    fontSize: 9,
-    color: "#0f172a",
-  },
-  totalRow: {
-    flexDirection: "row",
-    justifyContent: "flex-end",
-    paddingVertical: 6,
-    paddingHorizontal: 10,
-    borderTopWidth: 1,
-    borderTopColor: "#e2e8f0",
-    marginTop: 6,
-  },
-  totalLabel: {
-    width: 100,
-    textAlign: "right",
-    fontWeight: "bold",
-    fontSize: 11,
-    color: "#0f172a",
-    paddingRight: 10,
-  },
-  totalVal: {
-    width: 100,
-    textAlign: "right",
-    fontWeight: "bold",
-    fontSize: 11,
-    color: "#0f172a",
-  },
-  footer: {
-    position: "absolute",
-    bottom: 30,
-    left: 40,
-    right: 40,
-    textAlign: "center",
-    color: "#94a3b8",
-    fontSize: 8,
-    borderTopWidth: 1,
-    borderTopColor: "#f1f5f9",
-    paddingTop: 10,
-  },
-});
+function buildInvoicePdf(invoice: MysqlRow, items: MysqlRow[]): Buffer {
+  const invNumber = invoice.invoice_number || `INV-${String(invoice.id).slice(0, 8)}`;
+  const cur = invoice.currency || "GHS";
+  const subtotal = Number(invoice.subtotal || 0).toFixed(2);
+  const taxRate = Number(invoice.tax_rate || 0);
+  const taxAmount = Number(invoice.tax_amount || 0).toFixed(2);
+  const discount = Number(invoice.discount_amount || 0).toFixed(2);
+  const total = Number(invoice.total || 0).toFixed(2);
+  const amountPaid = Number(invoice.amount_paid || 0).toFixed(2);
+  const balanceDue = Number(invoice.balance_due || (Number(total) - Number(amountPaid))).toFixed(2);
+
+  const lines: string[] = [
+    `Skytech Ghana Limited - Enterprise Invoice`,
+    `Invoice #: ${invNumber}   |   Status: ${invoice.status || "DRAFT"}`,
+    `Due Date: ${invoice.due_date ? new Date(invoice.due_date).toLocaleDateString() : "Upon Receipt"}`,
+    `--------------------------------------------------------------------------------`,
+    `Bill To: ${invoice.recipient_name || "Valued Client"}`,
+  ];
+
+  if (invoice.recipient_company) lines.push(`Company: ${invoice.recipient_company}`);
+  if (invoice.recipient_email) lines.push(`Email: ${invoice.recipient_email}`);
+  if (invoice.recipient_address) lines.push(`Address: ${invoice.recipient_address}`);
+
+  lines.push(`--------------------------------------------------------------------------------`);
+  lines.push(`ITEMS & SERVICES:`);
+
+  if (!items.length) {
+    lines.push(`(No line items listed)`);
+  } else {
+    items.forEach((it, idx) => {
+      const desc = it.description || "Item";
+      const qty = it.quantity || 1;
+      const rate = Number(it.unit_price || 0).toFixed(2);
+      const amt = Number(it.amount || (qty * Number(rate))).toFixed(2);
+      lines.push(`${idx + 1}. ${desc} (Qty: ${qty} x ${cur} ${rate}) = ${cur} ${amt}`);
+    });
+  }
+
+  lines.push(`--------------------------------------------------------------------------------`);
+  lines.push(`Subtotal: ${cur} ${subtotal}`);
+  if (Number(taxAmount) > 0) lines.push(`Tax (${taxRate}%): ${cur} ${taxAmount}`);
+  if (Number(discount) > 0) lines.push(`Discount: -${cur} ${discount}`);
+  lines.push(`Total Amount: ${cur} ${total}`);
+  if (Number(amountPaid) > 0) lines.push(`Amount Paid: ${cur} ${amountPaid}`);
+  lines.push(`Balance Due: ${cur} ${balanceDue}`);
+  lines.push(`--------------------------------------------------------------------------------`);
+  lines.push(`Thank you for your business. Skytech Ghana.`);
+
+  const content = [
+    "BT",
+    "/F1 16 Tf",
+    "50 780 Td",
+    `(${invNumber}) Tj`,
+    "/F1 10 Tf",
+    ...lines.flatMap((line) => [
+      "0 -18 Td",
+      `(${line.replace(/[()\\\\]/g, "\\$&")}) Tj`,
+    ]),
+    "ET",
+  ].join("\n");
+
+  const stream = Buffer.from(content, "utf8");
+  const streamLength = stream.length;
+
+  const objects = [
+    "1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj",
+    "2 0 obj\n<< /Type /Pages /Kids [3 0 R] /Count 1 >>\nendobj",
+    `3 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>\nendobj`,
+    `4 0 obj\n<< /Length ${streamLength} >>\nstream\n${content}\nendstream\nendobj`,
+    "5 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>\nendobj",
+  ];
+
+  let body = "%PDF-1.4\n";
+  const offsets: number[] = [];
+  for (const obj of objects) {
+    offsets.push(Buffer.byteLength(body, "utf8"));
+    body += obj + "\n";
+  }
+
+  const xrefOffset = Buffer.byteLength(body, "utf8");
+  let xref = "xref\n0 " + (objects.length + 1) + "\n0000000000 65535 f \n";
+  for (const off of offsets) {
+    xref += String(off).padStart(10, "0") + " 00000 n \n";
+  }
+
+  const trailer = `trailer\n<< /Size ${objects.length + 1} /Root 1 0 R >>\nstartxref\n${xrefOffset}\n%%EOF`;
+  return Buffer.from(body + xref + trailer, "utf8");
+}
 
 export async function GET(
   request: NextRequest,
@@ -154,137 +111,14 @@ export async function GET(
       [invoiceId]
     );
 
-    const invNumber = invoice.invoice_number || `INV-${invoice.id.slice(0, 8)}`;
-    const cur = invoice.currency || "GHS";
-    const subtotal = Number(invoice.subtotal || 0);
-    const taxRate = Number(invoice.tax_rate || 0);
-    const taxAmount = Number(invoice.tax_amount || 0);
-    const discount = Number(invoice.discount_amount || 0);
-    const total = Number(invoice.total || 0);
-    const amountPaid = Number(invoice.amount_paid || 0);
-    const balanceDue = Number(invoice.balance_due || (total - amountPaid));
-
-    const invoiceDoc = React.createElement(
-      Document,
-      null,
-      React.createElement(
-        Page,
-        { size: "A4", style: styles.page },
-        React.createElement(
-          View,
-          { style: styles.header },
-          React.createElement(
-            View,
-            null,
-            React.createElement(Text, { style: styles.title }, "INVOICE"),
-            React.createElement(Text, { style: styles.subtitle }, `Skytech CRM - ${invNumber}`)
-          ),
-          React.createElement(
-            View,
-            { style: styles.meta },
-            React.createElement(Text, { style: styles.metaText }, `Status: ${invoice.status || "DRAFT"}`),
-            React.createElement(
-              Text,
-              { style: styles.metaText },
-              `Due: ${invoice.due_date ? new Date(invoice.due_date).toLocaleDateString() : "Upon Receipt"}`
-            )
-          )
-        ),
-        React.createElement(
-          View,
-          { style: styles.section },
-          React.createElement(Text, { style: styles.sectionTitle }, "Bill To:"),
-          React.createElement(Text, { style: { fontWeight: "bold" } }, invoice.recipient_name || "Valued Client"),
-          invoice.recipient_company ? React.createElement(Text, null, invoice.recipient_company) : null,
-          invoice.recipient_email ? React.createElement(Text, null, invoice.recipient_email) : null,
-          invoice.recipient_address ? React.createElement(Text, null, invoice.recipient_address) : null
-        ),
-        React.createElement(
-          View,
-          { style: styles.table },
-          React.createElement(
-            View,
-            { style: styles.tableHeader },
-            React.createElement(Text, { style: styles.colDesc }, "Item Description"),
-            React.createElement(Text, { style: styles.colQty }, "Qty"),
-            React.createElement(Text, { style: styles.colPrice }, `Rate (${cur})`),
-            React.createElement(Text, { style: styles.colTotal }, `Amount (${cur})`)
-          ),
-          ...items.map((it, idx) =>
-            React.createElement(
-              View,
-              { key: idx, style: styles.tableRow },
-              React.createElement(Text, { style: styles.colDesc }, it.description || "-"),
-              React.createElement(Text, { style: styles.colQty }, String(it.quantity || 1)),
-              React.createElement(Text, { style: styles.colPrice }, Number(it.unit_price || 0).toFixed(2)),
-              React.createElement(Text, { style: styles.colTotal }, Number(it.amount || 0).toFixed(2))
-            )
-          )
-        ),
-        React.createElement(
-          View,
-          { style: { marginTop: 12 } },
-          React.createElement(
-            View,
-            { style: styles.summaryRow },
-            React.createElement(Text, { style: styles.summaryLabel }, "Subtotal:"),
-            React.createElement(Text, { style: styles.summaryVal }, `${cur} ${subtotal.toFixed(2)}`)
-          ),
-          taxAmount > 0
-            ? React.createElement(
-                View,
-                { style: styles.summaryRow },
-                React.createElement(Text, { style: styles.summaryLabel }, `Tax (${taxRate}%):`),
-                React.createElement(Text, { style: styles.summaryVal }, `${cur} ${taxAmount.toFixed(2)}`)
-              )
-            : null,
-          discount > 0
-            ? React.createElement(
-                View,
-                { style: styles.summaryRow },
-                React.createElement(Text, { style: styles.summaryLabel }, "Discount:"),
-                React.createElement(Text, { style: styles.summaryVal }, `-${cur} ${discount.toFixed(2)}`)
-              )
-            : null,
-          React.createElement(
-            View,
-            { style: styles.totalRow },
-            React.createElement(Text, { style: styles.totalLabel }, "Total:"),
-            React.createElement(Text, { style: styles.totalVal }, `${cur} ${total.toFixed(2)}`)
-          ),
-          amountPaid > 0
-            ? React.createElement(
-                View,
-                { style: styles.summaryRow },
-                React.createElement(Text, { style: styles.summaryLabel }, "Paid:"),
-                React.createElement(Text, { style: styles.summaryVal }, `${cur} ${amountPaid.toFixed(2)}`)
-              )
-            : null,
-          React.createElement(
-            View,
-            { style: styles.summaryRow },
-            React.createElement(Text, { style: styles.summaryLabel }, "Balance Due:"),
-            React.createElement(
-              Text,
-              { style: [styles.summaryVal, { fontWeight: "bold" }] },
-              `${cur} ${balanceDue.toFixed(2)}`
-            )
-          )
-        ),
-        React.createElement(
-          View,
-          { style: styles.footer },
-          React.createElement(Text, null, "Thank you for your business. Skytech Ghana.")
-        )
-      )
-    );
-
-    const pdfBuffer = await renderToBuffer(invoiceDoc);
+    const pdfBuffer = buildInvoicePdf(invoice, items);
+    const invNumber = invoice.invoice_number || `INV-${String(invoice.id).slice(0, 8)}`;
 
     return new Response(pdfBuffer as any, {
       headers: {
         "Content-Type": "application/pdf",
         "Content-Disposition": `attachment; filename="${invNumber}.pdf"`,
+        "Content-Length": String(pdfBuffer.length),
       },
     });
   } catch (error: any) {

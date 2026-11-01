@@ -44,7 +44,7 @@ export async function POST(request: NextRequest) {
     const proto = request.headers.get("x-forwarded-proto") || "https";
     const link = `${proto}://${host}/rate-me/${token}`;
 
-    const res: RatingLinkResponse = {
+    const res: RatingLinkResponse & { token: string } = {
       id: ratingId,
       agentId: user.id,
       dealId,
@@ -52,6 +52,7 @@ export async function POST(request: NextRequest) {
       status: "SENT",
       message: "Rating link created",
       link,
+      token,
     };
 
     return apiSuccess(res, "Rating link generated", 201);
