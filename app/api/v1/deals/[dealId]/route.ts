@@ -2,6 +2,7 @@ import { NextRequest } from "next/server";
 import { getAuthUser, apiSuccess, apiError } from "@/lib/crm/auth";
 import { crmExecute, crmQuery, initCrmSchema, MysqlRow } from "@/lib/crm/db";
 import { formatDeal, parseCurrencyAmount } from "@/lib/crm/formatters";
+import { camelize } from "@/lib/case-conversion";
 
 export async function GET(
   request: NextRequest,
@@ -34,7 +35,8 @@ export async function PUT(
     if (!user) return apiError("Unauthorized", 401);
 
     const { dealId } = await params;
-    const body = await request.json();
+    const rawBody = await request.json().catch(() => ({}));
+    const body = (camelize(rawBody) || {}) as any;
     await initCrmSchema();
 
     const existing = await crmQuery<MysqlRow>(
@@ -43,15 +45,28 @@ export async function PUT(
     );
     if (!existing.length) return apiError("Deal not found", 404);
 
-    const contractValue = body.contractValue !== undefined 
-      ? parseCurrencyAmount(body.contractValue) 
+    const rawContract = body.contractValue !== undefined 
+      ? body.contractValue 
+      : rawBody.contract_value !== undefined 
+      ? rawBody.contract_value 
+      : rawBody.contractValue;
+    const contractValue = rawContract !== undefined 
+      ? parseCurrencyAmount(rawContract) 
       : Number(existing[0].contract_value || 0);
-    const totalPaid = body.totalPaid !== undefined 
-      ? parseCurrencyAmount(body.totalPaid) 
+
+    const rawPaid = body.totalPaid !== undefined 
+      ? body.totalPaid 
+      : rawBody.total_paid !== undefined 
+      ? rawBody.total_paid 
+      : rawBody.totalPaid;
+    const totalPaid = rawPaid !== undefined 
+      ? parseCurrencyAmount(rawPaid) 
       : Number(existing[0].total_paid || 0);
+
     const arrears = Math.max(0, contractValue - totalPaid);
     const isPaidInFull = arrears === 0 && contractValue > 0;
-    const currency = body.currency || existing[0].currency || "GHS";
+    const currency = body.currency || rawBody.currency || existing[0].currency || "GHS";
+    const assignedTo = body.assignedToId ?? rawBody.assigned_to_id ?? rawBody.assignedToId ?? null;
 
     await crmExecute(
       `UPDATE deals SET
@@ -68,16 +83,16 @@ export async function PUT(
         updated_at = NOW()
       WHERE id = ?`,
       [
-        body.title ?? null,
-        body.stage ?? null,
-        body.priority ?? null,
+        body.title || rawBody.title || null,
+        body.stage || rawBody.stage || null,
+        body.priority || rawBody.priority || null,
         currency,
         contractValue,
         totalPaid,
         arrears,
         isPaidInFull ? 1 : 0,
-        body.assignedToId ?? null,
-        body.notes ?? null,
+        assignedTo,
+        body.notes || rawBody.notes || null,
         dealId,
       ]
     );

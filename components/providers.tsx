@@ -7,6 +7,7 @@ import { Toaster } from "sonner";
 import { queryClient } from "@/lib/queryClient";
 import { useCurrentUser } from "@/hooks/useAuth";
 import { useAuthStore } from "@/store/authStore";
+import { ChunkErrorListener } from "@/components/shared/ChunkErrorListener";
 
 const AuthBootstrap = () => {
   const hydrated = useAuthStore((state) => state.hydrated);
@@ -29,6 +30,7 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+        <ChunkErrorListener />
         <AuthBootstrap />
         <Toaster richColors closeButton position="top-right" />
         {children}

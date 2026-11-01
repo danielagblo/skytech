@@ -2,6 +2,7 @@ import { NextRequest } from "next/server";
 import { getAuthUser, apiSuccess, apiError } from "@/lib/crm/auth";
 import { crmExecute, crmQuery, initCrmSchema, MysqlRow, newId } from "@/lib/crm/db";
 import { formatDeal, parseCurrencyAmount } from "@/lib/crm/formatters";
+import { camelize } from "@/lib/case-conversion";
 
 export async function GET(request: NextRequest) {
   try {
@@ -71,14 +72,17 @@ export async function POST(request: NextRequest) {
     if (!user) return apiError("Unauthorized", 401);
 
     await initCrmSchema();
-    const body = await request.json();
+    const rawBody = await request.json().catch(() => ({}));
+    const body = (camelize(rawBody) || {}) as any;
     const dealId = newId();
 
-    const contractValue = parseCurrencyAmount(body.contractValue);
-    const totalPaid = parseCurrencyAmount(body.totalPaid);
+    const contractValue = parseCurrencyAmount(body.contractValue ?? rawBody.contract_value ?? rawBody.contractValue);
+    const totalPaid = parseCurrencyAmount(body.totalPaid ?? rawBody.total_paid ?? rawBody.totalPaid);
     const arrears = Math.max(0, contractValue - totalPaid);
     const isPaidInFull = arrears === 0 && contractValue > 0;
-    const currency = body.currency || "GHS";
+    const currency = body.currency || rawBody.currency || "GHS";
+    const leadId = body.leadId ?? rawBody.lead_id ?? rawBody.leadId ?? null;
+    const assignedTo = body.assignedToId ?? rawBody.assigned_to_id ?? rawBody.assignedToId ?? user.id;
 
     await crmExecute(
       `INSERT INTO deals (
@@ -89,18 +93,18 @@ export async function POST(request: NextRequest) {
       [
         dealId,
         user.companyId || null,
-        body.leadId || null,
+        leadId,
         user.id,
-        body.assignedToId || user.id,
-        body.title || "Untitled Deal",
-        body.stage || "PROSPECTING",
-        body.priority || "MEDIUM",
+        assignedTo,
+        body.title || rawBody.title || "Untitled Deal",
+        body.stage || rawBody.stage || "PROSPECTING",
+        body.priority || rawBody.priority || "MEDIUM",
         currency,
         contractValue,
         totalPaid,
         arrears,
         isPaidInFull ? 1 : 0,
-        body.notes || null,
+        body.notes || rawBody.notes || null,
       ]
     );
 

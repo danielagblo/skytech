@@ -2,6 +2,7 @@ import { NextRequest } from "next/server";
 import { getAuthUser, apiSuccess, apiError } from "@/lib/crm/auth";
 import { crmExecute, crmQuery, initCrmSchema, MysqlRow, newId } from "@/lib/crm/db";
 import { formatDeal, parseCurrencyAmount } from "@/lib/crm/formatters";
+import { camelize } from "@/lib/case-conversion";
 
 export async function POST(
   request: NextRequest,
@@ -12,7 +13,8 @@ export async function POST(
     if (!user) return apiError("Unauthorized", 401);
 
     const { leadId } = await params;
-    const body = await request.json().catch(() => ({}));
+    const rawBody = await request.json().catch(() => ({}));
+    const body = (camelize(rawBody) || {}) as any;
     await initCrmSchema();
 
     const leads = await crmQuery<MysqlRow>(
@@ -24,11 +26,16 @@ export async function POST(
 
     const dealId = newId();
     const leadName = `${lead.company_name || `${lead.first_name || ""} ${lead.last_name || ""}`.trim() || "New"} Deal`;
-    const title = body.title?.trim() || leadName;
-    const contractValue = parseCurrencyAmount(body.contractValue);
-    const currency = body.currency || "GHS";
-    const assignedTo = body.assignedToId || lead.assigned_to || user.id;
-    const priority = body.priority || lead.priority || "MEDIUM";
+    const title = (body.title || rawBody.title)?.trim() || leadName;
+    const rawContract = body.contractValue !== undefined 
+      ? body.contractValue 
+      : rawBody.contract_value !== undefined 
+      ? rawBody.contract_value 
+      : rawBody.contractValue;
+    const contractValue = parseCurrencyAmount(rawContract);
+    const currency = body.currency || rawBody.currency || "GHS";
+    const assignedTo = body.assignedToId || rawBody.assigned_to_id || rawBody.assignedToId || lead.assigned_to || user.id;
+    const priority = body.priority || rawBody.priority || lead.priority || "MEDIUM";
 
     await crmExecute(
       `INSERT INTO deals (

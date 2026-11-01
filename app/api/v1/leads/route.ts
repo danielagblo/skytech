@@ -2,6 +2,7 @@ import { NextRequest } from "next/server";
 import { getAuthUser, apiSuccess, apiError } from "@/lib/crm/auth";
 import { crmExecute, crmQuery, initCrmSchema, MysqlRow, newId } from "@/lib/crm/db";
 import { formatLead } from "@/lib/crm/formatters";
+import { camelize } from "@/lib/case-conversion";
 
 export async function GET(request: NextRequest) {
   try {
@@ -79,10 +80,12 @@ export async function POST(request: NextRequest) {
     if (!user) return apiError("Unauthorized", 401);
 
     await initCrmSchema();
-    const body = await request.json();
+    const rawBody = await request.json().catch(() => ({}));
+    const body = (camelize(rawBody) || {}) as any;
     const leadId = newId();
 
-    const assignedTo = Array.isArray(body.assignedTo) ? JSON.stringify(body.assignedTo) : JSON.stringify([]);
+    const assignedToRaw = body.assignedTo ?? rawBody.assigned_to ?? [];
+    const assignedTo = Array.isArray(assignedToRaw) ? JSON.stringify(assignedToRaw) : JSON.stringify([]);
 
     let firstName = (body.firstName || body.first_name || "").trim();
     let lastName = (body.lastName || body.last_name || "").trim();

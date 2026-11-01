@@ -2,6 +2,7 @@ import { NextRequest } from "next/server";
 import { getAuthUser, apiSuccess, apiError } from "@/lib/crm/auth";
 import { crmExecute, crmQuery, initCrmSchema, MysqlRow, newId } from "@/lib/crm/db";
 import { formatDealLog, parseCurrencyAmount } from "@/lib/crm/formatters";
+import { camelize } from "@/lib/case-conversion";
 
 export async function GET(
   request: NextRequest,
@@ -41,18 +42,30 @@ export async function POST(
     if (!user) return apiError("Unauthorized", 401);
 
     const { dealId } = await params;
-    const body = await request.json();
+    const rawBody = await request.json().catch(() => ({}));
+    const body = (camelize(rawBody) || {}) as any;
     await initCrmSchema();
 
-    const settlementVal = body.settlementValue !== undefined && body.settlementValue !== null
-      ? parseCurrencyAmount(body.settlementValue)
+    const rawSettlement = body.settlementValue !== undefined && body.settlementValue !== null
+      ? body.settlementValue
+      : rawBody.settlement_value !== undefined && rawBody.settlement_value !== null
+      ? rawBody.settlement_value
       : null;
-    const amountPaid = body.amountPaid !== undefined && body.amountPaid !== null
-      ? parseCurrencyAmount(body.amountPaid)
+    const settlementVal = rawSettlement !== null ? parseCurrencyAmount(rawSettlement) : null;
+
+    const rawAmountPaid = body.amountPaid !== undefined && body.amountPaid !== null
+      ? body.amountPaid
+      : rawBody.amount_paid !== undefined && rawBody.amount_paid !== null
+      ? rawBody.amount_paid
       : null;
-    const retentionAmt = body.retentionAmount !== undefined && body.retentionAmount !== null
-      ? parseCurrencyAmount(body.retentionAmount)
+    const amountPaid = rawAmountPaid !== null ? parseCurrencyAmount(rawAmountPaid) : null;
+
+    const rawRetention = body.retentionAmount !== undefined && body.retentionAmount !== null
+      ? body.retentionAmount
+      : rawBody.retention_amount !== undefined && rawBody.retention_amount !== null
+      ? rawBody.retention_amount
       : null;
+    const retentionAmt = rawRetention !== null ? parseCurrencyAmount(rawRetention) : null;
 
     const logId = newId();
     await crmExecute(
@@ -69,24 +82,24 @@ export async function POST(
         user.companyId || null,
         dealId,
         user.id,
-        body.logType || "NEGOTIATION",
-        body.contactMode || null,
-        body.responseType || null,
-        body.followUpAt ? new Date(body.followUpAt) : null,
+        body.logType || rawBody.log_type || "NEGOTIATION",
+        body.contactMode || rawBody.contact_mode || null,
+        body.responseType || rawBody.response_type || null,
+        (body.followUpAt || rawBody.follow_up_at) ? new Date(body.followUpAt || rawBody.follow_up_at) : null,
         settlementVal,
-        body.settlementFollowUp ? new Date(body.settlementFollowUp) : null,
-        body.specialConditions || null,
+        (body.settlementFollowUp || rawBody.settlement_follow_up) ? new Date(body.settlementFollowUp || rawBody.settlement_follow_up) : null,
+        body.specialConditions || rawBody.special_conditions || null,
         amountPaid,
-        body.paymentMode || null,
-        body.invoiceNumber || null,
-        body.receiptNumber || null,
-        body.invoiceIssued ? 1 : 0,
-        body.serviceType || null,
-        body.expiryDate ? new Date(body.expiryDate) : null,
+        body.paymentMode || rawBody.payment_mode || null,
+        body.invoiceNumber || rawBody.invoice_number || null,
+        body.receiptNumber || rawBody.receipt_number || null,
+        (body.invoiceIssued ?? rawBody.invoice_issued) ? 1 : 0,
+        body.serviceType || rawBody.service_type || null,
+        (body.expiryDate || rawBody.expiry_date) ? new Date(body.expiryDate || rawBody.expiry_date) : null,
         retentionAmt,
-        body.retentionInvoice || null,
-        body.retentionReceipt || null,
-        body.body || null,
+        body.retentionInvoice || rawBody.retention_invoice || null,
+        body.retentionReceipt || rawBody.retention_receipt || null,
+        body.body || rawBody.body || null,
       ]
     );
 

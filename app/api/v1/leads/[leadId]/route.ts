@@ -2,6 +2,7 @@ import { NextRequest } from "next/server";
 import { getAuthUser, apiSuccess, apiError } from "@/lib/crm/auth";
 import { crmExecute, crmQuery, initCrmSchema, MysqlRow } from "@/lib/crm/db";
 import { formatLead } from "@/lib/crm/formatters";
+import { camelize } from "@/lib/case-conversion";
 
 export async function GET(
   request: NextRequest,
@@ -34,7 +35,8 @@ export async function PUT(
     if (!user) return apiError("Unauthorized", 401);
 
     const { leadId } = await params;
-    const body = await request.json();
+    const rawBody = await request.json().catch(() => ({}));
+    const body = (camelize(rawBody) || {}) as any;
     await initCrmSchema();
 
     const existing = await crmQuery<MysqlRow>(
