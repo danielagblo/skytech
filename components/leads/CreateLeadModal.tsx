@@ -178,9 +178,9 @@ export const CreateLeadModal = ({
             launchTimeline: lead.launchTimeline ?? "ONE_TO_TWO_MONTHS",
             meetingArranged: Boolean(lead.meetingArranged),
             hasPublicOffice: Boolean(lead.hasPublicOffice),
-            smsOptIn: lead.smsOptIn,
-            emailOptIn: lead.emailOptIn,
-            newsletterOptIn: lead.newsletterOptIn,
+            smsOptIn: Boolean(lead.smsOptIn),
+            emailOptIn: Boolean(lead.emailOptIn),
+            newsletterOptIn: Boolean(lead.newsletterOptIn),
             description: lead.description ?? "",
           }
         : defaults,
@@ -439,7 +439,7 @@ export const CreateLeadModal = ({
                 <Label>{label}</Label>
                 <Switch
                   checked={Boolean(toggles[key])}
-                  onCheckedChange={(value) => setValue(key, value)}
+                  onCheckedChange={(value) => setValue(key, value, { shouldValidate: true, shouldDirty: true, shouldTouch: true })}
                 />
               </div>
             ))}
@@ -455,7 +455,7 @@ export const CreateLeadModal = ({
                 <label key={key} className="flex items-center gap-2 text-sm">
                   <Switch
                     checked={Boolean(toggles[key])}
-                    onCheckedChange={(value) => setValue(key, value)}
+                    onCheckedChange={(value) => setValue(key, value, { shouldValidate: true, shouldDirty: true, shouldTouch: true })}
                   />
                   {label}
                 </label>

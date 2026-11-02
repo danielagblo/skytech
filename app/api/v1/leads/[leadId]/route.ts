@@ -79,6 +79,42 @@ export async function PUT(
       ? JSON.stringify(body.assignedTo)
       : (typeof existing[0].assigned_to === "string" ? existing[0].assigned_to : JSON.stringify(existing[0].assigned_to || []));
 
+    const hasPublicOffice = body.hasPublicOffice !== undefined
+      ? (body.hasPublicOffice ? 1 : 0)
+      : (rawBody.has_public_office !== undefined
+          ? (rawBody.has_public_office ? 1 : 0)
+          : (existing[0].has_public_office ? 1 : 0));
+
+    const meetingArranged = body.meetingArranged !== undefined
+      ? (body.meetingArranged ? 1 : 0)
+      : (rawBody.meeting_arranged !== undefined
+          ? (rawBody.meeting_arranged ? 1 : 0)
+          : (existing[0].meeting_arranged ? 1 : 0));
+
+    const smsOptIn = body.smsOptIn !== undefined
+      ? (body.smsOptIn ? 1 : 0)
+      : (rawBody.sms_opt_in !== undefined
+          ? (rawBody.sms_opt_in ? 1 : 0)
+          : (existing[0].sms_opt_in ? 1 : 0));
+
+    const emailOptIn = body.emailOptIn !== undefined
+      ? (body.emailOptIn ? 1 : 0)
+      : (rawBody.email_opt_in !== undefined
+          ? (rawBody.email_opt_in ? 1 : 0)
+          : (existing[0].email_opt_in ? 1 : 0));
+
+    const newsletterOptIn = body.newsletterOptIn !== undefined
+      ? (body.newsletterOptIn ? 1 : 0)
+      : (rawBody.newsletter_opt_in !== undefined
+          ? (rawBody.newsletter_opt_in ? 1 : 0)
+          : (existing[0].newsletter_opt_in ? 1 : 0));
+
+    const conversionScore = body.conversionScore !== undefined
+      ? Number(body.conversionScore) || 0
+      : (rawBody.conversion_score !== undefined
+          ? Number(rawBody.conversion_score) || 0
+          : Number(existing[0].conversion_score || 0));
+
     await crmExecute(
       `UPDATE leads SET
         first_name = COALESCE(?, first_name),
@@ -96,8 +132,14 @@ export async function PUT(
         priority = COALESCE(?, priority),
         status = COALESCE(?, status),
         launch_timeline = COALESCE(?, launch_timeline),
+        has_public_office = ?,
+        meeting_arranged = ?,
         birthday = ${birthdayValue !== undefined ? "?" : "birthday"},
+        sms_opt_in = ?,
+        email_opt_in = ?,
+        newsletter_opt_in = ?,
         description = COALESCE(?, description),
+        conversion_score = ?,
         assigned_to = ?,
         updated_at = NOW()
       WHERE id = ?`,
@@ -117,8 +159,14 @@ export async function PUT(
         body.priority ?? null,
         body.status ?? null,
         body.launchTimeline ?? null,
+        hasPublicOffice,
+        meetingArranged,
         ...(birthdayValue !== undefined ? [birthdayValue] : []),
+        smsOptIn,
+        emailOptIn,
+        newsletterOptIn,
         body.description ?? null,
+        conversionScore,
         assignedTo,
         leadId,
       ]
@@ -130,6 +178,8 @@ export async function PUT(
     return apiError(error.message || "Failed to update lead", 500);
   }
 }
+
+export const PATCH = PUT;
 
 export async function DELETE(
   request: NextRequest,
