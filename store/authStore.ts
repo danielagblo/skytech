@@ -94,7 +94,12 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
   setUser: (user) => set({ user }),
   clearAuth: () => {
-    if (typeof window !== "undefined") clearPersisted();
+    if (typeof window !== "undefined") {
+      clearPersisted();
+      try {
+        fetch("/api/v1/auth/logout", { method: "POST", credentials: "include" }).catch(() => {});
+      } catch {}
+    }
     set({
       user: null,
       accessToken: null,

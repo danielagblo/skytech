@@ -22,14 +22,20 @@ const refreshAccessToken = async () => {
     const refreshToken =
       useAuthStore.getState().refreshToken ?? stored("skytech_refresh");
     if (!refreshToken) throw new Error("No refresh token is available");
-    const response = await axios.post<ApiResponse<AccessToken>>(
+    const response = await axios.post<ApiResponse<any>>(
       `${baseURL}/auth/refresh`,
-      snakeize({ refreshToken }),
-      { timeout: 60_000 },
+      { refreshToken, refresh_token: refreshToken },
+      { timeout: 60_000, withCredentials: true },
     );
-    const data = camelize(response.data) as ApiResponse<AccessToken>;
-    useAuthStore.getState().setAccessToken(data.data.accessToken);
-    return data.data.accessToken;
+    const data = camelize(response.data) as ApiResponse<any>;
+    const newAccessToken = data?.data?.accessToken || data?.data?.token;
+    if (!newAccessToken) throw new Error("Invalid refresh response");
+    useAuthStore.getState().setAccessToken(newAccessToken);
+    const newRefreshToken = data?.data?.refreshToken;
+    if (newRefreshToken) {
+      localStorage.setItem("skytech_refresh", newRefreshToken);
+    }
+    return newAccessToken;
   })().finally(() => {
     refreshPromise = null;
   });
@@ -78,8 +84,16 @@ api.interceptors.response.use(
         return api(original);
       } catch {
         useAuthStore.getState().clearAuth();
-        toast.error("Your session expired. Please sign in again.");
-        if (typeof window !== "undefined") window.location.assign("/login");
+        if (typeof window !== "undefined") {
+          const pathname = window.location.pathname;
+          if (!pathname.includes("/login")) {
+            toast.error("Your session expired. Please sign in again.");
+            const isCrmSubdomain = window.location.hostname.startsWith("crm.");
+            const isCrmPath = pathname.startsWith("/crm");
+            const target = isCrmSubdomain ? "/login" : (isCrmPath ? "/crm/login" : "/login");
+            window.location.assign(target);
+          }
+        }
       }
     }
 

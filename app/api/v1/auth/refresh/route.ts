@@ -5,7 +5,10 @@ import { crmExecute, crmQuery, MysqlRow } from "@/lib/crm/db";
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json().catch(() => ({}));
-    const refreshToken = body.refreshToken || request.cookies.get("skytech_refresh")?.value;
+    const refreshToken =
+      body.refreshToken ||
+      body.refresh_token ||
+      request.cookies.get("skytech_refresh")?.value;
 
     if (!refreshToken) {
       return apiError("Refresh token is required", 400);
@@ -34,7 +37,11 @@ export async function POST(request: NextRequest) {
     ]);
 
     const response = apiSuccess(
-      { accessToken: tokens.accessToken },
+      {
+        accessToken: tokens.accessToken,
+        refreshToken: tokens.refreshToken,
+        token: tokens.accessToken,
+      },
       "Token refreshed"
     );
 
@@ -43,7 +50,15 @@ export async function POST(request: NextRequest) {
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       path: "/",
-      maxAge: 15 * 60,
+      maxAge: 2 * 60 * 60, // 2 hours
+    });
+
+    response.cookies.set("skytech_refresh", tokens.refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+      maxAge: 30 * 24 * 60 * 60, // 30 days
     });
 
     return response;

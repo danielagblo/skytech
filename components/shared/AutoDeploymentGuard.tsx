@@ -28,15 +28,15 @@ export default function AutoDeploymentGuard() {
 
       if (isChunkError) {
         try {
-          // Check if we already tried reloading in this browser session
-          const hasReloaded = sessionStorage.getItem('chunk-retry');
-          if (!hasReloaded) {
-            sessionStorage.setItem('chunk-retry', 'true');
+          // Check if we already tried reloading recently to avoid reload loops
+          const lastRetry = sessionStorage.getItem('chunk-retry');
+          if (!lastRetry) {
+            sessionStorage.setItem('chunk-retry', String(Date.now()));
             console.warn('New auto-deployment detected. Refreshing assets...');
-            (window.location as any).reload(true); // Force clear-cache reload
+            window.location.reload();
           }
         } catch {
-          (window.location as any).reload(true);
+          // Do not reload blindly if storage fails
         }
       }
     };
@@ -53,7 +53,7 @@ export default function AutoDeploymentGuard() {
       try {
         sessionStorage.removeItem('chunk-retry');
       } catch {}
-    }, 15000);
+    }, 60000);
 
     return () => {
       window.removeEventListener('error', handleChunkError);

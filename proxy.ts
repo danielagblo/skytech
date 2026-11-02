@@ -62,7 +62,9 @@ export function proxy(request: NextRequest) {
     const effectivePath = isCrmPath ? (pathname.replace(/^\/crm/, "") || "/") : pathname;
     const token = request.cookies.get("skytech_access")?.value;
     const refreshToken = request.cookies.get("skytech_refresh")?.value;
-    const authenticated = hasValidCrmToken(token) || hasValidCrmToken(refreshToken);
+    const hasValidAccess = hasValidCrmToken(token);
+    const hasValidRefresh = hasValidCrmToken(refreshToken);
+    const authenticated = hasValidAccess || hasValidRefresh;
     const demoEnabled = process.env.NEXT_PUBLIC_ENABLE_DEMO_AUTH === "true";
     const guarded = crmProtectedRoutes.some((route) => effectivePath.startsWith(route));
 
@@ -72,8 +74,10 @@ export function proxy(request: NextRequest) {
       return NextResponse.redirect(loginUrl);
     }
 
-    // Already authenticated and visiting login or otp
-    if ((effectivePath === "/login" || effectivePath === "/verify-otp") && authenticated) {
+    // Already authenticated with a valid access token and visiting login or otp:
+    // Only redirect to /home if the access token itself is currently valid.
+    // If the access token expired, never bounce them back to /home to prevent refresh loops.
+    if ((effectivePath === "/login" || effectivePath === "/verify-otp") && hasValidAccess) {
       const homeUrl = new URL(isCrmSubdomain ? "/home" : "/crm/home", request.url);
       return NextResponse.redirect(homeUrl);
     }

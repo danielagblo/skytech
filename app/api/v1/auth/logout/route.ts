@@ -9,7 +9,7 @@ export async function POST(request: NextRequest) {
   }
 
   const response = apiSuccess(null, "Logged out successfully");
-  response.cookies.delete("skytech_access");
-  response.cookies.delete("skytech_refresh");
+  response.cookies.set("skytech_access", "", { path: "/", maxAge: 0 });
+  response.cookies.set("skytech_refresh", "", { path: "/", maxAge: 0 });
   return response;
 }

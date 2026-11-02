@@ -5,8 +5,8 @@ import { crmQuery, initCrmSchema, MysqlRow } from "./db";
 import { User } from "@/types/user.types";
 
 const JWT_SECRET = process.env.CRM_JWT_SECRET || process.env.JWT_SECRET || "skytech-crm-default-jwt-secret-key-replace-in-env";
-const ACCESS_EXPIRY = "15m";
-const REFRESH_EXPIRY = "7d";
+const ACCESS_EXPIRY = "2h";
+const REFRESH_EXPIRY = "30d";
 
 export function hashPassword(plain: string): Promise<string> {
   return bcrypt.hash(plain, 10);
