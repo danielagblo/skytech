@@ -46,6 +46,11 @@ const WEBSITE_TABLES = [
 ];
 
 async function clearDatabase() {
+  if (process.env.SKIP_DB_CLEAR === "true" || process.env.SKIP_DB_CLEAR === "1") {
+    console.log("\n⏭️ SKIP_DB_CLEAR is set to true. Skipping database reset.\n");
+    process.exit(0);
+  }
+
   console.log("\n=======================================================");
   console.log("       SKYTECH DATABASE CLEAR & SUPERADMIN SEED        ");
   console.log("=======================================================\n");
