@@ -6,8 +6,6 @@ import type { Lead } from "@/types/lead.types";
 import type { User, UserSummary } from "@/types/user.types";
 import type { DealStage } from "@/types/api.types";
 import { useDeal, useDealLogs } from "@/hooks/useDeals";
-import { useUpdateLead } from "@/hooks/useLeads";
-import { CreateLeadModal } from "@/components/leads/CreateLeadModal";
 import {
   Sheet,
   SheetContent,
@@ -52,8 +50,6 @@ export const DealDetail = ({
 }) => {
   const [expanded, setExpanded] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
-  const [leadEditOpen, setLeadEditOpen] = useState(false);
-  const updateLead = useUpdateLead();
   
   const liveDeal = useDeal(initialDeal?.id ?? "");
   const deal = liveDeal.data ?? initialDeal;
@@ -152,26 +148,12 @@ export const DealDetail = ({
               </div>
             </div>
             <div className="mt-4 grid gap-2 text-sm sm:grid-cols-2">
-              <div className="flex items-center justify-between sm:col-span-2">
-                <p className="flex items-center gap-2">
-                  <UserRound className="h-4 w-4 text-muted-foreground" />
-                  <span className="font-medium">
-                    {lead
-                      ? `${lead.firstName || "Unnamed"} ${lead.lastName || ""} · ${lead.role || "Contact"}`
-                      : "No linked lead"}
-                  </span>
-                </p>
-                {lead && (
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    className="h-6 px-2 text-xs text-primary hover:text-primary"
-                    onClick={() => setLeadEditOpen(true)}
-                  >
-                    Edit lead
-                  </Button>
-                )}
-              </div>
+              <p className="flex items-center gap-2">
+                <UserRound className="h-4 w-4 text-muted-foreground" />
+                {lead
+                  ? `${lead.firstName || "Unnamed"} · ${lead.role || "Contact"}`
+                  : "No linked lead"}
+              </p>
               <p className="flex items-center gap-2">
                 <Phone className="h-4 w-4 text-muted-foreground" />
                 {lead?.phone1 || "Not provided"}
@@ -216,46 +198,16 @@ export const DealDetail = ({
               </div>
             </div>
             <div className="mt-4 flex flex-wrap gap-4 text-xs">
-              <label className="flex items-center gap-2 cursor-pointer select-none">
-                <Checkbox
-                  checked={Boolean(lead?.smsOptIn)}
-                  disabled={!lead || updateLead.isPending}
-                  onCheckedChange={(checked) => {
-                    if (!lead) return;
-                    updateLead.mutate({
-                      id: lead.id,
-                      data: { smsOptIn: Boolean(checked) },
-                    });
-                  }}
-                />
+              <label className="flex items-center gap-2">
+                <Checkbox checked={Boolean(lead?.smsOptIn)} disabled />
                 SMS reminder
               </label>
-              <label className="flex items-center gap-2 cursor-pointer select-none">
-                <Checkbox
-                  checked={Boolean(lead?.emailOptIn)}
-                  disabled={!lead || updateLead.isPending}
-                  onCheckedChange={(checked) => {
-                    if (!lead) return;
-                    updateLead.mutate({
-                      id: lead.id,
-                      data: { emailOptIn: Boolean(checked) },
-                    });
-                  }}
-                />
+              <label className="flex items-center gap-2">
+                <Checkbox checked={Boolean(lead?.emailOptIn)} disabled />
                 Email reminder
               </label>
-              <label className="flex items-center gap-2 cursor-pointer select-none">
-                <Checkbox
-                  checked={Boolean(lead?.newsletterOptIn)}
-                  disabled={!lead || updateLead.isPending}
-                  onCheckedChange={(checked) => {
-                    if (!lead) return;
-                    updateLead.mutate({
-                      id: lead.id,
-                      data: { newsletterOptIn: Boolean(checked) },
-                    });
-                  }}
-                />
+              <label className="flex items-center gap-2">
+                <Checkbox checked={Boolean(lead?.newsletterOptIn)} disabled />
                 Newsletter
               </label>
             </div>
@@ -338,14 +290,6 @@ export const DealDetail = ({
       </SheetContent>
     </Sheet>
     <EditDealModal deal={deal} open={editOpen} onOpenChange={setEditOpen} />
-    {lead && (
-      <CreateLeadModal
-        open={leadEditOpen}
-        onOpenChange={setLeadEditOpen}
-        lead={lead}
-        users={users}
-      />
-    )}
     </>
   );
 };
