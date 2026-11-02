@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
 import { getAuthUser, hashPassword, formatUser, apiSuccess, apiError } from "@/lib/crm/auth";
 import { crmExecute, crmQuery, initCrmSchema, MysqlRow, newId } from "@/lib/crm/db";
+import { camelize } from "@/lib/case-conversion";
 
 export async function GET(request: NextRequest) {
   try {
@@ -35,9 +36,11 @@ export async function POST(request: NextRequest) {
     }
 
     await initCrmSchema();
-    const body = await request.json();
-    const email = (body.email || "").trim().toLowerCase();
-    const password = body.password || "Skytech@123";
+    const rawBody = await request.json().catch(() => ({}));
+    const body = (camelize(rawBody) || {}) as any;
+
+    const email = (body.email || rawBody.email || "").trim().toLowerCase();
+    const password = body.password || rawBody.password || "Skytech@123";
 
     if (!email) return apiError("Email is required", 400);
 
@@ -50,6 +53,16 @@ export async function POST(request: NextRequest) {
     const userId = newId();
     const hashed = await hashPassword(password);
 
+    const firstName = body.firstName !== undefined ? body.firstName : (rawBody.first_name || "");
+    const lastName = body.lastName !== undefined ? body.lastName : (rawBody.last_name || "");
+    const phone = body.phone || rawBody.phone || null;
+    const username = body.username || rawBody.username || null;
+    const role = body.role || rawBody.role || "AGENT";
+    const planTier = body.planTier || rawBody.plan_tier || "FREE";
+    const isActive = body.active !== undefined 
+      ? (body.active ? 1 : 0) 
+      : (rawBody.is_active !== undefined ? (rawBody.is_active ? 1 : 0) : 1);
+
     await crmExecute(
       `INSERT INTO users (
         id, company_id, first_name, last_name, email, password_hash,
@@ -58,15 +71,15 @@ export async function POST(request: NextRequest) {
       [
         userId,
         user.companyId || null,
-        body.firstName || "",
-        body.lastName || "",
+        firstName,
+        lastName,
         email,
         hashed,
-        body.phone || null,
-        body.username || null,
-        body.role || "AGENT",
-        body.planTier || "FREE",
-        body.active !== false ? 1 : 0,
+        phone,
+        username,
+        role,
+        planTier,
+        isActive,
       ]
     );
 

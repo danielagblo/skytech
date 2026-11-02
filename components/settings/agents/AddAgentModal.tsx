@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { zodResolver } from "@/lib/zodResolver";
 import type { User } from "@/types/user.types";
 import type { Role } from "@/types/api.types";
 import { Camera, Trash2 } from "lucide-react";
