@@ -3,9 +3,10 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { AlertCircle, Pencil, Plus, RefreshCw, ShieldAlert, Trash2, Wallet } from "lucide-react";
+import { AlertCircle, Eye, Pencil, Plus, RefreshCw, ShieldAlert, Trash2, Wallet } from "lucide-react";
 import { toast } from "sonner";
 import { BookEntryDialog, type BookDraft } from "@/components/books/BookEntryDialog";
+import { BookEntryView } from "@/components/books/BookEntryView";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { EmptyState } from "@/components/shared/EmptyState";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -116,11 +117,13 @@ export const BooksWorkspace = () => {
   const hydrated = useAuthStore((state) => state.hydrated);
   const user = useAuthStore((state) => state.user);
   const allowed = user?.role === "ADMIN" || user?.booksAccess === true;
+  const canEdit = user?.role === "ADMIN";
   const [month, setMonth] = useState(currentMonth);
   const [type, setType] = useState<"" | BookEntryType>("");
   const [source, setSource] = useState<"" | BookSource>("");
   const [search, setSearch] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [viewing, setViewing] = useState<BookEntry | null>(null);
   const [editing, setEditing] = useState<BookEntry | null>(null);
   const [draft, setDraft] = useState<BookDraft | null>(null);
   const range = monthBounds(month);
@@ -474,20 +477,33 @@ export const BooksWorkspace = () => {
                               type="button"
                               variant="ghost"
                               size="icon"
-                              aria-label={`Edit ${entry.description}`}
-                              onClick={() => openEdit(entry)}
+                              aria-label={`View ${entry.description}`}
+                              onClick={() => setViewing(entry)}
                             >
-                              <Pencil />
+                              <Eye />
                             </Button>
-                            <Button
-                              type="button"
-                              variant="ghost"
-                              size="icon"
-                              aria-label={`Remove ${entry.description}`}
-                              onClick={() => onDelete(entry)}
-                            >
-                              <Trash2 />
-                            </Button>
+                            {canEdit && (
+                              <>
+                                <Button
+                                  type="button"
+                                  variant="ghost"
+                                  size="icon"
+                                  aria-label={`Edit ${entry.description}`}
+                                  onClick={() => openEdit(entry)}
+                                >
+                                  <Pencil />
+                                </Button>
+                                <Button
+                                  type="button"
+                                  variant="ghost"
+                                  size="icon"
+                                  aria-label={`Remove ${entry.description}`}
+                                  onClick={() => onDelete(entry)}
+                                >
+                                  <Trash2 />
+                                </Button>
+                              </>
+                            )}
                           </div>
                         </TableCell>
                       </TableRow>
@@ -551,6 +567,14 @@ export const BooksWorkspace = () => {
                             type="button"
                             size="sm"
                             variant="outline"
+                            onClick={() => setViewing(entry)}
+                          >
+                            View
+                          </Button>
+                          <Button
+                            type="button"
+                            size="sm"
+                            variant="outline"
                             disabled={blockAnother || post.isPending}
                             onClick={() =>
                               post.mutate({ id: entry.id, entryDate: postDate })
@@ -560,22 +584,26 @@ export const BooksWorkspace = () => {
                               ? "Add this week"
                               : "Add to this month"}
                           </Button>
-                          <Button
-                            type="button"
-                            size="sm"
-                            variant="ghost"
-                            onClick={() => openEdit(entry)}
-                          >
-                            Edit
-                          </Button>
-                          <Button
-                            type="button"
-                            size="sm"
-                            variant="ghost"
-                            onClick={() => onDelete(entry)}
-                          >
-                            Remove
-                          </Button>
+                          {canEdit && (
+                            <>
+                              <Button
+                                type="button"
+                                size="sm"
+                                variant="ghost"
+                                onClick={() => openEdit(entry)}
+                              >
+                                Edit
+                              </Button>
+                              <Button
+                                type="button"
+                                size="sm"
+                                variant="ghost"
+                                onClick={() => onDelete(entry)}
+                              >
+                                Remove
+                              </Button>
+                            </>
+                          )}
                         </div>
                       </li>
                     );
@@ -587,6 +615,14 @@ export const BooksWorkspace = () => {
         </>
       )}
 
+      <BookEntryView
+        entry={viewing}
+        open={Boolean(viewing)}
+        onOpenChange={(open) => {
+          if (!open) setViewing(null);
+        }}
+        dealHref={viewing?.dealId ? `${root}/pipeline/${viewing.dealId}` : null}
+      />
       <BookEntryDialog
         open={dialogOpen}
         onOpenChange={setDialogOpen}

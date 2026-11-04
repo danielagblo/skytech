@@ -72,6 +72,14 @@ export function resolveBookRange(from: string | null, to: string | null) {
   return { from: `${month}-01`, to: monthEnd(`${month}-01`) };
 }
 
+const personName = (first: unknown, last: unknown) => {
+  const name = [first, last]
+    .map((part) => String(part ?? "").trim())
+    .filter(Boolean)
+    .join(" ");
+  return name || null;
+};
+
 const formatEntry = (row: MysqlRow): BookEntry => ({
   id: String(row.id),
   entryType: row.entry_type === "EXPENSE" ? "EXPENSE" : "REVENUE",
@@ -102,9 +110,37 @@ const formatEntry = (row: MysqlRow): BookEntry => ({
     row.posted_in_range === undefined
       ? undefined
       : Number(row.posted_in_range) === 1,
+  recordedByName: personName(row.recorder_first_name, row.recorder_last_name),
+  recordedByEmail: row.recorder_email ? String(row.recorder_email) : null,
+  recordedByRole: row.recorder_role ? String(row.recorder_role) : null,
+  clientName: personName(row.client_first_name, row.client_last_name),
+  clientCompany: row.client_company ? String(row.client_company) : null,
+  clientRole: row.client_role ? String(row.client_role) : null,
+  clientEmail: row.client_email ? String(row.client_email) : null,
+  clientPhone: row.client_phone ? String(row.client_phone) : null,
   createdAt: asIso(row.created_at),
   updatedAt: asIso(row.updated_at),
 });
+
+const entryQuery = (extraSelect = "") => `
+  SELECT be.*, DATE_FORMAT(be.entry_date, '%Y-%m-%d') AS entry_date_text,
+    ${extraSelect}
+    d.title AS deal_title,
+    u.first_name AS recorder_first_name,
+    u.last_name AS recorder_last_name,
+    u.email AS recorder_email,
+    u.role AS recorder_role,
+    l.first_name AS client_first_name,
+    l.last_name AS client_last_name,
+    l.company_name AS client_company,
+    l.role AS client_role,
+    l.email AS client_email,
+    l.phone_1 AS client_phone
+  FROM book_entries be
+  LEFT JOIN deals d ON d.id = be.deal_id
+  LEFT JOIN leads l ON l.id = d.lead_id
+  LEFT JOIN users u ON u.id = be.created_by
+`;
 
 const PAYMENT_IMPORT = `
   INSERT IGNORE INTO book_entries (
@@ -208,9 +244,7 @@ async function getRaw(id: string) {
 
 async function getBookEntry(id: string) {
   const rows = await crmQuery<MysqlRow>(
-    `SELECT be.*, DATE_FORMAT(be.entry_date, '%Y-%m-%d') AS entry_date_text, d.title AS deal_title
-     FROM book_entries be
-     LEFT JOIN deals d ON d.id = be.deal_id
+    `${entryQuery()}
      WHERE be.id = ? AND be.deleted_at IS NULL
      LIMIT 1`,
     [id],
@@ -330,9 +364,7 @@ export async function loadBooks(
 ): Promise<BooksSnapshot> {
   const imported = await syncPipelinePayments();
   const rows = await crmQuery<MysqlRow>(
-    `SELECT be.*, DATE_FORMAT(be.entry_date, '%Y-%m-%d') AS entry_date_text, d.title AS deal_title
-     FROM book_entries be
-     LEFT JOIN deals d ON d.id = be.deal_id
+    `${entryQuery()}
      WHERE be.deleted_at IS NULL
        AND be.is_template = 0
        AND be.entry_date BETWEEN ? AND ?
@@ -340,16 +372,13 @@ export async function loadBooks(
     [range.from, range.to],
   );
   const templateRows = await crmQuery<MysqlRow>(
-    `SELECT be.*, DATE_FORMAT(be.entry_date, '%Y-%m-%d') AS entry_date_text, d.title AS deal_title,
-       EXISTS(
+    `${entryQuery(`EXISTS(
          SELECT 1 FROM book_entries child
          WHERE child.recurrence_parent_id = be.id
            AND child.deleted_at IS NULL
            AND child.is_template = 0
            AND child.entry_date BETWEEN ? AND ?
-       ) AS posted_in_range
-     FROM book_entries be
-     LEFT JOIN deals d ON d.id = be.deal_id
+       ) AS posted_in_range,`)}
      WHERE be.deleted_at IS NULL AND be.is_template = 1
      ORDER BY be.entry_type ASC, be.category ASC, be.description ASC`,
     [range.from, range.to],

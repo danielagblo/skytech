@@ -84,6 +84,14 @@ export interface BookEntry {
   isTemplate: boolean;
   notes: string | null;
   postedInRange?: boolean;
+  recordedByName: string | null;
+  recordedByEmail: string | null;
+  recordedByRole: string | null;
+  clientName: string | null;
+  clientCompany: string | null;
+  clientRole: string | null;
+  clientEmail: string | null;
+  clientPhone: string | null;
   createdAt: string;
   updatedAt: string;
 }

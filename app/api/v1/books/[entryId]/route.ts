@@ -19,6 +19,9 @@ export async function PUT(
     const user = await getAuthUser(request);
     if (!user) return apiError("Unauthorized", 401);
     if (!canAccessBooks(user)) return apiError("You do not have access to Books.", 403);
+    if (user.role !== "ADMIN") {
+      return apiError("Only an administrator can change a book entry.", 403);
+    }
     await initCrmSchema();
     const { entryId } = await params;
     const rawBody = await request.json().catch(() => ({}));
@@ -38,6 +41,9 @@ export async function DELETE(
     const user = await getAuthUser(request);
     if (!user) return apiError("Unauthorized", 401);
     if (!canAccessBooks(user)) return apiError("You do not have access to Books.", 403);
+    if (user.role !== "ADMIN") {
+      return apiError("Only an administrator can change a book entry.", 403);
+    }
     await initCrmSchema();
     const { entryId } = await params;
     await deleteBookEntry(entryId);
