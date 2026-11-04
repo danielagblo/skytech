@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { AlertCircle, Eye, Pencil, Plus, RefreshCw, ShieldAlert, Trash2, Wallet } from "lucide-react";
+import { AlertCircle, Eye, Pencil, Plus, ShieldAlert, Trash2, Wallet } from "lucide-react";
 import { toast } from "sonner";
 import { BookEntryDialog, type BookDraft } from "@/components/books/BookEntryDialog";
 import { BookEntryView } from "@/components/books/BookEntryView";
@@ -86,12 +86,10 @@ const money = (amount: number, currency = "GHS") =>
 const Stat = ({
   label,
   value,
-  hint,
   tone,
 }: {
   label: string;
   value: string;
-  hint: string;
   tone?: "good" | "bad";
 }) => (
   <section className="border bg-card px-4 py-3">
@@ -107,7 +105,6 @@ const Stat = ({
     >
       {value}
     </p>
-    <p className="mt-1 text-xs text-muted-foreground">{hint}</p>
   </section>
 );
 
@@ -233,21 +230,10 @@ export const BooksWorkspace = () => {
         title="Books"
         description="Revenue is money already received. Pipeline payment logs and invoice payments are recorded here. Amounts still owed stay on the pipeline."
         actions={
-          <>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => books.refetch()}
-              disabled={books.isFetching}
-            >
-              <RefreshCw className={cn(books.isFetching && "animate-spin")} />
-              Refresh
-            </Button>
-            <Button type="button" onClick={() => openCreate()}>
-              <Plus />
-              Record entry
-            </Button>
-          </>
+          <Button type="button" onClick={() => openCreate()}>
+            <Plus />
+            Record entry
+          </Button>
         }
       />
 
@@ -277,23 +263,16 @@ export const BooksWorkspace = () => {
             <Stat
               label="Revenue"
               value={money(summary.revenue, currency)}
-              hint="Payments received this month"
               tone="good"
             />
             <Stat
               label="Expenses"
               value={money(summary.expenses, currency)}
-              hint={
-                summary.recurringPosted
-                  ? `${money(summary.recurringPosted, currency)} from schedules`
-                  : "Costs recorded this month"
-              }
               tone="bad"
             />
             <Stat
               label="Net"
               value={money(summary.net, currency)}
-              hint="Payments received minus expenses"
               tone={summary.net >= 0 ? "good" : "bad"}
             />
           </div>
