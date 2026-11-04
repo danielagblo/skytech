@@ -34,7 +34,7 @@ export const AgentRankCard = ({
     },
   ];
   return (
-    <section className="surface p-5">
+    <section className="surface p-4">
       <div className="flex items-center gap-3">
         <UserAvatar
           id={user?.id}
@@ -49,7 +49,7 @@ export const AgentRankCard = ({
           </p>
         </div>
       </div>
-      <div className="my-5 rounded-xl border border-primary/20 bg-primary/10 p-4 text-foreground">
+      <div className="my-3 rounded-xl border border-primary/20 bg-primary/10 p-3 text-foreground">
         <p className="text-2xl font-semibold">
           {rank.rank}
           {rank.rank === 1

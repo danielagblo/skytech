@@ -200,7 +200,7 @@ export const UpcomingActivity = ({
 
   return (
     <section className="overflow-hidden border bg-card">
-      <div className="flex items-center justify-between gap-2 px-5 pb-3 pt-5">
+      <div className="flex items-center justify-between gap-2 px-4 pb-2 pt-3">
         <div className="flex items-center gap-2">
           <h3 className="text-lg font-normal text-slate-500">
             Upcoming activity
@@ -211,7 +211,7 @@ export const UpcomingActivity = ({
         </span>
       </div>
 
-      <div className="flex flex-wrap items-center gap-2 px-5 pb-5">
+      <div className="flex flex-wrap items-center gap-2 px-4 pb-3">
         <Select
           value={range}
           onValueChange={(value) => {

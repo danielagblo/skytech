@@ -16,7 +16,7 @@ export const FollowUpReminders = ({
   rows: DashboardOverview["followUpReminders"];
 }) => (
   <section className="surface overflow-hidden">
-    <div className="p-5">
+    <div className="px-4 py-3">
       <h3 className="font-semibold">Follow-up reminder</h3>
       <p className="text-xs text-muted-foreground">
         Messages due across open cases

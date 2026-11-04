@@ -17,7 +17,7 @@ export const ExecutivePerformanceTable = ({
   rows: DashboardOverview["executivePerformance"];
 }) => (
   <section className="overflow-hidden border bg-card">
-    <div className="px-5 py-4">
+    <div className="px-4 py-3">
       <h3 className="text-base font-medium text-muted-foreground">
         Agent performance overview
       </h3>

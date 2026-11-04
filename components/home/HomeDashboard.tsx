@@ -53,9 +53,9 @@ export const HomeDashboard = () => {
     );
   const data = overview.data;
   return (
-    <div className="min-w-0 space-y-4 overflow-hidden">
-      <div className="grid min-w-0 items-start gap-4 xl:grid-cols-2">
-        <div className="min-w-0 space-y-4">
+    <div className="mx-auto w-full max-w-6xl space-y-3">
+      <div className="grid min-w-0 items-start gap-3 xl:grid-cols-[minmax(0,1.15fr)_minmax(260px,22rem)]">
+        <div className="min-w-0 space-y-3">
           <section className="overflow-hidden border bg-card">
             <div className="flex h-9 items-center justify-between bg-muted px-5">
               <span className="text-sm font-medium">{periodLabel}</span>
@@ -75,7 +75,7 @@ export const HomeDashboard = () => {
                 </SelectContent>
               </Select>
             </div>
-            <div className="divide-y px-5">
+            <div className="divide-y px-4">
               <CallStatsCard
                 title="Outgoing calls"
                 stats={data.outgoingCalls}
@@ -91,7 +91,7 @@ export const HomeDashboard = () => {
           )}
           <AgentRankCard user={user} rank={data.agentRank} />
         </div>
-        <div className="min-w-0 space-y-4">
+        <div className="min-w-0 space-y-3">
           <UpcomingActivity followUps={data.followUpReminders} />
           <FollowUpReminders rows={data.followUpReminders} />
           <TopDealsChart

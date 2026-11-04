@@ -13,9 +13,9 @@ const Gauge = ({ pct }: { pct: number }) => {
   const fill = (clamped / 100) * circumference;
   const arc = "M 16 58 A 44 44 0 0 1 104 58";
   return (
-    <svg
+      <svg
       viewBox="0 0 120 64"
-      className="h-28 w-full sm:h-32"
+      className="h-24 w-40"
       aria-hidden="true"
     >
       <path
@@ -72,17 +72,17 @@ export const CallStatsCard = ({
   ];
   const Icon = title === "Incoming calls" ? ArrowDownLeft : ArrowUpRight;
   return (
-    <section className="py-3 sm:py-4">
+    <section className="py-3">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Icon className={`h-4 w-4 ${directionClass}`} />
           <h3 className="text-base font-medium text-foreground">{title}</h3>
         </div>
-        <span className="text-2xl font-light tabular-nums text-gray-900 sm:text-3xl">
+        <span className="text-2xl font-light tabular-nums text-foreground">
           {stats.total}
         </span>
       </div>
-      <div className="grid items-center gap-2 sm:grid-cols-[minmax(190px,.85fr)_minmax(270px,1.15fr)]">
+      <div className="grid items-center gap-2 sm:grid-cols-[9rem_minmax(0,1fr)]">
         {/* Gauge */}
         <div className="flex w-full items-center justify-center">
           <Gauge pct={stats.successRate} />
