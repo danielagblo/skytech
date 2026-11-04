@@ -28,6 +28,8 @@ export const PipelineColumn = ({
   users,
   logs,
   onOpen,
+  onRemove,
+  removing,
 }: {
   stage: DealStage;
   deals: Deal[];
@@ -35,8 +37,10 @@ export const PipelineColumn = ({
   users: User[];
   logs: Record<string, DealLog[]>;
   onOpen: (deal: Deal) => void;
+  onRemove?: (deal: Deal) => void;
+  removing?: boolean;
 }) => (
-  <section className="flex h-full min-w-[250px] flex-1 flex-col 2xl:min-w-[265px] min-[2200px]:min-w-0">
+  <section className="flex h-full w-[min(86vw,320px)] shrink-0 snap-start flex-col sm:w-[280px] lg:w-auto lg:min-w-[240px] lg:flex-1">
     <div className="mb-2 shrink-0 border-b bg-card px-2 py-3">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
@@ -86,6 +90,8 @@ export const PipelineColumn = ({
                     )}
                     logs={logs[deal.id] ?? []}
                     onClick={() => onOpen(deal)}
+                    onRemove={onRemove ? () => onRemove(deal) : undefined}
+                    removing={removing}
                   />
                 </div>
               )}

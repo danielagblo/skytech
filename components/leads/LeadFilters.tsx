@@ -32,13 +32,13 @@ export const LeadFilters = ({
   users,
   onCreate,
 }: LeadFiltersProps) => (
-  <div className="flex flex-wrap gap-2 bg-card py-4">
+  <div className="flex flex-col gap-2 bg-card py-4 sm:flex-row sm:flex-wrap sm:items-center">
     <SearchInput value={search} onChange={onSearch} placeholder="Search" />
     <Select
       onValueChange={(value) => onAssignee(value === "ALL" ? undefined : value)}
       value={assignee || "ALL"}
     >
-      <SelectTrigger className="w-44">
+      <SelectTrigger className="w-full sm:w-44">
         <SelectValue placeholder="Assignee" />
       </SelectTrigger>
       <SelectContent>
@@ -56,7 +56,7 @@ export const LeadFilters = ({
       }
       value={priority || "ALL"}
     >
-      <SelectTrigger className="w-40">
+      <SelectTrigger className="w-full sm:w-40">
         <SelectValue />
       </SelectTrigger>
       <SelectContent>
@@ -66,7 +66,7 @@ export const LeadFilters = ({
         <SelectItem value="HIGH">High</SelectItem>
       </SelectContent>
     </Select>
-    <Button className="ml-auto" onClick={onCreate}>
+    <Button className="w-full sm:ml-auto sm:w-auto" onClick={onCreate}>
       <Plus className="h-4 w-4" />
       Create lead
     </Button>

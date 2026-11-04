@@ -5,7 +5,8 @@ import type { Deal } from "@/types/deal.types";
 import type { Lead } from "@/types/lead.types";
 import type { User, UserSummary } from "@/types/user.types";
 import type { DealStage } from "@/types/api.types";
-import { useDeal, useDealLogs } from "@/hooks/useDeals";
+import { useDeal, useDealLogs, useDeleteDeal } from "@/hooks/useDeals";
+import { usePermission } from "@/hooks/usePermission";
 import {
   Sheet,
   SheetContent,
@@ -20,6 +21,7 @@ import { PriorityBadge } from "@/components/shared/PriorityBadge";
 import { StageBadge } from "@/components/shared/StageBadge";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { CardRemoveButton } from "@/components/shared/CardRemoveButton";
 import { EditDealModal } from "./EditDealModal";
 import { NegotiationLog } from "./logs/NegotiationLog";
 
@@ -55,6 +57,8 @@ export const DealDetail = ({
   const deal = liveDeal.data ?? initialDeal;
   
   const logs = useDealLogs(deal?.id ?? "");
+  const removeDeal = useDeleteDeal();
+  const { can } = usePermission();
   useEffect(() => {
     if (open && lead) markLeadSeen(lead.id);
   }, [open, lead]);
@@ -99,16 +103,29 @@ export const DealDetail = ({
                 </p>
               </div>
             </div>
-            <div className="mt-2 flex items-center justify-between gap-2">
-              <SheetTitle className="text-xl">{deal.title}</SheetTitle>
-              <Button size="sm" variant="outline" onClick={() => setEditOpen(true)}>
-                Edit deal
-              </Button>
+            <div className="mt-2 flex flex-wrap items-center justify-between gap-2">
+              <SheetTitle className="min-w-0 text-xl">{deal.title}</SheetTitle>
+              <div className="flex flex-wrap items-center gap-2">
+                {can("delete:deals") && (
+                  <CardRemoveButton
+                    label={deal.title}
+                    pending={removeDeal.isPending}
+                    onRemove={() =>
+                      removeDeal.mutate(deal.id, {
+                        onSuccess: () => onOpenChange(false),
+                      })
+                    }
+                  />
+                )}
+                <Button size="sm" variant="outline" onClick={() => setEditOpen(true)}>
+                  Edit deal
+                </Button>
+              </div>
             </div>
           </SheetHeader>
 
           {/* Prominent Financial Breakdown */}
-          <div className="mt-4 grid grid-cols-3 gap-2 rounded-xl border bg-muted/30 p-3 text-center">
+          <div className="mt-4 grid grid-cols-1 gap-2 rounded-xl border bg-muted/30 p-3 text-center min-[420px]:grid-cols-3">
             <div className="border-r pr-2">
               <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Contract Deal</p>
               <p className="mt-1 text-sm font-bold text-green-700 dark:text-green-400">

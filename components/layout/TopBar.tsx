@@ -62,7 +62,7 @@ export const TopBar = () => {
   const name = user ? `${user.firstName} ${user.lastName}` : "Loading profile";
   return (
     <>
-      <header className="sticky top-0 z-30 flex h-[72px] items-center border-b bg-background/95 backdrop-blur lg:h-[90px]">
+      <header className="fixed inset-x-0 top-0 z-30 flex h-[72px] items-center border-b bg-background/95 backdrop-blur lg:left-28 lg:h-[90px]">
         <div className="flex h-full min-w-0 flex-1 items-center lg:flex-none">
           <div className="flex h-full min-w-0 flex-1 items-center border-r px-4 lg:w-[270px] lg:flex-none">
             <h1 className="truncate text-xl font-light tracking-tight text-muted-foreground sm:text-2xl lg:text-[27px]">

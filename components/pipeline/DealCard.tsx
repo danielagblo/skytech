@@ -6,6 +6,7 @@ import type { Lead } from "@/types/lead.types";
 import type { User, UserSummary } from "@/types/user.types";
 import { PriorityBadge } from "@/components/shared/PriorityBadge";
 import { AssigneeStack } from "@/components/shared/AssigneeStack";
+import { CardRemoveButton } from "@/components/shared/CardRemoveButton";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { isLeadSeen } from "@/lib/seenLeads";
 
@@ -15,12 +16,16 @@ export const DealCard = ({
   assignees = [],
   logs,
   onClick,
+  onRemove,
+  removing,
 }: {
   deal: Deal;
   lead?: Lead;
   assignees?: User[];
   logs: DealLog[];
   onClick: () => void;
+  onRemove?: () => void;
+  removing?: boolean;
 }) => {
   const followUp = (() => {
     const dates = logs
@@ -41,8 +46,17 @@ export const DealCard = ({
     setIsSeen(lead ? isLeadSeen(lead.id) : true);
   }, [lead]);
   return (
-    <button
+    <div
+      role="button"
+      tabIndex={0}
       onClick={onClick}
+      onKeyDown={(event) => {
+        if (event.target !== event.currentTarget) return;
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          onClick();
+        }
+      }}
       className="w-full rounded-md border bg-card p-3 text-left shadow-[0_1px_2px_rgba(15,23,42,.04)] transition hover:-translate-y-0.5 hover:border-primary/60 hover:shadow-md"
     >
       <div className="flex items-start justify-between gap-2">
@@ -107,11 +121,20 @@ export const DealCard = ({
         ) : (
           <span className="text-[10px] text-muted-foreground">Unassigned</span>
         )}
-        <span className="flex items-center gap-1 text-[10px] text-muted-foreground">
-          <MessageSquare className="h-3 w-3" />
-          {deal.notes ? 1 : 0}
+        <span className="flex items-center gap-1">
+          <span className="flex items-center gap-1 text-[10px] text-muted-foreground">
+            <MessageSquare className="h-3 w-3" />
+            {deal.notes ? 1 : 0}
+          </span>
+          {onRemove && (
+            <CardRemoveButton
+              label={deal.title}
+              pending={removing}
+              onRemove={onRemove}
+            />
+          )}
         </span>
       </div>
-    </button>
+    </div>
   );
 };

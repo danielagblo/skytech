@@ -9,6 +9,7 @@ import type { Task } from "@/types/task.types";
 import type { User, UserSummary } from "@/types/user.types";
 import { PriorityBadge } from "@/components/shared/PriorityBadge";
 import { AssigneeStack } from "@/components/shared/AssigneeStack";
+import { CardRemoveButton } from "@/components/shared/CardRemoveButton";
 import { formatDate } from "@/lib/utils";
 export const TaskCard = ({
   task,
@@ -16,19 +17,32 @@ export const TaskCard = ({
   subtaskCount,
   commentCount,
   onClick,
+  onRemove,
+  removing,
 }: {
   task: Task;
   users: User[];
   subtaskCount: number;
   commentCount: number;
   onClick: () => void;
+  onRemove?: () => void;
+  removing?: boolean;
 }) => {
   const assignees = task.assigneeIds
     .map((id) => users.find((user) => user.id === id))
     .filter((user): user is User => Boolean(user)) as UserSummary[];
   return (
-    <button
+    <div
+      role="button"
+      tabIndex={0}
       onClick={onClick}
+      onKeyDown={(event) => {
+        if (event.target !== event.currentTarget) return;
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          onClick();
+        }
+      }}
       className="w-full border bg-card text-left shadow-[0_1px_2px_rgba(15,23,42,.04)] transition hover:border-primary hover:shadow-md"
     >
       <h4 className="line-clamp-2 min-h-12 border-b px-2 py-2 text-sm font-medium leading-5">
@@ -69,7 +83,7 @@ export const TaskCard = ({
           </span>
         </p>
       </div>
-      <div className="flex justify-between gap-3 border-t px-2 py-2 text-xs text-muted-foreground">
+      <div className="flex flex-wrap items-center justify-between gap-2 border-t px-2 py-2 text-xs text-muted-foreground">
         <span className="flex items-center gap-1">
           <Network className="h-3 w-3" />
           {subtaskCount} subtasks
@@ -78,7 +92,14 @@ export const TaskCard = ({
           <MessageSquare className="h-3 w-3" />
           {commentCount} comments
         </span>
+        {onRemove && (
+          <CardRemoveButton
+            label={task.title}
+            pending={removing}
+            onRemove={onRemove}
+          />
+        )}
       </div>
-    </button>
+    </div>
   );
 };

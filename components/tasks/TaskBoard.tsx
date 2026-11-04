@@ -15,10 +15,11 @@ import type { LucideIcon } from "lucide-react";
 import type { Task } from "@/types/task.types";
 import type { Priority, TaskStatus } from "@/types/api.types";
 import { tasksService } from "@/services/tasks.service";
-import { useTasks, useTaskStats, useUpdateTaskStatus } from "@/hooks/useTasks";
+import { useTasks, useTaskStats, useUpdateTaskStatus, useDeleteTask } from "@/hooks/useTasks";
 import { useUsers } from "@/hooks/useUsers";
 import { useCreateActivity } from "@/hooks/useActivities";
 import { useAuthStore } from "@/store/authStore";
+import { usePermission } from "@/hooks/usePermission";
 import { TaskColumn } from "./TaskColumn";
 import { TaskDetail } from "./TaskDetail";
 import { CreateTaskModal } from "./CreateTaskModal";
@@ -59,6 +60,9 @@ export const TaskBoard = () => {
   const stats = useTaskStats();
   const users = useUsers({ page: 0, size: 100 });
   const updateStatus = useUpdateTaskStatus();
+  const removeTask = useDeleteTask();
+  const { can } = usePermission();
+  const canRemove = can("delete:tasks");
   const createActivity = useCreateActivity();
   const source = useMemo(() => tasks.data?.content ?? [], [tasks.data]);
   const items = useMemo(
@@ -246,8 +250,8 @@ export const TaskBoard = () => {
   ];
   return (
     <div className="flex flex-col lg:h-[calc(100dvh-7.75rem)] lg:min-h-0 lg:overflow-hidden 2xl:h-[calc(100dvh-8.25rem)]">
-      <div className="flex flex-wrap items-center gap-2 border-b bg-card px-2 py-3 sm:px-3">
-        <div className="relative min-w-56 flex-1 sm:max-w-64">
+      <div className="flex flex-col gap-2 border-b bg-card px-3 py-3 sm:flex-row sm:flex-wrap sm:items-center">
+        <div className="relative w-full sm:max-w-64 sm:flex-1">
           <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
           <Input
             value={search}
@@ -256,13 +260,13 @@ export const TaskBoard = () => {
             className="pl-9"
           />
         </div>
-        <div className="ml-auto flex flex-wrap gap-2">
+        <div className="flex w-full flex-col gap-2 sm:ml-auto sm:w-auto sm:flex-row sm:flex-wrap">
           <Select
             onValueChange={(value) =>
               setAssignee(value === "ALL" ? undefined : value)
             }
           >
-            <SelectTrigger className="w-36">
+            <SelectTrigger className="w-full sm:w-36">
               <SelectValue placeholder="Assignee" />
             </SelectTrigger>
             <SelectContent>
@@ -279,7 +283,7 @@ export const TaskBoard = () => {
               setPriority(value === "ALL" ? undefined : (value as Priority))
             }
           >
-            <SelectTrigger className="w-32">
+            <SelectTrigger className="w-full sm:w-32">
               <SelectValue placeholder="Priority" />
             </SelectTrigger>
             <SelectContent>
@@ -289,7 +293,7 @@ export const TaskBoard = () => {
               <SelectItem value="HIGH">High</SelectItem>
             </SelectContent>
           </Select>
-          <Button onClick={() => setCreate(true)}>
+          <Button className="w-full sm:w-auto" onClick={() => setCreate(true)}>
             <Plus className="h-4 w-4" />
             Create task
           </Button>
@@ -310,7 +314,7 @@ export const TaskBoard = () => {
         ))}
       </div>
       <DragDropContext onDragEnd={drop}>
-        <div className="dot-grid flex min-h-[650px] flex-1 gap-8 overflow-x-auto overflow-y-hidden border-x border-b px-10 py-2 max-xl:gap-3 max-xl:px-3 lg:min-h-0 2xl:gap-10">
+        <div className="dot-grid flex min-h-[650px] flex-1 snap-x snap-mandatory gap-3 overflow-x-auto overflow-y-hidden border-x border-b px-3 py-2 lg:min-h-0 lg:gap-8 lg:px-6 2xl:gap-10 2xl:px-10">
           {statuses.map((status) => (
             <TaskColumn
               key={status}
@@ -319,6 +323,18 @@ export const TaskBoard = () => {
               users={users.data?.content ?? []}
               counts={counts}
               onOpen={setSelected}
+              onRemove={
+                canRemove
+                  ? (task) =>
+                      removeTask.mutate(task.id, {
+                        onSuccess: () =>
+                          setSelected((current) =>
+                            current?.id === task.id ? null : current,
+                          ),
+                      })
+                  : undefined
+              }
+              removing={removeTask.isPending}
             />
           ))}
         </div>

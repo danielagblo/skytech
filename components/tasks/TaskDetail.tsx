@@ -14,8 +14,10 @@ import {
   useReplyTaskComment,
   useTaskComments,
   useTaskSubtasks,
+  useDeleteTask,
   useUpdateTask,
 } from "@/hooks/useTasks";
+import { usePermission } from "@/hooks/usePermission";
 import {
   Sheet,
   SheetContent,
@@ -40,6 +42,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
 import { SubTaskList } from "./SubTaskList";
 import { CommentThread } from "@/components/shared/CommentThread";
+import { CardRemoveButton } from "@/components/shared/CardRemoveButton";
 
 const subtaskSchema = z.object({
   title: z.string().trim().min(2, "Enter a subtask title."),
@@ -70,6 +73,8 @@ export const TaskDetail = ({
   const addComment = useAddTaskComment();
   const replyComment = useReplyTaskComment();
   const update = useUpdateTask();
+  const removeTask = useDeleteTask();
+  const { can } = usePermission();
   const {
     register,
     control,
@@ -105,9 +110,20 @@ export const TaskDetail = ({
       <SheetContent className="max-w-lg">
         <SheetHeader>
           <SheetTitle>{task.title}</SheetTitle>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <StatusBadge status={task.status} />
             {task.priority && <PriorityBadge priority={task.priority} />}
+            {can("delete:tasks") && (
+              <CardRemoveButton
+                label={task.title}
+                pending={removeTask.isPending}
+                onRemove={() =>
+                  removeTask.mutate(task.id, {
+                    onSuccess: () => onOpenChange(false),
+                  })
+                }
+              />
+            )}
           </div>
         </SheetHeader>
         <div className="space-y-6">

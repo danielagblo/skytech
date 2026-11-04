@@ -6,9 +6,10 @@ import { AlertCircle } from "lucide-react";
 import type { Deal } from "@/types/deal.types";
 import type { DealStage } from "@/types/api.types";
 import { dealsService } from "@/services/deals.service";
-import { usePipeline, useUpdateDealStage } from "@/hooks/useDeals";
+import { usePipeline, useUpdateDealStage, useDeleteDeal } from "@/hooks/useDeals";
 import { useLeads } from "@/hooks/useLeads";
 import { useUsers } from "@/hooks/useUsers";
+import { usePermission } from "@/hooks/usePermission";
 import { PipelineColumn } from "./PipelineColumn";
 import { DealDetail } from "./DealDetail";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -31,6 +32,9 @@ export const PipelineBoard = () => {
   >({});
   const [selected, setSelected] = useState<Deal | null>(null);
   const updateStage = useUpdateDealStage();
+  const removeDeal = useDeleteDeal();
+  const { can } = usePermission();
+  const canRemove = can("delete:deals");
   const sourceDeals = useMemo(
     () => stages.flatMap((stage) => pipeline.data?.[stage] ?? []),
     [pipeline.data],
@@ -123,7 +127,7 @@ export const PipelineBoard = () => {
   return (
     <>
       <DragDropContext onDragEnd={drop}>
-        <div className="dot-grid scrollbar-thin flex min-h-[620px] flex-1 gap-3 overflow-x-auto overflow-y-hidden rounded-lg border p-2 sm:p-3 lg:h-full lg:min-h-0 2xl:gap-4 2xl:p-4">
+        <div className="dot-grid scrollbar-thin flex min-h-[620px] flex-1 snap-x snap-mandatory gap-3 overflow-x-auto overflow-y-hidden rounded-lg border p-2 sm:p-3 lg:h-full lg:min-h-0 2xl:gap-4 2xl:p-4">
           {stages.map((stage) => {
             const columnDeals = items.filter((deal) => deal.stage === stage);
             const sortedDeals =
@@ -149,6 +153,18 @@ export const PipelineBoard = () => {
                 users={users.data?.content ?? []}
                 logs={logs}
                 onOpen={setSelected}
+                onRemove={
+                  canRemove
+                    ? (deal) =>
+                        removeDeal.mutate(deal.id, {
+                          onSuccess: () =>
+                            setSelected((current) =>
+                              current?.id === deal.id ? null : current,
+                            ),
+                        })
+                    : undefined
+                }
+                removing={removeDeal.isPending}
               />
             );
           })}

@@ -22,14 +22,18 @@ export const TaskColumn = ({
   users,
   counts,
   onOpen,
+  onRemove,
+  removing,
 }: {
   status: TaskStatus;
   tasks: Task[];
   users: User[];
   counts: Record<string, { subtasks: number; comments: number }>;
   onOpen: (task: Task) => void;
+  onRemove?: (task: Task) => void;
+  removing?: boolean;
 }) => (
-  <section className="flex h-full min-w-[250px] flex-1 flex-col xl:max-w-[270px] xl:flex-none min-[2200px]:max-w-none min-[2200px]:flex-1">
+  <section className="flex h-full w-[min(86vw,280px)] shrink-0 snap-start flex-col lg:w-auto lg:min-w-[240px] lg:flex-1 xl:max-w-[270px] xl:flex-none min-[2200px]:max-w-none min-[2200px]:flex-1">
     <div
       className={`mb-2 flex items-center justify-between border-l-2 px-3 py-2 ${style[status]}`}
     >
@@ -62,6 +66,8 @@ export const TaskColumn = ({
                     subtaskCount={counts[task.id]?.subtasks ?? 0}
                     commentCount={counts[task.id]?.comments ?? 0}
                     onClick={() => onOpen(task)}
+                    onRemove={onRemove ? () => onRemove(task) : undefined}
+                    removing={removing}
                   />
                 </div>
               )}

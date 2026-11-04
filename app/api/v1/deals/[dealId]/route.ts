@@ -126,6 +126,7 @@ export async function DELETE(
   try {
     const user = await getAuthUser(request);
     if (!user) return apiError("Unauthorized", 401);
+    if (user.role !== "ADMIN") return apiError("Only an administrator can remove a deal", 403);
 
     const { dealId } = await params;
     await initCrmSchema();

@@ -54,7 +54,7 @@ export const HomeDashboard = () => {
   const data = overview.data;
   return (
     <div className="min-w-0 space-y-4 overflow-hidden">
-      <div className="grid min-w-0 items-start gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(520px,1.05fr)] min-[2200px]:grid-cols-[minmax(0,1fr)_minmax(720px,1fr)]">
+      <div className="grid min-w-0 items-start gap-4 xl:grid-cols-2">
         <div className="min-w-0 space-y-4">
           <section className="overflow-hidden border bg-card">
             <div className="flex h-9 items-center justify-between bg-muted px-5">

@@ -86,6 +86,7 @@ export async function DELETE(
   try {
     const user = await getAuthUser(request);
     if (!user) return apiError("Unauthorized", 401);
+    if (user.role !== "ADMIN") return apiError("Only an administrator can remove a task", 403);
 
     const { taskId } = await params;
     await initCrmSchema();
