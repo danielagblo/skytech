@@ -23,6 +23,7 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { StatusBadge } from "@/components/shared/StatusBadge";
+import { AssigneePicker } from "@/components/shared/AssigneePicker";
 import { PriorityBadge } from "@/components/shared/PriorityBadge";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
@@ -152,6 +153,24 @@ export const TaskDetail = ({
                     },
                   );
                 }}
+              />
+            </div>
+            <div>
+              <p className="mb-2 text-sm font-medium">Assignees</p>
+              <AssigneePicker
+                users={users}
+                value={task.assigneeIds}
+                disabled={update.isPending}
+                onChange={(ids) =>
+                  update.mutate({
+                    id: task.id,
+                    data: {
+                      title: task.title,
+                      assigneeIds: ids,
+                      version: task.version,
+                    },
+                  })
+                }
               />
             </div>
           </div>

@@ -2,6 +2,7 @@ import { NextRequest } from "next/server";
 import { getAuthUser, apiSuccess, apiError } from "@/lib/crm/auth";
 import { crmExecute, crmQuery, initCrmSchema, MysqlRow, newId } from "@/lib/crm/db";
 import { formatTask } from "@/lib/crm/formatters";
+import { camelize } from "@/lib/case-conversion";
 
 export async function GET(request: NextRequest) {
   try {
@@ -15,6 +16,7 @@ export async function GET(request: NextRequest) {
     const search = url.searchParams.get("search")?.trim();
     const status = url.searchParams.get("status")?.trim();
     const priority = url.searchParams.get("priority")?.trim();
+    const assignee = url.searchParams.get("assignee")?.trim();
 
     let whereSql = "WHERE 1=1";
     const params: any[] = [];
@@ -30,6 +32,10 @@ export async function GET(request: NextRequest) {
     if (priority) {
       whereSql += " AND priority = ?";
       params.push(priority);
+    }
+    if (assignee) {
+      whereSql += " AND id IN (SELECT task_id FROM task_assignees WHERE user_id = ?)";
+      params.push(assignee);
     }
 
     const countRows = await crmQuery<{ count: number }>(
@@ -81,7 +87,8 @@ export async function POST(request: NextRequest) {
     if (!user) return apiError("Unauthorized", 401);
 
     await initCrmSchema();
-    const body = await request.json();
+    const rawBody = await request.json().catch(() => ({}));
+    const body = (camelize(rawBody) || {}) as Record<string, any>;
     const taskId = newId();
 
     await crmExecute(

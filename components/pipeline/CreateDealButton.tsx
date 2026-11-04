@@ -25,11 +25,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import type { DealStage, Priority } from "@/types/api.types";
+import { AssigneePicker } from "@/components/shared/AssigneePicker";
 
 const schema = z.object({
   title: z.string().min(3, "Enter a descriptive deal title."),
   leadId: z.string().optional(),
-  assignedToId: z.string().optional(),
+  assigneeIds: z.array(z.string()),
   stage: z.enum([
     "PROSPECTING",
     "NEGOTIATION",
@@ -68,7 +69,7 @@ export const CreateDealButton = () => {
     defaultValues: {
       title: "",
       leadId: "",
-      assignedToId: "",
+      assigneeIds: [],
       stage: "PROSPECTING",
       priority: "MEDIUM",
       contractValue: "" as any,
@@ -81,7 +82,7 @@ export const CreateDealButton = () => {
       {
         title: data.title,
         leadId: data.leadId || undefined,
-        assignedToId: data.assignedToId || undefined,
+        assigneeIds: data.assigneeIds,
         stage: data.stage as DealStage,
         priority: data.priority as Priority,
         contractValue: Number(data.contractValue || 0),
@@ -139,27 +140,12 @@ export const CreateDealButton = () => {
               </Select>
             </div>
             <div>
-              <Label>Assignee</Label>
-              <Select
-                value={values.assignedToId || "NONE"}
-                onValueChange={(value) =>
-                  setValue("assignedToId", value === "NONE" ? "" : value)
-                }
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="NONE">Unassigned</SelectItem>
-                  {(users.data?.content ?? [])
-                    .filter((user) => user.active)
-                    .map((user) => (
-                      <SelectItem key={user.id} value={user.id}>
-                        {user.firstName} {user.lastName}
-                      </SelectItem>
-                    ))}
-                </SelectContent>
-              </Select>
+              <Label>Assignees</Label>
+              <AssigneePicker
+                users={users.data?.content ?? []}
+                value={values.assigneeIds ?? []}
+                onChange={(ids) => setValue("assigneeIds", ids)}
+              />
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>

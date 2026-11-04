@@ -15,6 +15,7 @@ export interface Deal {
   leadId: string | null;
   createdById: string;
   assignedToId: string | null;
+  assigneeIds: string[];
   title: string;
   stage: DealStage;
   priority: Priority | null;
@@ -45,6 +46,7 @@ export interface DealFilters extends PageParams {
 export interface CreateDealRequest {
   leadId?: string;
   assignedToId?: string;
+  assigneeIds?: string[];
   title: string;
   stage?: DealStage;
   priority?: Priority;

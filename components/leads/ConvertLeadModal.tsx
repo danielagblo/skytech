@@ -26,10 +26,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Workflow } from "lucide-react";
+import { AssigneePicker } from "@/components/shared/AssigneePicker";
 
 const schema = z.object({
   title: z.string().min(3, "Enter a descriptive deal title."),
-  assignedToId: z.string().optional(),
+  assigneeIds: z.array(z.string()),
   priority: z.enum(["LOW", "MEDIUM", "HIGH"]),
   contractValue: z.preprocess((val) => {
     if (val === null || val === undefined || val === "") return 0;
@@ -69,7 +70,7 @@ export const ConvertLeadModal = ({
     mode: "onBlur",
     defaultValues: {
       title: "",
-      assignedToId: "",
+      assigneeIds: [],
       priority: "MEDIUM",
       contractValue: "" as any,
     },
@@ -80,12 +81,10 @@ export const ConvertLeadModal = ({
   useEffect(() => {
     if (!open || !lead) return;
     const defaultTitle = `${lead.companyName || `${lead.firstName || ""} ${lead.lastName || ""}`.trim() || "New"} Deal`;
-    const defaultAssignee = Array.isArray(lead.assignedTo) && lead.assignedTo.length > 0 
-      ? lead.assignedTo[0] 
-      : "";
+    const defaultAssignees = Array.isArray(lead.assignedTo) ? lead.assignedTo : [];
     reset({
       title: defaultTitle,
-      assignedToId: defaultAssignee,
+      assigneeIds: defaultAssignees,
       priority: (lead.priority as Priority) || "MEDIUM",
       contractValue: "" as any,
     });
@@ -99,7 +98,7 @@ export const ConvertLeadModal = ({
         id: lead.id,
         data: {
           title: data.title,
-          assignedToId: data.assignedToId || undefined,
+          assigneeIds: data.assigneeIds,
           priority: data.priority as Priority,
           contractValue: Number(data.contractValue || 0),
         },
@@ -178,28 +177,13 @@ export const ConvertLeadModal = ({
               </Select>
             </div>
 
-            <div>
-              <Label>Assignee</Label>
-              <Select
-                value={values.assignedToId || "NONE"}
-                onValueChange={(val) =>
-                  setValue("assignedToId", val === "NONE" ? "" : val)
-                }
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="NONE">Unassigned</SelectItem>
-                  {(users || [])
-                    .filter((u) => u.active)
-                    .map((u) => (
-                      <SelectItem key={u.id} value={u.id}>
-                        {u.firstName} {u.lastName}
-                      </SelectItem>
-                    ))}
-                </SelectContent>
-              </Select>
+            <div className="col-span-2">
+              <Label>Assignees</Label>
+              <AssigneePicker
+                users={users || []}
+                value={values.assigneeIds ?? []}
+                onChange={(ids) => setValue("assigneeIds", ids)}
+              />
             </div>
           </div>
 

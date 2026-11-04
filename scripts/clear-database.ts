@@ -18,6 +18,7 @@ const CRM_TABLES = [
   "task_assignees",
   "tasks",
   "calendar_events",
+  "book_entries",
   "invoice_payments",
   "invoice_items",
   "invoices",

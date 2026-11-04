@@ -5,6 +5,7 @@ import { campaignIntentPath } from "./app/lib/analyticsNormalize";
 const crmProtectedRoutes = [
   "/home",
   "/pipeline",
+  "/books",
   "/tasks",
   "/leads",
   "/calendar",

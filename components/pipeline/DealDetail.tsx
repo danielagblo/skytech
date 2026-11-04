@@ -62,7 +62,12 @@ export const DealDetail = ({
   const reached = (stage: DealStage) =>
     order.indexOf(stage) <= order.indexOf(deal.stage) &&
     stage !== "PROSPECTING";
-  const assignee = users.find((user) => user.id === deal.assignedToId);
+  const assigneeIds = deal.assigneeIds?.length
+    ? deal.assigneeIds
+    : deal.assignedToId
+      ? [deal.assignedToId]
+      : [];
+  const assignees = users.filter((user) => assigneeIds.includes(user.id));
   const creator = users.find((user) => user.id === deal.createdById);
   const { latestFollowUp, hasFollowUp } = (() => {
     const dates = (logs.data ?? [])
@@ -127,10 +132,10 @@ export const DealDetail = ({
           <div className="mt-4 rounded-2xl bg-muted/60 p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="eyebrow">Assignee</p>
+                <p className="eyebrow">Assignees</p>
                 <div className="mt-2">
-                  {assignee ? (
-                    <AssigneeStack users={[assignee as UserSummary]} />
+                  {assignees.length > 0 ? (
+                    <AssigneeStack users={assignees as UserSummary[]} />
                   ) : (
                     <span className="text-sm text-muted-foreground">
                       Unassigned

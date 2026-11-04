@@ -9,6 +9,7 @@ export interface User {
   phone: string | null;
   username: string | null;
   role: Role;
+  booksAccess: boolean;
   planTier: PlanTier;
   profilePhotoUrl: string | null;
   active: boolean;

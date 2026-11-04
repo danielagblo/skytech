@@ -23,6 +23,7 @@ export const demoUser: User = {
   lastName: "Henadez",
   email: "demo@skytech.local",
   role: "ADMIN",
+  booksAccess: true,
   phone: "+233 55 289 2433",
   username: "demo.admin",
   planTier: "PRO",

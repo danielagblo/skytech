@@ -98,6 +98,12 @@ export async function initCrmSchema() {
     );
   `);
 
+  try {
+    await pool.query(
+      "ALTER TABLE users ADD COLUMN books_access TINYINT(1) NOT NULL DEFAULT 0",
+    );
+  } catch {}
+
   await pool.query(`
     CREATE TABLE IF NOT EXISTS leads (
       id VARCHAR(36) PRIMARY KEY,
@@ -163,8 +169,12 @@ export async function initCrmSchema() {
   `);
 
     try {
-    await pool.query("ALTER TABLE deals ADD COLUMN currency VARCHAR(10) DEFAULT 'GHS'");
-  } catch {}
+      await pool.query("ALTER TABLE deals ADD COLUMN currency VARCHAR(10) DEFAULT 'GHS'");
+    } catch {}
+
+    try {
+      await pool.query("ALTER TABLE deals ADD COLUMN assignee_ids JSON");
+    } catch {}
 
   await pool.query(`
     CREATE TABLE IF NOT EXISTS deal_logs (
@@ -438,6 +448,36 @@ export async function initCrmSchema() {
       config JSON,
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
       updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    );
+  `);
+
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS book_entries (
+      id VARCHAR(36) PRIMARY KEY,
+      company_id VARCHAR(36),
+      entry_type VARCHAR(20) NOT NULL,
+      source VARCHAR(20) NOT NULL DEFAULT 'MANUAL',
+      source_log_id VARCHAR(80),
+      deal_id VARCHAR(36),
+      category VARCHAR(50) NOT NULL,
+      description VARCHAR(255) NOT NULL,
+      amount DECIMAL(15,2) NOT NULL,
+      currency VARCHAR(10) DEFAULT 'GHS',
+      payment_mode VARCHAR(50),
+      reference_no VARCHAR(100),
+      entry_date DATE NOT NULL,
+      is_recurring TINYINT(1) NOT NULL DEFAULT 0,
+      recurrence VARCHAR(20),
+      recurrence_parent_id VARCHAR(36),
+      is_template TINYINT(1) NOT NULL DEFAULT 0,
+      notes TEXT,
+      created_by VARCHAR(36),
+      deleted_at DATETIME,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+      UNIQUE KEY uq_book_source_log (source_log_id),
+      KEY idx_book_entry_date (entry_date),
+      KEY idx_book_parent (recurrence_parent_id)
     );
   `);
 

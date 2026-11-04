@@ -4,7 +4,7 @@ import { useQueries } from "@tanstack/react-query";
 import type { User } from "@/types/user.types";
 import { AlertCircle, ArrowRight, Plus } from "lucide-react";
 import { usersService } from "@/services/users.service";
-import { useUsers } from "@/hooks/useUsers";
+import { useUpdateBooksAccess, useUsers } from "@/hooks/useUsers";
 import { useLeads } from "@/hooks/useLeads";
 import {
   useLeadAssignmentSettings,
@@ -40,6 +40,7 @@ export default function AgentsPage() {
     null,
   );
   const users = useUsers({ page: page - 1, size: 20 });
+  const updateBooksAccess = useUpdateBooksAccess();
   const leads = useLeads({ page: 0, size: 5 });
   const assignment = useLeadAssignmentSettings();
   const updateAssignment = useUpdateLeadAssignmentSettings();
@@ -82,9 +83,21 @@ export default function AgentsPage() {
         />
       ) : (
         <section className="w-full overflow-hidden border bg-card">
+          <div className="border-b px-4 py-3">
+            <h2 className="text-sm font-medium">Books access</h2>
+            <p className="text-xs text-muted-foreground">
+              Assign or remove the Books page for each person. Administrators always have it.
+            </p>
+          </div>
           <AgentTable
             agents={agents}
             performance={performance}
+            booksAccessPendingId={
+              updateBooksAccess.isPending ? updateBooksAccess.variables?.id : null
+            }
+            onBooksAccess={(selected, enabled) =>
+              updateBooksAccess.mutate({ id: selected.id, enabled })
+            }
             onOpen={(selected) => {
               setAgent(selected);
               setOpen(true);

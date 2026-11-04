@@ -2,9 +2,11 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Wallet } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLogout } from "@/hooks/useAuth";
 import { usePermission, type Permission } from "@/hooks/usePermission";
+import { useAuthStore } from "@/store/authStore";
 
 const nav: Array<{
   href: string;
@@ -18,6 +20,7 @@ const nav: Array<{
     label: "Pipeline",
     icon: "/assets/navIcons/pipeline_Icon.svg",
   },
+  { href: "/books", label: "Books", icon: "" },
   { href: "/tasks", label: "Task Bar", icon: "/assets/notes_Icon.svg" },
   { href: "/leads", label: "Leads", icon: "/assets/navIcons/leads_Icon.svg" },
   {
@@ -33,13 +36,40 @@ const nav: Array<{
   },
 ];
 
+const isActive = (path: string, href: string) =>
+  path === href ||
+  path === `/crm${href}` ||
+  path.startsWith(`${href}/`) ||
+  path.startsWith(`/crm${href}/`);
+
+const itemHref = (path: string, href: string) =>
+  path.startsWith("/crm") ? `/crm${href}` : href;
+
+const NavIcon = ({
+  href,
+  icon,
+  className,
+}: {
+  href: string;
+  icon: string;
+  className: string;
+}) =>
+  href === "/books" ? (
+    <Wallet className={className} strokeWidth={1.75} />
+  ) : (
+    <img src={icon} alt="" className={cn("nav-asset object-contain", className)} />
+  );
+
 export const Sidebar = () => {
   const path = usePathname();
   const { logout, isPending } = useLogout();
   const { can } = usePermission();
-  const available = nav.filter(
-    (item) => !item.permission || can(item.permission),
-  );
+  const user = useAuthStore((state) => state.user);
+  const canOpenBooks = user?.role === "ADMIN" || user?.booksAccess === true;
+  const available = nav.filter((item) => {
+    if (item.href === "/books") return canOpenBooks;
+    return !item.permission || can(item.permission);
+  });
   return (
     <>
       <aside className="fixed inset-y-0 left-0 z-50 hidden w-28 flex-col border-r bg-card lg:flex">
@@ -52,26 +82,18 @@ export const Sidebar = () => {
         </div>
         <nav className="flex-1 pt-5">
           {available.map((item) => {
-            const active =
-              path === item.href ||
-              path === `/crm${item.href}` ||
-              path.startsWith(`${item.href}/`) ||
-              path.startsWith(`/crm${item.href}/`);
+            const active = isActive(path, item.href);
             return (
               <Link
                 key={item.href}
-                href={path.startsWith("/crm") ? `/crm${item.href}` : item.href}
+                href={itemHref(path, item.href)}
                 aria-current={active ? "page" : undefined}
                 className={cn(
                   "group flex h-[74px] flex-col items-center justify-center gap-1.5 text-[10px] text-muted-foreground transition-colors hover:bg-primary/15 hover:text-foreground",
                   active && "bg-primary/65 text-foreground",
                 )}
               >
-                <img
-                  src={item.icon}
-                  alt=""
-                  className="nav-asset h-6 w-6 object-contain"
-                />
+                <NavIcon href={item.href} icon={item.icon} className="h-6 w-6" />
                 <span>{item.label}</span>
               </Link>
             );
@@ -97,11 +119,11 @@ export const Sidebar = () => {
         }}
       >
         {available.map((item) => {
-          const active = path === item.href || path.startsWith(`${item.href}/`);
+          const active = isActive(path, item.href);
           return (
             <Link
               key={item.href}
-              href={item.href}
+              href={itemHref(path, item.href)}
               aria-current={active ? "page" : undefined}
               className={cn(
                 "relative flex flex-col items-center justify-center gap-1 text-[9px] text-muted-foreground",
@@ -109,7 +131,7 @@ export const Sidebar = () => {
                   "text-foreground after:absolute after:inset-x-3 after:top-0 after:h-1 after:rounded-b-full after:bg-primary",
               )}
             >
-              <img src={item.icon} alt="" className="nav-asset h-5 w-5" />
+              <NavIcon href={item.href} icon={item.icon} className="h-5 w-5" />
               <span>{item.label}</span>
             </Link>
           );

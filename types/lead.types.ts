@@ -76,6 +76,7 @@ export type UpdateLeadRequest = CreateLeadRequest;
 export interface ConvertLeadRequest {
   title?: string;
   assignedToId?: string;
+  assigneeIds?: string[];
   priority?: Priority;
   contractValue?: number;
 }

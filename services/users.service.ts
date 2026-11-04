@@ -19,6 +19,8 @@ export const usersService = {
   delete: (id: string) => api.delete<ApiResponse<void>>(`/users/${id}`),
   updateRole: (id: string, role: Role) =>
     api.put<ApiResponse<User>>(`/users/${id}/role`, { role }),
+  updateBooksAccess: (id: string, enabled: boolean) =>
+    api.put<ApiResponse<User>>(`/users/${id}/books-access`, { enabled }),
   uploadPhoto: (id: string, file: File) => {
     const form = new FormData();
     form.append("file", file);

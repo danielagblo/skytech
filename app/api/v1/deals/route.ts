@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import { getAuthUser, apiSuccess, apiError } from "@/lib/crm/auth";
 import { crmExecute, crmQuery, initCrmSchema, MysqlRow, newId } from "@/lib/crm/db";
-import { formatDeal, parseCurrencyAmount } from "@/lib/crm/formatters";
+import { formatDeal, parseAssigneeIds, parseCurrencyAmount } from "@/lib/crm/formatters";
 import { camelize } from "@/lib/case-conversion";
 
 export async function GET(request: NextRequest) {
@@ -34,8 +34,8 @@ export async function GET(request: NextRequest) {
       params.push(priority);
     }
     if (assignee) {
-      whereSql += " AND assigned_to = ?";
-      params.push(assignee);
+      whereSql += " AND (assigned_to = ? OR JSON_CONTAINS(assignee_ids, JSON_QUOTE(?)))";
+      params.push(assignee, assignee);
     }
 
     const countRows = await crmQuery<{ count: number }>(
@@ -82,20 +82,26 @@ export async function POST(request: NextRequest) {
     const isPaidInFull = arrears === 0 && contractValue > 0;
     const currency = body.currency || rawBody.currency || "GHS";
     const leadId = body.leadId ?? rawBody.lead_id ?? rawBody.leadId ?? null;
-    const assignedTo = body.assignedToId ?? rawBody.assigned_to_id ?? rawBody.assignedToId ?? user.id;
+    const assigneeIds = Array.isArray(body.assigneeIds)
+      ? parseAssigneeIds(body.assigneeIds)
+      : body.assignedToId
+        ? [String(body.assignedToId)]
+        : [user.id];
+    const assignedTo = assigneeIds[0] || null;
 
     await crmExecute(
       `INSERT INTO deals (
-        id, company_id, lead_id, created_by, assigned_to,
+        id, company_id, lead_id, created_by, assigned_to, assignee_ids,
         title, stage, priority, currency, contract_value, total_paid, arrears,
         is_paid_in_full, notes
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         dealId,
         user.companyId || null,
         leadId,
         user.id,
         assignedTo,
+        JSON.stringify(assigneeIds),
         body.title || rawBody.title || "Untitled Deal",
         body.stage || rawBody.stage || "PROSPECTING",
         body.priority || rawBody.priority || "MEDIUM",

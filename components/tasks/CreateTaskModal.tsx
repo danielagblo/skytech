@@ -1,12 +1,13 @@
 "use client";
 import { useState } from "react";
+import { toast } from "sonner";
 import { useFieldArray, useForm, useWatch } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Plus, Trash2 } from "lucide-react";
 import { useCreateTaskWithSubtasks } from "@/hooks/useTasks";
 import { useLeads } from "@/hooks/useLeads";
-import { useDeals } from "@/hooks/useDeals";
+import { useDeals, useUpdateDeal } from "@/hooks/useDeals";
 import { useUsers } from "@/hooks/useUsers";
 import {
   Dialog,
@@ -27,11 +28,33 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import type { Priority } from "@/types/api.types";
+import { DEAL_STAGE_LABELS } from "@/lib/crm-options";
+import { AssigneePicker } from "@/components/shared/AssigneePicker";
+import type { DealStage, Priority } from "@/types/api.types";
+
+const dealStages = [
+  "PROSPECTING",
+  "NEGOTIATION",
+  "SETTLEMENT",
+  "PAYMENT",
+  "CLIENT_RETENTION",
+] as const;
+
+type DealDraft = {
+  title: string;
+  assigneeIds: string[];
+  stage: DealStage;
+  priority: Priority;
+  contractValue: string;
+  totalPaid: string;
+  notes: string;
+  dueDate: string;
+  reminder: boolean;
+};
 const schema = z.object({
   title: z.string().min(3, "Enter a task title."),
   priority: z.enum(["LOW", "MEDIUM", "HIGH"]),
-  assigneeId: z.string().optional(),
+  assigneeIds: z.array(z.string()),
   reminder: z.boolean(),
   dueDate: z.string().optional(),
   description: z.string().min(10, "Add at least 10 characters."),
@@ -53,7 +76,9 @@ export const CreateTaskModal = ({
 }) => {
   const [caseType, setCaseType] = useState<"lead" | "deal">("lead");
   const [caseId, setCaseId] = useState("");
+  const [dealDraft, setDealDraft] = useState<DealDraft | null>(null);
   const create = useCreateTaskWithSubtasks();
+  const updateDeal = useUpdateDeal();
   const leads = useLeads({ page: 0, size: 100 });
   const deals = useDeals({ page: 0, size: 100 });
   const users = useUsers({ page: 0, size: 100 });
@@ -70,7 +95,7 @@ export const CreateTaskModal = ({
     defaultValues: {
       title: "",
       priority: "LOW",
-      assigneeId: "",
+      assigneeIds: [],
       reminder: true,
       dueDate: "",
       description: "",
@@ -88,7 +113,7 @@ export const CreateTaskModal = ({
         task: {
           title: data.title,
           priority: data.priority,
-          assigneeIds: data.assigneeId ? [data.assigneeId] : [],
+          assigneeIds: data.assigneeIds ?? [],
           allowReminder: data.reminder,
           dueDate: data.dueDate
             ? new Date(data.dueDate).toISOString()
@@ -106,22 +131,40 @@ export const CreateTaskModal = ({
         onSuccess: () => {
           reset();
           setCaseId("");
+          setDealDraft(null);
           onOpenChange(false);
         },
       },
     );
   const save = handleSubmit((data) => submitValues(data));
+  const selectDeal = (id: string) => {
+    setCaseId(id);
+    const deal = deals.data?.content.find((item) => item.id === id);
+    if (!deal) {
+      setDealDraft(null);
+      return;
+    }
+    setDealDraft({
+      title: deal.title || "",
+      assigneeIds: deal.assigneeIds?.length
+        ? deal.assigneeIds
+        : deal.assignedToId
+          ? [deal.assignedToId]
+          : [],
+      stage: deal.stage || "PROSPECTING",
+      priority: deal.priority || "MEDIUM",
+      contractValue: String(deal.contractValue ?? 0),
+      totalPaid: String(deal.totalPaid ?? 0),
+      notes: deal.notes || "",
+      dueDate: "",
+      reminder: true,
+    });
+  };
   const createFromCase = () => {
     const lead = leads.data?.content.find((item) => item.id === caseId);
-    const deal = deals.data?.content.find((item) => item.id === caseId);
-    const title = lead
-      ? `Follow up with ${lead.firstName || "lead"} ${lead.lastName || ""}`
-      : deal
-        ? `Follow up: ${deal.title}`
-        : "";
+    const title = `Follow up with ${lead?.firstName || "lead"} ${lead?.lastName || ""}`.trim();
     const description =
       lead?.description ||
-      deal?.notes ||
       "Follow up on this pending CRM case and record the outcome.";
     submitValues(
       {
@@ -132,7 +175,47 @@ export const CreateTaskModal = ({
         reminder: values.reminder ?? true,
         subTasks: values.subTasks ?? [],
       } as Values,
-      caseType === "lead" ? { linkedLeadId: caseId } : { linkedDealId: caseId },
+      { linkedLeadId: caseId },
+    );
+  };
+  const saveDealAndCreate = async () => {
+    if (!dealDraft || !caseId) return;
+    if (dealDraft.title.trim().length < 3) {
+      toast.error("Enter a deal title of at least 3 characters.");
+      return;
+    }
+    const notes = dealDraft.notes.trim();
+    try {
+      await updateDeal.mutateAsync({
+        id: caseId,
+        data: {
+          title: dealDraft.title.trim(),
+          assigneeIds: dealDraft.assigneeIds,
+          stage: dealDraft.stage,
+          priority: dealDraft.priority,
+          contractValue: Number(dealDraft.contractValue) || 0,
+          totalPaid: Number(dealDraft.totalPaid) || 0,
+          currency: "GHS",
+          notes: notes || undefined,
+        },
+      });
+    } catch {
+      return;
+    }
+    submitValues(
+      {
+        title: `Follow up: ${dealDraft.title.trim()}`,
+        description:
+          notes.length >= 10
+            ? notes
+            : `Follow up on ${dealDraft.title.trim()} and record the outcome.`,
+        priority: dealDraft.priority,
+        assigneeIds: dealDraft.assigneeIds,
+        reminder: dealDraft.reminder,
+        dueDate: dealDraft.dueDate,
+        subTasks: [],
+      },
+      { linkedDealId: caseId },
     );
   };
   return (
@@ -174,29 +257,14 @@ export const CreateTaskModal = ({
                     </SelectContent>
                   </Select>
                 </div>
-                <div>
-                  <Label>Assignee</Label>
-                  <Select
-                    value={values.assigneeId || "NONE"}
-                    onValueChange={(value) =>
-                      setValue("assigneeId", value === "NONE" ? "" : value)
-                    }
-                  >
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="NONE">Unassigned</SelectItem>
-                      {(users.data?.content ?? [])
-                        .filter((user) => user.active)
-                        .map((user) => (
-                          <SelectItem key={user.id} value={user.id}>
-                            {user.firstName} {user.lastName}
-                          </SelectItem>
-                        ))}
-                    </SelectContent>
-                  </Select>
-                </div>
+              </div>
+              <div>
+                <Label>Assignees</Label>
+                <AssigneePicker
+                  users={users.data?.content ?? []}
+                  value={values.assigneeIds ?? []}
+                  onChange={(ids) => setValue("assigneeIds", ids)}
+                />
               </div>
               <div>
                 <Label>Due date</Label>
@@ -293,6 +361,7 @@ export const CreateTaskModal = ({
                 onClick={() => {
                   setCaseType("lead");
                   setCaseId("");
+                  setDealDraft(null);
                 }}
               >
                 Leads
@@ -302,6 +371,7 @@ export const CreateTaskModal = ({
                 onClick={() => {
                   setCaseType("deal");
                   setCaseId("");
+                  setDealDraft(null);
                 }}
               >
                 Deals
@@ -331,22 +401,157 @@ export const CreateTaskModal = ({
                 : (deals.data?.content ?? []).map((deal) => (
                     <button
                       key={deal.id}
-                      onClick={() => setCaseId(deal.id)}
+                      type="button"
+                      onClick={() => selectDeal(deal.id)}
                       className={`w-full rounded-xl border p-3 text-left ${caseId === deal.id ? "border-primary bg-green-50" : ""}`}
                     >
                       <strong className="text-sm">{deal.title}</strong>
                       <p className="text-xs text-muted-foreground">
-                        {deal.stage.replace("_", " ")}
+                        {DEAL_STAGE_LABELS[deal.stage] || deal.stage}
                       </p>
                     </button>
                   ))}
             </div>
+            {caseType === "deal" && dealDraft && (
+              <div className="mt-4 space-y-3 rounded-xl border p-3">
+                <div>
+                  <p className="text-sm font-medium">Review this deal</p>
+                  <p className="text-xs text-muted-foreground">
+                    Edit the deal, then create the follow-up task.
+                  </p>
+                </div>
+                <div>
+                  <Label>Deal title</Label>
+                  <Input
+                    value={dealDraft.title}
+                    onChange={(event) =>
+                      setDealDraft({ ...dealDraft, title: event.target.value })
+                    }
+                  />
+                </div>
+                <div>
+                  <Label>Assignees</Label>
+                  <AssigneePicker
+                    users={users.data?.content ?? []}
+                    value={dealDraft.assigneeIds}
+                    onChange={(ids) =>
+                      setDealDraft({ ...dealDraft, assigneeIds: ids })
+                    }
+                  />
+                </div>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <div>
+                    <Label>Priority</Label>
+                    <Select
+                      value={dealDraft.priority}
+                      onValueChange={(value: Priority) =>
+                        setDealDraft({ ...dealDraft, priority: value })
+                      }
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="LOW">Low</SelectItem>
+                        <SelectItem value="MEDIUM">Medium</SelectItem>
+                        <SelectItem value="HIGH">High</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+                <div>
+                  <Label>Stage</Label>
+                  <Select
+                    value={dealDraft.stage}
+                    onValueChange={(value: DealStage) =>
+                      setDealDraft({ ...dealDraft, stage: value })
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {dealStages.map((stage) => (
+                        <SelectItem key={stage} value={stage}>
+                          {DEAL_STAGE_LABELS[stage]}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <div>
+                    <Label>Contract value (GHS)</Label>
+                    <Input
+                      inputMode="decimal"
+                      value={dealDraft.contractValue}
+                      onChange={(event) =>
+                        setDealDraft({
+                          ...dealDraft,
+                          contractValue: event.target.value,
+                        })
+                      }
+                    />
+                  </div>
+                  <div>
+                    <Label>Total paid (GHS)</Label>
+                    <Input
+                      inputMode="decimal"
+                      value={dealDraft.totalPaid}
+                      onChange={(event) =>
+                        setDealDraft({
+                          ...dealDraft,
+                          totalPaid: event.target.value,
+                        })
+                      }
+                    />
+                  </div>
+                </div>
+                <div>
+                  <Label>Notes</Label>
+                  <Textarea
+                    value={dealDraft.notes}
+                    onChange={(event) =>
+                      setDealDraft({ ...dealDraft, notes: event.target.value })
+                    }
+                  />
+                </div>
+                <div>
+                  <Label>Task due date</Label>
+                  <Input
+                    type="datetime-local"
+                    value={dealDraft.dueDate}
+                    onChange={(event) =>
+                      setDealDraft({ ...dealDraft, dueDate: event.target.value })
+                    }
+                  />
+                </div>
+                <div className="flex items-center justify-between rounded-lg border p-3">
+                  <Label>Allow reminder</Label>
+                  <Switch
+                    checked={dealDraft.reminder}
+                    onCheckedChange={(value) =>
+                      setDealDraft({ ...dealDraft, reminder: value })
+                    }
+                  />
+                </div>
+              </div>
+            )}
             <Button
               className="mt-4 w-full"
-              onClick={createFromCase}
-              disabled={!caseId || create.isPending}
+              onClick={caseType === "deal" ? saveDealAndCreate : createFromCase}
+              disabled={
+                !caseId ||
+                create.isPending ||
+                updateDeal.isPending ||
+                (caseType === "deal" && !dealDraft)
+              }
             >
-              {create.isPending ? "Creating…" : "Create from selected case"}
+              {create.isPending || updateDeal.isPending
+                ? "Creating…"
+                : caseType === "deal"
+                  ? "Save deal and create task"
+                  : "Create from selected case"}
             </Button>
           </TabsContent>
         </Tabs>

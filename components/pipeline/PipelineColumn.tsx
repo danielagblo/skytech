@@ -76,8 +76,13 @@ export const PipelineColumn = ({
                   <DealCard
                     deal={deal}
                     lead={leads.find((lead) => lead.id === deal.leadId)}
-                    assignee={users.find(
-                      (user) => user.id === deal.assignedToId,
+                    assignees={users.filter((user) =>
+                      (deal.assigneeIds?.length
+                        ? deal.assigneeIds
+                        : deal.assignedToId
+                          ? [deal.assignedToId]
+                          : []
+                      ).includes(user.id),
                     )}
                     logs={logs[deal.id] ?? []}
                     onClick={() => onOpen(deal)}

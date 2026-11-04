@@ -1,4 +1,7 @@
+"use client";
+
 import type { User, UserPerformance } from "@/types/user.types";
+import { Switch } from "@/components/ui/switch";
 import {
   formatCurrency,
   formatDate,
@@ -20,10 +23,14 @@ export const AgentTable = ({
   agents,
   performance,
   onOpen,
+  onBooksAccess,
+  booksAccessPendingId,
 }: {
   agents: User[];
   performance: Record<string, UserPerformance | undefined>;
   onOpen: (agent: User) => void;
+  onBooksAccess: (agent: User, enabled: boolean) => void;
+  booksAccessPendingId?: string | null;
 }) => (
   <div className="surface overflow-hidden">
     {agents.length === 0 ? (
@@ -38,6 +45,7 @@ export const AgentTable = ({
             <TableRow>
               <TableHead>Name</TableHead>
               <TableHead>Role</TableHead>
+              <TableHead>Books</TableHead>
               <TableHead>Presence</TableHead>
               <TableHead>Account</TableHead>
               <TableHead>Revenue</TableHead>
@@ -66,6 +74,20 @@ export const AgentTable = ({
                   </div>
                 </TableCell>
                 <TableCell>{agent.role}</TableCell>
+                <TableCell onClick={(event) => event.stopPropagation()}>
+                  <Switch
+                    checked={agent.role === "ADMIN" || agent.booksAccess}
+                    disabled={
+                      agent.role === "ADMIN" || booksAccessPendingId === agent.id
+                    }
+                    onCheckedChange={(enabled) => onBooksAccess(agent, enabled)}
+                    aria-label={
+                      agent.role === "ADMIN"
+                        ? `${agent.firstName} ${agent.lastName} always has Books`
+                        : `${agent.booksAccess ? "Remove" : "Assign"} Books for ${agent.firstName} ${agent.lastName}`
+                    }
+                  />
+                </TableCell>
                 <TableCell>
                   <span className="flex items-center gap-2">
                     <span

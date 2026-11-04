@@ -49,6 +49,7 @@ export function formatUser(row: MysqlRow): User {
     phone: row.phone || null,
     username: row.username || null,
     role: row.role || "AGENT",
+    booksAccess: row.role === "ADMIN" || Number(row.books_access) === 1,
     planTier: row.plan_tier || "FREE",
     profilePhotoUrl: row.profile_photo_url || null,
     active: Boolean(row.is_active),
@@ -76,6 +77,10 @@ export async function getAuthUser(request: NextRequest): Promise<User | null> {
   if (!users.length) return null;
 
   return formatUser(users[0]);
+}
+
+export function canAccessBooks(user: { role: string; booksAccess?: boolean }) {
+  return user.role === "ADMIN" || user.booksAccess === true;
 }
 
 export function apiSuccess<T>(data: T, message = "Success", status = 200) {

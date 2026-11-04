@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import { getAuthUser, apiSuccess, apiError } from "@/lib/crm/auth";
 import { crmExecute, crmQuery, initCrmSchema, MysqlRow } from "@/lib/crm/db";
-import { formatDeal, parseCurrencyAmount } from "@/lib/crm/formatters";
+import { formatDeal, parseAssigneeIds, parseCurrencyAmount } from "@/lib/crm/formatters";
 import { camelize } from "@/lib/case-conversion";
 
 export async function GET(
@@ -66,7 +66,18 @@ export async function PUT(
     const arrears = Math.max(0, contractValue - totalPaid);
     const isPaidInFull = arrears === 0 && contractValue > 0;
     const currency = body.currency || rawBody.currency || existing[0].currency || "GHS";
-    const assignedTo = body.assignedToId ?? rawBody.assigned_to_id ?? rawBody.assignedToId ?? null;
+    const currentAssignees = parseAssigneeIds(existing[0].assignee_ids);
+    const fallbackAssignees = currentAssignees.length
+      ? currentAssignees
+      : existing[0].assigned_to
+        ? [String(existing[0].assigned_to)]
+        : [];
+    const assigneeIds = Array.isArray(body.assigneeIds)
+      ? parseAssigneeIds(body.assigneeIds)
+      : body.assignedToId
+        ? [String(body.assignedToId)]
+        : fallbackAssignees;
+    const assignedTo = assigneeIds[0] || null;
 
     await crmExecute(
       `UPDATE deals SET
@@ -78,7 +89,8 @@ export async function PUT(
         total_paid = ?,
         arrears = ?,
         is_paid_in_full = ?,
-        assigned_to = COALESCE(?, assigned_to),
+        assigned_to = ?,
+        assignee_ids = ?,
         notes = COALESCE(?, notes),
         updated_at = NOW()
       WHERE id = ?`,
@@ -92,6 +104,7 @@ export async function PUT(
         arrears,
         isPaidInFull ? 1 : 0,
         assignedTo,
+        JSON.stringify(assigneeIds),
         body.notes || rawBody.notes || null,
         dealId,
       ]

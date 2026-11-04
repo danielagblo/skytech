@@ -62,6 +62,23 @@ export const useUpdateUser = () => {
       toast.error(getApiErrorMessage(error, "The agent could not be updated.")),
   });
 };
+export const useUpdateBooksAccess = () => {
+  const client = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, enabled }: { id: string; enabled: boolean }) =>
+      usersService.updateBooksAccess(id, enabled),
+    onSuccess: (_result, variables) => {
+      void client.invalidateQueries({ queryKey: ["users"] });
+      toast.success(
+        variables.enabled ? "Books access assigned." : "Books access removed.",
+      );
+    },
+    onError: (error) =>
+      toast.error(
+        getApiErrorMessage(error, "Books access could not be updated."),
+      ),
+  });
+};
 export const useDeleteUser = () => {
   const client = useQueryClient();
   return useMutation({

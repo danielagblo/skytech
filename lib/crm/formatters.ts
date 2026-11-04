@@ -79,13 +79,34 @@ export function formatLead(row: MysqlRow): Lead {
   };
 }
 
+export function parseAssigneeIds(value: unknown): string[] {
+  if (Array.isArray(value)) return value.map(String).filter(Boolean);
+  if (value && typeof value === "object") return [];
+  if (typeof value === "string" && value.trim()) {
+    try {
+      const parsed = JSON.parse(value);
+      if (Array.isArray(parsed)) return parsed.map(String).filter(Boolean);
+    } catch {
+      return [value];
+    }
+  }
+  return [];
+}
+
 export function formatDeal(row: MysqlRow): Deal {
+  const stored = parseAssigneeIds(row.assignee_ids);
+  const assigneeIds = stored.length
+    ? stored
+    : row.assigned_to
+      ? [String(row.assigned_to)]
+      : [];
   return {
     id: String(row.id),
     companyId: row.company_id ? String(row.company_id) : "",
     leadId: row.lead_id ? String(row.lead_id) : null,
     createdById: row.created_by ? String(row.created_by) : "",
-    assignedToId: row.assigned_to ? String(row.assigned_to) : null,
+    assignedToId: assigneeIds[0] || null,
+    assigneeIds,
     title: row.title || "",
     stage: row.stage || "PROSPECTING",
     priority: row.priority || "MEDIUM",

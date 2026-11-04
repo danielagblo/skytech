@@ -12,13 +12,13 @@ import { isLeadSeen } from "@/lib/seenLeads";
 export const DealCard = ({
   deal,
   lead,
-  assignee,
+  assignees = [],
   logs,
   onClick,
 }: {
   deal: Deal;
   lead?: Lead;
-  assignee?: User;
+  assignees?: User[];
   logs: DealLog[];
   onClick: () => void;
 }) => {
@@ -102,8 +102,8 @@ export const DealCard = ({
         </div>
       )}
       <div className="mt-3 flex items-center justify-between border-t pt-2">
-        {assignee ? (
-          <AssigneeStack users={[assignee as UserSummary]} />
+        {assignees.length > 0 ? (
+          <AssigneeStack users={assignees as UserSummary[]} />
         ) : (
           <span className="text-[10px] text-muted-foreground">Unassigned</span>
         )}
