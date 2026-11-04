@@ -3,7 +3,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { getApiErrorMessage } from "@/lib/api-error";
-import { isDemoSession } from "@/lib/demo-data";
+import { demoResponse, isDemoSession } from "@/lib/demo-data";
 import { booksService } from "@/services/books.service";
 import type {
   BookFilters,
@@ -43,14 +43,7 @@ export const useBooks = (filters: BookFilters, enabled = true) =>
     enabled,
     queryFn: () =>
       isDemoSession()
-        ? Promise.resolve({
-            data: {
-              success: true as const,
-              data: demoSnapshot(filters),
-              message: "Demo data",
-              timestamp: new Date().toISOString(),
-            },
-          })
+        ? demoResponse(demoSnapshot(filters))
         : booksService.getAll(filters),
     select: (response) => response.data.data,
   });

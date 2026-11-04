@@ -396,7 +396,7 @@ export async function loadBooks(
       outstandingArrears: roundMoney(Number(arrearsRows[0]?.total || 0)),
       currency: "GHS",
     },
-    categoryTotals: [...categoryMap.values()]
+    categoryTotals: Array.from(categoryMap.values())
       .map((item) => ({ ...item, total: roundMoney(item.total) }))
       .sort((a, b) => b.total - a.total),
     range,
