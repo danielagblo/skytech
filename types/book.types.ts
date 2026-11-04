@@ -95,7 +95,6 @@ export interface BookSummary {
   pipelineCollected: number;
   manualRevenue: number;
   recurringPosted: number;
-  outstandingArrears: number;
   currency: string;
 }
 

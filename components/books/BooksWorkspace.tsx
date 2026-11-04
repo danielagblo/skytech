@@ -228,7 +228,7 @@ export const BooksWorkspace = () => {
     <div className="space-y-4">
       <PageHeader
         title="Books"
-        description="Collect pipeline payments, record other income, and track salaries, petty office costs, and the rest of the month."
+        description="Revenue is money already received. Pipeline payment logs and invoice payments are recorded here. Amounts still owed stay on the pipeline."
         actions={
           <>
             <Button
@@ -250,8 +250,7 @@ export const BooksWorkspace = () => {
 
       {books.isLoading ? (
         <div className="space-y-4">
-          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-            <Skeleton className="h-24" />
+          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
             <Skeleton className="h-24" />
             <Skeleton className="h-24" />
             <Skeleton className="h-24" />
@@ -271,11 +270,11 @@ export const BooksWorkspace = () => {
         />
       ) : (
         <>
-          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
             <Stat
               label="Revenue"
               value={money(summary.revenue, currency)}
-              hint={`${monthTitle(month)} income`}
+              hint="Payments received this month"
               tone="good"
             />
             <Stat
@@ -291,39 +290,26 @@ export const BooksWorkspace = () => {
             <Stat
               label="Net"
               value={money(summary.net, currency)}
-              hint="Revenue minus expenses"
+              hint="Payments received minus expenses"
               tone={summary.net >= 0 ? "good" : "bad"}
             />
-            <Link href={`${root}/pipeline`} className="block">
-              <Stat
-                label="Still to collect"
-                value={money(summary.outstandingArrears, currency)}
-                hint="Open arrears on deals"
-              />
-            </Link>
           </div>
 
           <section className="border bg-card">
             <div className="flex h-9 items-center bg-muted px-5 text-sm font-medium">
               Revenue mobilisation
             </div>
-            <div className="grid gap-4 px-5 py-4 sm:grid-cols-3">
+            <div className="grid gap-4 px-5 py-4 sm:grid-cols-2">
               <div>
-                <p className="text-xs text-muted-foreground">Collected from pipeline</p>
+                <p className="text-xs text-muted-foreground">Payments from pipeline</p>
                 <p className="text-sm font-medium">
                   {money(summary.pipelineCollected, currency)}
                 </p>
               </div>
               <div>
-                <p className="text-xs text-muted-foreground">Recorded manually</p>
+                <p className="text-xs text-muted-foreground">Payments recorded manually</p>
                 <p className="text-sm font-medium">
                   {money(summary.manualRevenue, currency)}
-                </p>
-              </div>
-              <div>
-                <p className="text-xs text-muted-foreground">Left on deals</p>
-                <p className="text-sm font-medium">
-                  {money(summary.outstandingArrears, currency)}
                 </p>
               </div>
             </div>
@@ -396,7 +382,7 @@ export const BooksWorkspace = () => {
                     title={data.entries.length === 0 ? "No records this month" : "Nothing matches"}
                     message={
                       data.entries.length === 0
-                        ? "Pipeline payments land here automatically. Record salaries, petty office expenses, and any other income by hand."
+                        ? "Only payments already received are listed. Record a pipeline payment or an invoice payment, or add a received amount by hand."
                         : "Try another month, type, or search."
                     }
                     action={

@@ -132,10 +132,12 @@ const PAYMENT_IMPORT = `
     dl.created_by
   FROM deal_logs dl
   INNER JOIN deals d ON d.id = dl.deal_id AND d.deleted_at IS NULL
-  WHERE dl.amount_paid IS NOT NULL AND dl.amount_paid > 0
+  WHERE dl.log_type = 'PAYMENT'
+    AND dl.amount_paid IS NOT NULL
+    AND dl.amount_paid > 0
 `;
 
-const RETENTION_IMPORT = `
+const INVOICE_PAYMENT_IMPORT = `
   INSERT IGNORE INTO book_entries (
     id, company_id, entry_type, source, source_log_id, deal_id,
     category, description, amount, currency, payment_mode, reference_no,
@@ -144,33 +146,55 @@ const RETENTION_IMPORT = `
   )
   SELECT
     UUID(),
-    dl.company_id,
+    ip.company_id,
     'REVENUE',
     'PIPELINE',
-    CONCAT(dl.id, ':retention'),
-    dl.deal_id,
-    'RETENTION',
-    LEFT(CONCAT('Retention · ', COALESCE(NULLIF(d.title, ''), 'Deal')), 255),
-    dl.retention_amount,
-    COALESCE(NULLIF(d.currency, ''), 'GHS'),
-    NULLIF(dl.payment_mode, ''),
-    COALESCE(NULLIF(dl.retention_receipt, ''), NULLIF(dl.retention_invoice, '')),
-    COALESCE(DATE(dl.created_at), CURDATE()),
+    CONCAT('invoice-payment:', ip.id),
+    inv.deal_id,
+    'CLIENT_PAYMENT',
+    LEFT(CONCAT('Invoice payment · ', COALESCE(NULLIF(inv.invoice_number, ''), 'Invoice')), 255),
+    ip.amount,
+    COALESCE(NULLIF(inv.currency, ''), 'GHS'),
+    NULLIF(ip.payment_mode, ''),
+    NULLIF(ip.reference, ''),
+    COALESCE(DATE(ip.paid_at), DATE(ip.created_at), CURDATE()),
     0, NULL, NULL, 0,
-    'Collected from the pipeline retention receipt.',
-    dl.created_by
-  FROM deal_logs dl
-  INNER JOIN deals d ON d.id = dl.deal_id AND d.deleted_at IS NULL
-  WHERE dl.retention_amount IS NOT NULL AND dl.retention_amount > 0
+    'Payment received against an invoice.',
+    ip.recorded_by
+  FROM invoice_payments ip
+  INNER JOIN invoices inv ON inv.id = ip.invoice_id
+  WHERE ip.amount IS NOT NULL AND ip.amount > 0
+`;
+
+const DROP_UNPAID_PIPELINE_REVENUE = `
+  UPDATE book_entries
+  SET deleted_at = NOW()
+  WHERE source = 'PIPELINE'
+    AND entry_type = 'REVENUE'
+    AND deleted_at IS NULL
+    AND (
+      category = 'RETENTION'
+      OR source_log_id LIKE '%:retention'
+      OR (
+        source_log_id NOT LIKE 'invoice-payment:%'
+        AND source_log_id NOT IN (
+          SELECT id FROM deal_logs
+          WHERE log_type = 'PAYMENT'
+            AND amount_paid IS NOT NULL
+            AND amount_paid > 0
+        )
+      )
+    )
 `;
 
 export async function syncPipelinePayments() {
   const pool = await getCrmPool();
+  await pool.query(DROP_UNPAID_PIPELINE_REVENUE);
   const [payments] = await pool.query(PAYMENT_IMPORT);
-  const [retention] = await pool.query(RETENTION_IMPORT);
+  const [invoicePayments] = await pool.query(INVOICE_PAYMENT_IMPORT);
   return (
     Number((payments as { affectedRows?: number }).affectedRows || 0) +
-    Number((retention as { affectedRows?: number }).affectedRows || 0)
+    Number((invoicePayments as { affectedRows?: number }).affectedRows || 0)
   );
 }
 
@@ -330,9 +354,6 @@ export async function loadBooks(
      ORDER BY be.entry_type ASC, be.category ASC, be.description ASC`,
     [range.from, range.to],
   );
-  const arrearsRows = await crmQuery<{ total: number | string }>(
-    "SELECT COALESCE(SUM(arrears), 0) AS total FROM deals WHERE deleted_at IS NULL",
-  );
 
   const periodEntries = rows.map(formatEntry);
   const summary = periodEntries.reduce(
@@ -393,7 +414,6 @@ export async function loadBooks(
       pipelineCollected: roundMoney(summary.pipelineCollected),
       manualRevenue: roundMoney(summary.manualRevenue),
       recurringPosted: roundMoney(summary.recurringPosted),
-      outstandingArrears: roundMoney(Number(arrearsRows[0]?.total || 0)),
       currency: "GHS",
     },
     categoryTotals: Array.from(categoryMap.values())

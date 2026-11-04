@@ -29,7 +29,6 @@ const demoSnapshot = (filters: BookFilters): BooksSnapshot => ({
     pipelineCollected: 0,
     manualRevenue: 0,
     recurringPosted: 0,
-    outstandingArrears: 0,
     currency: "GHS",
   },
   categoryTotals: [],
