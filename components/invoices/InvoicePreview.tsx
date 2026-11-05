@@ -1,15 +1,12 @@
 "use client";
 
 /**
- * InvoicePreview
- * --------------
- * On-screen preview of the invoice (React + Tailwind), matching the
- * Pixel-matched template. The company logo sits in the upper-right, and the
- * issuer's cursive signature appears in the footer.
- *
- * This is NOT used for PDF export - @react-pdf/renderer does not understand
- * Tailwind classes. Use InvoicePDF instead, which mirrors this exact layout.
+ * On-screen invoice laid over the Skytech Ghana letterhead.
+ * The PDF download stamps the same fields onto that letterhead file.
  */
+
+import { formatCurrency } from "@/lib/utils";
+import { INVOICE_PAGE } from "@/lib/crm/invoice-template";
 
 export interface InvoiceLineItem {
   description: string;
@@ -36,6 +33,8 @@ export interface InvoiceData {
   taxRatePercent: number;
   discountAmount?: number;
   currencySymbol?: string;
+  amountPaid?: number;
+  notes?: string;
   bankName: string;
   accountName: string;
   accountNumber: string;
@@ -45,27 +44,28 @@ export interface InvoiceData {
 }
 
 export const defaultInvoice: InvoiceData = {
-  issuerName: "[YOUR NAME]",
-  issuerTagline: "[YOUR TITLE / COMPANY]",
+  issuerName: "Skytech Ghana",
+  issuerEmail: "Sales@skytechghana.com",
+  issuerPhone: "0538311626",
+  issuerAddress: "Spintex Road, Dnor Plaza",
   clientName: "[CLIENT NAME]",
   clientCompany: "[CLIENT COMPANY]",
   clientAddress: "[CLIENT ADDRESS]",
   invoiceNo: "[INVOICE NO.]",
   date: "[DATE]",
   dueDate: "[DUE DATE]",
-  items: [
-    { description: "[LINE ITEM DESCRIPTION]", rate: 0, qty: 1 },
-    { description: "[LINE ITEM DESCRIPTION]", rate: 0, qty: 1 },
-  ],
+  items: [{ description: "[LINE ITEM DESCRIPTION]", rate: 0, qty: 1 }],
   taxRatePercent: 0,
-  bankName: "[BANK NAME]",
-  accountName: "[ACCOUNT NAME]",
-  accountNumber: "[ACCOUNT NUMBER]",
-  signatureName: "[SIGNATURE]",
+  amountPaid: 0,
+  bankName: "Merchant",
+  accountName: "BRICSKY TECH",
+  accountNumber: "3182364624",
+  signatureName: "Daniel K. Agblo",
 };
 
-function currency(n: number, symbol = "GH¢") {
-  return `${symbol} ${n.toLocaleString(undefined, { maximumFractionDigits: 2, minimumFractionDigits: 2 })}`;
+function qtyLabel(qty: number) {
+  if (Number.isInteger(qty)) return String(qty);
+  return String(Math.round(qty * 100) / 100);
 }
 
 export default function InvoicePreview({
@@ -74,217 +74,128 @@ export default function InvoicePreview({
   data?: InvoiceData;
 }) {
   const items = Array.isArray(data?.items) ? data.items : [];
-  const subtotal = items.reduce((sum, i) => sum + i.rate * i.qty, 0);
+  const subtotal = items.reduce((sum, item) => sum + item.rate * item.qty, 0);
   const tax = subtotal * ((data.taxRatePercent ?? 0) / 100);
   const discount = data.discountAmount ?? 0;
   const total = Math.max(subtotal + tax - discount, 0);
-  const symbol = data.currencySymbol ?? "GH¢";
+  const paid = data.amountPaid ?? 0;
+  const rows = items.length
+    ? items
+    : [{ description: "No line items yet", rate: 0, qty: 0 }];
+  const box = {
+    left: `${(INVOICE_PAGE.marginX / INVOICE_PAGE.width) * 100}%`,
+    right: `${(INVOICE_PAGE.marginX / INVOICE_PAGE.width) * 100}%`,
+    top: `${(INVOICE_PAGE.contentTop / INVOICE_PAGE.height) * 100}%`,
+    bottom: `${(INVOICE_PAGE.contentBottom / INVOICE_PAGE.height) * 100}%`,
+  };
 
   return (
-    <div className="w-full flex justify-center bg-neutral-100 p-4 md:p-8">
-      {/* Page: fixed aspect to emulate a portrait invoice sheet */}
+    <div className="flex justify-center bg-neutral-100 p-3 md:p-5">
       <div
-        className="invoice-sheet bg-white text-neutral-800 shadow-sm w-full"
-        style={{ maxWidth: "816px" }}
+        className="relative w-full bg-white shadow-sm"
+        style={{
+          maxWidth: 720,
+          aspectRatio: `${INVOICE_PAGE.width} / ${INVOICE_PAGE.height}`,
+        }}
       >
-        <div className="px-8 pt-12 pb-10 md:px-16 md:pt-16 md:pb-12 flex flex-col h-full">
-          {/* Header */}
+        <img
+          src="/assets/skytech-invoice-template.png"
+          alt=""
+          className="pointer-events-none absolute inset-0 h-full w-full"
+        />
+        <div
+          className="absolute overflow-y-auto text-[10px] leading-snug text-neutral-900 md:text-[11px]"
+          style={{ ...box, fontFamily: "Arial, Helvetica, sans-serif" }}
+        >
           <div className="flex items-start justify-between gap-4">
-            <div>
-              <h1 className="text-4xl md:text-5xl font-extrabold tracking-wide text-neutral-800">
-                INVOICE
-              </h1>
-              {(data.issuerAddress ||
-                data.issuerPhone ||
-                data.issuerEmail ||
-                data.issuerTaxId) && (
-                <div className="mt-3 text-[11px] md:text-xs leading-relaxed text-neutral-600">
-                  <p className="font-bold tracking-wide text-neutral-800">
-                    {data.issuerName}
-                  </p>
-                  {data.issuerAddress && (
-                    <p className="whitespace-pre-line">{data.issuerAddress}</p>
-                  )}
-                  {data.issuerPhone && <p>Phone: {data.issuerPhone}</p>}
-                  {data.issuerEmail && <p>Email: {data.issuerEmail}</p>}
-                  {data.issuerTaxId && <p>Tax ID: {data.issuerTaxId}</p>}
-                </div>
-              )}
+            <div className="min-w-0">
+              <p className="font-bold tracking-wide">ISSUED TO:</p>
+              <p className="mt-1 font-bold">{data.clientName || "Client"}</p>
+              {data.clientCompany ? <p>{data.clientCompany}</p> : null}
+              {data.clientAddress ? (
+                <p className="whitespace-pre-line text-neutral-700">{data.clientAddress}</p>
+              ) : null}
             </div>
-
-            {/* Company logo (upper right) */}
-            <div className="relative flex h-14 w-40 shrink-0 items-center justify-end md:h-20 md:w-56">
-              {data.logoUrl ? (
-                <img
-                  src={data.logoUrl}
-                  alt={data.issuerName}
-                  className="h-full w-full object-contain object-right"
-                />
-              ) : (
-                <div className="flex h-14 w-14 flex-col items-center justify-center rounded-full bg-neutral-100 md:h-20 md:w-20">
-                  <span
-                    className="text-xl md:text-3xl leading-none mb-1"
-                    style={{ fontFamily: "'Brush Script MT', cursive" }}
-                  >
-                    {data.issuerName[0]}.
-                  </span>
-                  <span className="text-[8px] md:text-[9px] font-bold tracking-widest text-neutral-800 text-center px-2 leading-tight">
-                    {data.issuerName}
-                  </span>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Issued to / Invoice meta */}
-          <div className="mt-12 md:mt-16 flex flex-wrap justify-between gap-6 text-xs md:text-sm">
-            <div>
-              <p className="font-bold tracking-wide text-neutral-800 mb-2">
-                ISSUED TO:
+            <div className="shrink-0 text-right">
+              <p>
+                <span className="font-bold">INVOICE NO:</span>{" "}
+                <span className="font-bold">{data.invoiceNo}</span>
               </p>
-              <p className="text-neutral-700 leading-relaxed">
-                {data.clientName || "—"}
-                <br />
-                {data.clientCompany && (
-                  <>
-                    {data.clientCompany}
-                    <br />
-                  </>
-                )}
-                {data.clientAddress && (
-                  <span className="whitespace-pre-line">{data.clientAddress}</span>
-                )}
+              <p className="mt-1">
+                <span className="font-bold">DATE:</span> {data.date}
               </p>
-            </div>
-            <div className="md:text-right">
-              <p className="mb-2">
-                <span className="font-bold tracking-wide">INVOICE NO:</span>{" "}
-                <span className="font-bold ml-2">{data.invoiceNo}</span>
-              </p>
-              <p className="text-neutral-700">
-                <span className="font-bold tracking-wide">DATE:</span>{" "}
-                <span className="ml-2">{data.date}</span>
-              </p>
-              <p className="text-neutral-700">
-                <span className="font-bold tracking-wide">DUE DATE:</span>{" "}
-                <span className="ml-2">{data.dueDate}</span>
+              <p className="mt-1">
+                <span className="font-bold">DUE DATE:</span> {data.dueDate}
               </p>
             </div>
           </div>
 
-          {/* Line items table */}
-          <div className="mt-12 md:mt-14">
-            <div className="grid grid-cols-[1fr_80px_60px_100px] md:grid-cols-[1fr_100px_100px_120px] text-xs md:text-sm font-bold tracking-wide text-neutral-800 pb-3 border-b-2 border-neutral-800">
-              <span>DESCRIPTION</span>
-              <span>RATE</span>
-              <span>QTY</span>
-              <span className="text-right">TOTAL</span>
-            </div>
-
-            {items.map((item, idx) => (
-              <div
-                key={idx}
-                className="grid grid-cols-[1fr_80px_60px_100px] md:grid-cols-[1fr_100px_100px_120px] text-xs md:text-sm text-neutral-700 py-3 border-b border-neutral-100"
-              >
-                <span className="pr-2">
-                  <span>{item.description}</span>
-                  {item.subLines?.map((line, subIdx) => (
-                    <span
-                      key={`${idx}-${subIdx}`}
-                      className="block ml-3 text-neutral-500"
-                    >
-                      — {line}
-                    </span>
-                  ))}
-                </span>
-                <span>{item.rate}</span>
-                <span>{item.qty}</span>
-                <span className="text-right">
-                  {currency(item.rate * item.qty, symbol)}
-                </span>
-              </div>
-            ))}
-
-            <div className="mt-4 space-y-2 text-xs md:text-sm">
-              <div className="grid grid-cols-[1fr_80px_60px_100px] md:grid-cols-[1fr_100px_100px_120px]">
-                <span className="font-bold tracking-wide">SUBTOTAL</span>
-                <span />
-                <span />
-                <span className="text-right font-bold">
-                  {currency(subtotal, symbol)}
-                </span>
-              </div>
-              {discount > 0 && (
-                <div className="grid grid-cols-[1fr_80px_60px_100px] md:grid-cols-[1fr_100px_100px_120px]">
-                  <span />
-                  <span />
-                  <span className="text-right text-neutral-600">Discount</span>
-                  <span className="text-right">
-                    - {currency(discount, symbol)}
-                  </span>
-                </div>
-              )}
-              <div className="grid grid-cols-[1fr_80px_60px_100px] md:grid-cols-[1fr_100px_100px_120px]">
-                <span />
-                <span />
-                <span className="text-right text-neutral-600">Tax</span>
-                <span className="text-right">{data.taxRatePercent}%</span>
-              </div>
-              <div className="border-t-2 border-neutral-800 pt-2 grid grid-cols-[1fr_80px_60px_100px] md:grid-cols-[1fr_100px_100px_120px]">
-                <span />
-                <span />
-                <span className="text-right font-bold">TOTAL</span>
-                <span className="text-right font-bold">
-                  {currency(total, symbol)}
-                </span>
-              </div>
-            </div>
+          <div className="mt-4 grid grid-cols-[1fr_78px_40px_92px] border-b-2 border-neutral-900 pb-1 font-bold tracking-wide">
+            <span>DESCRIPTION</span>
+            <span>RATE</span>
+            <span>QTY</span>
+            <span className="text-right">TOTAL</span>
           </div>
-
-          {/* Footer: payment info + signature */}
-          <div className="mt-auto pt-16 md:pt-24 flex flex-wrap justify-between items-end gap-6">
-            <div className="text-xs md:text-sm">
-              <p className="font-bold tracking-wide text-neutral-800 mb-2">
-                PAYMENT INFO:
-              </p>
-              {data.paymentInstructions ? (
-                <p className="whitespace-pre-line leading-relaxed text-neutral-700">
-                  {data.paymentInstructions}
-                </p>
-              ) : (
-                <p className="text-neutral-700 leading-relaxed">
-                  {data.bankName}
-                  <br />
-                  Account Name: {data.accountName}
-                  <br />
-                  Account No.: {data.accountNumber}
-                </p>
-              )}
+          {rows.map((item, index) => (
+            <div
+              key={index}
+              className="grid grid-cols-[1fr_78px_40px_92px] border-b border-neutral-200 py-1.5 text-neutral-800"
+            >
+              <span className="pr-2">
+                {item.description}
+                {item.subLines?.filter((line) => line.trim()).map((line, subIndex) => (
+                  <span key={subIndex} className="mt-0.5 block pl-2 text-neutral-500">
+                    - {line}
+                  </span>
+                ))}
+              </span>
+              <span>{formatCurrency(item.rate)}</span>
+              <span>{qtyLabel(item.qty)}</span>
+              <span className="text-right">{formatCurrency(item.rate * item.qty)}</span>
             </div>
-            {data.signatureUrl ? (
-              <div className="pr-4 flex flex-col items-end">
-                <img
-                  src={data.signatureUrl}
-                  alt={`${data.issuerName} signature`}
-                  className="h-[70px] object-contain"
-                  style={{ maxWidth: 320 }}
-                />
-                <p className="mt-1 text-xs text-neutral-500">{data.issuerName}</p>
-              </div>
-            ) : data.signatureName ? (
-              <div className="pr-4">
-                <p
-                  className="text-3xl text-neutral-800"
-                  style={{ fontFamily: "'Brush Script MT', cursive" }}
-                >
-                  {data.signatureName}
-                </p>
-                <p className="mt-1 text-xs text-neutral-500">
-                  {data.issuerName}
-                </p>
+          ))}
+
+          <div className="ml-auto mt-2 w-[220px] space-y-1">
+            <div className="flex justify-between font-bold">
+              <span>SUBTOTAL</span>
+              <span>{formatCurrency(subtotal)}</span>
+            </div>
+            {discount > 0 ? (
+              <div className="flex justify-between">
+                <span>DISCOUNT</span>
+                <span>- {formatCurrency(discount)}</span>
               </div>
             ) : null}
+            {(data.taxRatePercent ?? 0) > 0 ? (
+              <div className="flex justify-between">
+                <span>TAX {data.taxRatePercent}%</span>
+                <span>{formatCurrency(tax)}</span>
+              </div>
+            ) : null}
+            <div className="flex justify-between border-t-2 border-neutral-900 pt-1 font-bold">
+              <span>TOTAL</span>
+              <span>{formatCurrency(total)}</span>
+            </div>
+            {paid > 0 ? (
+              <>
+                <div className="flex justify-between">
+                  <span>AMOUNT PAID</span>
+                  <span>{formatCurrency(paid)}</span>
+                </div>
+                <div className="flex justify-between font-bold">
+                  <span>BALANCE DUE</span>
+                  <span>{formatCurrency(Math.max(total - paid, 0))}</span>
+                </div>
+              </>
+            ) : null}
           </div>
+
+          {data.notes?.trim() ? (
+            <div className="mt-3">
+              <p className="font-bold">NOTES</p>
+              <p className="mt-1 whitespace-pre-line text-neutral-700">{data.notes}</p>
+            </div>
+          ) : null}
         </div>
       </div>
     </div>

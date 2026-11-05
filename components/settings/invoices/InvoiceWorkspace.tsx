@@ -498,10 +498,12 @@ export const InvoiceWorkspace = ({
     })),
     taxRatePercent: Number(draftValues.taxRate ?? 0) || 0,
     discountAmount: Number(draftValues.discountAmount ?? 0) || 0,
-    bankName: "-",
-    accountName: "Skytech Ghana",
-    accountNumber: "0-",
-    signatureUrl: "/assets/daniel-agblo-signature.jpeg",
+    amountPaid: invoice?.amountPaid ?? 0,
+    notes: draftValues.notes || undefined,
+    bankName: "Merchant",
+    accountName: "BRICSKY TECH",
+    accountNumber: "3182364624",
+    signatureName: "Daniel K. Agblo",
   };
 
   const isMobile = () => window.matchMedia("(max-width: 767px)").matches;

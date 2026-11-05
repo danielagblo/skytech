@@ -7,12 +7,14 @@ import {
 export const metadata: Metadata = { title: "Invoices" };
 
 const issuerInfo: InvoiceIssuerSettings = {
-  name: process.env.INVOICE_ISSUER_NAME ?? "",
-  email: process.env.INVOICE_ISSUER_EMAIL ?? "",
-  phone: process.env.INVOICE_ISSUER_PHONE ?? "",
-  address: process.env.INVOICE_ISSUER_ADDRESS ?? "",
+  name: process.env.INVOICE_ISSUER_NAME ?? "Skytech Ghana",
+  email: process.env.INVOICE_ISSUER_EMAIL ?? "Sales@skytechghana.com",
+  phone: process.env.INVOICE_ISSUER_PHONE ?? "0538311626",
+  address: process.env.INVOICE_ISSUER_ADDRESS ?? "Spintex Road, Dnor Plaza",
   taxId: process.env.INVOICE_ISSUER_TAX_ID ?? "",
-  paymentInstructions: process.env.INVOICE_PAYMENT_INSTRUCTIONS?.replace(/\\n/g, '\n') ?? "",
+  paymentInstructions:
+    process.env.INVOICE_PAYMENT_INSTRUCTIONS?.replace(/\\n/g, "\n") ??
+    "Merchant No: 3182364624\nAccount Name: BRICSKY TECH",
 };
 
 export default function InvoicesPage() {
