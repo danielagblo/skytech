@@ -57,43 +57,41 @@ export const DealCard = ({
           onClick();
         }
       }}
-      className="w-full min-w-0 overflow-hidden rounded-md border bg-card p-2.5 text-left shadow-[0_1px_2px_rgba(15,23,42,.04)] transition hover:border-primary/60 hover:shadow-md"
+      className="w-full rounded-md border bg-card p-3 text-left shadow-[0_1px_2px_rgba(15,23,42,.04)] transition hover:-translate-y-0.5 hover:border-primary/60 hover:shadow-md"
     >
-      <div className="flex min-w-0 items-start justify-between gap-2">
-        <h4 className="line-clamp-2 min-w-0 text-sm font-semibold">{deal.title}</h4>
+      <div className="flex items-start justify-between gap-2">
+        <h4 className="line-clamp-2 text-sm font-semibold">{deal.title}</h4>
         {deal.priority && <PriorityBadge priority={deal.priority} />}
       </div>
-      <div className="mt-2 min-w-0 rounded-md bg-muted/40 px-2 py-1 text-xs">
-        <p className="truncate text-[11px] font-medium text-muted-foreground">Contract Deal</p>
-        <p className="truncate font-bold text-green-700 dark:text-green-400">
+      <div className="mt-2 flex items-center justify-between rounded-md bg-muted/40 px-2 py-1 text-xs">
+        <span className="text-[11px] font-medium text-muted-foreground">Contract Deal:</span>
+        <span className="font-bold text-green-700 dark:text-green-400">
           {formatCurrency(deal.contractValue)}
-        </p>
+        </span>
       </div>
       <div className="mt-2.5 space-y-1.5 text-xs text-muted-foreground">
-        <p className="flex min-w-0 items-center gap-2">
-          <UserRound className="h-3.5 w-3.5 shrink-0" />
+        <p className="flex items-center gap-2">
+          <UserRound className="h-3.5 w-3.5" />
           {lead ? (
-            <span className="flex min-w-0 items-center gap-2">
+            <span className="flex items-center gap-2">
               {!isSeen && (
                 <span className="inline-block h-2 w-2 shrink-0 rounded-full bg-primary/80" />
               )}
-              <span className="truncate">{`${lead.firstName || "Unnamed"} · ${lead.role || "Contact"}`}</span>
+              <span>{`${lead.firstName || "Unnamed"} · ${lead.role || "Contact"}`}</span>
             </span>
           ) : (
             "No linked lead"
           )}
         </p>
-        <p className="flex min-w-0 items-center gap-2">
-          <Phone className="h-3.5 w-3.5 shrink-0" />
-          <span className="truncate">{lead?.phone1 || "No phone number"}</span>
+        <p className="flex items-center gap-2">
+          <Phone className="h-3.5 w-3.5" />
+          {lead?.phone1 || "No phone number"}
         </p>
-        <p className="flex min-w-0 items-center gap-2">
-          <CalendarClock className="h-3.5 w-3.5 shrink-0" />
-          <span className="truncate">
-            {followUp
-              ? `Follow-up ${formatDate(followUp)}`
-              : `Issued ${formatDate(deal.createdAt)}`}
-          </span>
+        <p className="flex items-center gap-2">
+          <CalendarClock className="h-3.5 w-3.5" />
+          {followUp
+            ? `Follow-up ${formatDate(followUp)}`
+            : `Issued ${formatDate(deal.createdAt)}`}
         </p>
       </div>
       {deal.stage === "PAYMENT" && (

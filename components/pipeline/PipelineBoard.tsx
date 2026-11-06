@@ -110,9 +110,9 @@ export const PipelineBoard = () => {
   };
   if (pipeline.isLoading || leads.isLoading || users.isLoading)
     return (
-      <div className="grid min-w-0 grid-cols-5 gap-2 overflow-hidden">
+      <div className="flex gap-4 overflow-hidden">
         {stages.map((stage) => (
-          <Skeleton key={stage} className="h-[600px] min-w-0" />
+          <Skeleton key={stage} className="h-[600px] min-w-[285px] flex-1" />
         ))}
       </div>
     );
@@ -125,9 +125,9 @@ export const PipelineBoard = () => {
       />
     );
   return (
-    <div className="flex min-h-0 min-w-0 flex-1 flex-col">
+    <>
       <DragDropContext onDragEnd={drop}>
-        <div className="dot-grid grid h-full min-h-[620px] min-w-0 flex-1 grid-cols-5 gap-2 overflow-hidden rounded-lg border p-2 lg:min-h-0">
+        <div className="dot-grid scrollbar-thin flex min-h-[620px] flex-1 snap-x snap-mandatory gap-3 overflow-x-auto overflow-y-hidden rounded-lg border p-2 sm:p-3 lg:h-full lg:min-h-0 2xl:gap-4 2xl:p-4">
           {stages.map((stage) => {
             const columnDeals = items.filter((deal) => deal.stage === stage);
             const sortedDeals =
@@ -179,6 +179,6 @@ export const PipelineBoard = () => {
         open={Boolean(selected)}
         onOpenChange={(value) => !value && setSelected(null)}
       />
-    </div>
+    </>
   );
 };
