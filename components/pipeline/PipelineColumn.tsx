@@ -40,29 +40,27 @@ export const PipelineColumn = ({
   onRemove?: (deal: Deal) => void;
   removing?: boolean;
 }) => (
-  <section className="flex h-full w-[min(86vw,320px)] shrink-0 snap-start flex-col sm:w-[280px] lg:w-auto lg:min-w-[240px] lg:flex-1">
-    <div className="mb-2 shrink-0 border-b bg-card px-2 py-3">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <span className={`h-2.5 w-2.5 rounded-full ${bars[stage]}`} />
-          <h3 className="text-sm font-semibold">{labels[stage]}</h3>
-          <span className="rounded-full bg-muted px-2 text-xs">
-            {deals.length}
-          </span>
-        </div>
-        <strong className="text-xs">
-          {formatCurrency(
-            deals.reduce((total, deal) => total + deal.contractValue, 0),
-          )}
-        </strong>
+  <section className="flex h-full min-h-0 min-w-0 flex-col">
+    <div className="mb-2 shrink-0 border-b bg-card px-2 py-2">
+      <div className="flex min-w-0 items-center gap-1.5">
+        <span className={`h-2.5 w-2.5 shrink-0 rounded-full ${bars[stage]}`} />
+        <h3 className="truncate text-xs font-semibold sm:text-sm">{labels[stage]}</h3>
+        <span className="shrink-0 rounded-full bg-muted px-1.5 text-[11px]">
+          {deals.length}
+        </span>
       </div>
+      <p className="mt-1 truncate text-[11px] font-semibold">
+        {formatCurrency(
+          deals.reduce((total, deal) => total + deal.contractValue, 0),
+        )}
+      </p>
     </div>
     <Droppable droppableId={stage}>
       {(provided, snapshot) => (
         <div
           ref={provided.innerRef}
           {...provided.droppableProps}
-          className={`scrollbar-none min-h-[520px] flex-1 space-y-2 overflow-y-auto overscroll-contain p-1.5 transition lg:min-h-0 ${snapshot.isDraggingOver ? "bg-primary/15" : "bg-card/35"}`}
+          className={`scrollbar-none min-h-[520px] min-w-0 flex-1 space-y-2 overflow-x-hidden overflow-y-auto overscroll-contain p-1.5 transition lg:min-h-0 ${snapshot.isDraggingOver ? "bg-primary/15" : "bg-card/35"}`}
         >
           {deals.map((deal, index) => (
             <Draggable
@@ -76,6 +74,7 @@ export const PipelineColumn = ({
                   ref={drag.innerRef}
                   {...drag.draggableProps}
                   {...drag.dragHandleProps}
+                  className="min-w-0"
                 >
                   <DealCard
                     deal={deal}
