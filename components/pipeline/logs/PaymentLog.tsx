@@ -8,11 +8,12 @@ import type { User } from "@/types/user.types";
 import type { PaymentMode } from "@/types/api.types";
 import { useAddDealLog } from "@/hooks/useDeals";
 import { LogFeed } from "../LogFeed";
-import { formatCurrency } from "@/lib/utils";
+import { formatCurrency, formatDate, formatTime } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
@@ -49,6 +50,13 @@ const schema = z
 
 type Values = z.infer<typeof schema>;
 
+const followUpSchema = z.object({
+  followUp: z.string().min(1, "Choose a payment follow-up date."),
+  feedback: z.string().trim().min(1, "Enter feedback."),
+});
+
+type FollowUpValues = z.infer<typeof followUpSchema>;
+
 export const PaymentLog = ({
   deal,
   logs,
@@ -59,6 +67,7 @@ export const PaymentLog = ({
   users: User[];
 }) => {
   const mutation = useAddDealLog();
+  const followUpMutation = useAddDealLog();
   const queryClient = useQueryClient();
   const {
     register,
@@ -77,6 +86,38 @@ export const PaymentLog = ({
     },
   });
   const values = useWatch({ control });
+  const followUpForm = useForm<FollowUpValues>({
+    resolver: zodResolver(followUpSchema),
+    mode: "onBlur",
+    defaultValues: { followUp: "", feedback: "" },
+  });
+
+  const refreshLogs = () =>
+    Promise.all([
+      queryClient.invalidateQueries({ queryKey: ["deals"] }),
+      queryClient.invalidateQueries({ queryKey: ["pipeline"] }),
+      queryClient.invalidateQueries({ queryKey: ["deal-logs", deal.id] }),
+    ]);
+
+  const saveFollowUp = followUpForm.handleSubmit((data) => {
+    const when = new Date(data.followUp);
+    followUpMutation.mutate(
+      {
+        dealId: deal.id,
+        data: {
+          logType: "PAYMENT",
+          followUpAt: when.toISOString(),
+          body: `Payment follow-up · ${formatDate(when)} at ${formatTime(when)}\n${data.feedback.trim()}`,
+        },
+      },
+      {
+        onSuccess: () => {
+          void refreshLogs();
+          followUpForm.reset({ followUp: "", feedback: "" });
+        },
+      },
+    );
+  });
 
   const submit = handleSubmit((data) =>
     mutation.mutate(
@@ -94,11 +135,7 @@ export const PaymentLog = ({
       },
       {
         onSuccess: () => {
-          void Promise.all([
-            queryClient.invalidateQueries({ queryKey: ["deals"] }),
-            queryClient.invalidateQueries({ queryKey: ["pipeline"] }),
-            queryClient.invalidateQueries({ queryKey: ["deal-logs", deal.id] }),
-          ]);
+          void refreshLogs();
           reset();
         },
       },
@@ -122,6 +159,7 @@ export const PaymentLog = ({
         ))}
       </div>
       <form onSubmit={submit} className="space-y-3 border-b pb-4">
+        <h4 className="font-semibold">Record payment</h4>
         <div>
           <Label>Amount (GH¢)</Label>
           <div className="relative mt-1">
@@ -210,6 +248,38 @@ export const PaymentLog = ({
         </div>
         <Button type="submit" className="w-full" disabled={mutation.isPending}>
           {mutation.isPending ? "Recording…" : "Record payment"}
+        </Button>
+      </form>
+      <form onSubmit={saveFollowUp} className="space-y-3 border-b pb-4">
+        <h4 className="font-semibold">Payment follow-up</h4>
+        <div>
+          <Label>Follow-up date and time</Label>
+          <Input type="datetime-local" {...followUpForm.register("followUp")} />
+          {followUpForm.formState.errors.followUp && (
+            <p className="text-xs text-danger">
+              {followUpForm.formState.errors.followUp.message}
+            </p>
+          )}
+        </div>
+        <div>
+          <Label>Feedback</Label>
+          <Textarea
+            placeholder="What was discussed or agreed…"
+            {...followUpForm.register("feedback")}
+          />
+          {followUpForm.formState.errors.feedback && (
+            <p className="text-xs text-danger">
+              {followUpForm.formState.errors.feedback.message}
+            </p>
+          )}
+        </div>
+        <Button
+          type="submit"
+          variant="outline"
+          className="w-full"
+          disabled={followUpMutation.isPending}
+        >
+          {followUpMutation.isPending ? "Saving…" : "Save follow-up"}
         </Button>
       </form>
       <LogFeed dealId={deal.id} logs={logs} users={users} />

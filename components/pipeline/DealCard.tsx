@@ -10,6 +10,22 @@ import { CardRemoveButton } from "@/components/shared/CardRemoveButton";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { isLeadSeen } from "@/lib/seenLeads";
 
+export function displayedFollowUp(logs: DealLog[]) {
+  const paymentFollowUp = logs
+    .filter((log) => log.logType === "PAYMENT" && log.followUpAt)
+    .sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+    )[0]?.followUpAt;
+  if (paymentFollowUp) return paymentFollowUp;
+
+  const dates = logs
+    .map((log) => log.followUpAt || log.settlementFollowUp)
+    .filter((date): date is string => Boolean(date))
+    .sort((a, b) => new Date(a).getTime() - new Date(b).getTime());
+  return dates.length ? dates[dates.length - 1] : null;
+}
+
 export const DealCard = ({
   deal,
   lead,
@@ -27,15 +43,7 @@ export const DealCard = ({
   onRemove?: () => void;
   removing?: boolean;
 }) => {
-  const followUp = (() => {
-    const dates = logs
-      .map((log) => log.followUpAt || log.settlementFollowUp)
-      .filter((d): d is string => Boolean(d))
-      .map((d) => new Date(d).toISOString())
-      .sort();
-    if (dates.length === 0) return null;
-    return dates[dates.length - 1];
-  })();
+  const followUp = displayedFollowUp(logs);
   const services = [
     ["DOMAIN", deal.domainExpiry, deal.domainCost],
     ["HOSTING", deal.hostingExpiry, deal.hostingCost],

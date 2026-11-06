@@ -25,6 +25,7 @@ const invalidate = (client: ReturnType<typeof useQueryClient>) =>
     client.invalidateQueries({ queryKey: ["deals"] }),
     client.invalidateQueries({ queryKey: ["pipeline"] }),
     client.invalidateQueries({ queryKey: ["dashboard"] }),
+    client.invalidateQueries({ queryKey: ["notifications", "follow-ups"] }),
   ]);
 
 export const useDeals = (filters: DealFilters = {}) =>

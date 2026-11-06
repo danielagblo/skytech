@@ -21,7 +21,6 @@ const schema = z.object({
     const parsed = parseFloat(clean);
     return isNaN(parsed) ? 0 : Math.max(0, parsed);
   }, z.number().min(0.01, "Enter a positive contract value.")),
-  followUp: z.string().min(1, "Choose a payment follow-up date."),
 });
 
 type Values = z.infer<typeof schema>;
@@ -56,7 +55,6 @@ export const SettlementLog = ({
           logType: "SETTLEMENT",
           specialConditions: data.conditions,
           settlementValue: Number(data.value),
-          settlementFollowUp: new Date(data.followUp).toISOString(),
           body: data.conditions,
         },
       },
@@ -67,7 +65,7 @@ export const SettlementLog = ({
             queryClient.invalidateQueries({ queryKey: ["pipeline"] }),
             queryClient.invalidateQueries({ queryKey: ["deal-logs", deal.id] }),
           ]);
-          reset({ value: data.value, conditions: "", followUp: "" });
+          reset({ value: data.value, conditions: "" });
         },
       },
     ),
@@ -87,32 +85,23 @@ export const SettlementLog = ({
             <p className="text-xs text-danger">{errors.conditions.message}</p>
           )}
         </div>
-        <div className="grid grid-cols-2 gap-3">
-          <div>
-            <Label>Agreed contract amount (GH¢)</Label>
-            <div className="relative mt-1">
-              <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-xs font-semibold text-muted-foreground">
-                GH¢
-              </span>
-              <Input
-                type="text"
-                inputMode="decimal"
-                placeholder="0.00"
-                className="pl-12"
-                {...register("value")}
-              />
-            </div>
-            {errors.value && (
-              <p className="text-xs text-danger">{errors.value.message}</p>
-            )}
+        <div>
+          <Label>Agreed contract amount (GH¢)</Label>
+          <div className="relative mt-1">
+            <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-xs font-semibold text-muted-foreground">
+              GH¢
+            </span>
+            <Input
+              type="text"
+              inputMode="decimal"
+              placeholder="0.00"
+              className="pl-12"
+              {...register("value")}
+            />
           </div>
-          <div>
-            <Label>Payment follow-up</Label>
-            <Input type="datetime-local" {...register("followUp")} />
-            {errors.followUp && (
-              <p className="text-xs text-danger">{errors.followUp.message}</p>
-            )}
-          </div>
+          {errors.value && (
+            <p className="text-xs text-danger">{errors.value.message}</p>
+          )}
         </div>
         <Button type="submit" className="w-full" disabled={mutation.isPending}>
           {mutation.isPending ? "Saving…" : "Save log"}

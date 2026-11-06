@@ -4,6 +4,20 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { getApiErrorMessage } from "@/lib/api-error";
 import { notificationsService } from "@/services/notifications.service";
+import { isDemoSession } from "@/lib/demo-data";
+import type { FollowUpUrgency } from "@/types/notification.types";
+
+const SIX_HOURS = 6 * 60 * 60 * 1000;
+const ONE_DAY = 24 * 60 * 60 * 1000;
+
+export function followUpUrgency(followUpAt: string, now = Date.now()): FollowUpUrgency | null {
+  const remaining = new Date(followUpAt).getTime() - now;
+  if (Number.isNaN(remaining)) return null;
+  if (remaining <= 0) return "DUE";
+  if (remaining <= SIX_HOURS) return "SIX_HOURS";
+  if (remaining <= ONE_DAY) return "ONE_DAY";
+  return null;
+}
 
 type NotificationListResponse = Awaited<ReturnType<typeof notificationsService.getAll>>;
 type UnreadResponse = Awaited<ReturnType<typeof notificationsService.getUnreadCount>>;
@@ -45,6 +59,16 @@ export const useUnreadNotificationCount = () =>
     queryFn: notificationsService.getUnreadCount,
     select: (response) => response.data.data.count,
     refetchInterval: 30_000,
+  });
+
+export const useFollowUpAlerts = () =>
+  useQuery({
+    queryKey: ["notifications", "follow-ups"],
+    queryFn: () => notificationsService.getFollowUps(),
+    select: (response) => response.data.data ?? [],
+    refetchInterval: 15_000,
+    refetchIntervalInBackground: true,
+    enabled: !isDemoSession(),
   });
 
 export const useMarkNotificationRead = () => {

@@ -23,6 +23,7 @@ import { formatCurrency, formatDate } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { CardRemoveButton } from "@/components/shared/CardRemoveButton";
 import { EditDealModal } from "./EditDealModal";
+import { displayedFollowUp } from "./DealCard";
 import { NegotiationLog } from "./logs/NegotiationLog";
 
 import { markLeadSeen } from "@/lib/seenLeads";
@@ -73,15 +74,8 @@ export const DealDetail = ({
       : [];
   const assignees = users.filter((user) => assigneeIds.includes(user.id));
   const creator = users.find((user) => user.id === deal.createdById);
-  const { latestFollowUp, hasFollowUp } = (() => {
-    const dates = (logs.data ?? [])
-      .map((log) => log.followUpAt || log.settlementFollowUp)
-      .filter((date): date is string => Boolean(date))
-      .map((d) => new Date(d).toISOString());
-    if (dates.length === 0) return { latestFollowUp: undefined as string | undefined, hasFollowUp: false };
-    dates.sort();
-    return { latestFollowUp: dates[dates.length - 1], hasFollowUp: true };
-  })();
+  const latestFollowUp = displayedFollowUp(logs.data ?? []);
+  const hasFollowUp = Boolean(latestFollowUp);
   const stageLogs = (
     type: "NEGOTIATION" | "SETTLEMENT" | "PAYMENT" | "CLIENT_RETENTION",
   ) => (logs.data ?? []).filter((log) => log.logType === type);
