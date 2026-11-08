@@ -2,6 +2,7 @@ import { NextRequest } from "next/server";
 import { getAuthUser, apiSuccess, apiError } from "@/lib/crm/auth";
 import { crmExecute, crmQuery, initCrmSchema, MysqlRow, newId } from "@/lib/crm/db";
 import { formatInvoice } from "@/lib/crm/formatters";
+import { invalidAfterIssue, parseIssueDate } from "@/lib/crm/invoice-dates";
 
 export async function GET(
   request: NextRequest,
@@ -81,6 +82,7 @@ export async function PUT(
         recipient_company = COALESCE(?, recipient_company),
         recipient_email = COALESCE(?, recipient_email),
         recipient_address = COALESCE(?, recipient_address),
+        issue_date = COALESCE(?, issue_date),
         due_date = COALESCE(?, due_date),
         subtotal = ?,
         tax_rate = ?,
@@ -98,7 +100,8 @@ export async function PUT(
         body.recipientCompany ?? null,
         body.recipientEmail ?? null,
         body.recipientAddress ?? null,
-        body.dueDate ? new Date(body.dueDate) : null,
+        parseIssueDate(body.issueDate),
+        invalidAfterIssue(body.issueDate),
         subtotal,
         taxRate,
         taxAmount,

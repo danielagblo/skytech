@@ -1,3 +1,4 @@
+import fontkit from "@pdf-lib/fontkit";
 import { PDFDocument, StandardFonts, rgb, type PDFFont } from "pdf-lib";
 
 export interface InvoiceTemplateLine {
@@ -33,8 +34,8 @@ export const INVOICE_PAGE = {
 const BLACK = rgb(0.08, 0.08, 0.08);
 const MUTED = rgb(0.28, 0.28, 0.28);
 const HAIRLINE = rgb(0.82, 0.82, 0.82);
-const BODY = 9.5;
-const LABEL = 9;
+const BODY = 11.5;
+const LABEL = 11;
 
 function pdfText(value: string) {
   return value
@@ -80,11 +81,21 @@ function wrap(text: string, font: PDFFont, size: number, maxWidth: number) {
 export async function stampInvoiceTemplate(
   template: Uint8Array,
   data: InvoiceTemplateInput,
+  thanksFontBytes?: Uint8Array,
 ) {
   const source = await PDFDocument.load(template);
   const document = await PDFDocument.create();
+  document.registerFontkit(fontkit);
   const font = await document.embedFont(StandardFonts.Helvetica);
   const bold = await document.embedFont(StandardFonts.HelveticaBold);
+  let thanksFont = await document.embedFont(StandardFonts.Helvetica);
+  if (thanksFontBytes) {
+    try {
+      thanksFont = await document.embedFont(thanksFontBytes);
+    } catch {
+      thanksFont = await document.embedFont(StandardFonts.Helvetica);
+    }
+  }
 
   let page = (await document.copyPages(source, [0]))[0];
   document.addPage(page);
@@ -108,8 +119,8 @@ export async function stampInvoiceTemplate(
   const drawTableHeader = () => {
     const size = LABEL;
     page.drawText("DESCRIPTION", { x: left, y, size, font: bold, color: BLACK });
-    page.drawText("RATE", { x: left + 318, y, size, font: bold, color: BLACK });
-    page.drawText("QTY", { x: left + 392, y, size, font: bold, color: BLACK });
+    page.drawText("RATE", { x: left + 300, y, size, font: bold, color: BLACK });
+    page.drawText("QTY", { x: left + 400, y, size, font: bold, color: BLACK });
     const total = "TOTAL";
     page.drawText(total, {
       x: right() - bold.widthOfTextAtSize(total, size),
@@ -137,12 +148,12 @@ export async function stampInvoiceTemplate(
   ) => {
     for (const line of lines) {
       page.drawText(line, { x, y, size, font: used, color });
-      y -= 12;
+      y -= 14;
     }
   };
 
   const clientLines = [
-    ...wrap(data.clientName || "Client", bold, 10, 270),
+    ...wrap(data.clientName || "Client", bold, 12, 270),
     ...(data.clientCompany ? wrap(data.clientCompany, font, BODY, 270) : []),
     ...(data.clientAddress ?? "")
       .split(/\n/)
@@ -153,21 +164,52 @@ export async function stampInvoiceTemplate(
     ["DATE:", data.date || "-", false],
     ["DUE DATE:", data.dueDate || "-", false],
   ] as const;
-  const blockHeight = Math.max(16 + clientLines.length * 12, 16 + meta.length * 14) + 8;
+  const blockHeight = Math.max(18 + clientLines.length * 14, 18 + meta.length * 16) + 120;
   await ensure(blockHeight);
+
+  const thanks = "Thank you for doing business with us";
+  const fade = rgb(0.45, 0.45, 0.45);
+  const maxThanksWidth = right() - left;
+  let thanksSize = 26;
+  const thanksWords = thanks.split(" ");
+  const wordGap = () => thanksSize * 0.14;
+  const measureThanks = () => {
+    const widths = thanksWords.map((word) => thanksFont.widthOfTextAtSize(word, thanksSize));
+    const total = widths.reduce((sum, width) => sum + width, 0) + wordGap() * (thanksWords.length - 1);
+    return { widths, total };
+  };
+  let measured = measureThanks();
+  if (measured.total > maxThanksWidth) {
+    thanksSize = (thanksSize * maxThanksWidth) / measured.total;
+    measured = measureThanks();
+  }
+  y -= 18;
+  let thanksX = left + (maxThanksWidth - measured.total) / 2;
+  thanksWords.forEach((word, index) => {
+    page.drawText(word, {
+      x: thanksX,
+      y,
+      size: thanksSize,
+      font: thanksFont,
+      color: fade,
+      opacity: 0.75,
+    });
+    thanksX += measured.widths[index] + wordGap();
+  });
+  y -= 78;
 
   const columnTop = y;
   page.drawText("ISSUED TO:", { x: left, y, size: LABEL, font: bold, color: BLACK });
-  y -= 15;
+  y -= 16;
   clientLines.forEach((line, index) => {
     page.drawText(line, {
       x: left,
       y,
-      size: index === 0 ? 10 : BODY,
+      size: index === 0 ? 12 : BODY,
       font: index === 0 ? bold : font,
       color: index === 0 ? BLACK : MUTED,
     });
-    y -= 12;
+    y -= 14;
   });
 
   let metaY = columnTop;
@@ -184,7 +226,7 @@ export async function stampInvoiceTemplate(
       font: valueFont,
       color: BLACK,
     });
-    metaY -= 14;
+    metaY -= 16;
   }
 
   y = Math.min(y, metaY) - 18;
@@ -194,37 +236,37 @@ export async function stampInvoiceTemplate(
 
   const items = data.items.length ? data.items : [{ description: "No line items yet", rate: 0, qty: 0 }];
   for (const item of items) {
-    const description = wrap(item.description || "Line item", font, BODY, 300);
+    const description = wrap(item.description || "Line item", font, BODY, 280);
     const extras = (item.subLines ?? [])
       .map((line) => line.trim())
       .filter(Boolean)
       .slice(0, 6)
-      .flatMap((line) => wrap(`- ${line}`, font, 8, 290));
+      .flatMap((line) => wrap(`- ${line}`, font, 10, 270));
     const rowLines = description.length + extras.length;
-    const rowHeight = Math.max(16, rowLines * 11 + 8);
+    const rowHeight = Math.max(18, rowLines * 14 + 8);
     await ensure(rowHeight);
     const rowTop = y;
     description.forEach((line, index) => {
-      page.drawText(line, { x: left, y: rowTop - index * 11, size: BODY, font, color: BLACK });
+      page.drawText(line, { x: left, y: rowTop - index * 14, size: BODY, font, color: BLACK });
     });
     extras.forEach((line, index) => {
       page.drawText(line, {
         x: left + 8,
-        y: rowTop - description.length * 11 - index * 11,
-        size: 8,
+        y: rowTop - description.length * 14 - index * 14,
+        size: 10,
         font,
         color: MUTED,
       });
     });
     page.drawText(money(item.rate, data.currencySymbol), {
-      x: left + 318,
+      x: left + 300,
       y: rowTop,
       size: BODY,
       font,
       color: MUTED,
     });
     page.drawText(qtyLabel(item.qty), {
-      x: left + 392,
+      x: left + 400,
       y: rowTop,
       size: BODY,
       font,
@@ -265,7 +307,7 @@ export async function stampInvoiceTemplate(
   }
 
   repeatingHeader = false;
-  await ensure(totals.length * 14 + 12);
+  await ensure(totals.length * 16 + 28);
   y -= 4;
   for (const [label, value, emphasize] of totals) {
     if (label === "TOTAL") {
@@ -276,7 +318,7 @@ export async function stampInvoiceTemplate(
         thickness: 1.1,
         color: BLACK,
       });
-      y -= 14;
+      y -= 16;
     }
     const used = emphasize ? bold : font;
     page.drawText(label, {
@@ -293,17 +335,27 @@ export async function stampInvoiceTemplate(
       font: used,
       color: BLACK,
     });
-    y -= 14;
+    y -= 16;
   }
+
+  const upfront = "Pay 50% upfront.";
+  page.drawText(upfront, {
+    x: right() - bold.widthOfTextAtSize(upfront, LABEL),
+    y,
+    size: LABEL,
+    font: bold,
+    color: BLACK,
+  });
+  y -= 16;
 
   const note = (data.notes ?? "").trim();
   if (note) {
-    const noteLines = wrap(note, font, 8, right() - left);
-    await ensure(18 + noteLines.length * 11);
+    const noteLines = wrap(note, font, 10.5, right() - left);
+    await ensure(18 + noteLines.length * 13);
     y -= 8;
     page.drawText("NOTES", { x: left, y, size: LABEL, font: bold, color: BLACK });
-    y -= 13;
-    drawWrapped(noteLines, left, 8, font, MUTED);
+    y -= 15;
+    drawWrapped(noteLines, left, 10.5, font, MUTED);
   }
 
   return document.save();

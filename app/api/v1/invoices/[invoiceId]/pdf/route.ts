@@ -5,6 +5,7 @@ import { getAuthUser, apiError } from "@/lib/crm/auth";
 import { crmQuery, initCrmSchema, MysqlRow } from "@/lib/crm/db";
 import { stampInvoiceTemplate } from "@/lib/crm/invoice-template";
 import { formatDate } from "@/lib/utils";
+import { invalidAfterIssue } from "@/lib/crm/invoice-dates";
 
 export async function GET(
   request: NextRequest,
@@ -29,7 +30,13 @@ export async function GET(
     const template = await readFile(
       path.join(process.cwd(), "public", "assets", "skytech-invoice-template.pdf"),
     );
+    const thanksFont = await readFile(
+      path.join(process.cwd(), "public", "fonts", "GreatVibes-Regular.ttf"),
+    );
     const issued = invoice.issue_date || invoice.issued_at || invoice.created_at;
+    const invalidAfter = invoice.due_date
+      ? new Date(invoice.due_date)
+      : invalidAfterIssue(issued);
     const address = [invoice.recipient_email, invoice.recipient_address]
       .filter(Boolean)
       .join("\n");
@@ -39,7 +46,10 @@ export async function GET(
       clientAddress: address || undefined,
       invoiceNo: String(invoice.invoice_number || `INV-${String(invoice.id).slice(0, 8)}`),
       date: issued ? formatDate(issued) : "—",
-      dueDate: invoice.due_date ? formatDate(invoice.due_date) : "Upon receipt",
+      dueDate:
+        invalidAfter && !Number.isNaN(invalidAfter.getTime())
+          ? formatDate(invalidAfter)
+          : "—",
       items: items.map((item) => ({
         description: String(item.description || "Item"),
         rate: Number(item.unit_price || 0),
@@ -50,7 +60,7 @@ export async function GET(
       currencySymbol: "GH\u00A2",
       amountPaid: Number(invoice.amount_paid || 0),
       notes: invoice.notes ? String(invoice.notes) : undefined,
-    });
+    }, new Uint8Array(thanksFont));
     const pdfBuffer = Buffer.from(pdfBytes);
     const invNumber = invoice.invoice_number || `INV-${String(invoice.id).slice(0, 8)}`;
 

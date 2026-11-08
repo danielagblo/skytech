@@ -9,6 +9,7 @@ import type { InvoiceData } from "./InvoicePreview";
 export type { InvoiceData, InvoiceLineItem } from "./InvoicePreview";
 
 const TEMPLATE_URL = "/assets/skytech-invoice-template.pdf";
+const THANKS_FONT_URL = "/fonts/GreatVibes-Regular.ttf";
 
 function toTemplate(data: InvoiceData): InvoiceTemplateInput {
   return {
@@ -33,8 +34,18 @@ async function templateBytes() {
   return new Uint8Array(await response.arrayBuffer());
 }
 
+async function thanksFontBytes() {
+  const response = await fetch(THANKS_FONT_URL);
+  if (!response.ok) return undefined;
+  return new Uint8Array(await response.arrayBuffer());
+}
+
 export async function invoiceToPdfBlob(invoice: InvoiceData) {
-  const bytes = await stampInvoiceTemplate(await templateBytes(), toTemplate(invoice));
+  const bytes = await stampInvoiceTemplate(
+    await templateBytes(),
+    toTemplate(invoice),
+    await thanksFontBytes(),
+  );
   const copy = new Uint8Array(bytes.byteLength);
   copy.set(bytes);
   return new Blob([copy], { type: "application/pdf" });

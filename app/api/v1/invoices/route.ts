@@ -4,6 +4,7 @@ import { crmExecute, crmQuery, initCrmSchema, MysqlRow, newId } from "@/lib/crm/
 import { formatInvoice } from "@/lib/crm/formatters";
 import { Invoice } from "@/types/invoice.types";
 import { camelize } from "@/lib/case-conversion";
+import { invalidAfterIssue, parseIssueDate } from "@/lib/crm/invoice-dates";
 
 export async function GET(request: NextRequest) {
   try {
@@ -74,9 +75,9 @@ export async function POST(request: NextRequest) {
       `INSERT INTO invoices (
         id, company_id, deal_id, created_by, invoice_number, status,
         recipient_name, recipient_company, recipient_email, recipient_address,
-        due_date, currency, subtotal, tax_rate, tax_amount, discount_amount,
+        issue_date, due_date, currency, subtotal, tax_rate, tax_amount, discount_amount,
         total, amount_paid, balance_due, notes, terms
-      ) VALUES (?, ?, ?, ?, ?, 'DRAFT', ?, ?, ?, ?, ?, 'GHS', ?, ?, ?, ?, ?, 0, ?, ?, ?)`,
+      ) VALUES (?, ?, ?, ?, ?, 'DRAFT', ?, ?, ?, ?, ?, ?, 'GHS', ?, ?, ?, ?, ?, 0, ?, ?, ?)`,
       [
         invoiceId,
         user.companyId || null,
@@ -87,7 +88,8 @@ export async function POST(request: NextRequest) {
         body.recipientCompany || rawBody.recipient_company || null,
         body.recipientEmail || rawBody.recipient_email || null,
         body.recipientAddress || rawBody.recipient_address || null,
-        (body.dueDate || rawBody.due_date) ? new Date(body.dueDate || rawBody.due_date) : null,
+        parseIssueDate(body.issueDate || rawBody.issue_date),
+        invalidAfterIssue(body.issueDate || rawBody.issue_date),
         subtotal,
         taxRate,
         taxAmount,

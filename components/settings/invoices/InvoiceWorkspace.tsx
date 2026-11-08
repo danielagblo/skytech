@@ -178,10 +178,8 @@ const requestFrom = (values: DraftValues): InvoiceDraftRequest => ({
 const displayNumber = (invoice: Invoice) =>
   invoice.invoiceNumber ?? `Draft ${invoice.id.slice(0, 8)}`;
 
-const dueDateFromIssue = (issueDate: string) =>
-  issueDate
-    ? format(addDays(new Date(`${issueDate}T00:00:00`), 14), "yyyy-MM-dd")
-    : "";
+const dueOnFromIssue = (issueDate: string) =>
+  issueDate ? addDays(new Date(`${issueDate}T00:00:00`), 14) : null;
 
 const ItemSubLineEditor = ({
   form,
@@ -465,14 +463,18 @@ export const InvoiceWorkspace = ({
     draftValues.issueDate ||
     (invoice?.issueDate ? String(invoice.issueDate) : "") ||
     "";
-  const computedDueDate = dueDateFromIssue(chosenIssueDate);
+  const dueOn = dueOnFromIssue(chosenIssueDate);
+  const draftDue = dueOnFromIssue(draftValues.issueDate ?? "");
   const previewDate = chosenIssueDate
-    ? formatDate(chosenIssueDate)
+    ? format(new Date(`${chosenIssueDate}T00:00:00`), "do MMMM yyyy")
     : invoice
       ? formatDate(invoice.createdAt)
       : "—";
-  const previewDue =
-    computedDueDate || (invoice?.dueDate ? formatDate(invoice.dueDate) : "—");
+  const previewDue = dueOn
+    ? format(dueOn, "do MMMM yyyy")
+    : invoice?.dueDate
+      ? formatDate(invoice.dueDate)
+      : "—";
   const previewData: InvoiceData = {
     issuerName: issuerInfo.name || "Skytech Ghana",
     issuerTagline: "Customer Relations",
@@ -639,13 +641,13 @@ export const InvoiceWorkspace = ({
                         <Input type="date" {...form.register("issueDate")} />
                       </div>
                       <div>
-                        <Label>Due date (auto)</Label>
+                        <Label>Due date</Label>
                         <Input
                           type="date"
                           readOnly
                           tabIndex={-1}
-                          value={dueDateFromIssue(draftValues.issueDate ?? "")}
-                          aria-label="Due date, calculated 14 days from the issue date"
+                          value={draftDue ? format(draftDue, "yyyy-MM-dd") : ""}
+                          aria-label="Due date, 14 days from the issue date"
                         />
                         <p className="mt-1 text-xs text-muted-foreground">
                           14 days from the issue date.

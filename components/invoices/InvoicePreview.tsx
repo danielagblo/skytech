@@ -104,9 +104,15 @@ export default function InvoicePreview({
           className="pointer-events-none absolute inset-0 h-full w-full"
         />
         <div
-          className="absolute overflow-y-auto text-[10px] leading-snug text-neutral-900 md:text-[11px]"
+          className="absolute overflow-y-auto text-[12px] leading-snug text-neutral-900 md:text-[13px]"
           style={{ ...box, fontFamily: "Arial, Helvetica, sans-serif" }}
         >
+          <p
+            className="mb-14 mt-4 text-center text-[22px] leading-none text-neutral-500/75 md:text-[26px]"
+            style={{ fontFamily: '"Great Vibes", cursive' }}
+          >
+            Thank you for doing business with us
+          </p>
           <div className="flex items-start justify-between gap-4">
             <div className="min-w-0">
               <p className="font-bold tracking-wide">ISSUED TO:</p>
@@ -130,7 +136,7 @@ export default function InvoicePreview({
             </div>
           </div>
 
-          <div className="mt-4 grid grid-cols-[1fr_78px_40px_92px] border-b-2 border-neutral-900 pb-1 font-bold tracking-wide">
+          <div className="mt-4 grid grid-cols-[1fr_92px_48px_104px] border-b-2 border-neutral-900 pb-1 font-bold tracking-wide">
             <span>DESCRIPTION</span>
             <span>RATE</span>
             <span>QTY</span>
@@ -139,7 +145,7 @@ export default function InvoicePreview({
           {rows.map((item, index) => (
             <div
               key={index}
-              className="grid grid-cols-[1fr_78px_40px_92px] border-b border-neutral-200 py-1.5 text-neutral-800"
+              className="grid grid-cols-[1fr_92px_48px_104px] border-b border-neutral-200 py-1.5 text-neutral-800"
             >
               <span className="pr-2">
                 {item.description}
@@ -155,7 +161,7 @@ export default function InvoicePreview({
             </div>
           ))}
 
-          <div className="ml-auto mt-2 w-[220px] space-y-1">
+          <div className="ml-auto mt-2 w-[250px] space-y-1">
             <div className="flex justify-between font-bold">
               <span>SUBTOTAL</span>
               <span>{formatCurrency(subtotal)}</span>
@@ -176,6 +182,7 @@ export default function InvoicePreview({
               <span>TOTAL</span>
               <span>{formatCurrency(total)}</span>
             </div>
+            <p className="pt-1 text-right text-sm font-bold">Pay 50% upfront.</p>
             {paid > 0 ? (
               <>
                 <div className="flex justify-between">
