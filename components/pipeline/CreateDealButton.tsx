@@ -85,7 +85,10 @@ export const CreateDealButton = () => {
         assigneeIds: data.assigneeIds,
         stage: data.stage as DealStage,
         priority: data.priority as Priority,
-        contractValue: Number(data.contractValue || 0),
+        contractValue:
+          data.stage === "PROSPECTING" || data.stage === "NEGOTIATION"
+            ? 0
+            : Number(data.contractValue || 0),
         currency: "GHS",
         notes: data.notes || undefined,
       },
@@ -193,26 +196,30 @@ export const CreateDealButton = () => {
                 </Select>
               </div>
             </div>
-            <div>
-              <Label>Contract value / Price (GH¢)</Label>
-              <div className="relative mt-1">
-                <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-xs font-semibold text-muted-foreground">
-                  GH¢
-                </span>
-                <Input
-                  type="text"
-                  inputMode="decimal"
-                  placeholder="0.00"
-                  className="pl-12"
-                  {...register("contractValue")}
-                />
+            {(values.stage === "SETTLEMENT" ||
+              values.stage === "PAYMENT" ||
+              values.stage === "CLIENT_RETENTION") && (
+              <div>
+                <Label>Contract value / Price (GH¢)</Label>
+                <div className="relative mt-1">
+                  <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-xs font-semibold text-muted-foreground">
+                    GH¢
+                  </span>
+                  <Input
+                    type="text"
+                    inputMode="decimal"
+                    placeholder="0.00"
+                    className="pl-12"
+                    {...register("contractValue")}
+                  />
+                </div>
+                {errors.contractValue && (
+                  <p className="mt-1 text-xs text-danger">
+                    {errors.contractValue.message}
+                  </p>
+                )}
               </div>
-              {errors.contractValue && (
-                <p className="mt-1 text-xs text-danger">
-                  {errors.contractValue.message}
-                </p>
-              )}
-            </div>
+            )}
             <div>
               <Label>Notes</Label>
               <Textarea {...register("notes")} />

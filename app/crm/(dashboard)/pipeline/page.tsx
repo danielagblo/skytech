@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Suspense } from "react";
 import { FileText } from "lucide-react";
 import { PipelineBoard } from "@/components/pipeline/PipelineBoard";
 import { CreateDealButton } from "@/components/pipeline/CreateDealButton";
@@ -8,7 +9,7 @@ import { buttonVariants } from "@/components/ui/button";
 export const metadata: Metadata = { title: "Pipeline" };
 export default function PipelinePage() {
   return (
-    <div className="flex min-w-0 flex-col gap-4 overflow-x-hidden lg:h-[calc(100dvh-7.75rem)] lg:overflow-hidden 2xl:h-[calc(100dvh-8.25rem)]">
+    <div className="flex min-w-0 flex-col gap-4 overflow-x-hidden lg:h-[calc(100dvh-8.625rem)] lg:overflow-hidden 2xl:h-[calc(100dvh-9.375rem)]">
       <PageHeader
         title="Pipeline"
         description="Move opportunities forward and capture every interaction"
@@ -25,7 +26,9 @@ export default function PipelinePage() {
           </>
         }
       />
-      <PipelineBoard />
+      <Suspense fallback={null}>
+        <PipelineBoard />
+      </Suspense>
     </div>
   );
 }

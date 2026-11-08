@@ -3,7 +3,7 @@ import { useState } from "react";
 import { AlertCircle } from "lucide-react";
 import { useDashboard, useTopDeals } from "@/hooks/useDashboard";
 import { useAuthStore } from "@/store/authStore";
-import { CallStatsCard } from "./CallStatsCard";
+import { ActivitySummary } from "./CallStatsCard";
 import { ExecutivePerformanceTable } from "./ExecutivePerformanceTable";
 import { AgentRankCard } from "./AgentRankCard";
 import { RevenueChart } from "./RevenueChart";
@@ -53,9 +53,9 @@ export const HomeDashboard = () => {
     );
   const data = overview.data;
   return (
-    <div className="mx-auto w-full max-w-6xl space-y-3">
-      <div className="grid min-w-0 items-start gap-3 xl:grid-cols-[minmax(0,1.15fr)_minmax(260px,22rem)]">
-        <div className="min-w-0 space-y-3">
+    <div className="mx-auto w-full max-w-[90rem] space-y-5">
+      <div className="grid min-w-0 items-start gap-5 xl:grid-cols-[minmax(0,1.35fr)_minmax(300px,28rem)]">
+        <div className="min-w-0 space-y-5">
           <section className="overflow-hidden border bg-card">
             <div className="flex h-9 items-center justify-between bg-muted px-5">
               <span className="text-sm font-medium">{periodLabel}</span>
@@ -75,15 +75,8 @@ export const HomeDashboard = () => {
                 </SelectContent>
               </Select>
             </div>
-            <div className="divide-y px-4">
-              <CallStatsCard
-                title="Outgoing calls"
-                stats={data.outgoingCalls}
-              />
-              <CallStatsCard
-                title="Incoming calls"
-                stats={data.incomingCalls}
-              />
+            <div className="px-5">
+              <ActivitySummary stats={data.activity} />
             </div>
           </section>
           {can("view:executive-performance") && (
@@ -91,7 +84,7 @@ export const HomeDashboard = () => {
           )}
           <AgentRankCard user={user} rank={data.agentRank} />
         </div>
-        <div className="min-w-0 space-y-3">
+        <div className="min-w-0 space-y-5">
           <UpcomingActivity followUps={data.followUpReminders} />
           <FollowUpReminders rows={data.followUpReminders} />
           <TopDealsChart

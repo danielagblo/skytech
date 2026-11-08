@@ -1,10 +1,12 @@
-export interface CallStats {
+export interface ActivityStats {
   total: number;
-  nonResponses: number;
-  networkInterruptions: number;
-  customerHungUp: number;
-  avgDuration: number;
-  successRate: number;
+  phoneCalls: number;
+  whatsapp: number;
+  email: number;
+  inPerson: number;
+  followUps: number;
+  payments: number;
+  followUpRate: number;
 }
 
 export type DashboardPeriod =
@@ -14,8 +16,7 @@ export type DashboardPeriod =
   | "three_months";
 
 export interface DashboardOverview {
-  outgoingCalls: CallStats;
-  incomingCalls: CallStats;
+  activity: ActivityStats;
   topRevenuePerAgent: { userId: string; name: string; revenue: number }[];
   executivePerformance: {
     userId: string;

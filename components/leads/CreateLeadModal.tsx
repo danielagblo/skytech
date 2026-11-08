@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@/lib/zodResolver";
@@ -27,12 +27,12 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { useCreateLead, useUpdateLead } from "@/hooks/useLeads";
-import { LEAD_INDUSTRIES } from "@/lib/crm-options";
+import { LEAD_INDUSTRIES, LEAD_SERVICES } from "@/lib/crm-options";
 
 const schema = z
   .object({
     assigneeIds: z.array(z.string()).default([]),
-    firstName: z.string().trim().min(1, "Enter a first name."),
+    firstName: z.string().trim().min(1, "Enter a name."),
     lastName: z.string(),
     birthday: z
       .string()
@@ -55,15 +55,13 @@ const schema = z
       "META_ADS",
     ]),
     priority: z.enum(["LOW", "MEDIUM", "HIGH"]),
-    companyName: z.string(),
-    industry: z.string(),
+    companyName: z.string().trim().min(1, "Enter a company name."),
+    service: z.string().trim().min(1, "Select a service."),
+    industry: z.string().trim().min(1, "Select an industry."),
     phone1: z.string().trim().min(7, "Enter a contact phone number."),
     phone2: z.string().optional(),
     whatsapp: z.string().optional(),
-    emailAddress: z.union([
-      z.literal(""),
-      z.string().email("Enter a valid email."),
-    ]),
+    emailAddress: z.string().trim().email("Enter a valid email."),
     address: z.string(),
     launchTimeline: z.enum([
       "IN_1_WEEK",
@@ -96,6 +94,25 @@ const schema = z
   });
 type Values = z.infer<typeof schema>;
 
+function storedService(lead: Lead) {
+  if (lead.service) return lead.service;
+  const description = lead.description ?? "";
+  const match = LEAD_SERVICES.find(
+    (option) => description === option || description.startsWith(`${option}\n\n`),
+  );
+  return match ?? "";
+}
+
+function storedActivity(lead: Lead) {
+  const description = lead.description ?? "";
+  if (lead.service) return description;
+  const match = LEAD_SERVICES.find(
+    (option) => description === option || description.startsWith(`${option}\n\n`),
+  );
+  if (!match) return description;
+  return description === match ? "" : description.slice(match.length + 2);
+}
+
 const defaults: Values = {
   assigneeIds: [],
   firstName: "",
@@ -105,6 +122,7 @@ const defaults: Values = {
   leadSource: "SMS",
   priority: "MEDIUM",
   companyName: "",
+  service: "",
   industry: "",
   phone1: "",
   phone2: "",
@@ -133,6 +151,7 @@ export const CreateLeadModal = ({
 }) => {
   const create = useCreateLead();
   const update = useUpdateLead();
+  const [showExtra, setShowExtra] = useState(false);
   const eligibleUsers = useMemo(
     () => users.filter((user) => user.active),
     [users],
@@ -156,19 +175,31 @@ export const CreateLeadModal = ({
   const toggles = useWatch({ control });
   useEffect(() => {
     if (!open) return;
+    setShowExtra(
+      Boolean(
+        lead &&
+          (lead.birthday ||
+            lead.role ||
+            lead.address ||
+            lead.phone2 ||
+            lead.whatsapp ||
+            (lead.assignedTo ?? []).length),
+      ),
+    );
     reset(
       lead
         ? {
             assigneeIds: (lead.assignedTo ?? []).filter((id) =>
               eligibleUserIds.has(id),
             ),
-            firstName: lead.firstName ?? "",
-            lastName: lead.lastName ?? "",
+            firstName: [lead.firstName, lead.lastName].filter(Boolean).join(" "),
+            lastName: "",
             birthday: lead.birthday ? (lead.birthday.length > 5 ? lead.birthday.slice(-5) : lead.birthday) : "",
             role: lead.role ?? "",
             leadSource: lead.leadSource ?? "SMS",
             priority: lead.priority ?? "MEDIUM",
             companyName: lead.companyName ?? "",
+            service: storedService(lead),
             industry: lead.industry ?? lead.category ?? "",
             phone1: lead.phone1 ?? "",
             phone2: lead.phone2 ?? "",
@@ -181,7 +212,7 @@ export const CreateLeadModal = ({
             smsOptIn: Boolean(lead.smsOptIn),
             emailOptIn: Boolean(lead.emailOptIn),
             newsletterOptIn: Boolean(lead.newsletterOptIn),
-            description: lead.description ?? "",
+            description: storedActivity(lead),
           }
         : defaults,
     );
@@ -191,12 +222,13 @@ export const CreateLeadModal = ({
     const data = {
       assignedTo: values.assigneeIds.filter((id) => eligibleUserIds.has(id)),
       firstName: values.firstName,
-      lastName: values.lastName,
+      lastName: "",
       birthday: values.birthday ? values.birthday.trim() : (lead ? "" : undefined),
       role: values.role,
       leadSource: values.leadSource as LeadSource,
       priority: values.priority as Priority,
       companyName: values.companyName,
+      service: values.service,
       industry: values.industry,
       category: values.industry,
       phone1: values.phone1,
@@ -245,6 +277,100 @@ export const CreateLeadModal = ({
           <DialogTitle>{lead ? "Edit lead" : "Create lead"}</DialogTitle>
         </DialogHeader>
         <form className="space-y-5" onSubmit={submit}>
+          <div className="grid gap-3 sm:grid-cols-2">
+            <div className="sm:col-span-2">
+              <Label>Name</Label>
+              <Input {...register("firstName")} placeholder="Full name" />
+              {error("firstName")}
+            </div>
+            <div>
+              <Label>Email</Label>
+              <Input type="email" {...register("emailAddress")} placeholder="name@company.com" />
+              {error("emailAddress")}
+            </div>
+            <div>
+              <Label>Contact</Label>
+              <Input {...register("phone1")} placeholder="Phone number" />
+              {error("phone1")}
+            </div>
+            <div className="sm:col-span-2">
+              <Label>Service</Label>
+              <Select
+                value={toggles.service || undefined}
+                onValueChange={(value) =>
+                  setValue("service", value, { shouldValidate: true })
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select a service" />
+                </SelectTrigger>
+                <SelectContent>
+                  {LEAD_SERVICES.map((service) => (
+                    <SelectItem key={service} value={service}>
+                      {service}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {error("service")}
+            </div>
+            <div className="sm:col-span-2">
+              <Label>Company</Label>
+              <Input {...register("companyName")} placeholder="Company name" />
+              {error("companyName")}
+            </div>
+            <div className="sm:col-span-2">
+              <Label>Industry</Label>
+              <Select
+                value={toggles.industry}
+                onValueChange={(value) =>
+                  setValue("industry", value, { shouldValidate: true })
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select an industry" />
+                </SelectTrigger>
+                <SelectContent>
+                  {LEAD_INDUSTRIES.map((industry) => (
+                    <SelectItem key={industry} value={industry}>
+                      {industry}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {error("industry")}
+            </div>
+            <div className="sm:col-span-2">
+              <Label>Activity</Label>
+              <p className="mb-2 text-xs text-muted-foreground">Optional.</p>
+              <Textarea
+                {...register("description")}
+                placeholder="Type the activity or details for this lead"
+                className="min-h-28"
+              />
+              {error("description")}
+            </div>
+          </div>
+
+          <div className="rounded-xl border bg-muted/30 p-4">
+            <button
+              type="button"
+              className="flex w-full items-center justify-between gap-3 text-left"
+              onClick={() => setShowExtra((open) => !open)}
+              aria-expanded={showExtra}
+            >
+              <span>
+                <span className="block font-medium">Extra details</span>
+                <span className="text-xs text-muted-foreground">
+                  Optional. Add these when you have them.
+                </span>
+              </span>
+              <span className="shrink-0 text-sm font-medium text-primary">
+                {showExtra ? "Show less" : "Show more"}
+              </span>
+            </button>
+            {showExtra && (
+            <div className="mt-4 space-y-4">
           <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
             <div className="sm:col-span-2 xl:col-span-3">
               <Label>Assign to</Label>
@@ -279,16 +405,6 @@ export const CreateLeadModal = ({
                   ))}
                 </div>
               </div>
-            </div>
-            <div>
-              <Label>First name</Label>
-              <Input {...register("firstName")} />
-              {error("firstName")}
-            </div>
-            <div>
-              <Label>Last name</Label>
-              <Input {...register("lastName")} />
-              {error("lastName")}
             </div>
             <div>
               <Label>Birthday (month and day)</Label>
@@ -351,48 +467,12 @@ export const CreateLeadModal = ({
               </Select>
             </div>
             <div>
-              <Label>Company name</Label>
-              <Input {...register("companyName")} />
-              {error("companyName")}
-            </div>
-            <div>
-              <Label>Industry</Label>
-              <Select
-                value={toggles.industry}
-                onValueChange={(value) =>
-                  setValue("industry", value, { shouldValidate: true })
-                }
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select an industry" />
-                </SelectTrigger>
-                <SelectContent>
-                  {LEAD_INDUSTRIES.map((industry) => (
-                    <SelectItem key={industry} value={industry}>
-                      {industry}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              {error("industry")}
-            </div>
-            <div>
-              <Label>Contact (phone)</Label>
-              <Input {...register("phone1")} />
-              {error("phone1")}
-            </div>
-            <div>
               <Label>Secondary phone</Label>
               <Input {...register("phone2")} />
             </div>
             <div>
               <Label>WhatsApp line</Label>
               <Input {...register("whatsapp")} />
-            </div>
-            <div>
-              <Label>Email</Label>
-              <Input type="email" {...register("emailAddress")} />
-              {error("emailAddress")}
             </div>
             <div className="sm:col-span-2">
               <Label>Address</Label>
@@ -465,10 +545,8 @@ export const CreateLeadModal = ({
             These choices only save the lead&apos;s communication consent.
             Creating the lead will not send an SMS or email.
           </p>
-          <div>
-            <Label>Description</Label>
-            <Textarea {...register("description")} />
-            {error("description")}
+            </div>
+            )}
           </div>
           <Button className="w-full" disabled={pending} type="submit">
             {pending ? "Saving…" : "Save lead"}

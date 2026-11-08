@@ -6,7 +6,6 @@ import {
   Mail,
   MapPin,
   Phone,
-  Plus,
   Trash2,
   Workflow,
 } from "lucide-react";
@@ -53,15 +52,14 @@ export const LeadDetail = ({
     .map((id) => users.find((user) => user.id === id))
     .filter((user): user is User => Boolean(user)) as UserSummary[];
   const creator = users.find((user) => user.id === lead.createdById);
+  const name = `${lead.firstName || ""} ${lead.lastName || ""}`.trim() || "Unnamed lead";
   const rows = [
     [Phone, lead.phone1 || "Not provided"],
     [Mail, lead.email || "Not provided"],
-    [
-      Building2,
-      `${lead.companyName || "No company"} · ${lead.role || "No role"}`,
-    ],
+    [Building2, lead.companyName || "No company"],
+    [Workflow, lead.service || "No service"],
     [MapPin, lead.address || "Not provided"],
-    [Calendar, lead.launchTimeline?.replaceAll("_", " ") || "Not set"],
+    [Calendar, lead.industry || "No industry"],
   ] as const;
 
   const handleDelete = () => {
@@ -78,7 +76,7 @@ export const LeadDetail = ({
       <Sheet open={open} onOpenChange={onOpenChange}>
         <SheetContent>
           <SheetHeader>
-            <SheetTitle className="text-xl">Lead details</SheetTitle>
+            <SheetTitle className="text-xl">{name}</SheetTitle>
           </SheetHeader>
           <div className="text-center">
             <p className="eyebrow">Assignees</p>
@@ -86,9 +84,7 @@ export const LeadDetail = ({
               {assignees.length ? (
                 <AssigneeStack users={assignees} />
               ) : (
-                <span className="text-xs text-muted-foreground">
-                  Unassigned
-                </span>
+                <span className="text-xs text-muted-foreground">Unassigned</span>
               )}
             </div>
             <p className="mt-3 text-xs text-muted-foreground">
@@ -109,15 +105,15 @@ export const LeadDetail = ({
           </div>
           <div className="mt-6 space-y-3 text-sm">
             {rows.map(([Icon, label], index) => (
-              <p key={index} className="flex items-center gap-2">
-                <Icon className="h-4 w-4 text-muted-foreground" />
-                <span>{label}</span>
+              <p key={index} className="flex items-start gap-2">
+                <Icon className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
+                <span className="break-words">{label}</span>
               </p>
             ))}
           </div>
           <div className="mt-6 border-t pt-4">
             <p className="eyebrow">Notes</p>
-            <p className="mt-2 text-xs text-muted-foreground">
+            <p className="mt-2 whitespace-pre-line text-xs text-muted-foreground">
               {lead.description || "No description provided."}
             </p>
           </div>

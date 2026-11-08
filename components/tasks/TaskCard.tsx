@@ -45,7 +45,7 @@ export const TaskCard = ({
       }}
       className="w-full border bg-card text-left shadow-[0_1px_2px_rgba(15,23,42,.04)] transition hover:border-primary hover:shadow-md"
     >
-      <h4 className="line-clamp-2 min-h-12 border-b px-2 py-2 text-sm font-medium leading-5">
+      <h4 className="line-clamp-2 min-h-12 border-b px-3 py-3 text-sm font-medium leading-5">
         {task.title}
       </h4>
       <div className="space-y-2 px-2 py-2 text-xs">
@@ -83,7 +83,7 @@ export const TaskCard = ({
           </span>
         </p>
       </div>
-      <div className="flex flex-wrap items-center justify-between gap-2 border-t px-2 py-2 text-xs text-muted-foreground">
+      <div className="flex flex-wrap items-center justify-between gap-2 border-t px-3 py-3 text-xs text-muted-foreground">
         <span className="flex items-center gap-1">
           <Network className="h-3 w-3" />
           {subtaskCount} subtasks

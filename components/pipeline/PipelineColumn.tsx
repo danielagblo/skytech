@@ -40,7 +40,7 @@ export const PipelineColumn = ({
   onRemove?: (deal: Deal) => void;
   removing?: boolean;
 }) => (
-  <section className="flex h-full w-[min(86vw,320px)] shrink-0 snap-start flex-col sm:w-[280px] lg:w-auto lg:min-w-[240px] lg:flex-1">
+  <section className="flex h-full w-[min(88vw,340px)] shrink-0 snap-start flex-col sm:w-[320px] lg:w-auto lg:min-w-[300px] lg:flex-1">
     <div className="mb-2 shrink-0 border-b bg-card px-2 py-3">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
@@ -50,11 +50,13 @@ export const PipelineColumn = ({
             {deals.length}
           </span>
         </div>
-        <strong className="text-xs">
-          {formatCurrency(
-            deals.reduce((total, deal) => total + deal.contractValue, 0),
-          )}
-        </strong>
+        {stage !== "PROSPECTING" && stage !== "NEGOTIATION" && (
+          <strong className="text-xs">
+            {formatCurrency(
+              deals.reduce((total, deal) => total + deal.contractValue, 0),
+            )}
+          </strong>
+        )}
       </div>
     </div>
     <Droppable droppableId={stage}>

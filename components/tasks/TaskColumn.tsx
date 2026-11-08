@@ -33,7 +33,7 @@ export const TaskColumn = ({
   onRemove?: (task: Task) => void;
   removing?: boolean;
 }) => (
-  <section className="flex h-full w-[min(86vw,280px)] shrink-0 snap-start flex-col lg:w-auto lg:min-w-[240px] lg:flex-1 xl:max-w-[270px] xl:flex-none min-[2200px]:max-w-none min-[2200px]:flex-1">
+  <section className="flex h-full w-[min(88vw,320px)] shrink-0 snap-start flex-col lg:w-auto lg:min-w-[280px] lg:flex-1">
     <div
       className={`mb-2 flex items-center justify-between border-l-2 px-3 py-2 ${style[status]}`}
     >

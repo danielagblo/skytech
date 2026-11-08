@@ -133,12 +133,17 @@ export async function initCrmSchema() {
       email_opt_in BOOLEAN DEFAULT FALSE,
       newsletter_opt_in BOOLEAN DEFAULT FALSE,
       description TEXT,
+      service VARCHAR(120),
       conversion_score INT DEFAULT 0,
       deleted_at DATETIME,
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
       updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     );
   `);
+
+  try {
+    await pool.query("ALTER TABLE leads ADD COLUMN service VARCHAR(120)");
+  } catch {}
 
   await pool.query(`
     CREATE TABLE IF NOT EXISTS deals (

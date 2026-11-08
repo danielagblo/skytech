@@ -18,6 +18,7 @@ export interface Lead {
   role: string | null;
   address: string | null;
   industry: string | null;
+  service: string | null;
   category: string | null;
   leadSource: LeadSource | null;
   priority: Priority | null;
@@ -56,6 +57,7 @@ export interface CreateLeadRequest {
   role?: string;
   address?: string;
   industry?: string;
+  service?: string;
   category?: string;
   leadSource?: LeadSource;
   priority?: Priority;

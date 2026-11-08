@@ -16,7 +16,6 @@ import type { CalendarEvent } from "@/types/calendar.types";
 import { useCalendar } from "@/hooks/useCalendar";
 import { useUsers } from "@/hooks/useUsers";
 import { useTasks } from "@/hooks/useTasks";
-import { useDashboard } from "@/hooks/useDashboard";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { EmptyState } from "@/components/shared/EmptyState";
@@ -39,8 +38,7 @@ export const CalendarView = () => {
     size: 100,
   });
   const users = useUsers({ page: 0, size: 100 });
-  const tasks = useTasks({ page: 0, size: 100 });
-  const overview = useDashboard("three_months");
+  const tasks = useTasks({ page: 0, size: 200 });
   const days = Array.from({ length: 7 }, (_, index) => addDays(start, index));
   const monthDays = Array.from({ length: 35 }, (_, index) =>
     addDays(
@@ -70,32 +68,15 @@ export const CalendarView = () => {
         })),
     [tasks.data],
   );
-  const followUps = useMemo<CalendarEvent[]>(
-    () =>
-      (overview.data?.followUpReminders ?? []).map((row): CalendarEvent => ({
-        id: `follow-${row.dealId}-${new Date(row.followUpAt).getTime()}`,
-        title: `${row.type === "SETTLEMENT" ? "Settlement" : "Negotiation"} follow-up · ${row.dealTitle}`,
-        description: null,
-        ownerId: "",
-        linkedLeadId: null,
-        linkedDealId: row.dealId,
-        startTime: row.followUpAt,
-        endTime: row.followUpAt,
-        eventType: "CALL_LOG_FOLLOWUP",
-        assignees: [],
-        createdAt: row.followUpAt,
-      })),
-    [overview.data],
-  );
   const mergedEvents = useMemo<CalendarEvent[]>(() => {
     const seen = new Set(
       events.map((item) => `${item.eventType}|${item.startTime}|${item.title}`),
     );
-    const extra = [...taskEvents, ...followUps].filter(
+    const extra = taskEvents.filter(
       (item) => !seen.has(`${item.eventType}|${item.startTime}|${item.title}`),
     );
     return [...events, ...extra];
-  }, [events, taskEvents, followUps]);
+  }, [events, taskEvents]);
   const eventMap = useMemo(
     () =>
       new Map(

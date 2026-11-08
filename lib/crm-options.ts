@@ -1,3 +1,10 @@
+export const LEAD_SERVICES = [
+  "Website + SEO",
+  "Virtual tour website",
+  "Customers management software (CRM)",
+  "Mobile App",
+] as const;
+
 export const LEAD_INDUSTRIES = [
   "Hospitality",
   "Retail & E-commerce",

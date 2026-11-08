@@ -9,6 +9,15 @@ export async function GET(request: NextRequest) {
     if (!user) return apiError("Unauthorized", 401);
 
     await initCrmSchema();
+    const period = new URL(request.url).searchParams.get("period") || "today";
+    const since =
+      period === "this_week"
+        ? "DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY)"
+        : period === "this_month"
+          ? "DATE_FORMAT(CURDATE(), '%Y-%m-01')"
+          : period === "three_months"
+            ? "DATE_SUB(CURDATE(), INTERVAL 3 MONTH)"
+            : "CURDATE()";
 
     // Top revenue per agent
     const revRows = await crmQuery<MysqlRow>(
@@ -58,19 +67,34 @@ export async function GET(request: NextRequest) {
       paidAt: new Date(r.paidAt).toISOString(),
     }));
 
-    // Default call stats
-    const emptyCalls = {
-      total: 0,
-      nonResponses: 0,
-      networkInterruptions: 0,
-      customerHungUp: 0,
-      avgDuration: 0,
-      successRate: 0,
+    const activityRows = await crmQuery<MysqlRow>(
+      `SELECT
+         COUNT(*) AS total,
+         SUM(contact_mode = 'PHONE_CALL') AS phoneCalls,
+         SUM(contact_mode = 'WHATSAPP') AS whatsapp,
+         SUM(contact_mode = 'EMAIL') AS email,
+         SUM(contact_mode = 'IN_PERSON') AS inPerson,
+         SUM(follow_up_at IS NOT NULL) AS followUps,
+         SUM(IFNULL(amount_paid, 0) > 0) AS payments
+       FROM deal_logs
+       WHERE created_at >= ${since}`,
+    );
+    const activityRow = activityRows[0] || {};
+    const totalLogs = Number(activityRow.total || 0);
+    const followUpsLogged = Number(activityRow.followUps || 0);
+    const activity = {
+      total: totalLogs,
+      phoneCalls: Number(activityRow.phoneCalls || 0),
+      whatsapp: Number(activityRow.whatsapp || 0),
+      email: Number(activityRow.email || 0),
+      inPerson: Number(activityRow.inPerson || 0),
+      followUps: followUpsLogged,
+      payments: Number(activityRow.payments || 0),
+      followUpRate: totalLogs ? Math.round((followUpsLogged / totalLogs) * 100) : 0,
     };
 
     const overview: DashboardOverview = {
-      outgoingCalls: emptyCalls,
-      incomingCalls: emptyCalls,
+      activity,
       topRevenuePerAgent,
       executivePerformance: topRevenuePerAgent.map((agent, idx) => ({
         userId: agent.userId,

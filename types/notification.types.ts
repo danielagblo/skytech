@@ -10,7 +10,7 @@ export interface AppNotification {
   createdAt: string;
 }
 
-export type FollowUpUrgency = "DUE" | "SIX_HOURS" | "ONE_DAY";
+export type FollowUpUrgency = "DUE" | "TEN_MINUTES" | "ONE_HOUR";
 
 export interface FollowUpAlert {
   dealId: string;

@@ -1,11 +1,6 @@
-import { ArrowDownLeft, ArrowUpRight } from "lucide-react";
-import type { CallStats } from "@/types/dashboard.types";
-const duration = (seconds: number) =>
-  `${Math.floor(seconds / 60)
-    .toString()
-    .padStart(2, "0")}:${Math.round(seconds % 60)
-    .toString()
-    .padStart(2, "0")}`;
+import { ClipboardList } from "lucide-react";
+import type { ActivityStats } from "@/types/dashboard.types";
+
 const Gauge = ({ pct }: { pct: number }) => {
   const clamped = Math.max(0, Math.min(100, pct));
   const radius = 44;
@@ -13,11 +8,7 @@ const Gauge = ({ pct }: { pct: number }) => {
   const fill = (clamped / 100) * circumference;
   const arc = "M 16 58 A 44 44 0 0 1 104 58";
   return (
-      <svg
-      viewBox="0 0 120 64"
-      className="h-24 w-40"
-      aria-hidden="true"
-    >
+    <svg viewBox="0 0 120 64" className="h-28 w-48" aria-hidden="true">
       <path
         d={arc}
         fill="none"
@@ -50,51 +41,39 @@ const Gauge = ({ pct }: { pct: number }) => {
         fontSize="8"
         className="fill-muted-foreground"
       >
-        Successful call
+        With follow-up
       </text>
     </svg>
   );
 };
-export const CallStatsCard = ({
-  title,
-  stats,
-}: {
-  title: string;
-  stats: CallStats;
-}) => {
-  const directionClass =
-    title === "Incoming calls" ? "text-green-600" : "text-green-600";
+
+export const ActivitySummary = ({ stats }: { stats: ActivityStats }) => {
   const rows = [
-    ["Number of non responses", stats.nonResponses],
-    ["Network interruptions", stats.networkInterruptions],
-    ["Customer hung up", stats.customerHungUp],
-    ["Conversation duration", duration(stats.avgDuration)],
-  ];
-  const Icon = title === "Incoming calls" ? ArrowDownLeft : ArrowUpRight;
+    ["Phone calls", stats.phoneCalls],
+    ["WhatsApp", stats.whatsapp],
+    ["Email", stats.email],
+    ["In person", stats.inPerson],
+    ["Follow-ups set", stats.followUps],
+    ["Payments recorded", stats.payments],
+  ] as const;
   return (
-    <section className="py-3">
+    <section className="py-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Icon className={`h-4 w-4 ${directionClass}`} />
-          <h3 className="text-base font-medium text-foreground">{title}</h3>
+          <ClipboardList className="h-4 w-4 text-green-600" />
+          <h3 className="text-base font-medium text-foreground">Recorded activity</h3>
         </div>
         <span className="text-2xl font-light tabular-nums text-foreground">
           {stats.total}
         </span>
       </div>
-      <div className="grid items-center gap-2 sm:grid-cols-[9rem_minmax(0,1fr)]">
-        {/* Gauge */}
+      <div className="grid items-center gap-4 sm:grid-cols-[12rem_minmax(0,1fr)]">
         <div className="flex w-full items-center justify-center">
-          <Gauge pct={stats.successRate} />
+          <Gauge pct={stats.followUpRate} />
         </div>
-
-        {/* Stats */}
         <div className="w-full space-y-1.5">
           {rows.map(([label, value]) => (
-            <div
-              key={label}
-              className="flex items-center gap-3 text-muted-foreground"
-            >
+            <div key={label} className="flex items-center gap-3 text-muted-foreground">
               <span className="text-sm text-muted-foreground">{label}</span>
               <span className="h-px flex-1 bg-border" />
               <span className="shrink-0 font-semibold tabular-nums text-foreground">

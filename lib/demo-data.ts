@@ -88,6 +88,7 @@ export const demoLeads: Lead[] = leadNames.map(
     role: index === 0 ? "Manager" : "Executive",
     address: index % 2 === 0 ? "Osu, Accra" : "East Legon, Accra",
     industry: category,
+    service: "Website + SEO",
     category,
     leadSource: source,
     priority: index % 3 === 0 ? "HIGH" : index % 3 === 1 ? "MEDIUM" : "LOW",
@@ -219,21 +220,15 @@ export const demoLeadStats: LeadStats = {
 export const demoTaskStats: TaskStats = { total: 56, done: 18, overdue: 9 };
 
 export const demoDashboard: DashboardOverview = {
-  outgoingCalls: {
-    total: 567,
-    nonResponses: 34,
-    networkInterruptions: 34,
-    customerHungUp: 34,
-    avgDuration: 3418,
-    successRate: 65,
-  },
-  incomingCalls: {
-    total: 567,
-    nonResponses: 34,
-    networkInterruptions: 34,
-    customerHungUp: 34,
-    avgDuration: 3418,
-    successRate: 65,
+  activity: {
+    total: 186,
+    phoneCalls: 74,
+    whatsapp: 52,
+    email: 28,
+    inPerson: 16,
+    followUps: 121,
+    payments: 19,
+    followUpRate: 65,
   },
   topRevenuePerAgent: demoUsers.map((user, index) => ({
     userId: user.id,

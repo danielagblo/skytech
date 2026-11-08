@@ -193,7 +193,13 @@ export const CreateTaskModal = ({
           assigneeIds: dealDraft.assigneeIds,
           stage: dealDraft.stage,
           priority: dealDraft.priority,
-          contractValue: Number(dealDraft.contractValue) || 0,
+          contractValue:
+            dealDraft.stage === "PROSPECTING" || dealDraft.stage === "NEGOTIATION"
+              ? Number(
+                  deals.data?.content.find((item) => item.id === caseId)
+                    ?.contractValue,
+                ) || 0
+              : Number(dealDraft.contractValue) || 0,
           totalPaid: Number(dealDraft.totalPaid) || 0,
           currency: "GHS",
           notes: notes || undefined,
@@ -480,19 +486,22 @@ export const CreateTaskModal = ({
                   </Select>
                 </div>
                 <div className="grid gap-3 sm:grid-cols-2">
-                  <div>
-                    <Label>Contract value (GHS)</Label>
-                    <Input
-                      inputMode="decimal"
-                      value={dealDraft.contractValue}
-                      onChange={(event) =>
-                        setDealDraft({
-                          ...dealDraft,
-                          contractValue: event.target.value,
-                        })
-                      }
-                    />
-                  </div>
+                  {dealDraft.stage !== "PROSPECTING" &&
+                    dealDraft.stage !== "NEGOTIATION" && (
+                      <div>
+                        <Label>Contract value (GHS)</Label>
+                        <Input
+                          inputMode="decimal"
+                          value={dealDraft.contractValue}
+                          onChange={(event) =>
+                            setDealDraft({
+                              ...dealDraft,
+                              contractValue: event.target.value,
+                            })
+                          }
+                        />
+                      </div>
+                    )}
                   <div>
                     <Label>Total paid (GHS)</Label>
                     <Input

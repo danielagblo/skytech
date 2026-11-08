@@ -12,6 +12,14 @@ import { NegotiationLog } from "./logs/NegotiationLog";
 import { SettlementLog } from "./logs/SettlementLog";
 import { PaymentLog } from "./logs/PaymentLog";
 import { ClientRetentionLog } from "./logs/ClientRetentionLog";
+import type { DealStage } from "@/types/api.types";
+
+const tabForStage = (stage: DealStage) => {
+  if (stage === "SETTLEMENT") return "settlement";
+  if (stage === "PAYMENT") return "payment";
+  if (stage === "CLIENT_RETENTION") return "retention";
+  return "negotiation";
+};
 
 export const DealDetailPage = ({ dealId }: { dealId: string }) => {
   const deal = useDeal(dealId);
@@ -39,6 +47,7 @@ export const DealDetailPage = ({ dealId }: { dealId: string }) => {
         title={item.title}
         description={`${lead.data?.companyName || "No linked company"} · ${lead.data?.firstName || "No linked contact"}`}
       />
+      {item.stage !== "PROSPECTING" && item.stage !== "NEGOTIATION" && (
       <div className="grid grid-cols-3 gap-3 rounded-2xl bg-card border p-4 text-center">
         <div>
           <p className="eyebrow">Agreed Value</p>
@@ -59,7 +68,12 @@ export const DealDetailPage = ({ dealId }: { dealId: string }) => {
           </p>
         </div>
       </div>
-      <Tabs defaultValue="negotiation" className="w-full">
+      )}
+      <Tabs
+        key={`${item.id}-${item.stage}`}
+        defaultValue={tabForStage(item.stage)}
+        className="w-full"
+      >
         <TabsList className="grid h-auto w-full grid-cols-2 sm:grid-cols-4">
           <TabsTrigger value="negotiation">Negotiation</TabsTrigger>
           <TabsTrigger value="settlement">Settlement</TabsTrigger>

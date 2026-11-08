@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, Bot, Cog, FileText, Radio, Target, Users } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { ArrowRight, Bell, Bot, Cog, FileText, Radio, Target, Users } from "lucide-react";
 import { usePermission, type Permission } from "@/hooks/usePermission";
 import { PageHeader } from "@/components/shared/PageHeader";
 
@@ -47,18 +48,27 @@ const cards: Array<{
     icon: Target,
     permission: "manage:department-targets",
   },
+  {
+    href: "/settings/notifications",
+    title: "Notification tone",
+    description: "Play alert sounds and keep the one you prefer.",
+    icon: Bell,
+    permission: "view:settings",
+  },
 ];
 
 export default function SettingsPage() {
   const { can } = usePermission();
+  const path = usePathname();
   const available = cards.filter((card) => can(card.permission));
+  const hrefFor = (href: string) => (path.startsWith("/crm") ? `/crm${href}` : href);
   return (
     <div className="space-y-5">
       <PageHeader title="Settings" description="Configure your CRM workspace" />
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {available.map((card) => (
           <Link
-            href={card.href}
+            href={hrefFor(card.href)}
             key={card.href}
             className="surface group p-6 transition hover:-translate-y-1 hover:shadow-soft"
           >

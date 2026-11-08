@@ -1,11 +1,12 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { ChoiceList, ConversationalForm, type ConversationalStep } from "@/components/skytech/ui/ConversationalForm";
+import { LEAD_INDUSTRIES, LEAD_SERVICES } from "@/lib/crm-options";
 import { WHATSAPP_NUMBER } from "@/app/lib/whatsapp";
 import { WA_THANKYOU_KEY } from "@/app/lib/waThankYou";
 import { trackGtagLead } from "@/app/lib/gtag";
-import { lookupCoupon, type CouponOffer } from "@/app/lib/coupons";
 
 interface WhatsAppOfferFormProps {
   packageName?: string;
@@ -18,52 +19,11 @@ interface WhatsAppOfferFormProps {
   subtitle?: string;
   /** Show the green WhatsApp chat label under the subtitle. */
   showWhatsAppLabel?: boolean;
-  /** Full lead fields (phone, building, budget, coupon, referral). Default on everywhere. */
+  /** Kept so existing pages can pass it. The form always asks the same required details. */
   extended?: boolean;
 }
 
 const DEFAULT_WHATSAPP = WHATSAPP_NUMBER;
-
-type Urgency = "Very urgent" | "Urgent" | "Soon";
-type Building = "Website + SEO" | "Mobile App" | "Both";
-type ProjectType = "New Build" | "Redesign / Upgrade";
-type Budget =
-  | "Promo GH₵2,500"
-  | "GH₵6,500"
-  | "GH₵6,500 – GH₵12,000"
-  | "GH₵12,000+";
-type ReferralSource = "TikTok" | "Google" | "Facebook" | "Instagram" | "Friends" | "Other";
-
-const INDUSTRIES = [
-  "Hospitality",
-  "Retail & E-commerce",
-  "Education",
-  "Tourism & Logistics",
-  "Real estate & construction",
-  "Healthcare",
-  "Tech",
-  "NGO",
-  "Religion",
-  "Other",
-];
-
-const URGENCY_OPTIONS: Urgency[] = ["Very urgent", "Urgent", "Soon"];
-const BUILDING_OPTIONS: Building[] = ["Website + SEO", "Mobile App", "Both"];
-const PROJECT_TYPE_OPTIONS: ProjectType[] = ["New Build", "Redesign / Upgrade"];
-const BUDGET_OPTIONS: Budget[] = [
-  "Promo GH₵2,500",
-  "GH₵6,500",
-  "GH₵6,500 – GH₵12,000",
-  "GH₵12,000+",
-];
-const REFERRAL_OPTIONS: ReferralSource[] = [
-  "TikTok",
-  "Google",
-  "Facebook",
-  "Instagram",
-  "Friends",
-  "Other",
-];
 
 const COUNTRY_CODES = [
   { code: "+233", label: "GH +233", flag: "🇬🇭" },
@@ -76,56 +36,8 @@ const COUNTRY_CODES = [
   { code: "+971", label: "AE +971", flag: "🇦🇪" },
 ];
 
-/** Budget bands aligned to typical website vs app vs combined scopes. */
-function budgetsForBuilding(building: Building | null): Budget[] {
-  if (!building) return [];
-  if (building === "Website + SEO") {
-    return ["Promo GH₵2,500", "GH₵6,500", "GH₵12,000+"];
-  }
-  if (building === "Mobile App") {
-    return ["GH₵6,500 – GH₵12,000", "GH₵12,000+"];
-  }
-  // Both website and app — higher scope
-  return ["GH₵12,000+"];
-}
-
-function urgencyQuestion(building: Building | null, projectType: ProjectType | null) {
-  if (!building) return "How urgent do you need a digital solution?";
-  if (projectType) return `How urgent do you need your ${building} (${projectType})?`;
-  return `How urgent do you need your ${building}?`;
-}
-
-function RequiredMark() {
-  return <span className="text-red-500">*</span>;
-}
-
-function PillGroup<T extends string>({
-  options,
-  value,
-  onChange,
-}: {
-  options: T[];
-  value: T | null;
-  onChange: (v: T) => void;
-}) {
-  return (
-    <div className="flex flex-wrap gap-2">
-      {options.map((option) => {
-        const active = value === option;
-        return (
-          <button
-            key={option}
-            type="button"
-            onClick={() => onChange(option)}
-            className={`rounded-lg border px-3.5 py-2 text-sm transition-colors ${active ? "border-slate-900 font-semibold text-slate-900" : "border-slate-200 text-slate-500 hover:border-slate-300"
-              }`}
-          >
-            {option}
-          </button>
-        );
-      })}
-    </div>
-  );
+function emailOk(value: string) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
 }
 
 function WhatsAppOfferForm({
@@ -136,123 +48,192 @@ function WhatsAppOfferForm({
   showReturn = true,
   subtitle = "One last step to get on",
   showWhatsAppLabel = true,
-  extended = true,
 }: WhatsAppOfferFormProps) {
   const router = useRouter();
+  const [step, setStep] = useState(0);
   const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [countryCode, setCountryCode] = useState(COUNTRY_CODES[0].code);
   const [phone, setPhone] = useState("");
-  const [building, setBuilding] = useState<Building | null>(null);
-  const [projectType, setProjectType] = useState<ProjectType | null>(null);
-  const [budget, setBudget] = useState<Budget | null>(null);
-  const [urgency, setUrgency] = useState<Urgency | null>(null);
-  const [industry, setIndustry] = useState<string | null>(null);
-  const [couponInput, setCouponInput] = useState("");
-  const [appliedCoupon, setAppliedCoupon] = useState<CouponOffer | null>(null);
-  const [couponError, setCouponError] = useState("");
-  const [referral, setReferral] = useState<ReferralSource | null>(null);
-  const [showErrors, setShowErrors] = useState(false);
+  const [company, setCompany] = useState("");
+  const [industry, setIndustry] = useState<(typeof LEAD_INDUSTRIES)[number] | null>(null);
+  const [offering, setOffering] = useState<(typeof LEAD_SERVICES)[number] | null>(null);
+  const [activity, setActivity] = useState("");
   const [sending, setSending] = useState(false);
-  const nameRef = useRef<HTMLInputElement | null>(null);
-  const phoneRef = useRef<HTMLInputElement | null>(null);
-  const buildingRef = useRef<HTMLDivElement | null>(null);
-  const projectTypeRef = useRef<HTMLDivElement | null>(null);
-  const budgetRef = useRef<HTMLDivElement | null>(null);
-  const industryRef = useRef<HTMLDivElement | null>(null);
-  const referralRef = useRef<HTMLDivElement | null>(null);
 
   const phoneDigits = phone.replace(/[^\d]/g, "");
   const phoneOk = phoneDigits.length >= 7;
   const fullPhone = `${countryCode}${phoneDigits}`;
-  const availableBudgets = budgetsForBuilding(building);
-  const promoBudgetSelected = budget === "Promo GH₵2,500";
-  const isValid = extended
-    ? Boolean(name.trim() && phoneOk && building && projectType && budget && industry && referral)
-    : Boolean(name.trim() && industry);
+  const isValid = Boolean(
+    name.trim() && emailOk(email) && phoneOk && company.trim() && industry && offering,
+  );
+  const advance = () => setStep((current) => current + 1);
 
-  const selectBuilding = (next: Building) => {
-    setBuilding(next);
-    const nextBudgets = budgetsForBuilding(next);
-    setBudget((current) => (current && nextBudgets.includes(current) ? current : null));
-  };
+  const fieldClass =
+    "w-full rounded-2xl border border-emerald-100 bg-white px-4 py-3.5 text-base text-slate-800 shadow-sm outline-none transition placeholder:text-slate-400 focus:border-emerald-400 focus:ring-4 focus:ring-emerald-100";
 
-  const selectBudget = (next: Budget) => {
-    setBudget(next);
-    if (next === "Promo GH₵2,500") {
-      setCouponInput("");
-      setAppliedCoupon(null);
-      setCouponError("");
-    }
-  };
-
-  const onCouponChange = (raw: string) => {
-    const value = raw.toUpperCase();
-    setCouponInput(value);
-    if (!value.trim()) {
-      setAppliedCoupon(null);
-      setCouponError("");
-      return;
-    }
-    const offer = lookupCoupon(value);
-    if (offer) {
-      setAppliedCoupon(offer);
-      setCouponError("");
-    } else {
-      setAppliedCoupon(null);
-      setCouponError(value.trim().length >= 6 ? "That code is not valid." : "");
-    }
-  };
-
-  const scrollToFirstInvalidField = () => {
-    const firstInvalidField = !name.trim()
-      ? nameRef.current
-      : extended && !phoneOk
-        ? phoneRef.current
-        : extended && !building
-          ? buildingRef.current
-          : extended && !projectType
-            ? projectTypeRef.current
-            : extended && !budget
-              ? budgetRef.current
-              : !industry
-                ? industryRef.current
-                : extended && !referral
-                  ? referralRef.current
-                  : null;
-
-    firstInvalidField?.scrollIntoView({ behavior: "smooth", block: "center" });
-  };
+  const steps: ConversationalStep[] = [
+    {
+      id: "name",
+      question: "What is your name?",
+      valid: Boolean(name.trim()),
+      body: (
+        <input
+          type="text"
+          value={name}
+          autoComplete="name"
+          onChange={(event) => setName(event.target.value)}
+          placeholder="Your name"
+          className={fieldClass}
+        />
+      ),
+    },
+    {
+      id: "email",
+      question: "What is your email?",
+      valid: emailOk(email),
+      body: (
+        <div>
+          <input
+            type="email"
+            value={email}
+            autoComplete="email"
+            onChange={(event) => setEmail(event.target.value)}
+            placeholder="name@company.com"
+            className={fieldClass}
+          />
+          {email.trim() && !emailOk(email) && (
+            <p className="mt-2 text-sm text-red-600">Enter a valid email.</p>
+          )}
+        </div>
+      ),
+    },
+    {
+      id: "contact",
+      question: "What number can we reach you on?",
+      hint: "Include your WhatsApp number.",
+      valid: phoneOk,
+      body: (
+        <div>
+          <div className="flex overflow-hidden rounded-2xl border border-emerald-100 bg-white shadow-sm focus-within:border-emerald-400 focus-within:ring-4 focus-within:ring-emerald-100">
+            <label className="sr-only" htmlFor="wa-country-code">
+              Country code
+            </label>
+            <select
+              id="wa-country-code"
+              value={countryCode}
+              onChange={(event) => setCountryCode(event.target.value)}
+              className="max-w-[8.5rem] shrink-0 border-0 border-r border-emerald-100 bg-emerald-50/70 px-2 py-3.5 text-sm text-slate-800 outline-none"
+            >
+              {COUNTRY_CODES.map((country) => (
+                <option key={country.code} value={country.code}>
+                  {country.flag} {country.label}
+                </option>
+              ))}
+            </select>
+            <input
+              type="tel"
+              inputMode="numeric"
+              value={phone}
+              autoComplete="tel-national"
+              onChange={(event) => setPhone(event.target.value.replace(/[^\d\s-]/g, ""))}
+              placeholder="Phone number"
+                className="min-w-0 flex-1 border-0 bg-transparent px-4 py-3.5 text-base text-slate-800 outline-none placeholder:text-slate-400"
+            />
+          </div>
+          {phone.trim() && !phoneOk && (
+            <p className="mt-2 text-sm text-red-600">Enter at least 7 digits.</p>
+          )}
+        </div>
+      ),
+    },
+    {
+      id: "offering",
+      question: "What do you want?",
+      valid: Boolean(offering),
+      body: (
+        <ChoiceList
+          accent="emerald"
+          options={LEAD_SERVICES}
+          value={offering}
+          onChange={(value) => {
+            setOffering(value);
+            advance();
+          }}
+        />
+      ),
+    },
+    {
+      id: "company",
+      question: "What company is this for?",
+      valid: Boolean(company.trim()),
+      body: (
+        <input
+          type="text"
+          value={company}
+          autoComplete="organization"
+          onChange={(event) => setCompany(event.target.value)}
+          placeholder="Company name"
+          className={fieldClass}
+        />
+      ),
+    },
+    {
+      id: "industry",
+      question: "Which industry is this for?",
+      valid: Boolean(industry),
+      body: (
+        <ChoiceList
+          accent="emerald"
+          options={LEAD_INDUSTRIES}
+          value={industry}
+          onChange={(value) => {
+            setIndustry(value);
+            advance();
+          }}
+        />
+      ),
+    },
+    {
+      id: "activity",
+      question: "Anything else you'd like us to know?",
+      hint: "This part is optional. Share a few words, or skip it and finish.",
+      optional: true,
+      valid: true,
+      body: (
+        <textarea
+          value={activity}
+          rows={4}
+          onChange={(event) => setActivity(event.target.value)}
+          placeholder="Tell us what you have in mind…"
+          className={`${fieldClass} min-h-28 resize-y`}
+        />
+      ),
+    },
+  ];
 
   const handleSubmit = async () => {
-    if (!isValid) {
-      setShowErrors(true);
-      scrollToFirstInvalidField();
-      return;
-    }
+    if (!isValid || sending) return;
 
     const interestLine = packageName
       ? `Hi Skytech Ghana, I'd like to select the *${packageName}${packagePrice ? ` (${packagePrice})` : ""}*.\n`
       : `Hi Skytech Ghana, I'd like to chat about your services.\n`;
 
-    const lines = [
+    const message = [
       interestLine,
       ``,
-      `Name: ${name}`,
-      extended && phoneOk ? `Number: ${fullPhone}` : null,
-      extended && building ? `Building: ${building}` : null,
-      extended && projectType ? `Project type: ${projectType}` : null,
-      extended && budget ? `Budget: ${budget}` : null,
-      extended && appliedCoupon && !promoBudgetSelected
-        ? `Coupon: ${appliedCoupon.code} (${appliedCoupon.label})`
-        : null,
-      urgency ? `Urgency: ${urgency}` : null,
+      `Name: ${name.trim()}`,
+      `Email: ${email.trim()}`,
+      `Contact: ${fullPhone}`,
+      `Company: ${company.trim()}`,
       `Industry: ${industry}`,
-      extended && referral ? `Heard about us: ${referral}` : null,
-    ].filter(Boolean);
+      `Service: ${offering}`,
+      activity.trim() ? `Activity: ${activity.trim()}` : null,
+    ]
+      .filter(Boolean)
+      .join("\n");
 
-    const message = lines.join("\n");
-    const source =
-      typeof window !== "undefined" ? window.location.pathname : extended ? "/forms" : "whatsapp-offer";
+    const source = typeof window !== "undefined" ? window.location.pathname : "/forms";
 
     trackGtagLead({
       eventLabel: source === "/forms" ? "forms_lead_submit" : "lead_submit",
@@ -262,34 +243,47 @@ function WhatsAppOfferForm({
 
     const leadPayload = {
       name: name.trim(),
-      phone: extended && phoneOk ? fullPhone : "",
-      email: "",
-      company: "",
+      phone: fullPhone,
+      email: email.trim(),
+      company: company.trim(),
+      description: activity.trim(),
       industry: industry || "",
-      building: building || "",
-      projectType: projectType || packageName || "",
-      budget: budget || packagePrice || "",
+      service: offering || "",
+      building: offering || "",
+      projectType: packageName || "",
+      budget: packagePrice || "",
       timeline: "",
-      urgency: urgency || "",
-      coupon: !promoBudgetSelected && appliedCoupon ? appliedCoupon.code : "",
-      couponLabel: !promoBudgetSelected && appliedCoupon ? appliedCoupon.label : "",
-      referral: referral || "",
+      urgency: "",
+      coupon: "",
+      couponLabel: "",
+      referral: "",
       packageName: packageName || "",
       packagePrice: packagePrice || "",
       source,
       message,
     };
 
-    const crmBackendUrl = process.env.NEXT_PUBLIC_CRM_BACKEND_URL;
-    const crmRequests = crmBackendUrl
-      ? [
-          fetch(`${crmBackendUrl}/api/v1/public/landing-page-leads`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(leadPayload),
-          }).catch((error) => console.error("Failed to save lead to CRM:", error)),
-        ]
-      : [];
+    const crmBackendUrl = process.env.NEXT_PUBLIC_CRM_BACKEND_URL?.replace(/\/$/, "");
+    const sameOrigin =
+      typeof window !== "undefined" &&
+      Boolean(crmBackendUrl) &&
+      crmBackendUrl === window.location.origin;
+    const crmRequests = [
+      fetch("/api/v1/public/landing-page-leads", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(leadPayload),
+      }).catch((error) => console.error("Failed to save lead:", error)),
+    ];
+    if (crmBackendUrl && !sameOrigin) {
+      crmRequests.push(
+        fetch(`${crmBackendUrl}/api/v1/public/landing-page-leads`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(leadPayload),
+        }).catch((error) => console.error("Failed to save lead to CRM:", error)),
+      );
+    }
 
     setSending(true);
     try {
@@ -332,194 +326,37 @@ function WhatsAppOfferForm({
     router.push("/thank-you");
   };
 
-  const errorRing = (invalid: boolean) => (showErrors && invalid ? "border-red-300" : "border-slate-200");
-
   return (
-    <div className="text-center">
-      <h2 className="text-2xl mt-2 font-bold text-slate-800">Well done!</h2>
-      <p className="text-lg text-slate-600">{subtitle}</p>
-      {showWhatsAppLabel && (
-        <p className="flex items-center justify-center gap-1.5 text-lg font-bold text-emerald-600">
-          <svg viewBox="0 0 24 24" className="h-5 w-5 fill-emerald-600">
-            <path d="M12 2a10 10 0 00-8.5 15.2L2 22l4.9-1.5A10 10 0 1012 2zm0 18a8 8 0 01-4.1-1.1l-.3-.2-3 .9.9-2.9-.2-.3A8 8 0 1112 20zm4.4-5.9c-.2-.1-1.4-.7-1.7-.8-.2-.1-.4-.1-.6.1-.2.2-.6.8-.8 1-.1.2-.3.2-.5.1-.2-.1-1-.4-1.9-1.2-.7-.6-1.2-1.4-1.3-1.6-.1-.2 0-.4.1-.5.1-.1.2-.3.4-.4.1-.1.2-.2.2-.4.1-.2 0-.3 0-.4-.1-.1-.6-1.4-.8-1.9-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.4.1-.6.3-.2.2-.8.8-.8 1.9s.8 2.2.9 2.4c.1.2 1.6 2.5 4 3.4.6.2 1 .4 1.3.5.6.2 1.1.1 1.5.1.5-.1 1.4-.6 1.6-1.1.2-.5.2-1 .1-1.1 0-.1-.2-.2-.4-.3z" />
-          </svg>
-          What&apos;sApp chat
-        </p>
-      )}
-
-      <div className="mt-8 space-y-6 text-left">
-        <div>
-          <input
-            ref={nameRef}
-            type="text"
-            value={name}
-            autoComplete="name"
-            onChange={(e) => setName(e.target.value)}
-            placeholder="Name"
-            className={`w-full rounded-lg border bg-transparent px-3.5 py-2.5 text-sm text-slate-800 outline-none transition-colors placeholder:text-slate-500 focus:border-slate-900 ${errorRing(!name.trim())}`}
-          />
-        </div>
-
-        {extended && (
-          <>
-            <div>
-              <div
-                className={`flex overflow-hidden rounded-lg border ${errorRing(!phoneOk)}`}
-              >
-                <label className="sr-only" htmlFor="wa-country-code">
-                  Country code
-                </label>
-                <select
-                  id="wa-country-code"
-                  value={countryCode}
-                  onChange={(e) => setCountryCode(e.target.value)}
-                  className="max-w-[8.5rem] shrink-0 border-0 border-r border-slate-200 bg-slate-50 px-2 py-2.5 text-sm text-slate-800 outline-none focus:bg-white"
-                >
-                  {COUNTRY_CODES.map((c) => (
-                    <option key={c.code} value={c.code}>
-                      {c.flag} {c.label}
-                    </option>
-                  ))}
-                </select>
-                <input
-                  ref={phoneRef}
-                  type="tel"
-                  inputMode="numeric"
-                  value={phone}
-                  autoComplete="tel-national"
-                  onChange={(e) => setPhone(e.target.value.replace(/[^\d\s-]/g, ""))}
-                  placeholder="Number"
-                  className="min-w-0 flex-1 border-0 bg-transparent px-3.5 py-2.5 text-sm text-slate-800 outline-none placeholder:text-slate-500"
-                />
-              </div>
-            </div>
-
-            <div ref={buildingRef}>
-              <p className="mb-2 text-base text-slate-800">
-                What are you building? <RequiredMark />
-              </p>
-              <PillGroup options={BUILDING_OPTIONS} value={building} onChange={selectBuilding} />
-            </div>
-
-            <div ref={projectTypeRef}>
-              <p className="mb-2 text-base text-slate-800">
-                Is this a new project? <RequiredMark />
-              </p>
-              <PillGroup options={PROJECT_TYPE_OPTIONS} value={projectType} onChange={setProjectType} />
-            </div>
-
-            <div ref={budgetRef}>
-              <p className="mb-2 text-base text-slate-800">
-                Select your estimated budget: <RequiredMark />
-              </p>
-              {!building ? (
-                <p className="text-sm text-slate-500">Select what you&apos;re building to see matching budgets.</p>
-              ) : (
-                <PillGroup options={availableBudgets} value={budget} onChange={selectBudget} />
-              )}
-            </div>
-
-            <div
-              className={
-                promoBudgetSelected
-                  ? "pointer-events-none select-none opacity-45"
-                  : undefined
-              }
-              aria-disabled={promoBudgetSelected}
-            >
-              <p
-                className={`mb-2 text-base text-slate-800 ${
-                  promoBudgetSelected ? "line-through decoration-slate-400" : ""
-                }`}
-              >
-                Have a coupon code?
-              </p>
-              <input
-                type="text"
-                value={promoBudgetSelected ? "" : couponInput}
-                onChange={(e) => onCouponChange(e.target.value)}
-                placeholder="Enter code"
-                disabled={promoBudgetSelected}
-                className={`w-full rounded-lg border bg-transparent px-3.5 py-2.5 text-sm uppercase tracking-wide text-slate-800 outline-none placeholder:normal-case placeholder:tracking-normal placeholder:text-slate-500 focus:border-slate-900 disabled:cursor-not-allowed ${
-                  promoBudgetSelected
-                    ? "border-slate-200 line-through decoration-slate-400"
-                    : appliedCoupon
-                      ? "border-emerald-400"
-                      : couponError
-                        ? "border-red-300"
-                        : "border-slate-200"
-                }`}
-              />
-              {promoBudgetSelected ? (
-                <p className="mt-2 text-sm text-slate-500">
-                  Promo pricing already includes a discount — coupons don&apos;t apply.
-                </p>
-              ) : (
-                <>
-                  {appliedCoupon && (
-                    <p className="mt-2 text-sm font-medium text-emerald-700">
-                      Coupon applied — {appliedCoupon.label} on your project.
-                    </p>
-                  )}
-                  {couponError && (
-                    <p className="mt-2 text-sm text-red-600">{couponError}</p>
-                  )}
-                </>
-              )}
-            </div>
-          </>
-        )}
-
-        <div>
-          <p className="mb-2 text-base text-slate-800">
-            {extended ? urgencyQuestion(building, projectType) : "How urgent do you need a digital solution?"}
-          </p>
-          <PillGroup options={URGENCY_OPTIONS} value={urgency} onChange={setUrgency} />
-        </div>
-
-        <div>
-          <div ref={industryRef}>
-            <p className="mb-2 text-base text-slate-800">
-              Which industry best describes your business? <RequiredMark />
+    <ConversationalForm
+      steps={steps}
+      index={step}
+      onIndexChange={setStep}
+      onSubmit={() => void handleSubmit()}
+      submitting={sending}
+      submitLabel="Submit"
+      intro={
+        <div className="text-center">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-700">Skytech Ghana</p>
+          <h2 className="mt-2 text-3xl font-semibold tracking-tight text-slate-900">We&apos;re glad you&apos;re here</h2>
+          <p className="mt-2 text-base leading-relaxed text-slate-600">{subtitle}</p>
+          {showWhatsAppLabel && (
+            <p className="flex items-center justify-center gap-1.5 text-lg font-bold text-emerald-600">
+              <svg viewBox="0 0 24 24" className="h-5 w-5 fill-emerald-600">
+                <path d="M12 2a10 10 0 00-8.5 15.2L2 22l4.9-1.5A10 10 0 1012 2zm0 18a8 8 0 01-4.1-1.1l-.3-.2-3 .9.9-2.9-.2-.3A8 8 0 1112 20zm4.4-5.9c-.2-.1-1.4-.7-1.7-.8-.2-.1-.4-.1-.6.1-.2.2-.6.8-.8 1-.1.2-.3.2-.5.1-.2-.1-1-.4-1.9-1.2-.7-.6-1.2-1.4-1.3-1.6-.1-.2 0-.4.1-.5.1-.1.2-.3.4-.4.1-.1.2-.2.2-.4.1-.2 0-.3 0-.4-.1-.1-.6-1.4-.8-1.9-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.4.1-.6.3-.2.2-.8.8-.8 1.9s.8 2.2.9 2.4c.1.2 1.6 2.5 4 3.4.6.2 1 .4 1.3.5.6.2 1.1.1 1.5.1.5-.1 1.4-.6 1.6-1.1.2-.5.2-1 .1-1.1 0-.1-.2-.2-.4-.3z" />
+              </svg>
+              What&apos;sApp chat
             </p>
-            <PillGroup options={INDUSTRIES} value={industry} onChange={setIndustry} />
-          </div>
+          )}
         </div>
-
-        {extended && (
-          <div ref={referralRef}>
-            <p className="mb-2 text-base text-slate-800">
-              Where did you hear about us? <RequiredMark />
-            </p>
-            <PillGroup options={REFERRAL_OPTIONS} value={referral} onChange={setReferral} />
-          </div>
-        )}
-      </div>
-
-      <div className="mt-8 flex items-center gap-3">
-        {showReturn && onClose && (
-          <button
-            type="button"
-            onClick={onClose}
-            className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-slate-300 py-3 font-semibold text-slate-800"
-          >
-            <svg viewBox="0 0 24 24" className="h-4 w-4 fill-none stroke-slate-800" strokeWidth={2}>
-              <path d="M19 12H5M11 6l-6 6 6 6" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
+      }
+      footerNote={
+        showReturn && onClose ? (
+          <button type="button" onClick={onClose} className="font-semibold text-slate-600">
             Return
           </button>
-        )}
-        <button
-          type="button"
-          onClick={handleSubmit}
-          disabled={!isValid || sending}
-          className={`${showReturn && onClose ? "flex-[2]" : "w-full"} rounded-lg py-3 font-semibold text-white transition-colors ${isValid && !sending ? "bg-emerald-600 hover:bg-emerald-700" : "cursor-not-allowed bg-emerald-300 text-white/80"
-            }`}
-        >
-          {sending ? "Sending..." : "Submit"}
-        </button>
-      </div>
-    </div>
+        ) : null
+      }
+    />
   );
 }
 

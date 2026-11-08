@@ -29,7 +29,10 @@ export async function POST(request: NextRequest) {
     const email = body.email || null;
     const phone = body.phone || body.phone1 || null;
     const companyName = body.companyName || body.company || null;
-    const description = body.description || body.message || body.service || null;
+    const industry = body.industry || null;
+    const service = String(body.service || body.building || "").trim() || null;
+    const activity = String(body.description || "").trim();
+    const description = activity || null;
     const source = body.source || body.leadSource || "WEBSITE";
 
     const leadId = newId();
@@ -37,9 +40,9 @@ export async function POST(request: NextRequest) {
     await crmExecute(
       `INSERT INTO leads (
         id, first_name, last_name, email, phone_1,
-        company_name, description, lead_source, priority, status,
+        company_name, industry, category, service, description, lead_source, priority, status,
         conversion_score
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'HIGH', 'NEW', 50)`,
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'HIGH', 'NEW', 50)`,
       [
         leadId,
         firstName || "Web",
@@ -47,6 +50,9 @@ export async function POST(request: NextRequest) {
         email,
         phone,
         companyName,
+        industry,
+        industry,
+        service,
         description,
         source,
       ]

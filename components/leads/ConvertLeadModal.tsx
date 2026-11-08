@@ -32,13 +32,6 @@ const schema = z.object({
   title: z.string().min(3, "Enter a descriptive deal title."),
   assigneeIds: z.array(z.string()),
   priority: z.enum(["LOW", "MEDIUM", "HIGH"]),
-  contractValue: z.preprocess((val) => {
-    if (val === null || val === undefined || val === "") return 0;
-    if (typeof val === "number") return isNaN(val) ? 0 : Math.max(0, val);
-    const clean = String(val).replace(/[^0-9.-]/g, "").trim();
-    const parsed = parseFloat(clean);
-    return isNaN(parsed) ? 0 : Math.max(0, parsed);
-  }, z.number().min(0, "Contract value cannot be negative.")),
 });
 
 type Values = z.infer<typeof schema>;
@@ -72,7 +65,6 @@ export const ConvertLeadModal = ({
       title: "",
       assigneeIds: [],
       priority: "MEDIUM",
-      contractValue: "" as any,
     },
   });
 
@@ -86,7 +78,6 @@ export const ConvertLeadModal = ({
       title: defaultTitle,
       assigneeIds: defaultAssignees,
       priority: (lead.priority as Priority) || "MEDIUM",
-      contractValue: "" as any,
     });
   }, [lead, open, reset]);
 
@@ -100,7 +91,6 @@ export const ConvertLeadModal = ({
           title: data.title,
           assigneeIds: data.assigneeIds,
           priority: data.priority as Priority,
-          contractValue: Number(data.contractValue || 0),
         },
       },
       {
@@ -125,7 +115,7 @@ export const ConvertLeadModal = ({
             <span className="font-semibold text-foreground">
               {lead.companyName || `${lead.firstName || ""} ${lead.lastName || ""}`.trim()}
             </span>
-            . You can set the initial agreed contract price below.
+            . It starts in prospecting.
           </DialogDescription>
         </DialogHeader>
 
@@ -135,27 +125,6 @@ export const ConvertLeadModal = ({
             <Input {...register("title")} />
             {errors.title && (
               <p className="mt-1 text-xs text-danger">{errors.title.message}</p>
-            )}
-          </div>
-
-          <div>
-            <Label>Contract value / Price (GH¢)</Label>
-            <div className="relative mt-1">
-              <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-xs font-semibold text-muted-foreground">
-                GH¢
-              </span>
-              <Input
-                type="text"
-                inputMode="decimal"
-                placeholder="0.00"
-                className="pl-12"
-                {...register("contractValue")}
-              />
-            </div>
-            {errors.contractValue && (
-              <p className="mt-1 text-xs text-danger">
-                {errors.contractValue.message}
-              </p>
             )}
           </div>
 

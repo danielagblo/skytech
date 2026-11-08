@@ -1,12 +1,13 @@
 "use client";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useQueries } from "@tanstack/react-query";
 import { DragDropContext, type DropResult } from "@hello-pangea/dnd";
 import { AlertCircle } from "lucide-react";
 import type { Deal } from "@/types/deal.types";
 import type { DealStage } from "@/types/api.types";
 import { dealsService } from "@/services/deals.service";
-import { usePipeline, useUpdateDealStage, useDeleteDeal } from "@/hooks/useDeals";
+import { useDeal, usePipeline, useUpdateDealStage, useDeleteDeal } from "@/hooks/useDeals";
 import { useLeads } from "@/hooks/useLeads";
 import { useUsers } from "@/hooks/useUsers";
 import { usePermission } from "@/hooks/usePermission";
@@ -31,6 +32,12 @@ export const PipelineBoard = () => {
     Record<string, DealStage>
   >({});
   const [selected, setSelected] = useState<Deal | null>(null);
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+  const offerId = searchParams.get("offer");
+  const requested = useDeal(offerId ?? "");
+  const openedOffer = useRef<string | null>(null);
   const updateStage = useUpdateDealStage();
   const removeDeal = useDeleteDeal();
   const { can } = usePermission();
@@ -48,6 +55,25 @@ export const PipelineBoard = () => {
       ),
     [sourceDeals, stageOverrides],
   );
+  useEffect(() => {
+    if (!offerId) {
+      openedOffer.current = null;
+      return;
+    }
+    if (openedOffer.current === offerId) return;
+    const deal =
+      items.find((item) => item.id === offerId) ??
+      (requested.data?.id === offerId ? requested.data : null);
+    if (!deal) return;
+    openedOffer.current = offerId;
+    setSelected(deal);
+  }, [offerId, items, requested.data]);
+  const closeOffer = () => {
+    setSelected(null);
+    if (!offerId) return;
+    openedOffer.current = null;
+    router.replace(pathname);
+  };
   const logQueries = useQueries({
     queries: items.map((deal) => ({
       queryKey: ["deal-logs", deal.id],
@@ -127,7 +153,7 @@ export const PipelineBoard = () => {
   return (
     <>
       <DragDropContext onDragEnd={drop}>
-        <div className="dot-grid scrollbar-thin flex min-h-[620px] flex-1 snap-x snap-mandatory gap-3 overflow-x-auto overflow-y-hidden rounded-lg border p-2 sm:p-3 lg:h-full lg:min-h-0 2xl:gap-4 2xl:p-4">
+        <div className="dot-grid scrollbar-thin flex min-h-[620px] flex-1 snap-x snap-mandatory gap-4 overflow-x-auto overflow-y-hidden rounded-lg border p-3 sm:p-4 lg:h-full lg:min-h-0 2xl:gap-5 2xl:p-5">
           {stages.map((stage) => {
             const columnDeals = items.filter((deal) => deal.stage === stage);
             const sortedDeals =
@@ -177,7 +203,7 @@ export const PipelineBoard = () => {
         )}
         users={users.data?.content ?? []}
         open={Boolean(selected)}
-        onOpenChange={(value) => !value && setSelected(null)}
+        onOpenChange={(value) => !value && closeOffer()}
       />
     </>
   );

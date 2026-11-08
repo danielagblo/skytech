@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type PointerEvent } from "react";
 import {
   ArrowLeft,
   ArrowRight,
@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
+import { useQueryClient } from "@tanstack/react-query";
 import {
   followUpUrgency,
   useFollowUpAlerts,
@@ -19,71 +20,154 @@ import {
   useNotifications,
   useUnreadNotificationCount,
 } from "@/hooks/useNotifications";
+import { notificationsService } from "@/services/notifications.service";
 import { useAuthStore } from "@/store/authStore";
 import { UserAvatar } from "@/components/shared/UserAvatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ProfileSheet } from "./ProfileSheet";
 import { useTasks } from "@/hooks/useTasks";
 import type { AppNotification, FollowUpAlert } from "@/types/notification.types";
 import { cn, formatDate, formatTime } from "@/lib/utils";
+import { notificationAudio, playNotificationTone, readNotificationRepeats } from "@/lib/notification-tones";
 
-const HEARD_KEY = "skytech-rung-follow-ups-v4";
-const RING_MS = 10_000;
+const HEARD_KEY = "skytech-rung-follow-ups-v7";
+const DISMISSED_KEY = "skytech-dismissed-notifications";
+const CHIME_GAP_MS = 780;
+const REMOVE_WIDTH = 88;
 
-let sharedAudio: AudioContext | null = null;
+function readDismissed() {
+  try {
+    const stored = JSON.parse(localStorage.getItem(DISMISSED_KEY) || "[]");
+    return Array.isArray(stored)
+      ? stored.filter((id): id is string => typeof id === "string")
+      : [];
+  } catch {
+    return [];
+  }
+}
+
+function SwipeNotification({
+  item,
+  onOpen,
+  onRemove,
+}: {
+  item: AppNotification;
+  onOpen: () => void;
+  onRemove: () => void;
+}) {
+  const [offset, setOffset] = useState(0);
+  const startX = useRef(0);
+  const startY = useRef(0);
+  const startOffset = useRef(0);
+  const dragging = useRef(false);
+  const axis = useRef<"x" | "y" | null>(null);
+
+  const onPointerDown = (event: PointerEvent<HTMLDivElement>) => {
+    if (event.button !== 0) return;
+    dragging.current = true;
+    axis.current = null;
+    startX.current = event.clientX;
+    startY.current = event.clientY;
+    startOffset.current = offset;
+  };
+  const onPointerMove = (event: PointerEvent<HTMLDivElement>) => {
+    if (!dragging.current) return;
+    const dx = event.clientX - startX.current;
+    const dy = event.clientY - startY.current;
+    if (!axis.current) {
+      if (Math.abs(dx) < 6 && Math.abs(dy) < 6) return;
+      axis.current = Math.abs(dx) > Math.abs(dy) ? "x" : "y";
+      if (axis.current === "x") event.currentTarget.setPointerCapture(event.pointerId);
+    }
+    if (axis.current !== "x") return;
+    setOffset(Math.min(0, Math.max(-REMOVE_WIDTH, startOffset.current + dx)));
+  };
+  const finish = () => {
+    if (!dragging.current) return;
+    dragging.current = false;
+    if (axis.current === "x") {
+      setOffset((current) => (current <= -REMOVE_WIDTH / 2 ? -REMOVE_WIDTH : 0));
+    }
+  };
+
+  return (
+    <div className="relative overflow-hidden rounded-md">
+      <button
+        type="button"
+        className="absolute inset-y-0 right-0 flex w-[88px] items-center justify-center bg-danger text-xs font-semibold text-white"
+        onClick={onRemove}
+      >
+        Remove
+      </button>
+      <div
+        className="relative cursor-pointer bg-background px-3 py-2 text-sm hover:bg-muted"
+        style={{ transform: `translateX(${offset}px)`, touchAction: "pan-y" }}
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={finish}
+        onPointerCancel={finish}
+        onClick={() => {
+          if (axis.current === "x") return;
+          onOpen();
+        }}
+      >
+        <p className="font-medium">{item.title}</p>
+        <p className="mt-1 text-xs text-muted-foreground">{item.body}</p>
+        <p className="mt-1 text-[10px] uppercase tracking-wide text-muted-foreground">
+          Slide to remove
+        </p>
+      </div>
+    </div>
+  );
+}
 
 function audioContext() {
-  const AudioCtx =
-    window.AudioContext ||
-    (window as Window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
-  if (!AudioCtx) return null;
-  if (!sharedAudio || sharedAudio.state === "closed") sharedAudio = new AudioCtx();
-  return sharedAudio;
+  return notificationAudio();
 }
 
-function reboundNote(context: AudioContext, start: number, frequency: number, peak: number) {
-  const tone = context.createOscillator();
-  const gain = context.createGain();
-  tone.type = "sine";
-  tone.frequency.setValueAtTime(frequency, start);
-  gain.gain.setValueAtTime(0.001, start);
-  gain.gain.exponentialRampToValueAtTime(peak, start + 0.018);
-  gain.gain.exponentialRampToValueAtTime(0.001, start + 0.28);
-  tone.connect(gain);
-  gain.connect(context.destination);
-  tone.start(start);
-  tone.stop(start + 0.3);
+function playChime() {
+  return playNotificationTone();
 }
 
-function playRebound() {
-  const context = audioContext();
-  if (!context || context.state !== "running") return false;
-  const now = context.currentTime;
-  reboundNote(context, now, 698, 0.72);
-  reboundNote(context, now + 0.11, 880, 0.64);
-  reboundNote(context, now + 0.26, 698, 0.22);
-  reboundNote(context, now + 0.37, 880, 0.16);
-  return true;
+function pipelineOfferPath(href: string) {
+  const path = href.split("?")[0].replace(/\/$/, "");
+  const match = path.match(/^(?:\/crm)?\/pipeline\/([^/]+)$/);
+  if (!match) return null;
+  const onCrm =
+    typeof window !== "undefined" &&
+    window.location.pathname.startsWith("/crm");
+  const prefix = onCrm || path.startsWith("/crm") ? "/crm" : "";
+  return `${prefix}/pipeline?offer=${encodeURIComponent(match[1])}`;
+}
+
+function overdueLabel(followUpAt: string) {
+  const late = Date.now() - new Date(followUpAt).getTime();
+  const minutes = Math.max(1, Math.floor(late / 60000));
+  if (minutes < 60) return `${minutes} min overdue`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 48) return `${hours} hr overdue`;
+  return `${Math.floor(hours / 24)} days overdue`;
 }
 
 function followUpNotice(alert: FollowUpAlert): AppNotification {
   const when = `${formatDate(alert.followUpAt)} at ${formatTime(alert.followUpAt)}`;
-  const title =
-    alert.urgency === "DUE"
-      ? "Follow-up due"
-      : alert.urgency === "SIX_HOURS"
-        ? "Follow-up in 6 hours"
-        : "Follow-up in 1 day";
+  const overdue = alert.urgency === "DUE";
+  const title = overdue
+    ? "Follow-up overdue"
+    : alert.urgency === "TEN_MINUTES"
+      ? "Follow-up in 10 minutes"
+      : "Follow-up in 1 hour";
   return {
-    id: `follow-up-${alert.dealId}-${alert.followUpAt}`,
+    id: `follow-up-${alert.dealId}-${alert.followUpAt}-${alert.urgency}`,
     type: "FOLLOW_UP",
     title,
-    body: `${alert.dealTitle} · ${when}`,
+    body: overdue
+      ? `${alert.dealTitle} · ${overdueLabel(alert.followUpAt)}`
+      : `${alert.dealTitle} · ${when}`,
     href: `/pipeline/${alert.dealId}`,
     read: false,
     createdAt: alert.followUpAt,
@@ -94,6 +178,9 @@ export const TopBar = () => {
   const router = useRouter();
   const { resolvedTheme, setTheme } = useTheme();
   const [profileOpen, setProfileOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [dismissed, setDismissed] = useState<string[]>([]);
+  const client = useQueryClient();
   const notifications = useNotifications();
   const unread = useUnreadNotificationCount();
   const markRead = useMarkNotificationRead();
@@ -104,12 +191,17 @@ export const TopBar = () => {
   const [now, setNow] = useState(() => Date.now());
   const [ringing, setRinging] = useState(false);
   const ringTimer = useRef<number | null>(null);
-  const ringInterval = useRef<number | null>(null);
   const pendingKey = useRef<string | null>(null);
   const activeKey = useRef("");
+  useEffect(() => {
+    setDismissed(readDismissed());
+  }, []);
+  const dismissedSet = new Set(dismissed);
   const liveFollowUps = (followUpAlerts.data ?? []).flatMap((alert) => {
     const urgency = followUpUrgency(alert.followUpAt, now);
-    return urgency ? [{ ...alert, urgency }] : [];
+    if (!urgency) return [];
+    if (dismissedSet.has(`follow-up-${alert.dealId}-${alert.followUpAt}-${urgency}`)) return [];
+    return [{ ...alert, urgency }];
   });
   const followUps = liveFollowUps.map(followUpNotice);
   const followUpKey = liveFollowUps
@@ -129,10 +221,6 @@ export const TopBar = () => {
     sessionStorage.setItem(HEARD_KEY, JSON.stringify(ids));
   };
   const stopRing = (keep: boolean) => {
-    if (ringInterval.current !== null) {
-      window.clearInterval(ringInterval.current);
-      ringInterval.current = null;
-    }
     if (ringTimer.current !== null) {
       window.clearTimeout(ringTimer.current);
       ringTimer.current = null;
@@ -150,16 +238,24 @@ export const TopBar = () => {
         pendingKey.current = key;
         return;
       }
-      if (ringInterval.current !== null) window.clearInterval(ringInterval.current);
       if (ringTimer.current !== null) window.clearTimeout(ringTimer.current);
       pendingKey.current = null;
       activeKey.current = key;
       setRinging(true);
-      playRebound();
-      ringInterval.current = window.setInterval(() => {
-        if (!playRebound()) pendingKey.current = key;
-      }, 1400);
-      ringTimer.current = window.setTimeout(() => stopRing(true), RING_MS);
+      let played = 0;
+      const repeats = readNotificationRepeats();
+      const strike = () => {
+        if (!playChime()) {
+          pendingKey.current = key;
+          return;
+        }
+        played += 1;
+        ringTimer.current = window.setTimeout(
+          () => (played >= repeats ? stopRing(true) : strike()),
+          played >= repeats ? 900 : CHIME_GAP_MS,
+        );
+      };
+      strike();
     };
     if (context.state === "suspended") {
       pendingKey.current = key;
@@ -207,7 +303,8 @@ export const TopBar = () => {
       (task) =>
         task.status !== "DONE" &&
         !task.completionReason?.trim() &&
-        Boolean(user?.id && task.assigneeIds.includes(user.id)),
+        Boolean(user?.id && task.assigneeIds.includes(user.id)) &&
+        !dismissedSet.has(`overdue-task-${task.id}`),
     )
     .map((task) => ({
       id: `overdue-task-${task.id}`,
@@ -218,7 +315,25 @@ export const TopBar = () => {
       read: false,
       createdAt: task.dueDate ?? task.updatedAt,
     }));
-  const list = [...followUps, ...unresolvedOverdue, ...(notifications.data ?? [])];
+  const list = [
+    ...followUps,
+    ...unresolvedOverdue,
+    ...(notifications.data ?? []).filter((item) => !dismissedSet.has(item.id)),
+  ];
+  const dismiss = (item: AppNotification) => {
+    setDismissed((current) => {
+      const next = current.includes(item.id) ? current : [...current, item.id];
+      localStorage.setItem(DISMISSED_KEY, JSON.stringify(next));
+      return next;
+    });
+    const stored =
+      !item.id.startsWith("follow-up-") && !item.id.startsWith("overdue-task-");
+    if (stored && !item.read) {
+      void notificationsService.markRead(item.id).finally(() => {
+        void client.invalidateQueries({ queryKey: ["notifications"] });
+      });
+    }
+  };
   const unreadCount = (unread.data ?? 0) + unresolvedOverdue.length + followUps.length;
   const name = user ? `${user.firstName} ${user.lastName}` : "Loading profile";
   return (
@@ -259,7 +374,10 @@ export const TopBar = () => {
             <Moon className="h-5 w-5 dark:hidden" />
           </button>
           <DropdownMenu
+            modal={false}
+            open={menuOpen}
             onOpenChange={(open) => {
+              setMenuOpen(open);
               if (open) stopRing(true);
             }}
           >
@@ -297,26 +415,30 @@ export const TopBar = () => {
                   You are all caught up.
                 </p>
               ) : (
-                list.slice(0, 8).map((item) => (
-                  <DropdownMenuItem
-                    key={item.id}
-                    className="block cursor-pointer"
-                    onSelect={() => {
-                      if (
-                        !item.read &&
-                        !item.id.startsWith("overdue-task-") &&
-                        !item.id.startsWith("follow-up-")
-                      )
-                        markRead.mutate(item.id);
-                      if (item.href) router.push(item.href);
-                    }}
-                  >
-                    <p className="font-medium">{item.title}</p>
-                    <p className="mt-1 text-xs text-muted-foreground">
-                      {item.body}
-                    </p>
-                  </DropdownMenuItem>
-                ))
+                <div
+                  className="max-h-[min(22rem,calc(100vh-8rem))] space-y-1 overflow-y-auto overscroll-contain"
+                  onWheel={(event) => event.stopPropagation()}
+                >
+                  {list.map((item) => (
+                    <SwipeNotification
+                      key={item.id}
+                      item={item}
+                      onOpen={() => {
+                        if (
+                          !item.read &&
+                          !item.id.startsWith("overdue-task-") &&
+                          !item.id.startsWith("follow-up-")
+                        )
+                          markRead.mutate(item.id);
+                        setMenuOpen(false);
+                        if (item.href) {
+                          router.push(pipelineOfferPath(item.href) ?? item.href);
+                        }
+                      }}
+                      onRemove={() => dismiss(item)}
+                    />
+                  ))}
+                </div>
               )}
             </DropdownMenuContent>
           </DropdownMenu>

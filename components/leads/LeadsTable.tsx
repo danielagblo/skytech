@@ -99,21 +99,21 @@ export const LeadsTable = () => {
         ) : (
           <>
             <div className="overflow-x-auto">
-              <Table>
+              <Table className="table-fixed min-w-[1240px]">
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Name</TableHead>
-                    <TableHead>Number</TableHead>
-                    <TableHead>Company</TableHead>
-                    <TableHead>Location</TableHead>
-                    <TableHead>Role</TableHead>
-                    <TableHead>Email</TableHead>
-                    <TableHead>Assignee</TableHead>
-                    <TableHead>Category</TableHead>
-                    <TableHead>Conversion</TableHead>
-                    <TableHead>Lead source</TableHead>
-                    <TableHead>Priority</TableHead>
-                    <TableHead />
+                    <TableHead className="h-auto w-[160px] whitespace-nowrap px-3 py-3 tracking-normal">Name</TableHead>
+                    <TableHead className="h-auto w-[120px] whitespace-nowrap px-3 py-3 tracking-normal">Number</TableHead>
+                    <TableHead className="h-auto w-[150px] whitespace-nowrap px-3 py-3 tracking-normal">Company</TableHead>
+                    <TableHead className="h-auto w-[140px] whitespace-nowrap px-3 py-3 tracking-normal">Location</TableHead>
+                    <TableHead className="h-auto w-[100px] whitespace-nowrap px-3 py-3 tracking-normal">Role</TableHead>
+                    <TableHead className="h-auto w-[170px] whitespace-nowrap px-3 py-3 tracking-normal">Email</TableHead>
+                    <TableHead className="h-auto w-[110px] whitespace-nowrap px-3 py-3 tracking-normal">Assignee</TableHead>
+                    <TableHead className="h-auto w-[120px] whitespace-nowrap px-3 py-3 tracking-normal">Category</TableHead>
+                    <TableHead className="h-auto w-[130px] whitespace-nowrap px-3 py-3 tracking-normal">Conversion</TableHead>
+                    <TableHead className="h-auto w-[130px] whitespace-nowrap px-3 py-3 tracking-normal">Lead source</TableHead>
+                    <TableHead className="h-auto w-[100px] whitespace-nowrap px-3 py-3 tracking-normal">Priority</TableHead>
+                    <TableHead className="w-[52px] px-3" />
                   </TableRow>
                 </TableHeader>
                 <TableBody>

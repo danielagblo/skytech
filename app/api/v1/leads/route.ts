@@ -118,10 +118,10 @@ export async function POST(request: NextRequest) {
       `INSERT INTO leads (
         id, company_id, assigned_to, created_by,
         first_name, last_name, email, phone_1, phone_2, whatsapp,
-        company_name, role, address, industry, category, lead_source,
+        company_name, role, address, industry, category, service, lead_source,
         priority, status, launch_timeline, has_public_office, meeting_arranged,
         birthday, sms_opt_in, email_opt_in, newsletter_opt_in, description, conversion_score
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         leadId,
         user.companyId || null,
@@ -138,6 +138,7 @@ export async function POST(request: NextRequest) {
         body.address || null,
         body.industry || null,
         body.category || body.industry || null,
+        body.service || body.building || null,
         body.leadSource || body.source || "SMS",
         body.priority || "MEDIUM",
         body.status || "NEW",

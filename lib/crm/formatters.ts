@@ -61,6 +61,7 @@ export function formatLead(row: MysqlRow): Lead {
     role: row.role || null,
     address: row.address || null,
     industry: row.industry || null,
+    service: row.service || null,
     category: row.category || null,
     leadSource: row.lead_source || null,
     priority: row.priority || "MEDIUM",

@@ -249,8 +249,8 @@ export const TaskBoard = () => {
     },
   ];
   return (
-    <div className="flex flex-col lg:h-[calc(100dvh-7.75rem)] lg:min-h-0 lg:overflow-hidden 2xl:h-[calc(100dvh-8.25rem)]">
-      <div className="flex flex-col gap-2 border-b bg-card px-3 py-3 sm:flex-row sm:flex-wrap sm:items-center">
+    <div className="flex flex-col lg:h-[calc(100dvh-8.625rem)] lg:min-h-0 lg:overflow-hidden 2xl:h-[calc(100dvh-9.375rem)]">
+      <div className="flex flex-col gap-3 border-b bg-card px-4 py-4 sm:flex-row sm:flex-wrap sm:items-center">
         <div className="relative w-full sm:max-w-64 sm:flex-1">
           <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
           <Input
@@ -314,7 +314,7 @@ export const TaskBoard = () => {
         ))}
       </div>
       <DragDropContext onDragEnd={drop}>
-        <div className="dot-grid flex min-h-[650px] flex-1 snap-x snap-mandatory gap-3 overflow-x-auto overflow-y-hidden border-x border-b px-3 py-2 lg:min-h-0 lg:gap-8 lg:px-6 2xl:gap-10 2xl:px-10">
+        <div className="dot-grid flex min-h-[650px] flex-1 snap-x snap-mandatory gap-4 overflow-x-auto overflow-y-hidden border-x border-b px-4 py-4 lg:min-h-0 lg:gap-6 lg:px-6 2xl:gap-8 2xl:px-8">
           {statuses.map((status) => (
             <TaskColumn
               key={status}

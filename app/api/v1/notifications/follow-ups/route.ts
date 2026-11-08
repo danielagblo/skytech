@@ -3,14 +3,14 @@ import { getAuthUser, apiSuccess, apiError } from "@/lib/crm/auth";
 import { crmQuery, initCrmSchema, MysqlRow } from "@/lib/crm/db";
 import type { FollowUpAlert, FollowUpUrgency } from "@/types/notification.types";
 
-const SIX_HOURS = 6 * 60 * 60 * 1000;
-const ONE_DAY = 24 * 60 * 60 * 1000;
+const TEN_MINUTES = 10 * 60 * 1000;
+const ONE_HOUR = 60 * 60 * 1000;
 
 function urgencyFor(followUpAt: Date): FollowUpUrgency | null {
   const remaining = followUpAt.getTime() - Date.now();
   if (remaining <= 0) return "DUE";
-  if (remaining <= SIX_HOURS) return "SIX_HOURS";
-  if (remaining <= ONE_DAY) return "ONE_DAY";
+  if (remaining <= TEN_MINUTES) return "TEN_MINUTES";
+  if (remaining <= ONE_HOUR) return "ONE_HOUR";
   return null;
 }
 
@@ -44,10 +44,10 @@ export async function GET(request: NextRequest) {
          GROUP BY deal_id
        ) f
        JOIN deals d ON d.id = f.deal_id AND d.deleted_at IS NULL
-       WHERE f.follow_up_at <= DATE_ADD(NOW(), INTERVAL 26 HOUR)
+       WHERE f.follow_up_at <= DATE_ADD(NOW(), INTERVAL 70 MINUTE)
        ${assignedSql}
-       ORDER BY f.follow_up_at ASC
-       LIMIT 12`,
+       ORDER BY f.follow_up_at DESC
+       LIMIT 20`,
       params,
     );
 
@@ -55,11 +55,13 @@ export async function GET(request: NextRequest) {
     for (const row of rows) {
       const followUpAt = new Date(row.follow_up_at);
       if (Number.isNaN(followUpAt.getTime())) continue;
+      const urgency = urgencyFor(followUpAt);
+      if (!urgency) continue;
       alerts.push({
         dealId: String(row.deal_id),
         dealTitle: String(row.deal_title || "Deal"),
         followUpAt: followUpAt.toISOString(),
-        urgency: urgencyFor(followUpAt) ?? "ONE_DAY",
+        urgency,
       });
     }
 

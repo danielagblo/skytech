@@ -10,8 +10,15 @@ import { CardRemoveButton } from "@/components/shared/CardRemoveButton";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { isLeadSeen } from "@/lib/seenLeads";
 
-export function displayedFollowUp(logs: DealLog[]) {
-  const paymentFollowUp = logs
+export function displayedFollowUp(logs: DealLog[], stage?: Deal["stage"]) {
+  const pastNegotiation =
+    stage === "SETTLEMENT" ||
+    stage === "PAYMENT" ||
+    stage === "CLIENT_RETENTION";
+  const visible = pastNegotiation
+    ? logs.filter((log) => log.logType !== "NEGOTIATION")
+    : logs;
+  const paymentFollowUp = visible
     .filter((log) => log.logType === "PAYMENT" && log.followUpAt)
     .sort(
       (a, b) =>
@@ -19,7 +26,7 @@ export function displayedFollowUp(logs: DealLog[]) {
     )[0]?.followUpAt;
   if (paymentFollowUp) return paymentFollowUp;
 
-  const dates = logs
+  const dates = visible
     .map((log) => log.followUpAt || log.settlementFollowUp)
     .filter((date): date is string => Boolean(date))
     .sort((a, b) => new Date(a).getTime() - new Date(b).getTime());
@@ -43,7 +50,7 @@ export const DealCard = ({
   onRemove?: () => void;
   removing?: boolean;
 }) => {
-  const followUp = displayedFollowUp(logs);
+  const followUp = displayedFollowUp(logs, deal.stage);
   const services = [
     ["DOMAIN", deal.domainExpiry, deal.domainCost],
     ["HOSTING", deal.hostingExpiry, deal.hostingCost],
@@ -65,18 +72,20 @@ export const DealCard = ({
           onClick();
         }
       }}
-      className="w-full rounded-md border bg-card p-3 text-left shadow-[0_1px_2px_rgba(15,23,42,.04)] transition hover:-translate-y-0.5 hover:border-primary/60 hover:shadow-md"
+      className="w-full rounded-md border bg-card p-4 text-left shadow-[0_1px_2px_rgba(15,23,42,.04)] transition hover:-translate-y-0.5 hover:border-primary/60 hover:shadow-md"
     >
       <div className="flex items-start justify-between gap-2">
         <h4 className="line-clamp-2 text-sm font-semibold">{deal.title}</h4>
         {deal.priority && <PriorityBadge priority={deal.priority} />}
       </div>
-      <div className="mt-2 flex items-center justify-between rounded-md bg-muted/40 px-2 py-1 text-xs">
-        <span className="text-[11px] font-medium text-muted-foreground">Contract Deal:</span>
-        <span className="font-bold text-green-700 dark:text-green-400">
-          {formatCurrency(deal.contractValue)}
-        </span>
-      </div>
+      {deal.stage !== "PROSPECTING" && deal.stage !== "NEGOTIATION" && (
+        <div className="mt-2 flex items-center justify-between rounded-md bg-muted/40 px-2 py-1 text-xs">
+          <span className="text-[11px] font-medium text-muted-foreground">Contract Deal:</span>
+          <span className="font-bold text-green-700 dark:text-green-400">
+            {formatCurrency(deal.contractValue)}
+          </span>
+        </div>
+      )}
       <div className="mt-2.5 space-y-1.5 text-xs text-muted-foreground">
         <p className="flex items-center gap-2">
           <UserRound className="h-3.5 w-3.5" />

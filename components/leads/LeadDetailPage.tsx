@@ -64,15 +64,16 @@ export const LeadDetailPage = ({ leadId }: { leadId: string }) => {
             ["Lead source", lead.leadSource || "—"],
             ["Conversion", `${lead.conversionScore}%`],
             ["Status", lead.status],
+            ["Service", lead.service || "—"],
             ["Industry", lead.industry || "—"],
           ].map(([label, value]) => (
             <div key={label}>
               <dt className="eyebrow">{label}</dt>
-              <dd className="mt-1 text-sm font-medium">{value}</dd>
+              <dd className="mt-1 break-words text-sm font-medium">{value}</dd>
             </div>
           ))}
         </dl>
-        <p className="mt-6 text-sm leading-relaxed text-muted-foreground">
+        <p className="mt-6 whitespace-pre-line text-sm leading-relaxed text-muted-foreground">
           {lead.description || "No description provided."}
         </p>
       </section>

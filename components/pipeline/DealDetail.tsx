@@ -1,6 +1,6 @@
 "use client";
-import { useEffect, useState } from "react";
-import { Calendar, Mail, MapPin, Phone, UserRound, DollarSign } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Building2, Calendar, Mail, Phone, UserRound } from "lucide-react";
 import type { Deal } from "@/types/deal.types";
 import type { Lead } from "@/types/lead.types";
 import type { User, UserSummary } from "@/types/user.types";
@@ -38,6 +38,13 @@ const order: DealStage[] = [
   "CLIENT_RETENTION",
 ];
 
+const tabForStage = (stage: DealStage) => {
+  if (stage === "SETTLEMENT") return "settlement";
+  if (stage === "PAYMENT") return "payment";
+  if (stage === "CLIENT_RETENTION") return "retention";
+  return "negotiation";
+};
+
 export const DealDetail = ({
   deal: initialDeal,
   lead,
@@ -52,6 +59,9 @@ export const DealDetail = ({
   onOpenChange: (value: boolean) => void;
 }) => {
   const [expanded, setExpanded] = useState(false);
+  const [noteOverflows, setNoteOverflows] = useState(false);
+  const [showExtra, setShowExtra] = useState(false);
+  const noteRef = useRef<HTMLParagraphElement>(null);
   const [editOpen, setEditOpen] = useState(false);
   
   const liveDeal = useDeal(initialDeal?.id ?? "");
@@ -62,7 +72,20 @@ export const DealDetail = ({
   const { can } = usePermission();
   useEffect(() => {
     if (open && lead) markLeadSeen(lead.id);
+    if (!open) setShowExtra(false);
   }, [open, lead]);
+  const noteText = lead?.description || deal?.notes || "No description provided.";
+  useEffect(() => {
+    const node = noteRef.current;
+    if (!node || expanded) return;
+    const measure = () => {
+      setNoteOverflows(node.scrollHeight > node.clientHeight + 1);
+    };
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [noteText, expanded, open]);
   if (!deal) return null;
   const reached = (stage: DealStage) =>
     order.indexOf(stage) <= order.indexOf(deal.stage) &&
@@ -74,8 +97,11 @@ export const DealDetail = ({
       : [];
   const assignees = users.filter((user) => assigneeIds.includes(user.id));
   const creator = users.find((user) => user.id === deal.createdById);
-  const latestFollowUp = displayedFollowUp(logs.data ?? []);
+  const latestFollowUp = displayedFollowUp(logs.data ?? [], deal.stage);
   const hasFollowUp = Boolean(latestFollowUp);
+  const contactName = lead
+    ? `${lead.firstName || ""} ${lead.lastName || ""}`.trim() || "Unnamed"
+    : "No linked lead";
   const stageLogs = (
     type: "NEGOTIATION" | "SETTLEMENT" | "PAYMENT" | "CLIENT_RETENTION",
   ) => (logs.data ?? []).filter((log) => log.logType === type);
@@ -90,12 +116,14 @@ export const DealDetail = ({
                 <StageBadge stage={deal.stage} />
                 {deal.priority && <PriorityBadge priority={deal.priority} />}
               </div>
-              <div className="text-right">
-                <p className="eyebrow">Agreed Value</p>
-                <p className="text-base font-bold text-green-700 dark:text-green-400">
-                  {formatCurrency(deal.contractValue)}
-                </p>
-              </div>
+              {deal.stage !== "PROSPECTING" && deal.stage !== "NEGOTIATION" && (
+                <div className="text-right">
+                  <p className="eyebrow">Agreed Value</p>
+                  <p className="text-base font-bold text-green-700 dark:text-green-400">
+                    {formatCurrency(deal.contractValue)}
+                  </p>
+                </div>
+              )}
             </div>
             <div className="mt-2 flex flex-wrap items-center justify-between gap-2">
               <SheetTitle className="min-w-0 text-xl">{deal.title}</SheetTitle>
@@ -118,7 +146,7 @@ export const DealDetail = ({
             </div>
           </SheetHeader>
 
-          {/* Prominent Financial Breakdown */}
+          {deal.stage !== "PROSPECTING" && deal.stage !== "NEGOTIATION" && (
           <div className="mt-4 grid grid-cols-1 gap-2 rounded-xl border bg-muted/30 p-3 text-center min-[420px]:grid-cols-3">
             <div className="border-r pr-2">
               <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Contract Deal</p>
@@ -139,6 +167,7 @@ export const DealDetail = ({
               </p>
             </div>
           </div>
+          )}
 
           <div className="mt-4 rounded-2xl bg-muted/60 p-4">
             <div className="flex items-center justify-between">
@@ -164,80 +193,113 @@ export const DealDetail = ({
               </div>
             </div>
             <div className="mt-4 grid gap-2 text-sm sm:grid-cols-2">
-              <p className="flex items-center gap-2">
-                <UserRound className="h-4 w-4 text-muted-foreground" />
-                {lead
-                  ? `${lead.firstName || "Unnamed"} · ${lead.role || "Contact"}`
-                  : "No linked lead"}
+              <p className="flex items-start gap-2">
+                <UserRound className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
+                <span className="break-words font-medium">{contactName}</span>
               </p>
-              <p className="flex items-center gap-2">
-                <Phone className="h-4 w-4 text-muted-foreground" />
-                {lead?.phone1 || "Not provided"}
+              <p className="flex items-start gap-2">
+                <Phone className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
+                <span className="break-words">{lead?.phone1 || "Not provided"}</span>
               </p>
-              <p className="flex items-center gap-2">
-                <Mail className="h-4 w-4 text-muted-foreground" />
-                {lead?.email || "Not provided"}
+              <p className="flex items-start gap-2">
+                <Mail className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
+                <span className="break-words">{lead?.email || "Not provided"}</span>
               </p>
-              <p className="flex items-center gap-2">
-                <MapPin className="h-4 w-4 text-muted-foreground" />
-                {lead?.address || "Not provided"}
+              <p className="flex items-start gap-2">
+                <Building2 className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
+                <span className="break-words">{lead?.companyName || "No company"}</span>
               </p>
-              <p className="flex items-center gap-2">
-                <Calendar className="h-4 w-4 text-muted-foreground" />
-                {hasFollowUp ? (
-                  `Follow-up ${formatDate(latestFollowUp as string)}`
-                ) : (
-                  `Issued ${formatDate(deal.createdAt)}`
-                )}
+              <p className="flex items-start gap-2">
+                <Calendar className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
+                <span>
+                  {hasFollowUp
+                    ? `Follow-up ${formatDate(latestFollowUp as string)}`
+                    : "No follow-up set"}
+                </span>
               </p>
             </div>
-            <div className="mt-4 grid grid-cols-2 gap-3 border-t pt-4 text-xs sm:grid-cols-4">
+            <div className="mt-4 grid grid-cols-2 gap-3 border-t pt-4 text-sm sm:grid-cols-2">
+              <div>
+                <p className="eyebrow">Service</p>
+                <p className="mt-1 break-words font-medium">{lead?.service || "—"}</p>
+              </div>
               <div>
                 <p className="eyebrow">Industry</p>
-                <p className="mt-1">{lead?.industry || "—"}</p>
+                <p className="mt-1 break-words font-medium">{lead?.industry || "—"}</p>
               </div>
-              <div>
-                <p className="eyebrow">Launch date</p>
-                <p className="mt-1">
-                  {lead?.launchTimeline?.replaceAll("_", " ") || "—"}
-                </p>
-              </div>
-              <div>
-                <p className="eyebrow">Public office</p>
-                <p className="mt-1">{lead?.hasPublicOffice ? "Yes" : "No"}</p>
-              </div>
-              <div>
-                <p className="eyebrow">Meeting</p>
-                <p className="mt-1">
-                  {lead?.meetingArranged ? "Confirmed" : "Not arranged"}
-                </p>
-              </div>
-            </div>
-            <div className="mt-4 flex flex-wrap gap-4 text-xs">
-              <label className="flex items-center gap-2">
-                <Checkbox checked={Boolean(lead?.smsOptIn)} disabled />
-                SMS reminder
-              </label>
-              <label className="flex items-center gap-2">
-                <Checkbox checked={Boolean(lead?.emailOptIn)} disabled />
-                Email reminder
-              </label>
-              <label className="flex items-center gap-2">
-                <Checkbox checked={Boolean(lead?.newsletterOptIn)} disabled />
-                Newsletter
-              </label>
             </div>
             <p
-              className={`mt-4 text-sm text-muted-foreground ${expanded ? "" : "line-clamp-3"}`}
+              ref={noteRef}
+              className={`mt-4 whitespace-pre-line text-sm text-muted-foreground ${expanded ? "" : "line-clamp-3"}`}
             >
-              {lead?.description || deal.notes || "No description provided."}
+              {noteText}
             </p>
-            <button
-              onClick={() => setExpanded((value) => !value)}
-              className="mt-1 text-xs font-semibold text-green-700"
-            >
-              {expanded ? "Show less" : "Read more"}
-            </button>
+            {(noteOverflows || expanded) && (
+              <button
+                type="button"
+                onClick={() => setExpanded((value) => !value)}
+                className="mt-1 text-xs font-semibold text-green-700"
+              >
+                {expanded ? "Show less" : "Read more"}
+              </button>
+            )}
+            <div className="mt-4 border-t pt-3">
+              <button
+                type="button"
+                onClick={() => setShowExtra((value) => !value)}
+                className="text-xs font-semibold text-green-700"
+              >
+                {showExtra ? "Show less" : "Show more"}
+              </button>
+              {showExtra && (
+                <>
+                  <div className="mt-4 grid grid-cols-2 gap-3 text-xs sm:grid-cols-4">
+                    <div>
+                      <p className="eyebrow">Role</p>
+                      <p className="mt-1 break-words">{lead?.role || "—"}</p>
+                    </div>
+                    <div>
+                      <p className="eyebrow">Address</p>
+                      <p className="mt-1 break-words">{lead?.address || "—"}</p>
+                    </div>
+                    <div>
+                      <p className="eyebrow">Launch date</p>
+                      <p className="mt-1">
+                        {lead?.launchTimeline?.replace(/_/g, " ") || "—"}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="eyebrow">Issued</p>
+                      <p className="mt-1">{formatDate(deal.createdAt)}</p>
+                    </div>
+                    <div>
+                      <p className="eyebrow">Public office</p>
+                      <p className="mt-1">{lead?.hasPublicOffice ? "Yes" : "No"}</p>
+                    </div>
+                    <div>
+                      <p className="eyebrow">Meeting</p>
+                      <p className="mt-1">
+                        {lead?.meetingArranged ? "Confirmed" : "Not arranged"}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="mt-4 flex flex-wrap gap-4 text-xs">
+                    <label className="flex items-center gap-2">
+                      <Checkbox checked={Boolean(lead?.smsOptIn)} disabled />
+                      SMS reminder
+                    </label>
+                    <label className="flex items-center gap-2">
+                      <Checkbox checked={Boolean(lead?.emailOptIn)} disabled />
+                      Email reminder
+                    </label>
+                    <label className="flex items-center gap-2">
+                      <Checkbox checked={Boolean(lead?.newsletterOptIn)} disabled />
+                      Newsletter
+                    </label>
+                  </div>
+                </>
+              )}
+            </div>
           </div>
         </div>
         {deal.stage === "PROSPECTING" ? (
@@ -250,7 +312,11 @@ export const DealDetail = ({
             <Skeleton className="h-56" />
           </div>
         ) : (
-          <Tabs defaultValue="negotiation" className="px-6 pb-8">
+          <Tabs
+            key={`${deal.id}-${deal.stage}`}
+            defaultValue={tabForStage(deal.stage)}
+            className="px-6 pb-8"
+          >
             <TabsList className="w-full justify-start overflow-x-auto">
               {reached("NEGOTIATION") && (
                 <TabsTrigger value="negotiation">Negotiation</TabsTrigger>

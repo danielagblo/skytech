@@ -2,6 +2,7 @@
 
 import { FormEvent, useEffect, useState } from "react";
 import Image from "next/image";
+import { ConversationalForm, type ConversationalStep } from "@/components/skytech/ui/ConversationalForm";
 
 interface InternshipFormData {
   fullName: string;
@@ -87,6 +88,7 @@ async function compressImageFile(file: File): Promise<File> {
 }
 
 export default function InternshipForm() {
+  const [step, setStep] = useState(0);
   const [formData, setFormData] = useState<InternshipFormData>(EMPTY_FORM);
   const [profilePhoto, setProfilePhoto] = useState<File | null>(null);
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
@@ -98,13 +100,6 @@ export default function InternshipForm() {
       if (photoPreview) URL.revokeObjectURL(photoPreview);
     };
   }, [photoPreview]);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
 
   const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -135,6 +130,7 @@ export default function InternshipForm() {
   };
 
   const resetForm = () => {
+    setStep(0);
     setFormData(EMPTY_FORM);
     setProfilePhoto(null);
     if (photoPreview) URL.revokeObjectURL(photoPreview);
@@ -142,8 +138,8 @@ export default function InternshipForm() {
     setPhotoError("");
   };
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async (event?: FormEvent) => {
+    event?.preventDefault();
 
     if (!profilePhoto) {
       setPhotoError("Please upload a profile picture.");
@@ -251,6 +247,189 @@ export default function InternshipForm() {
 
   const inputClass =
     "w-full rounded-none border border-slate-200 bg-slate-50 px-4 py-3.5 text-base text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-brand-600 focus:bg-white focus:ring-2 focus:ring-brand-200 sm:py-4";
+  const emailOk = /\S+@\S+\.\S+/.test(formData.email.trim());
+  const phoneOk = formData.phone.replace(/[^\d]/g, "").length >= 7;
+  const setField = (name: keyof InternshipFormData, value: string) => {
+    setFormData((current) => ({ ...current, [name]: value }));
+  };
+  const steps: ConversationalStep[] = [
+    {
+      id: "photo",
+      question: "Add a profile picture",
+      hint: "A clear headshot. JPG, PNG, or WebP up to 5MB.",
+      valid: Boolean(profilePhoto) && !photoError,
+      body: (
+        <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-center">
+          <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-full border-2 border-slate-200 bg-slate-100">
+            {photoPreview ? (
+              <Image src={photoPreview} alt="Profile preview" fill className="object-cover" unoptimized />
+            ) : (
+              <div className="flex h-full w-full items-center justify-center text-slate-400">
+                <svg className="h-10 w-10" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                </svg>
+              </div>
+            )}
+          </div>
+          <div className="text-center sm:text-left">
+            <label
+              htmlFor="profilePhoto"
+              className="cursor-pointer rounded-none border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm font-medium text-slate-700 transition hover:border-brand-600 hover:bg-white"
+            >
+              {profilePhoto ? "Change photo" : "Upload photo"}
+            </label>
+            {profilePhoto && (
+              <button
+                type="button"
+                onClick={() => {
+                  setProfilePhoto(null);
+                  if (photoPreview) URL.revokeObjectURL(photoPreview);
+                  setPhotoPreview(null);
+                  setPhotoError("");
+                }}
+                className="ml-3 text-sm font-medium text-red-600"
+              >
+                Remove
+              </button>
+            )}
+            <input
+              id="profilePhoto"
+              type="file"
+              accept="image/jpeg,image/jpg,image/png,image/webp"
+              onChange={handlePhotoChange}
+              className="hidden"
+            />
+            {photoError && <p className="mt-2 text-sm text-red-600">{photoError}</p>}
+          </div>
+        </div>
+      ),
+    },
+    {
+      id: "name",
+      question: "What is your full name?",
+      valid: Boolean(formData.fullName.trim()),
+      body: (
+        <input
+          className={inputClass}
+          value={formData.fullName}
+          onChange={(event) => setField("fullName", event.target.value)}
+          placeholder="Full name"
+        />
+      ),
+    },
+    {
+      id: "email",
+      question: "What is your email?",
+      valid: emailOk,
+      body: (
+        <div>
+          <input
+            className={inputClass}
+            type="email"
+            value={formData.email}
+            onChange={(event) => setField("email", event.target.value)}
+            placeholder="you@example.com"
+          />
+          {formData.email.trim() && !emailOk && (
+            <p className="mt-2 text-sm text-red-600">Enter a valid email address.</p>
+          )}
+        </div>
+      ),
+    },
+    {
+      id: "phone",
+      question: "What is your phone number?",
+      valid: phoneOk,
+      body: (
+        <input
+          className={inputClass}
+          type="tel"
+          value={formData.phone}
+          onChange={(event) => setField("phone", event.target.value)}
+          placeholder="Phone number"
+        />
+      ),
+    },
+    {
+      id: "institution",
+      question: "What kind of institution are you from?",
+      valid: Boolean(formData.institutionType.trim()),
+      body: (
+        <input
+          className={inputClass}
+          value={formData.institutionType}
+          onChange={(event) => setField("institutionType", event.target.value)}
+          placeholder="University, training school..."
+        />
+      ),
+    },
+    {
+      id: "program",
+      question: "Which program are you offering?",
+      valid: Boolean(formData.programOffering.trim()),
+      body: (
+        <input
+          className={inputClass}
+          value={formData.programOffering}
+          onChange={(event) => setField("programOffering", event.target.value)}
+          placeholder="Program"
+        />
+      ),
+    },
+    {
+      id: "level",
+      question: "What level are you in?",
+      valid: Boolean(formData.level.trim()),
+      body: (
+        <input
+          className={inputClass}
+          value={formData.level}
+          onChange={(event) => setField("level", event.target.value)}
+          placeholder="Level"
+        />
+      ),
+    },
+    {
+      id: "start",
+      question: "When can you start?",
+      valid: Boolean(formData.startDate),
+      body: (
+        <input
+          className={inputClass}
+          type="date"
+          value={formData.startDate}
+          onChange={(event) => setField("startDate", event.target.value)}
+        />
+      ),
+    },
+    {
+      id: "duration",
+      question: "How long is the internship?",
+      valid: Boolean(formData.duration.trim()),
+      body: (
+        <input
+          className={inputClass}
+          value={formData.duration}
+          onChange={(event) => setField("duration", event.target.value)}
+          placeholder="For example, 3 months"
+        />
+      ),
+    },
+    {
+      id: "message",
+      question: "Why do you want this internship?",
+      hint: "Share your skills, interests, and what you hope to learn.",
+      valid: Boolean(formData.message.trim()),
+      body: (
+        <textarea
+          className={`${inputClass} min-h-36 resize-none`}
+          value={formData.message}
+          onChange={(event) => setField("message", event.target.value)}
+          placeholder="Your skills, interests, and why you want the internship"
+        />
+      ),
+    },
+  ];
 
   return (
     <section className="bg-slate-50 px-4 py-10 sm:px-6 sm:py-14 md:px-10 md:py-16">
@@ -260,182 +439,23 @@ export default function InternshipForm() {
           <h1 className="section-title mt-3 text-2xl text-balance sm:mt-4 sm:text-3xl md:text-4xl lg:text-5xl">
             Internship Form
           </h1>
-          <p className="section-lead mt-2 text-sm sm:mt-3 sm:text-base">Please fill in your details</p>
+          <p className="section-lead mt-2 text-sm sm:mt-3 sm:text-base">
+            Answer one question at a time
+          </p>
         </div>
 
-        <form
-          onSubmit={handleSubmit}
-          className="mt-8 space-y-4 rounded-none border border-slate-100 bg-white p-4 shadow-lift sm:mt-10 sm:space-y-5 sm:p-6 md:p-8 lg:p-10"
-        >
-          <div className="flex flex-col items-center gap-4 border-b border-slate-100 pb-6 sm:flex-row sm:items-start sm:pb-8">
-            <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-full border-2 border-slate-200 bg-slate-100 sm:h-28 sm:w-28">
-              {photoPreview ? (
-                <Image
-                  src={photoPreview}
-                  alt="Profile preview"
-                  fill
-                  className="object-cover"
-                  unoptimized
-                />
-              ) : (
-                <div className="flex h-full w-full items-center justify-center text-slate-400">
-                  <svg className="h-10 w-10" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
-                  </svg>
-                </div>
-              )}
-            </div>
-
-            <div className="flex-1 text-center sm:text-left">
-              <label htmlFor="profilePhoto" className="block text-sm font-semibold text-slate-900">
-                Profile Picture <span className="text-red-500">*</span>
-              </label>
-              <p className="mt-1 text-sm text-slate-500">
-                Upload a clear headshot. JPG, PNG, or WebP up to 5MB.
-              </p>
-              <div className="mt-4 flex flex-wrap items-center justify-center gap-3 sm:justify-start">
-                <label
-                  htmlFor="profilePhoto"
-                  className="cursor-pointer rounded-none border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm font-medium text-slate-700 transition hover:border-brand-600 hover:bg-white"
-                >
-                  {profilePhoto ? "Change Photo" : "Upload Photo"}
-                </label>
-                {profilePhoto && (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setProfilePhoto(null);
-                      if (photoPreview) URL.revokeObjectURL(photoPreview);
-                      setPhotoPreview(null);
-                      setPhotoError("");
-                    }}
-                    className="text-sm font-medium text-red-600 hover:text-red-700"
-                  >
-                    Remove
-                  </button>
-                )}
-              </div>
-              <input
-                id="profilePhoto"
-                type="file"
-                accept="image/jpeg,image/jpg,image/png,image/webp"
-                onChange={handlePhotoChange}
-                className="hidden"
-              />
-              {photoError && (
-                <p className="mt-2 text-sm text-red-600">{photoError}</p>
-              )}
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 gap-4 sm:gap-5 md:grid-cols-2">
-            <input
-              className={inputClass}
-              type="text"
-              name="fullName"
-              placeholder="Full Name"
-              value={formData.fullName}
-              onChange={handleChange}
-              required
-            />
-
-            <input
-              className={inputClass}
-              type="email"
-              name="email"
-              placeholder="Email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-            />
-
-            <input
-              className={inputClass}
-              type="tel"
-              name="phone"
-              placeholder="Phone Number"
-              value={formData.phone}
-              onChange={handleChange}
-              required
-            />
-
-            <input
-              className={inputClass}
-              type="text"
-              name="institutionType"
-              placeholder="Institution Type"
-              value={formData.institutionType}
-              onChange={handleChange}
-              required
-            />
-
-            <input
-              className={inputClass}
-              type="text"
-              name="programOffering"
-              placeholder="Program Offering"
-              value={formData.programOffering}
-              onChange={handleChange}
-              required
-            />
-
-            <input
-              className={inputClass}
-              type="text"
-              name="level"
-              placeholder="Level"
-              value={formData.level}
-              onChange={handleChange}
-              required
-            />
-
-            <div>
-              <label htmlFor="startDate" className="mb-2 block text-sm font-semibold text-slate-900">
-                Start Date
-              </label>
-              <input
-                id="startDate"
-                className={inputClass}
-                type="date"
-                name="startDate"
-                value={formData.startDate}
-                onChange={handleChange}
-                required
-              />
-            </div>
-
-            <input
-              className={inputClass}
-              type="text"
-              name="duration"
-              placeholder="Duration"
-              value={formData.duration}
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          <textarea
-            className={`${inputClass} min-h-[9rem] resize-none sm:min-h-[11.25rem]`}
-            name="message"
-            placeholder="Your Skills Interests, and why you want the internship"
-            value={formData.message}
-            onChange={handleChange}
-            required
+        <div className="mx-auto mt-8 max-w-xl rounded-none border border-slate-100 bg-white p-4 shadow-lift sm:mt-10 sm:p-6 md:p-8">
+          <ConversationalForm
+            steps={steps}
+            index={step}
+            onIndexChange={setStep}
+            onSubmit={() => void handleSubmit()}
+            submitting={loading}
+            submitLabel="Apply now"
+            accent="slate"
+            footerNote="You'll receive an approval email or SMS if your application is approved."
           />
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full rounded-none bg-slate-950 py-3.5 text-base font-medium text-white shadow-soft transition hover:bg-slate-900 disabled:cursor-not-allowed disabled:opacity-70 sm:py-4 sm:text-lg"
-          >
-            {loading ? "Submitting..." : "Apply Now"}
-          </button>
-
-          <p className="text-center text-sm text-slate-500">
-            You&apos;ll receive an approval Email or SMS if your application is approved.
-          </p>
-        </form>
+        </div>
       </div>
     </section>
   );

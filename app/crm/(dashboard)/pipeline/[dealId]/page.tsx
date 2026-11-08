@@ -1,9 +1,10 @@
-import { DealDetailPage } from "@/components/pipeline/DealDetailPage";
+import { redirect } from "next/navigation";
+
 export default async function Page({
   params,
 }: {
   params: Promise<{ dealId: string }>;
 }) {
   const { dealId } = await params;
-  return <DealDetailPage dealId={dealId} />;
+  redirect(`/crm/pipeline?offer=${encodeURIComponent(dealId)}`);
 }
