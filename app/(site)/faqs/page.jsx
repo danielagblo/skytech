@@ -14,34 +14,33 @@ export default async function FAQPage() {
   const faqs = await getFAQs();
 
   return (
-    <main className="min-h-screen pt-24 pb-20">
-      <div className="section-shell space-y-16">
-        <div className="text-center space-y-4">
-          <span className="pill">Support</span>
-          <h1 className="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight">
-            Frequently Asked Questions
-          </h1>
-          <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-            Our platform is built to help you work smarter, not harder. It adapts to your needs and supports your goals. Make the most of every feature.
+    <main className="min-h-screen bg-[#F6F4F0]">
+      <section className="studio-hero">
+        <div className="section-shell max-w-3xl">
+          <span className="eyebrow">Support</span>
+          <h1 className="section-title mt-5">Frequently asked questions</h1>
+          <p className="section-lead mt-5">
+            Practical answers about process, pricing, and the way we work with clients.
           </p>
         </div>
+      </section>
+      {faqs.length > 0 ? (
+        <FAQSection faqs={groupFAQs(faqs)} showHeading={false} />
+      ) : (
+        <div className="section-shell py-20 text-[#5C574F]">
+          No FAQs available at the moment.
+        </div>
+      )}
 
-        {faqs.length > 0 ? (
-          <FAQSection faqs={groupFAQs(faqs)} />
-        ) : (
-          <div className="py-20 text-center bg-white rounded-none border border-dashed border-slate-200 text-slate-400">
-            No FAQs available at the moment.
-          </div>
-        )}
-
-        <div className="glass-panel rounded-none p-12 text-center space-y-6 border-slate-100 bg-slate-50/50">
-          <h2 className="text-2xl font-bold text-slate-900">Still have questions?</h2>
-          <p className="text-slate-600 max-w-xl mx-auto">
-            Can't find the answer you're looking for? Reach out to our team and we'll get back to you as soon as possible.
+      <div className="section-shell pb-20">
+        <div className="border border-[#E3DDD4] bg-white p-8 md:p-10">
+          <h2 className="font-display text-2xl font-medium text-[#141413]">Still have questions?</h2>
+          <p className="mt-3 max-w-xl text-[#5C574F]">
+            If the answer is not here, write to the team and we will reply.
           </p>
-          <div className="flex justify-center gap-4">
-            <Link href="/contact" className="btn-primary px-8 py-3 rounded-none text-white font-bold">Contact Support</Link>
-            <Link href="/services" className="btn-secondary px-8 py-3 rounded-none border border-slate-200 font-bold">View Services</Link>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <Link href="/contact" className="btn-primary">Contact</Link>
+            <Link href="/services" className="btn-secondary">View services</Link>
           </div>
         </div>
       </div>

@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 
 export const metadata = {
@@ -8,59 +7,41 @@ export const metadata = {
 
 export default function SEOPage() {
   return (
-    <main className="overflow-x-hidden bg-white">
-      {/* Hero Section */}
-      <section className="relative overflow-hidden bg-slate-950 pt-28 pb-28 text-white md:pb-36">
-        <Image
-          src="/images/images/BlogPageHeader.png"
-          alt="SEO Services"
-          fill
-          className="absolute inset-0 object-cover opacity-25"
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/70 to-slate-950/30" />
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent" />
-        <div className="absolute inset-0 bg-grid opacity-20" />
-        <div className="absolute -top-20 left-1/3 h-72 w-72 rounded-full bg-brand-600/40 blur-[120px]" />
-
-        <div className="section-shell relative">
+    <main className="overflow-x-hidden bg-[#F6F4F0]">
+      <section className="studio-hero">
+        <div className="section-shell">
           <div className="max-w-2xl">
-            <span className="pill">Search Engine Optimization</span>
-            <h1 className="font-display mt-5 text-4xl font-semibold uppercase leading-[1.1] text-white sm:text-5xl lg:text-6xl">
-              Rank Higher on Google.
-              <span className="block text-brand-400">Get More Customers.</span>
-            </h1>
-            <p className="mt-5 max-w-xl text-lg leading-relaxed text-slate-300">
+            <span className="eyebrow">Search</span>
+            <h1 className="section-title mt-5">Rank higher on Google. Bring in more customers.</h1>
+            <p className="section-lead mt-5 max-w-xl">
               We help your website appear on the first page of Google so people can find
-              your business. Our SEO services bring you more traffic, leads, and sales.
+              your business. The work is built to bring traffic, leads, and sales.
             </p>
-            <div className="mt-8 flex flex-wrap gap-4">
-              <Link href="/contact" className="btn-primary px-8 py-4 text-base">
-                Book a Free Consultation
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link href="/contact" className="btn-primary">
+                Book a consultation
               </Link>
-              <Link href="#process" className="btn-secondary px-8 py-4 text-base">
-                How It Works
+              <Link href="#process" className="btn-secondary">
+                How it works
               </Link>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Stats / Results */}
-      <section className="relative z-10 bg-slate-50 px-6 pb-16 md:pb-20">
-        <div className="section-shell md:-mt-32 md:rounded-none md:border md:border-slate-200 md:bg-white md:p-10 md:shadow-lift">
-          <div className="grid grid-cols-1 gap-8 sm:grid-cols-3">
-            {seoStats.map((stat, idx) => (
-              <div key={idx} className="text-center">
-                <p className="font-display text-4xl font-semibold text-brand-600 md:text-5xl">
-                  {stat.value}
-                </p>
-                <p className="mt-3 font-display text-xs font-semibold uppercase tracking-[0.2em] text-slate-900">
-                  {stat.label}
-                </p>
-                <p className="mt-1 text-sm font-medium text-slate-500">{stat.detail}</p>
-              </div>
-            ))}
-          </div>
+      <section className="border-b border-[#E3DDD4] bg-[#F6F4F0]">
+        <div className="section-shell grid grid-cols-1 gap-10 py-14 sm:grid-cols-3">
+          {seoStats.map((stat, idx) => (
+            <div key={idx} className="border-t border-[#E3DDD4] pt-6">
+              <p className="font-display text-4xl font-medium text-[#1E5AC8] md:text-5xl">
+                {stat.value}
+              </p>
+              <p className="mt-3 text-[11px] font-medium uppercase tracking-[0.18em] text-[#141413]">
+                {stat.label}
+              </p>
+              <p className="mt-1 text-sm text-[#5C574F]">{stat.detail}</p>
+            </div>
+          ))}
         </div>
       </section>
 
@@ -115,9 +96,9 @@ export default function SEOPage() {
             {processSteps.map((step, idx) => (
               <div
                 key={step.title}
-                className="relative rounded-none border border-slate-100 bg-white p-8 shadow-soft transition-all duration-500 hover:-translate-y-1 hover:shadow-lift"
+                className="border border-[#E3DDD4] bg-white p-8"
               >
-                <span className="mb-5 inline-flex h-11 w-11 items-center justify-center rounded-none bg-slate-950 font-display text-base font-semibold text-white">
+                <span className="mb-5 block font-display text-sm tracking-[0.18em] text-[#1E5AC8]">
                   {String(idx + 1).padStart(2, "0")}
                 </span>
                 <h3 className="mb-3 text-lg font-semibold text-slate-900">{step.title}</h3>
@@ -129,21 +110,17 @@ export default function SEOPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="relative overflow-hidden bg-slate-950 py-20 text-white">
-        <div className="absolute inset-0 bg-grid opacity-20" />
-        <div className="absolute -bottom-20 right-1/4 h-72 w-72 rounded-full bg-brand-600/40 blur-[120px]" />
-
-        <div className="section-shell relative flex flex-col items-center text-center">
-          <span className="pill">Get Started</span>
-          <h2 className="font-display mt-5 max-w-3xl text-4xl font-semibold uppercase leading-[1.1] text-white sm:text-5xl">
+      <section className="border-t border-[#E3DDD4] bg-[#0C0D10] py-20 text-white">
+        <div className="section-shell max-w-3xl">
+          <p className="text-[11px] font-medium uppercase tracking-[0.22em] text-white/60">Get started</p>
+          <h2 className="mt-5 font-display text-3xl font-medium tracking-tight text-white sm:text-4xl">
             Ready to own the first page of Google?
           </h2>
-          <p className="mt-5 max-w-2xl text-lg leading-relaxed text-slate-300">
-            Tell us about your business and we&apos;ll map out a custom SEO roadmap that
-            brings measurable traffic, leads, and revenue to your doorstep.
+          <p className="mt-5 max-w-2xl text-lg leading-relaxed text-white/70">
+            Tell us about your business and we will map a search plan that brings measurable traffic and leads.
           </p>
-          <Link href="/contact" className="btn-primary mt-8 px-10 py-4 text-lg">
-            Talk to Our SEO Team
+          <Link href="/contact" className="btn-primary mt-8">
+            Talk to the team
           </Link>
         </div>
       </section>
@@ -154,9 +131,7 @@ export default function SEOPage() {
 function FeatureCard({ title, desc, icon, idx }) {
   return (
     <div
-      className={`glass-panel space-y-4 rounded-none border-slate-100 bg-white p-8 shadow-soft transition-all duration-500 hover:-translate-y-1 hover:shadow-lift ${
-        idx % 2 === 1 ? "sm:mt-8" : ""
-      }`}
+      className="space-y-4 border border-[#E3DDD4] bg-white p-8"
     >
       <div className="flex h-12 w-12 items-center justify-center rounded-none bg-brand-600/10 text-brand-600">
         {icon}

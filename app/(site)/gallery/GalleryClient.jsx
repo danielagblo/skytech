@@ -45,12 +45,12 @@ export default function GalleryClient({ projects }) {
   }, []);
 
   return (
-    <main ref={containerRef} className="min-h-screen pt-24 pb-20 bg-white">
+    <main ref={containerRef} className="min-h-screen bg-[#F6F4F0] pb-20 pt-36 md:pt-44">
       <div className="section-shell space-y-12">
-        <div className="max-w-3xl space-y-4">
-          <span className="pill border-brand-600/20 text-brand-600 bg-brand-50 uppercase tracking-[0.2em] text-[10px] font-bold gallery-header-el">Portfolio</span>
-          <h1 className="text-4xl lg:text-5xl leading-tight text-slate-900 font-light gallery-header-el">
-            Our Work <span className="font-extrabold text-brand-600">in Action</span>
+        <div className="max-w-3xl">
+          <span className="eyebrow gallery-header-el">Portfolio</span>
+          <h1 className="section-title mt-5 gallery-header-el">
+            Our work
           </h1>
           <p className="text-lg text-slate-600 gallery-header-el">
             A selection of projects where we've helped businesses transform their digital presence.
@@ -62,14 +62,14 @@ export default function GalleryClient({ projects }) {
             {projects.map((project, idx) => (
               <div
                 key={project._id || idx}
-                className="group relative overflow-hidden rounded-none bg-slate-100 border border-slate-200 aspect-[4/5] hover:shadow-2xl transition-all duration-500 project-card"
+                className="project-card group relative aspect-[4/5] overflow-hidden border border-[#E3DDD4] bg-[#EFEBE4]"
               >
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-900/20 to-transparent z-10 opacity-60 group-hover:opacity-80 transition-opacity" />
                 {project.image ? (
                   <img
                     src={project.image}
                     alt={project.title}
-                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                    className="absolute inset-0 h-full w-full object-cover"
                   />
                 ) : (
                   <div className="absolute inset-0 flex items-center justify-center text-slate-400 font-medium italic">

@@ -53,37 +53,17 @@ const initiatives: Initiative[] = [
 
 export default function FoundationPage() {
   return (
-    <div className="overflow-x-hidden bg-white text-slate-800">
-      {/* ===== Hero Section ===== */}
-      <section className="relative w-full min-h-[50vh] bg-slate-950 overflow-hidden flex items-center mt-0 pt-[140px] md:pt-[180px] pb-16">
-        <Image
-          src="/images/images/AboutBanner.png"
-          alt="Skytech Foundation Hero"
-          fill
-          className="object-cover opacity-25"
-          priority
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/70 to-slate-950/30" />
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-950/60 via-transparent to-slate-950" />
-        <div className="pointer-events-none absolute inset-0 z-[1] bg-grid opacity-20" />
-        <div className="pointer-events-none absolute -top-32 right-0 h-[34rem] w-[34rem] rounded-full bg-brand-600/40 blur-[120px]" />
-
-        <div className="section-shell relative z-10 w-full max-w-5xl text-center">
-          <span className="inline-flex items-center rounded-none bg-brand-500 px-5 py-2 text-sm font-bold uppercase tracking-[0.2em] text-white mb-6">Skytech Foundation</span>
-          <h1 className="font-display text-4xl font-bold uppercase leading-none tracking-tight text-white sm:text-5xl lg:text-6xl mt-4">
-            Bridging the Digital Divide
-            <span className="block text-brand-300">Through Real Action</span>
-          </h1>
-          <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-slate-200">
-            We believe that high-quality technology education is the ultimate equalizer. Through structured IT labs, vocational coding bootcamps, and career placement, we empower local youth and foster kids to build secure digital futures.
+    <div className="overflow-x-hidden bg-[#F6F4F0] text-[#141413]">
+      <section className="studio-hero">
+        <div className="section-shell max-w-3xl">
+          <span className="eyebrow">Skytech Foundation</span>
+          <h1 className="section-title mt-5">Bridging the digital divide through real action</h1>
+          <p className="section-lead mt-5">
+            High-quality technology education is the equalizer. Through IT labs, vocational bootcamps, and career placement, we help local youth and foster children build a working future in technology.
           </p>
-          <div className="mt-8 flex flex-wrap justify-center gap-4">
-            <Link href="/contact" className="btn-primary !text-sm bg-brand-500 hover:bg-brand-600">
-              DONATE NOW
-            </Link>
-            <Link href="/internship" className="btn-secondary !border-white/25 !bg-white/10 !text-white backdrop-blur-sm hover:!bg-white/20 !text-sm">
-              JOIN INTERN PROGRAM
-            </Link>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link href="/contact" className="btn-primary">Donate</Link>
+            <Link href="/internship" className="btn-secondary">Internship program</Link>
           </div>
         </div>
       </section>

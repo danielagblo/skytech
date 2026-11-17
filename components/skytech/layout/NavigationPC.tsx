@@ -13,7 +13,7 @@ function NavigationPC({ className }: { className?: string }) {
 
   return (
     <div
-      className={`${className ?? ""} flex items-center justify-between gap-4 px-6 py-2 bg-brand-700/95 backdrop-blur-md shadow-soft`}
+      className={`${className ?? ""} flex items-center justify-between gap-6 border-b border-white/10 bg-[#0C0D10] px-6 py-2`}
       onMouseLeave={() => {
         setServicesOpen(false);
         setSecurityOpen(false);
@@ -25,11 +25,11 @@ function NavigationPC({ className }: { className?: string }) {
         width={800}
         height={300}
         sizes="128px"
-        className="h-12 w-auto cursor-pointer transition hover:scale-[1.02]"
+        className="h-12 w-auto cursor-pointer transition hover:opacity-90"
         onClick={() => router.push("/")}
       />
       <nav>
-        <ul className="flex items-center gap-6 pr-4">
+        <ul className="flex items-center gap-4 pr-2">
           {navigationLinks.map((link) => {
             if (link.name === "Services") {
               return (
@@ -40,10 +40,10 @@ function NavigationPC({ className }: { className?: string }) {
                     onClick={() => {
                       setServicesOpen((v) => !v);
                     }}
-                    className={`relative flex items-center gap-1 whitespace-nowrap text-[0.95rem] text-white transition-colors ${
+                    className={`relative flex items-center gap-1 whitespace-nowrap text-[0.92rem] tracking-wide transition-colors ${
                       servicesOpen || currentPath === "/services" || currentPath.startsWith("/services/")
-                        ? "font-semibold"
-                        : "opacity-90 hover:text-brand-100 hover:opacity-100"
+                        ? "font-medium text-white"
+                        : "text-white/80 hover:text-white"
                     }`}
                   >
                     {link.name}
@@ -61,7 +61,7 @@ function NavigationPC({ className }: { className?: string }) {
                   </button>
 
                   <span
-                    className={`pointer-events-none absolute -bottom-1.5 left-0 h-0.5 rounded-full bg-white transition-all duration-300 ${
+                    className={`pointer-events-none absolute -bottom-1.5 left-0 h-px bg-[#1E5AC8] transition-all duration-300 ${
                       servicesOpen || currentPath === "/services" || currentPath.startsWith("/services/")
                         ? "w-full"
                         : "w-0"
@@ -75,7 +75,7 @@ function NavigationPC({ className }: { className?: string }) {
                         : "invisible -translate-y-2 opacity-0"
                     }`}
                   >
-                    <div className="w-80 rounded-none border border-slate-100 bg-white p-2 shadow-lift">
+                    <div className="w-80 border border-[#E3DDD4] bg-[#F6F4F0] p-2">
                       {servicesNav.map((item) => (
                         <div
                           key={item.name}
@@ -87,10 +87,10 @@ function NavigationPC({ className }: { className?: string }) {
                         >
                           <a
                             href={item.href}
-                            className={`flex items-center justify-between rounded-none px-4 py-3 text-sm font-medium transition-colors ${
+                            className={`flex items-center justify-between border-l-2 px-4 py-3 text-sm transition-colors ${
                               currentPath === item.href
-                                ? "bg-brand-50 text-brand-700"
-                                : "text-slate-700 hover:bg-brand-50 hover:text-brand-700"
+                                ? "border-[#1E5AC8] bg-white font-medium text-[#141413]"
+                                : "border-transparent text-[#141413] hover:bg-white"
                             }`}
                           >
                             {item.name}
@@ -111,7 +111,7 @@ function NavigationPC({ className }: { className?: string }) {
 
                           {item.children && (
                             <ul
-                              className={`ml-4 space-y-0.5 border-l border-slate-100 pl-3 transition-all duration-200 ${
+                              className={`ml-4 space-y-0.5 border-l border-[#E3DDD4] pl-3 transition-all duration-200 ${
                                 securityOpen
                                   ? "mb-1 max-h-64 opacity-100"
                                   : "max-h-0 overflow-hidden opacity-0"
@@ -121,7 +121,7 @@ function NavigationPC({ className }: { className?: string }) {
                                 <li key={child.name}>
                                   <a
                                     href={child.href}
-                                    className="block rounded-lg px-3 py-2 text-sm text-slate-600 transition-colors hover:bg-brand-50 hover:text-brand-700"
+                                    className="block px-3 py-2 text-sm text-[#5C574F] transition-colors hover:bg-white hover:text-[#141413]"
                                   >
                                     {child.name}
                                   </a>
@@ -142,15 +142,15 @@ function NavigationPC({ className }: { className?: string }) {
               <li key={link.name}>
                 <a
                   href={link.href}
-                  className={`relative whitespace-nowrap text-[0.95rem] text-white transition-colors ${
+                  className={`relative whitespace-nowrap text-[0.92rem] tracking-wide transition-colors ${
                     isActive
-                      ? "font-semibold"
-                      : "opacity-90 hover:text-brand-100 hover:opacity-100"
+                      ? "font-medium text-white"
+                      : "text-white/80 hover:text-white"
                   }`}
                 >
                   {link.name}
                   <span
-                    className={`pointer-events-none absolute -bottom-1.5 left-0 h-0.5 rounded-full bg-white transition-all duration-300 ${
+                    className={`pointer-events-none absolute -bottom-1.5 left-0 h-px bg-[#1E5AC8] transition-all duration-300 ${
                       isActive ? "w-full" : "w-0"
                     }`}
                   />

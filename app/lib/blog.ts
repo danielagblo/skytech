@@ -2,6 +2,7 @@ import { isMysql } from "./db";
 import * as mysql from "./mysql";
 import dbConnect from "./mongodb";
 import BlogPostModel from "../models/BlogPost";
+import { SERVICE_NOTES } from "./service-notes";
 
 export interface BlogPost {
   _id?: string;
@@ -83,11 +84,12 @@ async function getPublished(): Promise<any[]> {
 export async function getAllBlogPosts(): Promise<BlogPost[]> {
   try {
     const posts = await getPublished();
-    return posts.map(mapPost);
+    const mapped = posts.map(mapPost);
+    if (mapped.length > 0) return mapped;
   } catch (error) {
     console.error("getAllBlogPosts error:", error);
-    return [];
   }
+  return SERVICE_NOTES;
 }
 
 export async function getLatestBlogPosts(limit = 4): Promise<BlogPost[]> {

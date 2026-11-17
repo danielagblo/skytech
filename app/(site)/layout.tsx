@@ -5,7 +5,8 @@ import { getSettings } from '../lib/settings';
 import { getLatestBlogPosts } from '../lib/blog';
 import { getAffiliates } from '../lib/affiliates';
 import FloatingWhatsApp from '../../components/FloatingWhatsApp';
-import SiteChrome from '../../components/skytech/layout/SiteChrome';
+import FilmFrame from '../../components/skytech/layout/FilmFrame';
+import SmoothScroll from '../../components/skytech/layout/SmoothScroll';
 import { WhatsAppModalProvider } from '../../components/WhatsAppModal';
 
 export async function generateMetadata() {
@@ -13,7 +14,7 @@ export async function generateMetadata() {
   const title = settings.siteName || "Skytech Ghana";
   const description =
     settings.siteDescription ||
-    "Website design, mobile apps, SEO and growth features for businesses in Ghana.";
+    "Website design, mobile apps, SEO, virtual tours, and CRM for businesses in Ghana.";
 
   return {
     title,
@@ -44,14 +45,19 @@ export default async function SiteLayout({ children }: { children: ReactNode }) 
   }));
 
   return (
-    <WhatsAppModalProvider whatsapp={settings.whatsapp}>
-      <Suspense fallback={null}>
-        <AnalyticsTracker />
-      </Suspense>
-      <SiteChrome />
-      <main>{children}</main>
-      <Footer latestPosts={latestPosts} sponsors={sponsors} settings={settings} />
-      <FloatingWhatsApp />
-    </WhatsAppModalProvider>
+    <SmoothScroll>
+      <WhatsAppModalProvider whatsapp={settings.whatsapp}>
+        <div className="studio-page min-h-screen">
+          <Suspense fallback={null}>
+            <AnalyticsTracker />
+          </Suspense>
+          <FilmFrame>
+            <main>{children}</main>
+          </FilmFrame>
+          <Footer latestPosts={latestPosts} sponsors={sponsors} settings={settings} />
+          <FloatingWhatsApp />
+        </div>
+      </WhatsAppModalProvider>
+    </SmoothScroll>
   );
 }

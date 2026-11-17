@@ -27,7 +27,7 @@ const DEFAULT_FAQS: GroupedFAQs = {
   ],
 };
 
-export default function FAQSection({ faqs = DEFAULT_FAQS }: { faqs?: GroupedFAQs }) {
+export default function FAQSection({ faqs = DEFAULT_FAQS, showHeading = true }: { faqs?: GroupedFAQs; showHeading?: boolean }) {
   const categories = Object.keys(faqs);
   const defaultCategory = categories.includes("General") ? "General" : categories[0] || "General";
   const [activeCategory, setActiveCategory] = useState(defaultCategory);
@@ -41,75 +41,68 @@ export default function FAQSection({ faqs = DEFAULT_FAQS }: { faqs?: GroupedFAQs
   const currentFaqs = faqs[activeCategory] || [];
 
   return (
-    <section className="section-shell py-16">
-      <SectionHeading
-        tag="FAQ"
-        title="Frequently Asked Questions"
-        lead="Everything you need to know about our services, pricing and processes. Can't find an answer? Reach out and our team will help."
-        align="center"
-        className="mb-10"
-      />
-
-      {/* Category tabs */}
-      <div className="mb-8 flex flex-nowrap overflow-x-auto whitespace-nowrap max-w-full w-full justify-start md:justify-center gap-2 pb-3 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-        {categories.map((cat) => {
-          const isActive = cat === activeCategory;
-          return (
-            <button
-              key={cat}
-              onClick={() => handleCategory(cat)}
-              className={`rounded-none px-5 py-2.5 text-sm font-semibold uppercase tracking-[0.12em] transition-all duration-200 shrink-0 ${
-                isActive
-                  ? "bg-slate-950 text-white shadow-soft"
-                  : "bg-brand-50 text-slate-600 hover:bg-brand-100 hover:text-brand-700"
-              }`}
-            >
-              {cat}
-            </button>
-          );
-        })}
-      </div>
-
-      {/* Accordion */}
-      <div className="mx-auto max-w-3xl divide-y divide-slate-100 border-b border-slate-100">
-        {currentFaqs.length === 0 && (
-          <p className="px-6 py-10 text-center text-slate-500">No questions in this category yet.</p>
+    <section className="border-t border-[#E3DDD4] bg-[#F6F4F0] py-24 md:py-32">
+      <div className="section-shell">
+        {showHeading && (
+          <SectionHeading
+            tag="FAQ"
+            title="Frequently asked questions"
+            lead="Clear answers on services, pricing, and how we work. If you need something more specific, write to us."
+            className="mb-12 max-w-2xl"
+          />
         )}
-        {currentFaqs.map((faq, index) => {
-          const isOpen = openIndex === index;
-          return (
-            <div key={index} className="py-1">
+
+        <div className="mb-8 flex flex-wrap gap-x-6 gap-y-3 border-b border-[#E3DDD4]">
+          {categories.map((cat) => {
+            const isActive = cat === activeCategory;
+            return (
               <button
-                onClick={() => setOpenIndex(isOpen ? null : index)}
-                className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left"
-              >
-                <span
-                  className={`text-lg transition-colors ${
-                    isOpen ? "font-semibold text-brand-700" : "font-medium text-slate-800"
-                  }`}
-                >
-                  {faq.question}
-                </span>
-                <span
-                  className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-2xl font-light transition-all duration-200 ${
-                    isOpen ? "rotate-45 bg-slate-950 text-white" : "bg-slate-100 text-slate-500"
-                  }`}
-                >
-                  &#10010;
-                </span>
-              </button>
-              <div
-                className={`grid transition-all duration-300 ease-in-out ${
-                  isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+                key={cat}
+                onClick={() => handleCategory(cat)}
+                className={`-mb-px border-b pb-3 text-sm transition-colors ${
+                  isActive
+                    ? "border-[#1E5AC8] font-medium text-[#141413]"
+                    : "border-transparent text-[#6B6560] hover:text-[#141413]"
                 }`}
               >
-                <div className="overflow-hidden">
-                  <p className="px-6 pb-6 text-slate-600 leading-relaxed">{faq.answer}</p>
+                {cat}
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="max-w-3xl border-t border-[#E3DDD4]">
+          {currentFaqs.length === 0 && (
+            <p className="py-10 text-[#5C574F]">No questions in this category yet.</p>
+          )}
+          {currentFaqs.map((faq, index) => {
+            const isOpen = openIndex === index;
+            return (
+              <div key={index} className="border-b border-[#E3DDD4]">
+                <button
+                  onClick={() => setOpenIndex(isOpen ? null : index)}
+                  className="flex w-full items-center justify-between gap-6 py-5 text-left"
+                >
+                  <span className={`text-base sm:text-lg ${isOpen ? "font-medium text-[#141413]" : "text-[#141413]"}`}>
+                    {faq.question}
+                  </span>
+                  <span className={`text-sm ${isOpen ? "text-[#1E5AC8]" : "text-[#6B6560]"}`} aria-hidden>
+                    {isOpen ? "–" : "+"}
+                  </span>
+                </button>
+                <div
+                  className={`grid transition-all duration-300 ease-in-out ${
+                    isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+                  }`}
+                >
+                  <div className="overflow-hidden">
+                    <p className="max-w-2xl pb-6 text-[#5C574F] leading-relaxed">{faq.answer}</p>
+                  </div>
                 </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
     </section>
   );

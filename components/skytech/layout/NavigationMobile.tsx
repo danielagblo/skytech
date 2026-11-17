@@ -44,7 +44,7 @@ function NavigationMobile({ className }: { className?: string }) {
       <div className="relative z-50">
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 bg-brand-700/95 backdrop-blur-md shadow-soft"
+          className="pointer-events-none absolute inset-0 border-b border-white/10 bg-[#0C0D10]"
         />
 
         <div className="relative flex items-center justify-between px-4 py-2">
@@ -88,57 +88,47 @@ function NavigationMobile({ className }: { className?: string }) {
       </div>
 
       <div
-        className={`fixed inset-0 z-40 flex flex-col bg-gradient-to-b from-brand-800 to-brand-950 transition-opacity duration-300 ${
+        className={`fixed inset-0 z-40 flex flex-col bg-[#F6F4F0] text-[#141413] transition-opacity duration-300 ${
           isOpen ? "opacity-100" : "pointer-events-none opacity-0"
         }`}
       >
-        <div className="pointer-events-none absolute -top-24 -right-24 h-72 w-72 rounded-full bg-white/10 blur-3xl" />
-        <div className="pointer-events-none absolute bottom-0 left-0 h-64 w-64 rounded-full bg-white/5 blur-3xl" />
-
-        <nav className="flex min-h-full flex-1 flex-col justify-[safe_center] overflow-y-auto overscroll-contain px-8 py-20">
-          <ul className="flex flex-col gap-1">
-            {navigationLinks.map((link, i) => {
+        <nav className="flex min-h-full flex-1 flex-col overflow-y-auto overscroll-contain px-8 py-24">
+          <ul className="flex flex-col">
+            {navigationLinks.map((link) => {
               const isActive = currentPath === link.href;
               const isServices = link.name === "Services";
 
               return (
-                <li
-                  key={link.name}
-                  className={`border-b border-white/10 py-4 transition-all duration-300 ${
-                    isOpen ? "translate-x-0 opacity-100" : "translate-x-4 opacity-0"
-                  }`}
-                  style={{ transitionDelay: isOpen ? `${i * 40 + 100}ms` : "0ms" }}
-                >
+                <li key={link.name} className="border-b border-[#E3DDD4] py-4">
                   {isServices ? (
                     <>
                       <a
                         href={link.href}
                         onClick={() => setIsOpen(false)}
-                        className={`flex items-center justify-between text-2xl text-white ${
-                          isActive ? "font-bold" : "font-medium text-white/80"
+                        className={`flex items-center justify-between text-2xl tracking-tight ${
+                          isActive ? "font-medium text-[#1E5AC8]" : "font-medium text-[#141413]"
                         }`}
                       >
                         {link.name}
-                        {isActive && <span className="h-2 w-2 rounded-full bg-white" />}
                       </a>
-                      <ul className="mt-4 space-y-1">
+                      <ul className="mt-3 space-y-1">
                         {servicesNav.map((service) => (
                           <li key={service.name}>
                             <a
                               href={service.href}
                               onClick={() => setIsOpen(false)}
-                              className="block rounded-lg py-2 pl-4 text-lg text-brand-100 transition-colors hover:bg-white/10 hover:text-white"
+                              className="block py-2 pl-4 text-base text-[#5C574F] transition-colors hover:text-[#141413]"
                             >
                               {service.name}
                             </a>
                             {service.children && (
-                              <ul className="mt-1 space-y-1 border-l border-white/15 pl-6">
+                              <ul className="mt-1 space-y-1 border-l border-[#E3DDD4] pl-6">
                                 {service.children.map((child) => (
                                   <li key={child.name}>
                                     <a
                                       href={child.href}
                                       onClick={() => setIsOpen(false)}
-                                      className="block rounded-lg py-1.5 text-base text-white/70 transition-colors hover:text-white"
+                                      className="block py-1.5 text-sm text-[#5C574F] transition-colors hover:text-[#141413]"
                                     >
                                       {child.name}
                                     </a>
@@ -154,12 +144,11 @@ function NavigationMobile({ className }: { className?: string }) {
                     <a
                       href={link.href}
                       onClick={() => setIsOpen(false)}
-                      className={`flex items-center justify-between text-2xl text-white ${
-                        isActive ? "font-bold" : "font-medium text-white/80"
+                      className={`block text-2xl tracking-tight ${
+                        isActive ? "font-medium text-[#1E5AC8]" : "font-medium text-[#141413]"
                       }`}
                     >
                       {link.name}
-                      {isActive && <span className="h-2 w-2 rounded-full bg-white" />}
                     </a>
                   )}
                 </li>

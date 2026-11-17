@@ -11,8 +11,13 @@ export interface WhatsAppPackageGroup {
   items: string[];
 }
 
+export interface WhatsAppOpenOptions {
+  packageName?: string;
+  packagePrice?: string;
+}
+
 interface ModalCtx {
-  open: (whatsappDigits?: string) => void;
+  open: (whatsappDigitsOrOptions?: string | WhatsAppOpenOptions) => void;
   close: () => void;
   isOpen: boolean;
 }
@@ -36,21 +41,30 @@ export function WhatsAppModalProvider({
   packages?: WhatsAppPackageGroup[];
 }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [selectedPackage, setSelectedPackage] = useState<WhatsAppOpenOptions>({});
   const number = whatsapp || WHATSAPP_NUMBER;
 
-  const open = useCallback(() => {
+  const open = useCallback((arg?: string | WhatsAppOpenOptions) => {
+    setSelectedPackage(arg && typeof arg === "object" ? arg : {});
     setIsOpen(true);
   }, []);
 
   const close = useCallback(() => {
     setIsOpen(false);
+    setSelectedPackage({});
   }, []);
 
   return (
     <Ctx.Provider value={{ open, close, isOpen }}>
       {children}
       <BottomSheet isOpen={isOpen} onClose={close}>
-        <WhatsAppOfferForm extended onClose={close} whatsappNumber={number} />
+        <WhatsAppOfferForm
+          extended
+          onClose={close}
+          whatsappNumber={number}
+          packageName={selectedPackage.packageName}
+          packagePrice={selectedPackage.packagePrice}
+        />
       </BottomSheet>
     </Ctx.Provider>
   );

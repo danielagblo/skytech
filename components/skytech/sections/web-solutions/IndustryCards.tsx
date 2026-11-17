@@ -8,66 +8,54 @@ const industryCards = [
   },
   {
     title: "Health Tech",
-    description: "Privacy - complaint medical platforms and diagnostic tools.",
+    description: "Privacy-compliant medical platforms and diagnostic tools.",
     image: "/images/images/healthtechImage.png",
   },
   {
     title: "Logistics & Fleet",
-    description: "Realtime tracking systems and supply chain automation",
+    description: "Realtime tracking systems and supply chain automation.",
     image: "/images/images/logisticsAndFleetImage.png",
   },
   {
     title: "Property Tech",
-    description: "Real estate management and listings platform.",
+    description: "Real estate management and listings platforms.",
     image: "/images/images/propertytechImage.png",
   },
   {
     title: "Education Tech",
-    description: "LMS Platforms and interactive learning ecosystems.",
+    description: "Learning platforms and interactive classrooms.",
     image: "/images/images/educationtechImage.png",
   },
   {
     title: "Online E-Commerce",
-    description: "High-end marketplaces and headless commerce solutions.",
+    description: "Marketplaces and commerce built for real volume.",
     image: "/images/images/onlineEcommerceImage.png",
   },
 ];
 
 function IndustryCards() {
   return (
-    <section className="px-6 py-16 md:px-10 md:py-20">
-      <div className="mx-auto max-w-7xl">
-        <div className="mb-12 flex flex-col items-center text-center">
-          <span className="section-tag justify-center">Industries</span>
-          <h2 className="section-title mt-4 text-3xl text-balance sm:text-4xl">
-            Built for the sectors that matter
-          </h2>
-          <p className="section-lead mt-3 max-w-xl">
+    <section className="bg-[#F6F4F0] px-5 py-20 md:px-8 md:py-28">
+      <div className="mx-auto max-w-[80rem]">
+        <div className="mb-12 max-w-2xl">
+          <span className="eyebrow">Industries</span>
+          <h2 className="section-title mt-5">Built for the sectors that matter</h2>
+          <p className="section-lead mt-4">
             Tailored digital solutions for industries that demand technical rigor.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {industryCards.map((card, index) => (
-            <div
-              key={index}
-              className="group flex flex-col overflow-hidden rounded-none border border-slate-100 bg-white shadow-soft transition-all duration-500 hover:-translate-y-1 hover:shadow-lift"
-            >
-              <div className="relative aspect-[4/3] w-full overflow-hidden">
-                <Image
-                  src={card.image}
-                  alt={card.title}
-                  fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
-                />
+        <div className="grid grid-cols-1 gap-px bg-[#E3DDD4] sm:grid-cols-2 lg:grid-cols-3">
+          {industryCards.map((card) => (
+            <article key={card.title} className="flex flex-col bg-white">
+              <div className="relative aspect-[16/10] w-full overflow-hidden border-b border-[#E3DDD4]">
+                <Image src={card.image} alt="" fill className="object-cover" />
               </div>
               <div className="p-6">
-                <h3 className="font-display text-xl font-semibold uppercase text-slate-900">
-                  {card.title}
-                </h3>
-                <p className="mt-2 leading-relaxed text-slate-600">{card.description}</p>
+                <h3 className="font-display text-xl font-medium text-[#141413]">{card.title}</h3>
+                <p className="mt-2 leading-relaxed text-[#5C574F]">{card.description}</p>
               </div>
-            </div>
+            </article>
           ))}
         </div>
       </div>

@@ -45,19 +45,19 @@ export const metadata = {
 
 export default function SitemapPage() {
   return (
-    <div className="min-h-screen bg-white pt-32 pb-24">
-      <div className="section-shell mx-auto w-full max-w-4xl px-6">
-        <h1 className="font-display text-4xl font-bold uppercase tracking-tight text-slate-900 sm:text-5xl">
-          Sitemap
-        </h1>
-        <p className="mt-4 max-w-2xl text-lg leading-relaxed text-slate-500">
-          Everything on the Skytech Ghana website, organized for easy browsing.
-        </p>
-
-        <div className="mt-14 grid gap-12 md:grid-cols-2">
+    <div className="min-h-screen bg-[#F6F4F0] pb-24">
+      <section className="studio-hero">
+        <div className="section-shell max-w-3xl">
+          <span className="eyebrow">Index</span>
+          <h1 className="section-title mt-5">Sitemap</h1>
+          <p className="section-lead mt-5">Everything on the Skytech Ghana website, set out for easy browsing.</p>
+        </div>
+      </section>
+      <div className="section-shell mx-auto w-full max-w-4xl py-16">
+        <div className="grid gap-12 md:grid-cols-2">
           {sections.map((section) => (
             <div key={section.title}>
-              <h2 className="border-b border-slate-100 pb-3 text-sm font-semibold uppercase tracking-[0.18em] text-brand-600">
+              <h2 className="border-b border-[#E3DDD4] pb-3 text-[11px] font-medium uppercase tracking-[0.22em] text-[#1E5AC8]">
                 {section.title}
               </h2>
               <ul className="mt-5 space-y-3">

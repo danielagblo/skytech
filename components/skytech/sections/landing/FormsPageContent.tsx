@@ -23,7 +23,7 @@ export default function FormsPageContent({ partners }: { partners: Partner[] }) 
   return (
     <main className="min-h-screen overflow-x-hidden bg-white">
       <section className="px-4 pb-4 pt-8 sm:px-6 sm:pt-12">
-        <div className="mx-auto max-w-lg rounded-3xl border border-emerald-100 bg-gradient-to-b from-emerald-50 to-white p-5 shadow-xl shadow-emerald-900/5 sm:p-8">
+        <div className="mx-auto max-w-lg border border-[#E3DDD4] bg-white p-5 sm:p-8">
           <WhatsAppOfferForm
             extended
             showReturn={false}

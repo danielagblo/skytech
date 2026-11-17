@@ -38,7 +38,7 @@ export const DEFAULT_HERO: HeroData = {
   headlineSub: "IN OPERATION",
   headlines: [{ headline: "MANY YEARS", headlineSub: "IN OPERATION" }],
   headlineMode: "slide",
-  subText: "For Website, Mobile App Development and SEO Growth",
+  subText: "Websites, mobile apps, SEO, virtual tours, and CRM for businesses in Ghana.",
   stats: [
     { value: 8, suffix: "+", label: "Years in Operation", compact: false },
     { value: 8, suffix: "+", label: "Satisfied Customers", compact: false },

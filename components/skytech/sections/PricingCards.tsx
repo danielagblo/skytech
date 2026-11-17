@@ -79,79 +79,72 @@ export default function PricingCards({
   const [selected, setSelected] = useState(defaultIndex);
 
   return (
-    <div className="mx-auto grid max-w-[80rem] grid-cols-1 gap-6 px-5 pb-16 pt-8 md:grid-cols-3 lg:px-8">
+    <div className="mx-auto max-w-[80rem] px-5 pb-20 pt-8 lg:px-8">
+    <div className="grid grid-cols-1 gap-px bg-[#E3DDD4] md:grid-cols-3">
       {plans.map((plan, index) => {
         const isSelected = selected === index;
-        const isRecommended = plan.recommended;
 
         return (
           <div
             key={index}
             onClick={() => setSelected(index)}
-            className={`relative flex cursor-pointer flex-col overflow-hidden rounded-lg bg-white p-8 transition-all duration-300 ${
-              isSelected
-                ? "ring-2 ring-brand-600 shadow-lift"
-                : "shadow-soft ring-1 ring-slate-200 hover:-translate-y-1 hover:shadow-lift"
+            className={`relative flex cursor-pointer flex-col p-8 ${
+              isSelected ? "bg-[#141413] text-white" : "bg-white text-[#141413]"
             }`}
           >
-            {/* Recommended badge */}
-            {isRecommended && (
-              <span className="absolute right-0 top-0 inline-flex items-center gap-1.5 rounded-bl-2xl bg-slate-950 px-4 py-2 text-[0.7rem] font-bold uppercase tracking-widest text-white">
-                <svg className="h-3 w-3" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M13 3l1.1 4.1H18l-3.3 2.6 1.2 4.1-3-2.2-3 2.2 1.2-4.1L6 7.1h3.9L13 3z" />
-                </svg>
-                Recommended
-              </span>
-            )}
-
-            {/* Body */}
-            <div className="flex items-center justify-between">
-              <h3 className={`font-display text-xl font-semibold ${isSelected ? "text-brand-700" : "text-slate-900"}`}>
-                {plan.name}
-              </h3>
+            <div className="flex items-start justify-between gap-4">
+              <h3 className="font-display text-xl font-medium leading-snug">{plan.name}</h3>
+              {plan.recommended && (
+                <span className={`shrink-0 text-[11px] font-medium uppercase tracking-[0.16em] ${isSelected ? "text-white/70" : "text-[#1E5AC8]"}`}>
+                  Recommended
+                </span>
+              )}
             </div>
-            <p className="mt-1 text-sm text-slate-500">{plan.audience}</p>
+            <p className={`mt-2 text-sm ${isSelected ? "text-white/65" : "text-[#5C574F]"}`}>{plan.audience}</p>
 
-            {/* Price */}
-            <div className="mt-6 flex items-baseline gap-1.5">
-              <span className={`text-sm font-semibold ${isSelected ? "text-brand-600" : "text-slate-400"}`}>
+            <div className="mt-8 flex items-baseline gap-2">
+              <span className={`text-xs font-medium uppercase tracking-[0.14em] ${isSelected ? "text-white/60" : "text-[#5C574F]"}`}>
                 {currency}
               </span>
-              <span className={`font-display text-5xl font-bold tracking-tight ${isSelected ? "text-brand-600" : "text-slate-900"}`}>
+              <span className="font-display text-5xl font-medium tracking-tight">
                 {plan.price[currency]}
               </span>
             </div>
-            {plan.timeline && <p className="mt-1 text-xs text-slate-400">{plan.timeline}</p>}
+            {plan.timeline && (
+              <p className={`mt-2 text-xs ${isSelected ? "text-white/55" : "text-[#6B6560]"}`}>{plan.timeline}</p>
+            )}
 
-            <div className={`my-6 h-px ${isSelected ? "bg-brand-100" : "bg-slate-100"}`} />
+            <div className={`my-6 h-px ${isSelected ? "bg-white/15" : "bg-[#E3DDD4]"}`} />
 
-            {/* Features */}
             <ul className="flex-1 space-y-3">
               {plan.features.map((feature, i) => (
                 <li key={i} className="flex items-start gap-3">
-                  <span className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-white ${isSelected ? "bg-slate-950" : "bg-brand-100 text-brand-700"}`}>
-                    <svg className="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                    </svg>
-                  </span>
-                  <span className={`text-sm leading-snug ${isSelected ? "text-slate-700" : "text-slate-600"}`}>{feature}</span>
+                  <span className={`mt-2 h-1 w-1 shrink-0 ${isSelected ? "bg-white" : "bg-[#1E5AC8]"}`} />
+                  <span className={`text-sm leading-snug ${isSelected ? "text-white/85" : "text-[#5C574F]"}`}>{feature}</span>
                 </li>
               ))}
             </ul>
 
-            {/* CTA */}
             <div className="mt-8">
-              <button type="button" className={`w-full ${isSelected ? "btn-primary" : "btn-secondary"}`}>
+              <button
+                type="button"
+                className={`w-full rounded-full px-4 py-3.5 text-sm font-medium transition-colors ${
+                  isSelected
+                    ? "bg-[#161616] text-white hover:bg-[#2a2a2a]"
+                    : "border border-black/10 bg-white text-[#161616] hover:bg-black/5"
+                }`}
+              >
                 Choose {plan.name.replace(" Package", "")}
               </button>
             </div>
-            <p className="mt-4 text-center text-xs leading-relaxed whitespace-pre-line text-slate-400">
+            <p className={`mt-4 text-center text-xs leading-relaxed whitespace-pre-line ${isSelected ? "text-white/55" : "text-[#6B6560]"}`}>
               {plan.renewal}
               {"\n"}Free regular maintenance · No hidden fees
             </p>
           </div>
         );
       })}
+    </div>
     </div>
   );
 }

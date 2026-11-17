@@ -49,15 +49,14 @@ export default function ContactClient({ settings, teamMembers, contactContent })
   };
 
   return (
-    <main className="min-h-screen bg-white pt-28 pb-20">
-      {/* Hero */}
+    <main className="min-h-screen bg-[#F6F4F0] pt-28 pb-20">
       <section className="pb-16">
-        <div className="section-shell text-center space-y-4 max-w-3xl mx-auto">
-          <span className="pill">Get in Touch</span>
-          <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 leading-tight tracking-tight">
-            Let&apos;s Build Something <span className="text-blue-600">Great Together</span>
+        <div className="section-shell mx-auto max-w-3xl space-y-4 text-center">
+          <span className="eyebrow">Get in Touch</span>
+          <h1 className="font-display text-4xl font-semibold leading-[0.95] tracking-[-0.045em] text-[#141413] sm:text-6xl">
+            Let&apos;s build something <span className="text-[#1E5AC8]">great together</span>
           </h1>
-          <p className="text-lg text-slate-500">
+          <p className="text-lg text-[#5C574F]">
             Tell us about your project and we&apos;ll get back to you within 24 hours.
           </p>
         </div>
@@ -68,7 +67,7 @@ export default function ContactClient({ settings, teamMembers, contactContent })
         <div className="section-shell">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Contact Form */}
-            <div className="rounded-3xl bg-white border border-slate-100 shadow-sm p-8 lg:p-10">
+            <div className="rounded-[2rem] bg-white p-8 ring-1 ring-[#E3DDD4] lg:p-10">
               {submitted ? (
                 <div className="flex flex-col items-center justify-center py-20 space-y-4 text-center">
                   <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center">

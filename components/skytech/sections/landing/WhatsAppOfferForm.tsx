@@ -70,7 +70,7 @@ function WhatsAppOfferForm({
   const advance = () => setStep((current) => current + 1);
 
   const fieldClass =
-    "w-full rounded-2xl border border-emerald-100 bg-white px-4 py-3.5 text-base text-slate-800 shadow-sm outline-none transition placeholder:text-slate-400 focus:border-emerald-400 focus:ring-4 focus:ring-emerald-100";
+    "w-full rounded-2xl border border-black/10 bg-[#f6f6f4] px-4 py-3.5 text-base text-[#161616] outline-none transition placeholder:text-black/35 focus:border-[#161616]";
 
   const steps: ConversationalStep[] = [
     {
@@ -115,7 +115,7 @@ function WhatsAppOfferForm({
       valid: phoneOk,
       body: (
         <div>
-          <div className="flex overflow-hidden rounded-2xl border border-emerald-100 bg-white shadow-sm focus-within:border-emerald-400 focus-within:ring-4 focus-within:ring-emerald-100">
+          <div className="flex overflow-hidden rounded-2xl border border-black/10 bg-[#f6f6f4] focus-within:border-[#161616]">
             <label className="sr-only" htmlFor="wa-country-code">
               Country code
             </label>
@@ -123,7 +123,7 @@ function WhatsAppOfferForm({
               id="wa-country-code"
               value={countryCode}
               onChange={(event) => setCountryCode(event.target.value)}
-              className="max-w-[8.5rem] shrink-0 border-0 border-r border-emerald-100 bg-emerald-50/70 px-2 py-3.5 text-sm text-slate-800 outline-none"
+              className="max-w-[8.5rem] shrink-0 border-0 border-r border-black/10 bg-transparent px-2 py-3.5 text-sm text-[#161616] outline-none"
             >
               {COUNTRY_CODES.map((country) => (
                 <option key={country.code} value={country.code}>
@@ -339,6 +339,12 @@ function WhatsAppOfferForm({
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-700">Skytech Ghana</p>
           <h2 className="mt-2 text-3xl font-semibold tracking-tight text-slate-900">We&apos;re glad you&apos;re here</h2>
           <p className="mt-2 text-base leading-relaxed text-slate-600">{subtitle}</p>
+          {packageName ? (
+            <p className="mt-3 text-sm font-semibold text-[#161616]">
+              {packageName}
+              {packagePrice ? ` · ${packagePrice}` : ""}
+            </p>
+          ) : null}
           {showWhatsAppLabel && (
             <p className="flex items-center justify-center gap-1.5 text-lg font-bold text-emerald-600">
               <svg viewBox="0 0 24 24" className="h-5 w-5 fill-emerald-600">

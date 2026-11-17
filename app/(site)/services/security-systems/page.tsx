@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from "next/image";
 
 import CCTVSurveillance from "./CCTVSurveillance";
 import GPSTracking from "./GPSTracking";
@@ -83,29 +82,14 @@ function SecuritySystemsPage() {
   };
 
   return (
-    <div className="overflow-x-hidden bg-white">
-      <section className="relative overflow-hidden bg-slate-950 pt-28 pb-16 text-white md:pb-20">
-        <Image
-          src="/images/images/securitySystemsBannerImage.png"
-          alt="Security Systems"
-          fill
-          priority
-          className="absolute inset-0 object-cover opacity-25"
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/70 to-slate-950/30" />
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent" />
-        <div className="absolute inset-0 bg-grid opacity-20" />
-        <div className="absolute -top-20 right-1/4 h-72 w-72 rounded-full bg-brand-600/40 blur-[120px]" />
-
-        <div className="section-shell relative">
+    <div className="overflow-x-hidden bg-[#F6F4F0]">
+      <section className="studio-hero">
+        <div className="section-shell">
           <div className="max-w-2xl">
-            <span className="pill">Enterprise Security</span>
-            <h1 className="font-display mt-5 text-4xl font-semibold uppercase leading-[1.1] text-white sm:text-5xl">
-              SECURITY SYSTEMS &amp; SOLUTIONS
-            </h1>
-            <p className="mt-5 max-w-xl text-lg leading-relaxed text-slate-300">
-              Protecting your people, property, and data with enterprise-grade
-              surveillance, tracking, and cyber security services.
+            <span className="eyebrow">Enterprise security</span>
+            <h1 className="section-title mt-5">Security systems and solutions</h1>
+            <p className="section-lead mt-5 max-w-xl">
+              People, property, and data, looked after with surveillance, tracking, and cyber security.
             </p>
           </div>
         </div>
@@ -113,24 +97,24 @@ function SecuritySystemsPage() {
 
       <section className="px-4 py-12 md:px-8">
         <div className="mx-auto max-w-7xl">
-          <div className="mb-8 flex flex-col items-center">
-            <span className="section-tag justify-center">Choose a Service</span>
-            <h2 className="section-title mt-4 text-3xl text-balance sm:text-4xl">
-              Explore our security offerings
+          <div className="mb-8 max-w-2xl">
+            <span className="eyebrow">Choose a service</span>
+            <h2 className="section-title mt-4 text-3xl sm:text-4xl">
+              Security offerings
             </h2>
           </div>
 
-          <div className="mb-10 flex flex-wrap items-center justify-center gap-3">
+          <div className="mb-10 flex flex-wrap gap-x-6 gap-y-3 border-b border-[#E3DDD4]">
             {cards.map((card) => {
               const isActive = activeTabHash === card.hash;
               return (
                 <button
                   key={card.hash}
                   onClick={() => handleSelectTab(card)}
-                  className={`rounded-none px-5 py-2.5 text-sm font-medium transition-all duration-300 ${
+                  className={`-mb-px border-b pb-3 text-sm transition-colors ${
                     isActive
-                      ? "bg-slate-950 text-white shadow-soft"
-                      : "border border-slate-200 bg-white text-slate-600 hover:border-brand-600 hover:text-brand-600"
+                      ? "border-[#1E5AC8] font-medium text-[#141413]"
+                      : "border-transparent text-[#6B6560] hover:text-[#141413]"
                   }`}
                 >
                   {card.name}
@@ -139,8 +123,8 @@ function SecuritySystemsPage() {
             })}
           </div>
 
-          <div id="security-content" className="scroll-mt-24 rounded-none border border-slate-100 bg-white p-6 shadow-soft md:p-10">
-            <h2 className="mb-6 font-display text-3xl font-semibold uppercase leading-tight text-slate-900 md:text-4xl">
+          <div id="security-content" className="scroll-mt-28 border border-[#E3DDD4] bg-white p-6 md:p-10">
+            <h2 className="mb-6 font-display text-3xl font-medium leading-tight text-[#141413] md:text-4xl">
               {activeTab.title || activeTab.name || "Unknown Service"}
             </h2>
             {activeTab.component ? (

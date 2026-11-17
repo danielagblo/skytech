@@ -16,17 +16,14 @@ const problems = [
 export default function ProblemCards() {
   return (
     <div className="section-shell">
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+      <div className="grid gap-px bg-[#E3DDD4] md:grid-cols-3">
         {problems.map((problem, index) => (
-          <div
-            key={index}
-            className="flex flex-col rounded-none border border-slate-100 bg-white p-8 shadow-soft transition-all duration-500 hover:-translate-y-1 hover:shadow-lift"
-          >
-            <span className="mb-5 inline-flex h-11 w-11 items-center justify-center rounded-none bg-slate-950 font-display text-base font-semibold text-white">
+          <div key={index} className="flex flex-col bg-white p-8">
+            <span className="font-display text-sm tracking-[0.18em] text-[#1E5AC8]">
               {String(index + 1).padStart(2, "0")}
             </span>
-            <h3 className="mb-3 text-xl font-semibold leading-snug text-slate-900">{problem.title}</h3>
-            <p className="text-base leading-relaxed text-slate-600">{problem.body}</p>
+            <h3 className="mb-3 mt-5 text-xl font-medium leading-snug text-[#141413]">{problem.title}</h3>
+            <p className="text-base leading-relaxed text-[#5C574F]">{problem.body}</p>
           </div>
         ))}
       </div>

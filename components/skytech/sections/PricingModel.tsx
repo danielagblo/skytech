@@ -43,9 +43,11 @@ function toPlan(pkg: PricingPackageData): Plan {
 function PricingModel({
   categories = [],
   showWhyYouNeedUs = true,
+  showIntro = true,
 }: {
   categories?: PricingCategoryData[];
   showWhyYouNeedUs?: boolean;
+  showIntro?: boolean;
 }) {
   const [currency, setCurrency] = useState<Currency>("GHC");
   const [activeIndex, setActiveIndex] = useState(0);
@@ -64,57 +66,48 @@ function PricingModel({
     : [];
 
   return (
-    <div className="bg-white">
-      <div className="px-6 pt-16 md:pt-20">
-        <div className="mx-auto grid max-w-[80rem] grid-cols-1 items-center gap-10 lg:grid-cols-[1.4fr_1fr]">
-          <div className="relative">
-            <span className="section-tag">Simple & transparent</span>
-            <h2 className="section-title mt-3">
-              Simple rate card with zero surprises
+    <div className={`${showIntro ? "border-t border-[#E3DDD4]" : ""} bg-[#F6F4F0]`}>
+      {showIntro && <div className="px-5 pt-24 md:px-8 md:pt-32">
+        <div className="mx-auto grid max-w-[80rem] grid-cols-1 items-end gap-12 lg:grid-cols-[1.4fr_0.6fr]">
+          <div>
+            <span className="eyebrow">Pricing</span>
+            <h2 className="section-title mt-5 max-w-xl">
+              A simple rate card, with nothing added later
             </h2>
-            <ul className="mt-6 space-y-2 text-slate-600">
-              <li className="flex items-start gap-3">
-                <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand-100 text-brand-700">
-                  <svg className="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                  </svg>
-                </span>
-                We do regular maintenance on your site at no fees
+            <ul className="mt-8 max-w-lg space-y-3 text-[#5C574F]">
+              <li className="flex items-start gap-3 border-t border-[#E3DDD4] pt-3">
+                <span className="mt-2 h-1 w-1 shrink-0 bg-[#1E5AC8]" />
+                Regular maintenance on your site, at no extra fee
               </li>
-              <li className="flex items-start gap-3">
-                <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand-100 text-brand-700">
-                  <svg className="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                  </svg>
-                </span>
-                We program, we don&apos;t use templates or WordPress
+              <li className="flex items-start gap-3 border-t border-[#E3DDD4] pt-3">
+                <span className="mt-2 h-1 w-1 shrink-0 bg-[#1E5AC8]" />
+                Written and programmed here. No templates, no WordPress
               </li>
             </ul>
           </div>
-          <div className="flex items-center justify-center lg:justify-end">
+          <div className="hidden justify-end lg:flex">
             <Image
               src="/images/icons/stars-line-svgrepo-com.svg"
-              alt="Award"
-              width={200}
-              height={200}
-              className="h-40 w-40 object-contain opacity-90 lg:h-56 lg:w-56"
+              alt=""
+              width={160}
+              height={160}
+              className="h-28 w-28 object-contain opacity-80"
             />
           </div>
         </div>
-      </div>
+      </div>}
 
-      <div className="mx-auto mt-10 flex max-w-[80rem] flex-col gap-6 px-5 sm:flex-row sm:items-center sm:justify-between lg:px-8 border-b border-slate-100 pb-2">
-        {/* Category tabs */}
-        <div className="flex flex-wrap items-center gap-6">
-          {items.map((item, i) => (
+      <div className={`mx-auto flex max-w-[80rem] flex-col gap-6 border-b border-[#E3DDD4] px-5 sm:flex-row sm:items-end sm:justify-between lg:px-8 ${showIntro ? "mt-12" : "pt-8"}`}>
+        <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+          {items.map((item) => (
             <button
               key={item.key}
               type="button"
               onClick={() => setActiveIndex(item.index)}
-              className={`pb-2 text-sm font-semibold transition-all duration-300 border-b-2 -mb-[10px] ${
+              className={`-mb-px border-b pb-3 text-sm transition-colors ${
                 activeIndex === item.index
-                  ? "border-brand-600 text-brand-600"
-                  : "border-transparent text-slate-400 hover:text-slate-600 hover:border-slate-300"
+                  ? "border-[#1E5AC8] font-medium text-[#141413]"
+                  : "border-transparent text-[#6B6560] hover:text-[#141413]"
               }`}
             >
               {item.label}
@@ -122,17 +115,16 @@ function PricingModel({
           ))}
         </div>
 
-        {/* Currency toggle */}
         <div className="flex items-center gap-4">
           {(["GHC", "USD"] as Currency[]).map((c) => (
             <button
               key={c}
               type="button"
               onClick={() => setCurrency(c)}
-              className={`pb-2 text-sm font-semibold uppercase transition-all duration-300 border-b-2 -mb-[10px] ${
+              className={`-mb-px border-b pb-3 text-xs font-medium uppercase tracking-[0.16em] transition-colors ${
                 currency === c
-                  ? "border-brand-600 text-brand-600"
-                  : "border-transparent text-slate-400 hover:text-slate-600 hover:border-slate-300"
+                  ? "border-[#1E5AC8] text-[#141413]"
+                  : "border-transparent text-[#6B6560] hover:text-[#141413]"
               }`}
             >
               {c}

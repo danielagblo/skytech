@@ -74,6 +74,13 @@ import {
   downloadInvoicePDF,
   openInvoicePdf,
 } from "@/components/invoices/InvoicePDF";
+import {
+  detectWebsiteOffer,
+  websiteOfferById,
+  websiteOfferFromText,
+  websiteOfferFromValue,
+  WEBSITE_OFFERS,
+} from "@/lib/crm/website-offers";
 
 const itemSchema = z.object({
   description: z.string().trim().min(2, "Describe this line item.").max(500),
@@ -319,10 +326,15 @@ export const InvoiceWorkspace = ({
   const editable = !invoice || invoice.status === "DRAFT";
   const busy = createInvoice.isPending || updateInvoice.isPending;
   const autofillDealRef = useRef("");
+  const [offerId, setOfferId] = useState("");
 
   useEffect(() => {
-    if (!invoice) return;
+    if (!invoice) {
+      setOfferId("");
+      return;
+    }
     form.reset(toDraftValues(invoice));
+    setOfferId(detectWebsiteOffer(invoice.items)?.id ?? "");
   }, [form, invoice]);
 
   useEffect(() => {
@@ -352,25 +364,40 @@ export const InvoiceWorkspace = ({
     const contractTouched = Number(first?.unitPrice ?? 0) > 0;
     const descriptionTouched =
       Boolean(first?.description) && first?.description !== "Service";
-    if (!contractTouched && !descriptionTouched) {
-      form.setValue("items.0.description", "Service", {
-        shouldValidate: true,
-        shouldDirty: true,
-      });
-      form.setValue(
-        "items.0.unitPrice",
-        selectedDeal.data?.contractValue ?? 0,
-        {
-          shouldValidate: true,
-          shouldDirty: true,
-        },
+    if (contractTouched || descriptionTouched) return;
+    const matched =
+      websiteOfferFromText(
+        `${selectedDeal.data?.title ?? ""} ${relatedLead.service ?? ""}`,
+      ) ?? websiteOfferFromValue(selectedDeal.data?.contractValue ?? 0);
+    if (matched) {
+      setOfferId(matched.id);
+      items.replace(
+        matched.items.map((item) => ({
+          description: item.description,
+          quantity: 1,
+          unitPrice: item.unitPrice,
+          subLines: [] as string[],
+        })),
       );
-      form.setValue("items.0.quantity", 1, {
+      return;
+    }
+    form.setValue("items.0.description", "Service", {
+      shouldValidate: true,
+      shouldDirty: true,
+    });
+    form.setValue(
+      "items.0.unitPrice",
+      selectedDeal.data?.contractValue ?? 0,
+      {
         shouldValidate: true,
         shouldDirty: true,
-      });
-    }
-  }, [dealId, form, selectedLead.data, selectedDeal.data]);
+      },
+    );
+    form.setValue("items.0.quantity", 1, {
+      shouldValidate: true,
+      shouldDirty: true,
+    });
+  }, [dealId, form, items, selectedLead.data, selectedDeal.data]);
 
   const selectInvoice = (item: Invoice) => {
     setSelectedId(item.id);
@@ -383,8 +410,23 @@ export const InvoiceWorkspace = ({
     });
   };
 
+  const applyOffer = (id: string) => {
+    const offer = websiteOfferById(id);
+    if (!offer) return;
+    setOfferId(offer.id);
+    items.replace(
+      offer.items.map((item) => ({
+        description: item.description,
+        quantity: 1,
+        unitPrice: item.unitPrice,
+        subLines: [] as string[],
+      })),
+    );
+  };
+
   const startNew = () => {
     setSelectedId("");
+    setOfferId("");
     form.reset(defaultDraft());
   };
 
@@ -656,6 +698,29 @@ export const InvoiceWorkspace = ({
                     </div>
                   </section>
                 </div>
+              </div>
+
+              <div className="max-w-md">
+                <Label>Website offer</Label>
+                <Select
+                  value={offerId || undefined}
+                  onValueChange={applyOffer}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select an offer" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {WEBSITE_OFFERS.map((offer) => (
+                      <SelectItem key={offer.id} value={offer.id}>
+                        {offer.name} · {offer.total.toLocaleString("en-GH")}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  Choosing an offer fills Software, Hosting, Domain, SEO/Blog,
+                  and Maintenance on the invoice.
+                </p>
               </div>
 
               <div className="overflow-x-auto">

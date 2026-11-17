@@ -7,25 +7,23 @@ import WhatsAppOfferForm from "@/components/skytech/sections/landing/WhatsAppOff
 
 export default function ContactForm() {
   return (
-    <section className="bg-slate-50 px-6 py-16 md:py-24">
-      <div className="mx-auto max-w-7xl">
-        <div className="mb-12 flex flex-col items-center text-center">
-          <span className="section-tag">Get in Touch</span>
-          <h2 className="section-title mt-4 text-3xl text-balance sm:text-4xl lg:text-5xl">
-            Start a WhatsApp chat
-          </h2>
-          <p className="section-lead mt-3 max-w-xl">
-            Share a few details and we&apos;ll open WhatsApp so you can talk with our team right away.
+    <section className="bg-[#F6F4F0] px-5 py-20 md:px-8 md:py-28">
+      <div className="mx-auto max-w-[80rem]">
+        <div className="mb-12 max-w-2xl">
+          <span className="eyebrow">Get in touch</span>
+          <h2 className="section-title mt-5">Start a conversation</h2>
+          <p className="section-lead mt-4">
+            Share a few details and we will open WhatsApp so you can talk with the team directly.
           </p>
         </div>
 
         <div className="grid gap-12 lg:grid-cols-2">
-          <div className="rounded-none border border-slate-100 bg-white p-8 shadow-lift lg:p-10">
+          <div className="border border-[#E3DDD4] bg-white p-6 lg:p-10">
             <WhatsAppOfferForm extended showReturn={false} />
           </div>
 
           <div>
-            <div className="overflow-hidden rounded-none shadow-soft ring-1 ring-slate-100">
+            <div className="site-map overflow-hidden border border-[#E3DDD4]">
               <iframe
                 title="SkyTech Ghana"
                 src="https://maps.google.com/maps?q=5.6519898,-0.0643809&z=19&output=embed"
@@ -35,48 +33,36 @@ export default function ContactForm() {
               />
             </div>
 
-            <div className="mt-8 rounded-none bg-gradient-to-b from-brand-50/60 to-white p-8 ring-1 ring-brand-100">
-              <h3 className="font-display text-3xl font-semibold leading-tight text-slate-900 md:text-4xl">
-                SPEAK TO OUR
-                <br />
-                24/7 SUPPORT.
+            <div className="mt-8 border border-[#E3DDD4] bg-white p-8">
+              <h3 className="font-display text-2xl font-medium tracking-tight text-[#141413] md:text-3xl">
+                Speak with support
               </h3>
 
-              <div className="mt-8 space-y-3 text-lg">
-                <div className="h-6 w-6 inline-block">
-                  <Image src="/images/icons/mailIcon.svg" alt="Mail Icon" width={24} height={24} className="inline-block w-full h-full" />
-                </div>
-                &nbsp;&nbsp;
-                <p className="inline-block text-brand-700">info@skytechghana.com</p>
-
-                <br />
-                <div className="h-6 w-6 inline-block">
-                  <Image src="/images/icons/telephoneIcon.svg" alt="Telephone Icon" width={24} height={24} className="inline-block w-full h-full" />
-                </div>
-                &nbsp;&nbsp;
-                <p className="inline-block text-brand-700">+233 53 831 1626</p>
+              <div className="mt-8 space-y-4 text-base text-[#141413]">
+                <p className="flex items-center gap-3">
+                  <Image src="/images/icons/mailIcon.svg" alt="" width={20} height={20} />
+                  <a href="mailto:info@skytechghana.com" className="text-[#1E5AC8]">info@skytechghana.com</a>
+                </p>
+                <p className="flex items-center gap-3">
+                  <Image src="/images/icons/telephoneIcon.svg" alt="" width={20} height={20} />
+                  <a href="tel:+233538311626" className="text-[#1E5AC8]">+233 53 831 1626</a>
+                </p>
               </div>
 
-              <div className="mt-8">
-                <p className="mb-2 text-slate-500">All international enquiries</p>
-
-                <div className="flex items-center gap-2 text-2xl">
+              <div className="mt-8 border-t border-[#E3DDD4] pt-8">
+                <p className="text-sm text-[#5C574F]">International enquiries</p>
+                <div className="mt-3">
                   <FlagsList />
                 </div>
-
-                <div className="mt-4 space-y-3 text-lg">
-                  <div className="h-6 w-6 inline-block">
-                    <Image src="/images/icons/mailIcon.svg" alt="Mail Icon" width={24} height={24} className="inline-block w-full h-full" />
-                  </div>
-                  &nbsp;&nbsp;
-                  <p className="inline-block text-brand-700">world@skytechghana.com</p>
-
-                  <br />
-                  <div className="h-6 w-6 inline-block">
-                    <Image src="/images/icons/telephoneIcon.svg" alt="Telephone Icon" width={24} height={24} className="inline-block w-full h-full" />
-                  </div>
-                  &nbsp;&nbsp;
-                  <p className="inline-block text-brand-700">+1 558 289 2433</p>
+                <div className="mt-4 space-y-4 text-base text-[#141413]">
+                  <p className="flex items-center gap-3">
+                    <Image src="/images/icons/mailIcon.svg" alt="" width={20} height={20} />
+                    <a href="mailto:world@skytechghana.com" className="text-[#1E5AC8]">world@skytechghana.com</a>
+                  </p>
+                  <p className="flex items-center gap-3">
+                    <Image src="/images/icons/telephoneIcon.svg" alt="" width={20} height={20} />
+                    <a href="tel:+15582892433" className="text-[#1E5AC8]">+1 558 289 2433</a>
+                  </p>
                 </div>
               </div>
             </div>

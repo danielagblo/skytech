@@ -41,7 +41,7 @@ a {
 }
 
 ::selection {
-  background: rgba(59, 130, 246, 0.25);
+  background: rgba(30, 90, 200, 0.16);
 }
 
 /* ===== UTILITY CLASSES ===== */
@@ -59,7 +59,20 @@ a {
 }
 
 .pill {
-  @apply inline-flex items-center rounded-none px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] bg-brand-50 text-brand-700 border border-brand-100;
+  @apply inline-flex items-center border border-[#1E5AC8]/30 px-2.5 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-[#1E5AC8];
+}
+
+.eyebrow {
+  @apply inline-flex items-center gap-3 text-[11px] font-medium uppercase tracking-[0.22em] text-[#1E5AC8];
+}
+
+.eyebrow::before {
+  content: "";
+  display: block;
+  width: 1.25rem;
+  height: 1px;
+  background: currentColor;
+  flex-shrink: 0;
 }
 
 .btn-primary {
@@ -105,11 +118,75 @@ a {
 }
 
 .section-title {
-  @apply font-display text-3xl sm:text-4xl lg:text-[2.75rem] font-semibold tracking-tight text-slate-900 leading-[1.1];
+  @apply font-display text-3xl sm:text-4xl lg:text-5xl font-medium tracking-[-0.025em] text-[#141413] leading-[1.15];
 }
 
 .section-lead {
-  @apply text-lg text-slate-600 leading-relaxed;
+  @apply text-base sm:text-lg text-[#5C574F] leading-relaxed;
+}
+
+.studio-page {
+  background: #e8e8ea;
+  color: #161616;
+}
+
+.studio-hero {
+  background: transparent;
+  color: #161616;
+  border-bottom: none;
+  padding-top: 1.5rem;
+  padding-bottom: 3.5rem;
+}
+
+.film-page > div {
+  background-color: transparent;
+}
+
+.film-page .btn-primary {
+  border-radius: 9999px;
+  background: #161616;
+  color: #fff;
+}
+
+.film-page .btn-primary:hover {
+  background: #2a2a2a;
+}
+
+.film-page .btn-secondary {
+  border-radius: 9999px;
+  border-color: rgba(0, 0, 0, 0.1);
+  color: #161616;
+}
+
+.film-page .eyebrow {
+  color: #161616;
+}
+
+@keyframes story-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.film-page .eyebrow::before {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 9999px;
+  background: #8dce3a;
+}
+
+.studio-panel {
+  background: #ffffff;
+  border: 1px solid #E3DDD4;
+}
+
+.lenis.lenis-smooth .site-map iframe {
+  pointer-events: auto;
 }
 
 /* ===== ANIMATIONS ===== */
@@ -274,7 +351,7 @@ a {
 /* ===== CARD HOVER EFFECTS ===== */
 
 .card-hover {
-  @apply transition-all duration-500 hover:-translate-y-1 hover:shadow-xl;
+  @apply transition-colors duration-300;
 }
 
 /* ===== GRADIENT TEXT ===== */

@@ -15,7 +15,7 @@ interface PageHeroProps {
 export default function PageHero({ tag, title, lead, children, className }: PageHeroProps) {
   return (
     <div className={`${className ?? ""} space-y-5`}>
-      {tag && <span className="section-tag">{tag}</span>}
+      {tag && <span className="eyebrow">{tag}</span>}
       <h1 className="section-title">{title}</h1>
       {lead && <p className="section-lead max-w-2xl">{lead}</p>}
       {children}

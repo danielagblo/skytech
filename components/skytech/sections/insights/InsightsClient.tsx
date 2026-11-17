@@ -65,7 +65,7 @@ export default function InsightsClient({ posts }: { posts: BlogPost[] }) {
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="appearance-none bg-white border border-[#5A1827] text-[#5A1827] px-5 py-2.5 pr-10 font-display text-xs font-bold uppercase tracking-wider focus:outline-none rounded-none cursor-pointer"
+              className="cursor-pointer appearance-none border border-[#E3DDD4] bg-white px-5 py-2.5 pr-10 text-xs font-medium uppercase tracking-wider text-[#141413] focus:outline-none"
             >
               <option value="All">Content Type</option>
               {categories.filter(c => c !== "All").map((c) => (
@@ -74,7 +74,7 @@ export default function InsightsClient({ posts }: { posts: BlogPost[] }) {
                 </option>
               ))}
             </select>
-            <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-[#5A1827]">
+            <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-[#141413]">
               <svg className="fill-current h-3.5 w-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                 <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
               </svg>
@@ -86,7 +86,7 @@ export default function InsightsClient({ posts }: { posts: BlogPost[] }) {
             <select
               value={selectedYear}
               onChange={(e) => setSelectedYear(e.target.value)}
-              className="appearance-none bg-white border border-[#5A1827] text-[#5A1827] px-5 py-2.5 pr-10 font-display text-xs font-bold uppercase tracking-wider focus:outline-none rounded-none cursor-pointer"
+              className="cursor-pointer appearance-none border border-[#E3DDD4] bg-white px-5 py-2.5 pr-10 text-xs font-medium uppercase tracking-wider text-[#141413] focus:outline-none"
             >
               <option value="All">Select Year</option>
               {years.filter(y => y !== "All").map((y) => (
@@ -95,7 +95,7 @@ export default function InsightsClient({ posts }: { posts: BlogPost[] }) {
                 </option>
               ))}
             </select>
-            <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-[#5A1827]">
+            <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-[#141413]">
               <svg className="fill-current h-3.5 w-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                 <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
               </svg>
@@ -131,7 +131,7 @@ export default function InsightsClient({ posts }: { posts: BlogPost[] }) {
                       src={post.coverImage}
                       alt={post.title}
                       fill
-                      className="object-cover transition-transform duration-700 group-hover:scale-105"
+                      className="object-cover"
                     />
                     <div className="absolute inset-0 bg-black/45 z-[1]" />
                     <div className="relative z-10 text-white space-y-1">

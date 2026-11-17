@@ -68,14 +68,12 @@ export default function CaseStudiesClient({ projects }) {
   }, []);
 
   return (
-    <div ref={containerRef} className="min-h-screen bg-white pt-32 pb-24">
-      <div className="section-shell space-y-32">
-        {/* Header Block */}
-        <div className="max-w-4xl space-y-6">
-          <span className="pill border-brand-600/20 text-brand-600 bg-brand-50 uppercase tracking-[0.2em] text-[10px] font-bold case-hero-el">Our Work</span>
-          <h1 className="text-4xl lg:text-6xl leading-[1.1] tracking-tight text-slate-900 font-light case-hero-el">
-            Real projects, <span className="font-extrabold text-brand-600">real results.</span> <br />
-            <span className="font-extrabold text-slate-950">See what we've built.</span>
+    <div ref={containerRef} className="min-h-screen bg-[#F6F4F0] pb-24 pt-36 md:pt-44">
+      <div className="section-shell space-y-24">
+        <div className="max-w-3xl">
+          <span className="eyebrow case-hero-el">Our work</span>
+          <h1 className="section-title mt-5 case-hero-el">
+            Real projects, stated plainly.
           </h1>
           <p className="text-xl text-slate-500 max-w-2xl leading-relaxed font-medium case-hero-el">
             A selection of websites and apps we've built for our clients. Each project shows the problem, solution, and results.
@@ -151,18 +149,17 @@ export default function CaseStudiesClient({ projects }) {
         </div>
 
         {/* Global CTA */}
-        <div className="rounded-none bg-slate-950 p-16 md:p-24 text-center space-y-10 relative overflow-hidden case-cta-section">
-          <div className="absolute inset-0 bg-brand-600/10 blur-[120px]" />
-          <div className="relative z-10 space-y-4 max-w-3xl mx-auto case-cta-el">
-            <span className="text-brand-500 text-[10px] font-extrabold uppercase tracking-[0.4em]">Get Started</span>
-            <h2 className="text-4xl md:text-6xl font-extrabold text-white">Let's build something <br /> great together.</h2>
-            <p className="text-slate-400 text-lg leading-relaxed">
-              Ready to start your next project? Tell us about it and we'll give you a clear plan and a fixed price.
+        <div className="case-cta-section border border-[#E3DDD4] bg-[#0C0D10] px-8 py-16 text-white md:px-14">
+          <div className="max-w-2xl space-y-4 case-cta-el">
+            <p className="text-[11px] font-medium uppercase tracking-[0.22em] text-white/60">Next</p>
+            <h2 className="font-display text-3xl font-medium tracking-tight md:text-4xl">Let&apos;s build the next one together.</h2>
+            <p className="text-lg leading-relaxed text-white/70">
+              Tell us about the project. You will get a clear plan and a fixed price.
             </p>
           </div>
-          <div className="relative z-10 case-cta-el">
-            <Link href="/contact" className="inline-flex items-center gap-3 px-12 py-6 bg-slate-950 text-white rounded-none font-extrabold text-lg hover:bg-white hover:text-slate-950 transition-all shadow-2xl shadow-slate-950/20">
-              Start Your Project
+          <div className="case-cta-el mt-8">
+            <Link href="/contact" className="btn-primary">
+              Start a project
             </Link>
           </div>
         </div>

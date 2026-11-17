@@ -43,7 +43,7 @@ const audiences: AudienceItem[] = [
     description:
       "We accelerate speed-to-market by engineering highly scalable Minimum Viable Products (MVPs), flexible API architectures, and specialized microservices built to handle rapid user growth.",
     image: "/images/images/NGOsHandsImage.png",
-    alt: "NGO workers collaborating",
+    alt: "Team collaborating",
     wide: false,
   },
   {
@@ -57,74 +57,40 @@ const audiences: AudienceItem[] = [
   },
 ];
 
-function AudienceCard({ number, title, description, image, alt, wide }: AudienceItem) {
+function AudienceCard({ number, title, description, image, alt }: AudienceItem) {
   return (
-    <div className="relative flex h-full flex-col gap-6 rounded-none border border-slate-100 bg-white p-6 pt-10 shadow-soft transition-all duration-500 hover:-translate-y-1 hover:shadow-lift md:p-8 md:pt-10">
-      <div className="absolute -top-3 -left-2 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-slate-950 font-display text-sm font-semibold text-white shadow-soft">
-        {number}
-      </div>
-
-      <div className={`flex h-full flex-col gap-4 md:flex-row ${wide ? "items-start" : "items-center"}`}>
-        <div className="h-full min-w-0 flex-1 flex-col gap-3">
-          <h3 className="font-display text-2xl font-semibold leading-snug text-slate-900">{title}</h3>
+    <article className="flex h-full flex-col bg-white p-6 md:p-8">
+      <p className="font-display text-sm tracking-[0.18em] text-[#1E5AC8]">{String(number).padStart(2, "0")}</p>
+      <div className="mt-4 flex flex-col gap-6 md:flex-row md:items-start">
+        <div className="min-w-0 flex-1">
+          <h3 className="font-display text-2xl font-medium leading-snug text-[#141413]">{title}</h3>
           <div className="mt-3 flex flex-col gap-3">
             {description.split("\n\n").map((para, i) => (
-              <p key={i} className="leading-relaxed text-slate-600">
-                {para}
-              </p>
+              <p key={i} className="leading-relaxed text-[#5C574F]">{para}</p>
             ))}
           </div>
         </div>
-
         {image && (
-          <div
-            className={`shrink-0 overflow-hidden rounded-none ${
-              wide ? "md:h-56 md:w-64 md:scale-[0.8]" : "md:h-28 md:w-28"
-            } h-40 w-full`}
-          >
-            <Image src={image} alt={alt} width={256} height={224} className="h-full w-full object-cover" />
+          <div className="relative h-40 w-full shrink-0 overflow-hidden border border-[#E3DDD4] md:h-36 md:w-44">
+            <Image src={image} alt={alt} fill className="object-cover" />
           </div>
         )}
       </div>
-    </div>
+    </article>
   );
 }
 
 export default function TargetMarketAudience() {
-  const [first, ...rest] = audiences;
-  const pairs = rest.reduce<AudienceItem[][]>((acc, item, i) => {
-    if (i % 2 === 0) acc.push([item]);
-    else acc[acc.length - 1].push(item);
-    return acc;
-  }, []);
-
   return (
-    <section className="px-6 py-16 md:px-10 md:py-24">
-      <div className="mx-auto max-w-7xl">
-        <div className="mb-12 flex flex-col items-center text-center">
-          <span className="section-tag justify-center">Who we serve</span>
-          <h2 className="section-title mt-4 text-3xl text-balance sm:text-4xl">
-            Target Market Audience
-          </h2>
+    <section className="border-t border-[#E3DDD4] bg-[#F6F4F0] px-5 py-20 md:px-8 md:py-28">
+      <div className="mx-auto max-w-[80rem]">
+        <div className="mb-12 max-w-2xl">
+          <span className="eyebrow">Who we serve</span>
+          <h2 className="section-title mt-5">Target market</h2>
         </div>
-
-        <div className="flex flex-col gap-6">
-          <AudienceCard {...first} />
-
-          {pairs.map((pair, i) => (
-            <div key={i} className="grid grid-cols-1 gap-4 md:grid-cols-2">
-              {pair.map((item) => (
-                <AudienceCard
-                  number={item.number}
-                  title={item.title}
-                  description={item.description}
-                  image={item.image}
-                  alt={item.alt}
-                  wide={item.wide}
-                  key={item.number}
-                />
-              ))}
-            </div>
+        <div className="grid gap-px bg-[#E3DDD4]">
+          {audiences.map((item) => (
+            <AudienceCard key={item.number} {...item} />
           ))}
         </div>
       </div>

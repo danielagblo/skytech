@@ -15,24 +15,17 @@ export default function ServicesClient({ servicesContent, whoWeWorkFor, engageme
   return (
     <main className="min-h-screen bg-white">
       {/* Hero */}
-      <section className="relative overflow-hidden bg-slate-950 pt-36 pb-24 text-white">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0" style={{
-            backgroundImage: 'radial-gradient(circle at 30% 50%, rgba(30,90,200,0.5), transparent 50%), radial-gradient(circle at 70% 30%, rgba(56,189,248,0.25), transparent 50%)'
-          }} />
-        </div>
-        <div className="pointer-events-none absolute -left-20 top-10 h-80 w-80 rounded-full bg-brand-600/20 blur-[120px]" />
-
+      <section className="relative overflow-hidden bg-[#141413] pt-36 pb-24 text-[#F6F4F0]">
         <div className="section-shell relative z-10 mx-auto max-w-4xl space-y-6 text-center">
-          <span className="pill bg-white/10 text-brand-300 border-white/10">Our Services</span>
+          <span className="eyebrow">Our Services</span>
           <h1 className="text-4xl font-bold leading-tight tracking-tight sm:text-5xl lg:text-6xl">
             {servicesContent.heroTitle}
           </h1>
-          <p className="mx-auto max-w-2xl text-lg leading-relaxed text-slate-300">
+          <p className="mx-auto max-w-2xl text-lg leading-relaxed text-white/70">
             {servicesContent.heroSubtitle}
           </p>
           <div className="flex flex-wrap justify-center gap-4 pt-4">
-            <Link href="/contact" className="btn-primary border border-white/20">
+            <Link href="/contact" className="inline-flex items-center justify-center bg-[#1E5AC8] px-7 py-3.5 font-semibold text-white transition hover:bg-[#1749a3]">
               Start a Project
             </Link>
             <Link href="/services/security-systems" className="inline-flex items-center justify-center rounded-full border border-white/20 bg-white/5 px-7 py-3.5 font-semibold text-white transition-all hover:bg-white/10">
@@ -46,7 +39,7 @@ export default function ServicesClient({ servicesContent, whoWeWorkFor, engageme
       <section className="py-24 bg-white">
         <div className="section-shell space-y-16">
           <div className="text-center max-w-3xl mx-auto space-y-4">
-            <span className="section-tag">What We Build</span>
+            <span className="eyebrow">What We Build</span>
             <h2 className="section-title text-4xl sm:text-5xl">
               {servicesContent.whatWeDoTitle}
             </h2>
@@ -63,8 +56,8 @@ export default function ServicesClient({ servicesContent, whoWeWorkFor, engageme
                 onClick={() => setActiveFilter(filter)}
                 className={`rounded-full px-5 py-2 text-sm font-semibold transition-all duration-300 ${
                   activeFilter === filter
-                    ? 'bg-brand-600 text-white shadow-lg shadow-brand-600/25'
-                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                    ? 'bg-[#141413] text-[#F6F4F0]'
+                    : 'bg-[#F6F4F0] text-[#5C574F] hover:bg-[#E3DDD4]'
                 }`}
               >
                 {filter}
@@ -77,12 +70,12 @@ export default function ServicesClient({ servicesContent, whoWeWorkFor, engageme
             {filteredServices.map((service, idx) => (
               <div
                 key={idx}
-                className="group rounded-3xl border border-slate-100 bg-white p-8 shadow-soft transition-all duration-500 hover:shadow-lift hover:shadow-brand-600/5 hover:border-brand-100"
+                className="group rounded-[1.75rem] bg-[#F6F4F0] p-8 transition-all duration-500 hover:-translate-y-1"
               >
-                <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-50 text-brand-600 transition-all group-hover:bg-brand-600 group-hover:text-white">
+                <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-full bg-[#141413] text-[#F6F4F0]">
                   {service.icon}
                 </div>
-                <h3 className="mb-3 text-lg font-bold text-slate-900 transition-colors group-hover:text-brand-600">
+                <h3 className="mb-3 text-lg font-semibold text-[#141413]">
                   {service.name}
                 </h3>
                 <p className="text-sm leading-relaxed text-slate-500">
@@ -95,10 +88,10 @@ export default function ServicesClient({ servicesContent, whoWeWorkFor, engageme
       </section>
 
       {/* How We Work */}
-      <section className="py-24 bg-slate-50">
+      <section className="bg-[#F6F4F0] py-24">
         <div className="section-shell space-y-16">
           <div className="text-center max-w-3xl mx-auto space-y-4">
-            <span className="section-tag">How We Work</span>
+            <span className="eyebrow">How We Work</span>
             <h2 className="section-title text-4xl">
               {servicesContent.engagementTitle}
             </h2>
@@ -110,7 +103,7 @@ export default function ServicesClient({ servicesContent, whoWeWorkFor, engageme
                 key={idx}
                 className="space-y-6 rounded-3xl border border-slate-100 bg-white p-8 shadow-soft transition-all duration-500 hover:shadow-lift"
               >
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-600 text-sm font-bold text-white">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#1E5AC8] text-sm font-bold text-white">
                   {String(idx + 1).padStart(2, '0')}
                 </div>
                 <h3 className="text-xl font-bold text-slate-900">{engagement.title}</h3>

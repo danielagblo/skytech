@@ -1,36 +1,16 @@
-import Image from "next/image";
-
 function PrivacyPolicyPage() {
   return (
-    <div className="text-xl">
-      {/* Banner Wrapper: dark background matching navbar to prevent white gaps, with top padding so image starts below navbar */}
-      <div className="relative w-full bg-slate-950 pt-[60px] md:pt-[80px]">
-        <div className="relative h-64 md:h-80 w-full">
-          <Image
-            src="/images/images/AboutBanner.png"
-            alt="Privacy Policy"
-            fill
-            className="object-cover opacity-85"
-            priority
-          />
-          {/* Dark gradient overlay on top of the image */}
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-transparent to-transparent z-10" />
-          
-          {/* Title overlay directly on the hero image */}
-          <div className="absolute bottom-24 md:bottom-36 left-6 md:left-12 z-20">
-            <h1 className="text-3xl md:text-4xl font-extrabold text-white uppercase tracking-tight">
-              Privacy Policy
-            </h1>
-            <p className="text-slate-300 text-xs md:text-sm mt-1">
-              Last Updated: August 08, 2026
-            </p>
-          </div>
+    <div className="bg-[#F6F4F0] text-[#141413]">
+      <section className="studio-hero">
+        <div className="section-shell max-w-3xl">
+          <span className="eyebrow">Legal</span>
+          <h1 className="section-title mt-5">Privacy policy</h1>
+          <p className="section-lead mt-4">Last updated August 08, 2026</p>
         </div>
-      </div>
+      </section>
 
-      {/* Overlapping Content Section */}
-      <div className="relative z-10 -mt-20 md:-mt-32 bg-white p-6 md:p-10">
-        <div className="max-w-4xl mx-auto space-y-8 text-slate-700 leading-relaxed text-sm md:text-base pt-4">
+      <div className="section-shell max-w-3xl py-16">
+        <div className="space-y-8 text-sm leading-relaxed text-[#5C574F] md:text-base">
           <section className="space-y-3">
             <h2 className="text-xl md:text-2xl font-bold text-slate-900">1. Introduction</h2>
             <p>
