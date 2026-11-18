@@ -37,7 +37,7 @@ export default function FilmNav({ className = "" }: { className?: string }) {
               className="h-9 w-auto md:h-10"
             />
           </Link>
-          <BookMeetingButton className="rounded-full border border-black/10 bg-white px-3 py-1 text-xs font-medium">
+          <BookMeetingButton className="hidden rounded-full border border-black/10 bg-white px-3 py-1 text-xs font-medium md:inline-flex">
             Contact us
           </BookMeetingButton>
         </div>
