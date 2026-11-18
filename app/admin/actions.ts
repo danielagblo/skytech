@@ -134,6 +134,7 @@ export async function updateAffiliatesAction(affiliates: IAffiliate[]) {
   try {
     await saveAffiliates(affiliates);
     revalidatePath("/");
+    revalidatePath("/about");
     revalidatePath("/dashboard/affiliates");
     return { success: true };
   } catch (error: any) {

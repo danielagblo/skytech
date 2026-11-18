@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import Link from 'next/link';
+import { useEffect, useState } from "react";
+import Link from "next/link";
 
 interface TrafficSummary {
   totalVisitors: number;
@@ -16,11 +16,66 @@ interface TrafficSummary {
   sources: Array<{ source: string; count: number }>;
   pages: Array<{ page: string; label?: string; count: number }>;
   insights?: Array<{ severity: string; title: string; action: string }>;
-  comparison?: {
-    thisWeekSessions: number;
-    lastWeekSessions: number;
-  };
 }
+
+const siteLinks = [
+  {
+    href: "/dashboard/submissions",
+    title: "Contact leads",
+    body: "Progressive form on /contact",
+    icon: "💬",
+    color: "blue",
+  },
+  {
+    href: "/dashboard/blog",
+    title: "Insights",
+    body: "Published on /insights, services, and the footer",
+    icon: "📝",
+    color: "amber",
+  },
+  {
+    href: "/dashboard/faqs",
+    title: "FAQs",
+    body: "Shown on /pricing",
+    icon: "❓",
+    color: "violet",
+  },
+  {
+    href: "/dashboard/testimonials",
+    title: "Testimonials",
+    body: "Customer stories on the homepage",
+    icon: "⭐",
+    color: "emerald",
+  },
+  {
+    href: "/dashboard/team",
+    title: "Team",
+    body: "People cards on home and /about",
+    icon: "👥",
+    color: "purple",
+  },
+  {
+    href: "/dashboard/affiliates",
+    title: "Partners",
+    body: "Partner logos on home and in the footer",
+    icon: "🤝",
+    color: "sky",
+  },
+  {
+    href: "/dashboard/gallery",
+    title: "Gallery",
+    body: "Projects on /gallery and case studies",
+    icon: "📸",
+    color: "rose",
+  },
+  {
+    href: "/dashboard/internships",
+    title: "Internships",
+    body: "Applications from /internship",
+    icon: "🎓",
+    color: "indigo",
+  },
+];
 
 export default function DashboardPage() {
   const [traffic, setTraffic] = useState<TrafficSummary | null>(null);
@@ -29,7 +84,7 @@ export default function DashboardPage() {
     let active = true;
     (async () => {
       try {
-        const res = await fetch('/api/analytics');
+        const res = await fetch("/api/analytics");
         const data = await res.json();
         if (active) setTraffic(data);
       } catch {
@@ -41,22 +96,25 @@ export default function DashboardPage() {
     };
   }, []);
 
-  const topSource = traffic?.sources?.[0]?.source || '—';
-  const topPage = traffic?.pages?.[0]?.label || traffic?.pages?.[0]?.page || '—';
-  const topInsight = traffic?.insights?.find((i) => i.severity === 'opportunity')
-    || traffic?.insights?.find((i) => i.severity === 'watch')
-    || traffic?.insights?.[0];
+  const topSource = traffic?.sources?.[0]?.source || "—";
+  const topPage = traffic?.pages?.[0]?.label || traffic?.pages?.[0]?.page || "—";
+  const topInsight =
+    traffic?.insights?.find((item) => item.severity === "opportunity") ||
+    traffic?.insights?.find((item) => item.severity === "watch") ||
+    traffic?.insights?.[0];
 
   return (
     <div className="space-y-8">
-      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-8 border border-blue-100 shadow-sm">
-        <h1 className="text-4xl font-extrabold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-          Dashboard Overview
+      <div className="rounded-2xl border border-blue-100 bg-gradient-to-r from-blue-50 to-indigo-50 p-8 shadow-sm">
+        <h1 className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-4xl font-extrabold text-transparent">
+          Site overview
         </h1>
-        <p className="text-slate-600 mt-3 text-lg">Welcome back! Here&apos;s what&apos;s happening with your site.</p>
+        <p className="mt-3 text-lg text-slate-600">
+          These tools update the live film site. Website and app offer prices stay on the invoice rate card.
+        </p>
       </div>
 
-      {topInsight && (
+      {topInsight ? (
         <div className="rounded-2xl border border-amber-200 bg-amber-50/80 p-5 shadow-sm">
           <div className="flex flex-wrap items-start justify-between gap-3">
             <div>
@@ -74,124 +132,80 @@ export default function DashboardPage() {
             </Link>
           </div>
         </div>
-      )}
+      ) : null}
 
       <div>
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-bold text-slate-900">Website Traffic</h2>
+        <div className="mb-4 flex items-center justify-between">
+          <h2 className="text-xl font-bold text-slate-900">Website traffic</h2>
           <Link href="/dashboard/analytics" className="text-sm font-semibold text-blue-600 hover:text-blue-700">
-            View full analytics →
+            View analytics →
           </Link>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
           <div className="stat-card">
-            <div className="flex items-center justify-between mb-3">
-              <div className="text-slate-500 text-sm font-semibold uppercase tracking-wide">Sessions</div>
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center text-xl shadow-sm">👥</div>
+            <div className="mb-3 flex items-center justify-between">
+              <div className="text-sm font-semibold uppercase tracking-wide text-slate-500">Sessions</div>
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 text-xl shadow-sm">
+                👥
+              </div>
             </div>
-            <div className="text-4xl font-extrabold text-slate-900 mt-2">{traffic?.totalVisitors ?? '—'}</div>
-            <p className="text-sm text-slate-500 mt-3">{traffic?.todayVisitors ?? 0} today</p>
+            <div className="mt-2 text-4xl font-extrabold text-slate-900">{traffic?.totalVisitors ?? "—"}</div>
+            <p className="mt-3 text-sm text-slate-500">{traffic?.todayVisitors ?? 0} today</p>
           </div>
           <div className="stat-card">
-            <div className="flex items-center justify-between mb-3">
-              <div className="text-slate-500 text-sm font-semibold uppercase tracking-wide">Page Views</div>
-              <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-lg flex items-center justify-center text-xl shadow-sm">👁️</div>
+            <div className="mb-3 flex items-center justify-between">
+              <div className="text-sm font-semibold uppercase tracking-wide text-slate-500">Page views</div>
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-500 to-indigo-600 text-xl shadow-sm">
+                👁️
+              </div>
             </div>
-            <div className="text-4xl font-extrabold text-slate-900 mt-2">{traffic?.totalPageViews ?? '—'}</div>
-            <p className="text-sm text-slate-500 mt-3">{traffic?.todayPageViews ?? 0} today</p>
+            <div className="mt-2 text-4xl font-extrabold text-slate-900">{traffic?.totalPageViews ?? "—"}</div>
+            <p className="mt-3 text-sm text-slate-500">{traffic?.todayPageViews ?? 0} today</p>
           </div>
           <div className="stat-card">
-            <div className="flex items-center justify-between mb-3">
-              <div className="text-slate-500 text-sm font-semibold uppercase tracking-wide">Lead rate</div>
-              <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-lg flex items-center justify-center text-xl shadow-sm">🎯</div>
+            <div className="mb-3 flex items-center justify-between">
+              <div className="text-sm font-semibold uppercase tracking-wide text-slate-500">Lead rate</div>
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-500 to-emerald-600 text-xl shadow-sm">
+                🎯
+              </div>
             </div>
-            <div className="text-4xl font-extrabold text-slate-900 mt-2">{traffic?.conversionRate ?? 0}%</div>
-            <p className="text-sm text-slate-500 mt-3">{traffic?.totalConversions ?? 0} WhatsApp / form / apply</p>
+            <div className="mt-2 text-4xl font-extrabold text-slate-900">{traffic?.conversionRate ?? 0}%</div>
+            <p className="mt-3 text-sm text-slate-500">{traffic?.totalConversions ?? 0} form / WhatsApp / apply</p>
           </div>
           <div className="stat-card">
-            <div className="flex items-center justify-between mb-3">
-              <div className="text-slate-500 text-sm font-semibold uppercase tracking-wide">Top Source</div>
-              <div className="w-10 h-10 bg-gradient-to-br from-violet-500 to-violet-600 rounded-lg flex items-center justify-center text-xl shadow-sm">🌐</div>
+            <div className="mb-3 flex items-center justify-between">
+              <div className="text-sm font-semibold uppercase tracking-wide text-slate-500">Top source</div>
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-violet-500 to-violet-600 text-xl shadow-sm">
+                🌐
+              </div>
             </div>
-            <div className="text-2xl font-extrabold text-slate-900 mt-2 truncate capitalize">{topSource}</div>
-            <p className="text-sm text-slate-500 mt-3 truncate">Top page: {topPage}</p>
-            <div className="mt-4 pt-4 border-t border-slate-100 flex gap-3 text-xs font-semibold text-slate-600">
-              <span>Bounce {traffic?.bounceRate ?? 0}%</span>
-              <span>Engage {traffic?.engagementRate ?? 0}%</span>
-            </div>
+            <div className="mt-2 truncate text-2xl font-extrabold capitalize text-slate-900">{topSource}</div>
+            <p className="mt-3 truncate text-sm text-slate-500">Top page: {topPage}</p>
           </div>
         </div>
       </div>
 
-      <div className="bg-white rounded-2xl border border-slate-200 p-8 shadow-lg">
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <h3 className="text-2xl font-bold text-slate-900">Quick Actions</h3>
-            <p className="text-sm text-slate-500 mt-1">Jump to any section</p>
-          </div>
-          <span className="text-3xl">⚡</span>
+      <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-lg">
+        <div className="mb-6">
+          <h3 className="text-2xl font-bold text-slate-900">What the admin controls</h3>
+          <p className="mt-1 text-sm text-slate-500">Each tool maps to a live page on the site</p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          <Link
-            href="/dashboard/analytics"
-            className="group p-6 border-2 border-slate-200 rounded-xl hover:border-indigo-500 hover:shadow-lg transition-all duration-200 hover:-translate-y-1 bg-gradient-to-br from-white to-indigo-50/30"
-          >
-            <div className="w-12 h-12 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-xl flex items-center justify-center text-2xl mb-4 shadow-sm group-hover:shadow-md transition-shadow">📈</div>
-            <div className="font-bold text-slate-900 text-lg group-hover:text-indigo-600 transition-colors">Traffic & Insights</div>
-            <p className="text-sm text-slate-600 mt-2">Actionable analysis of visits, sources, and leads</p>
-            <div className="mt-4 text-xs text-indigo-600 font-semibold opacity-0 group-hover:opacity-100 transition-opacity">→ Open Analytics</div>
-          </Link>
-
-          <Link
-            href="/dashboard/blog"
-            className="group p-6 border-2 border-slate-200 rounded-xl hover:border-amber-500 hover:shadow-lg transition-all duration-200 hover:-translate-y-1 bg-gradient-to-br from-white to-amber-50/30"
-          >
-            <div className="w-12 h-12 bg-gradient-to-br from-amber-500 to-amber-600 rounded-xl flex items-center justify-center text-2xl mb-4 shadow-sm group-hover:shadow-md transition-shadow">📝</div>
-            <div className="font-bold text-slate-900 text-lg group-hover:text-amber-600 transition-colors">Insights / Blog</div>
-            <p className="text-sm text-slate-600 mt-2">Publish notes that appear on /insights and services</p>
-            <div className="mt-4 text-xs text-amber-600 font-semibold opacity-0 group-hover:opacity-100 transition-opacity">→ Go to Insights</div>
-          </Link>
-
-          <Link
-            href="/dashboard/submissions"
-            className="group p-6 border-2 border-slate-200 rounded-xl hover:border-blue-500 hover:shadow-lg transition-all duration-200 hover:-translate-y-1 bg-gradient-to-br from-white to-blue-50/30"
-          >
-            <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center text-2xl mb-4 shadow-sm group-hover:shadow-md transition-shadow">💬</div>
-            <div className="font-bold text-slate-900 text-lg group-hover:text-blue-600 transition-colors">Contact Forms</div>
-            <p className="text-sm text-slate-600 mt-2">Leads from the progressive contact form</p>
-            <div className="mt-4 text-xs text-blue-600 font-semibold opacity-0 group-hover:opacity-100 transition-opacity">→ Go to Forms</div>
-          </Link>
-
-          <Link
-            href="/dashboard/team"
-            className="group p-6 border-2 border-slate-200 rounded-xl hover:border-purple-500 hover:shadow-lg transition-all duration-200 hover:-translate-y-1 bg-gradient-to-br from-white to-purple-50/30"
-          >
-            <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center text-2xl mb-4 shadow-sm group-hover:shadow-md transition-shadow">👥</div>
-            <div className="font-bold text-slate-900 text-lg group-hover:text-purple-600 transition-colors">Team</div>
-            <p className="text-sm text-slate-600 mt-2">People shown on home and about</p>
-            <div className="mt-4 text-xs text-purple-600 font-semibold opacity-0 group-hover:opacity-100 transition-opacity">→ Go to Team</div>
-          </Link>
-
-          <Link
-            href="/dashboard/testimonials"
-            className="group p-6 border-2 border-slate-200 rounded-xl hover:border-emerald-500 hover:shadow-lg transition-all duration-200 hover:-translate-y-1 bg-gradient-to-br from-white to-emerald-50/30"
-          >
-            <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl flex items-center justify-center text-2xl mb-4 shadow-sm group-hover:shadow-md transition-shadow">💬</div>
-            <div className="font-bold text-slate-900 text-lg group-hover:text-emerald-600 transition-colors">Testimonials</div>
-            <p className="text-sm text-slate-600 mt-2">Customer stories on the homepage</p>
-            <div className="mt-4 text-xs text-emerald-600 font-semibold opacity-0 group-hover:opacity-100 transition-opacity">→ Go to Testimonials</div>
-          </Link>
-
-          <Link
-            href="/"
-            className="group p-6 border-2 border-slate-200 rounded-xl hover:border-green-500 hover:shadow-lg transition-all duration-200 hover:-translate-y-1 bg-gradient-to-br from-white to-green-50/30"
-          >
-            <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center text-2xl mb-4 shadow-sm group-hover:shadow-md transition-shadow">🌐</div>
-            <div className="font-bold text-slate-900 text-lg group-hover:text-green-600 transition-colors">View Site</div>
-            <p className="text-sm text-slate-600 mt-2">Visit public website</p>
-            <div className="mt-4 text-xs text-green-600 font-semibold opacity-0 group-hover:opacity-100 transition-opacity">→ Open Site</div>
-          </Link>
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+          {siteLinks.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="rounded-xl border border-slate-200 p-5 transition hover:-translate-y-0.5 hover:border-slate-900 hover:shadow-md"
+            >
+              <div className="text-2xl">{item.icon}</div>
+              <div className="mt-3 font-bold text-slate-900">{item.title}</div>
+              <p className="mt-2 text-sm leading-relaxed text-slate-600">{item.body}</p>
+            </Link>
+          ))}
         </div>
+        <p className="mt-6 rounded-xl bg-slate-50 px-4 py-3 text-sm text-slate-600">
+          Pricing cards on home and /pricing use the invoice offer list in code. Edit those totals in the CRM offer files, not in this admin.
+        </p>
       </div>
     </div>
   );
