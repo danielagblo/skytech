@@ -7,7 +7,7 @@ import {
   type FilmServiceStep,
   type FilmServicesContent,
   type ServiceMedia,
-} from "@/app/lib/services";
+} from "@/app/lib/services-shared";
 import { updateFilmServicesAction, uploadPartnerLogoAction } from "@/app/admin/actions";
 
 const EMPTY_SERVICE: FilmServiceItem = {

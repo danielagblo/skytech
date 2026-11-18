@@ -11,7 +11,7 @@ import BookMeetingButton from "@/components/skytech/ui/BookMeetingButton";
 import FilmNav from "@/components/skytech/layout/FilmNav";
 import { useRise } from "@/components/skytech/motion/useRise";
 import type { BlogPost } from "@/app/lib/blog";
-import type { FilmServiceItem, FilmServiceStep } from "@/app/lib/services";
+import type { FilmServiceItem, FilmServiceStep } from "@/app/lib/services-shared";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 

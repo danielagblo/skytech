@@ -13,7 +13,7 @@ import ServiceOffers from "@/components/skytech/sections/ServiceOffers";
 import CustomerSay, { type CustomerStory } from "@/components/skytech/sections/home/CustomerSay";
 import TeamHang, { type HangMember } from "@/components/skytech/sections/home/TeamHang";
 import type { ServiceMenu } from "@/lib/crm/service-offers";
-import type { FilmServiceItem } from "@/app/lib/services";
+import type { FilmServiceItem } from "@/app/lib/services-shared";
 
 function moneyLabel(amount: number | null | undefined) {
   if (amount == null) return null;
