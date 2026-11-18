@@ -1,15 +1,16 @@
 import FilmServices from "@/components/skytech/sections/pages/FilmServices";
 import { getLatestBlogPosts } from "@/app/lib/blog";
-import { getServiceMenus } from "@/app/lib/pricing-display";
+import { getFilmServices } from "@/app/lib/services";
 
 export const dynamic = "force-dynamic";
 
 export const metadata = {
   title: "Services | Skytech Ghana",
-  description: "Website, mobile app, SEO, CRM, and virtual tours for hospitality and property, from Skytech Ghana in Accra.",
+  description:
+    "Website, mobile app, SEO, CRM, and virtual tours for hospitality and property, from Skytech Ghana in Accra.",
 };
 
 export default async function ServicesPage() {
-  const [posts, menus] = await Promise.all([getLatestBlogPosts(3), getServiceMenus()]);
-  return <FilmServices posts={posts} menus={menus} />;
+  const [posts, content] = await Promise.all([getLatestBlogPosts(3), getFilmServices()]);
+  return <FilmServices posts={posts} services={content.services} steps={content.steps} />;
 }

@@ -48,6 +48,13 @@ const siteLinks = [
     color: "lime",
   },
   {
+    href: "/dashboard/services",
+    title: "Services",
+    body: "Copy, media, and steps on /services",
+    icon: "🛠️",
+    color: "teal",
+  },
+  {
     href: "/dashboard/testimonials",
     title: "Testimonials",
     body: "Customer stories on the homepage",

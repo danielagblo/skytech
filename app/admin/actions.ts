@@ -9,6 +9,7 @@ import { saveAffiliates, IAffiliate } from "../lib/affiliates";
 import { saveTestimonials, ITestimonial } from "../lib/testimonials";
 import { saveTeamMembers, ITeamMember } from "../lib/team";
 import { saveFAQs, IFAQ } from "../lib/faqs";
+import { saveFilmServices, type FilmServicesContent } from "../lib/services";
 
 
 export async function updateHomeHero(formData: FormData) {
@@ -179,6 +180,19 @@ export async function updateFAQsAction(faqs: IFAQ[]) {
     return { success: true, faqs: result.faqs };
   } catch (error: any) {
     console.error("FAQs update error:", error);
+    return { success: false, error: error.message };
+  }
+}
+
+export async function updateFilmServicesAction(content: FilmServicesContent) {
+  try {
+    await saveFilmServices(content);
+    revalidatePath("/services");
+    revalidatePath("/");
+    revalidatePath("/dashboard/services");
+    return { success: true };
+  } catch (error: any) {
+    console.error("Services update error:", error);
     return { success: false, error: error.message };
   }
 }

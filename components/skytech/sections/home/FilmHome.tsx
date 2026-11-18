@@ -181,7 +181,7 @@ export default function FilmHome({
           gsap.set(roadmapCards[0], { autoAlpha: 1, y: 0 });
         }
         if (concepts.length) {
-          gsap.set(concepts, { y: 18, autoAlpha: 0.35, scale: 0.98 });
+          gsap.set(concepts, { y: 8, autoAlpha: 0.45, scale: 1 });
           gsap.set(concepts[0], { y: 0, autoAlpha: 1, scale: 1 });
         }
 
@@ -231,7 +231,7 @@ export default function FilmHome({
             show.to({}, { duration: 0.45 });
             return;
           }
-          show.to(concepts[index - 1], { y: -12, autoAlpha: 0.35, scale: 0.98, duration: 0.28 });
+          show.to(concepts[index - 1], { y: 0, autoAlpha: 0.45, scale: 1, duration: 0.28 });
           show.to(concept, { y: 0, autoAlpha: 1, scale: 1, duration: 0.28 }, "<");
           show.to({}, { duration: 0.42 });
         });
@@ -460,7 +460,7 @@ export default function FilmHome({
               </header>
 
               <h2 className="mt-10 font-display text-[clamp(2.4rem,6vw,4.6rem)] font-medium leading-[0.95] tracking-tight md:mt-14">
-                Execution Roadmap
+                How we do it
               </h2>
 
               <div className="relative mt-10 hidden md:block" aria-hidden>
@@ -513,8 +513,8 @@ export default function FilmHome({
                     <span className="w-fit rounded-full bg-[#d9d9d9] px-3 py-1 text-[11px] font-medium">
                       {step.year}
                     </span>
-                    <h3 className="mt-5 font-display text-2xl font-medium tracking-tight">{step.title}</h3>
-                    <p className="mt-auto pt-6 text-xs leading-relaxed text-black/55">{step.body}</p>
+                    <h3 className="mt-4 font-display text-2xl font-medium tracking-tight">{step.title}</h3>
+                    <p className="mt-3 text-xs leading-relaxed text-black/55">{step.body}</p>
                   </div>
                 ))}
               </div>
@@ -523,7 +523,7 @@ export default function FilmHome({
             {/* Slide 2 — Problem & Solution */}
             <article
               data-perf-slide
-              className="absolute inset-0 flex flex-col bg-[#d9d9d9] px-5 py-5 text-[#161616] opacity-0 md:px-8 md:py-7"
+              className="absolute inset-0 flex flex-col bg-[#d9d9d9] px-5 pt-5 text-[#161616] opacity-0 md:px-8 md:pt-7"
             >
               <header className="flex items-center justify-between gap-4">
                 <div className="flex items-center gap-3">
@@ -541,21 +541,25 @@ export default function FilmHome({
                 </p>
               </header>
 
-              <h2 className="mt-12 max-w-4xl font-display text-[clamp(2rem,5.2vw,4.2rem)] font-medium leading-[1.02] tracking-tight md:mt-16">
-                <span className="text-white">Our solution </span>
+              <h2 className="mt-8 max-w-4xl shrink-0 font-display text-[clamp(1.75rem,4.2vw,3.35rem)] font-medium leading-[1.05] tracking-tight md:mt-10">
+                <span data-pill className="inline-flex items-center rounded-full bg-[#d5f5a8] px-[0.28em] py-[0.02em] text-[#161616]">
+                  Our solution
+                </span>{" "}
                 bridges the gap between evolving needs and effective execution.
               </h2>
 
-              <div className="mt-auto grid gap-3 pt-10 md:grid-cols-3">
+              <div className="mt-auto grid gap-3 md:grid-cols-3">
                 {solutionConcepts.map((concept) => (
                   <div
                     key={concept.id}
                     data-concept
-                    className="rounded-[18px] bg-white px-5 py-5 shadow-[0_8px_24px_rgba(0,0,0,.04)]"
+                    className="relative z-10 rounded-none bg-white px-5 py-4 md:rounded-t-[18px] md:py-5"
                   >
                     <div className="flex items-start justify-between gap-3">
-                      <div>
-                        <p className="font-display text-2xl font-medium tracking-tight">{concept.label}</p>
+                      <div className="min-w-0">
+                        <p className="font-display text-xl font-medium tracking-tight md:text-2xl">
+                          {concept.label}
+                        </p>
                         <p className="mt-2 text-sm leading-relaxed text-black/55">{concept.detail}</p>
                       </div>
                       <span className="mt-2 h-2.5 w-2.5 shrink-0 rounded-full bg-[#161616]" aria-hidden />
@@ -568,7 +572,7 @@ export default function FilmHome({
             {/* Slide 3 — Marketing & Growth */}
             <article
               data-perf-slide
-              className="absolute inset-0 flex flex-col bg-white px-5 py-5 text-[#161616] opacity-0 md:px-8 md:py-7"
+              className="absolute inset-0 flex flex-col bg-[#b7dff6] px-5 py-5 text-[#161616] opacity-0 md:px-8 md:py-7"
             >
               <header className="flex items-center justify-between gap-4">
                 <div className="flex items-center gap-3">
@@ -577,11 +581,11 @@ export default function FilmHome({
                     <span className="h-2.5 w-2.5 rounded-full bg-[#161616]" />
                     <span className="h-2.5 w-2.5 rounded-full bg-[#161616]" />
                   </span>
-                  <span className="rounded-md border border-black/15 px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.14em]">
+                  <span className="rounded-md border border-black/15 bg-white/70 px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.14em]">
                     Strategy &amp; Execution
                   </span>
                 </div>
-                <p className="hidden text-[10px] uppercase tracking-[0.16em] text-black/40 sm:block">
+                <p className="hidden text-[10px] uppercase tracking-[0.16em] text-black/45 sm:block">
                   © 2026. Skytech Ghana. All rights reserved.
                 </p>
               </header>
@@ -590,21 +594,27 @@ export default function FilmHome({
                 <div>
                   <h2 className="font-display text-[clamp(2.2rem,5vw,4rem)] font-medium leading-[0.98] tracking-tight">
                     Marketing &amp; Growth{" "}
-                    <span className="text-black/35">Objectives</span>
+                    <span data-pill className="inline-flex items-center rounded-full bg-[#d5f5a8] px-[0.28em] py-[0.02em]">
+                      Objectives
+                    </span>
                   </h2>
-                  <p className="mt-5 max-w-md text-sm leading-relaxed text-black/60 md:text-base">
+                  <p className="mt-5 max-w-md text-sm leading-relaxed text-black/65 md:text-base">
                     Performance-driven objectives aligned with scalable growth within the first 3 years. Clear, measurable growth targets guide our execution.
                   </p>
                 </div>
 
                 <div className="space-y-3">
-                  {growthMetrics.map((metric) => (
+                  {growthMetrics.map((metric, index) => (
                     <div
                       key={metric.label}
                       data-metric
-                      className="flex items-center justify-between gap-4 rounded-full bg-[#ececec] p-2 pl-2"
+                      className={`flex items-center justify-between gap-4 rounded-full p-2 pl-2 ${
+                        index % 2 === 0 ? "bg-white/80" : "bg-[#d5f5a8]/90"
+                      }`}
                     >
-                      <span className="rounded-full bg-white px-4 py-3 text-sm font-medium">{metric.label}</span>
+                      <span className="rounded-full bg-white px-4 py-3 text-sm font-medium shadow-sm">
+                        {metric.label}
+                      </span>
                       <span className="pr-5 font-display text-3xl font-medium tracking-tight md:text-4xl">
                         {metric.value}
                       </span>

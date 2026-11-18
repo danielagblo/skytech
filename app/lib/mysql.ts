@@ -329,6 +329,13 @@ export const SCHEMA: string[] = [
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     KEY idx_images_key_path (key_path)
   )`,
+  `CREATE TABLE IF NOT EXISTS film_services (
+    id CHAR(36) PRIMARY KEY,
+    page_key VARCHAR(50) NOT NULL,
+    payload JSON,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY uq_film_services_page (page_key)
+  )`,
 ];
 
 export const isJsonStr = (v: any): boolean =>
