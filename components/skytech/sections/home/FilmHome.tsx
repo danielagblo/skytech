@@ -13,6 +13,29 @@ import ServiceOffers from "@/components/skytech/sections/ServiceOffers";
 import CustomerSay, { type CustomerStory } from "@/components/skytech/sections/home/CustomerSay";
 import TeamHang, { type HangMember } from "@/components/skytech/sections/home/TeamHang";
 import type { ServiceMenu } from "@/lib/crm/service-offers";
+import type { FilmServiceItem } from "@/app/lib/services";
+
+function moneyLabel(amount: number | null | undefined) {
+  if (amount == null) return null;
+  return `GH₵${amount.toLocaleString("en-GH")}`;
+}
+
+function menuOffer(menus: ServiceMenu[] | undefined, serviceId: string, offerId?: string) {
+  const menu = menus?.find((item) => item.id === serviceId);
+  if (!menu?.offers?.length) return null;
+  if (offerId) {
+    return (
+      menu.offers.find((offer) => offer.id === offerId) ||
+      menu.offers.find((offer) => offer.name.toLowerCase().includes(offerId)) ||
+      null
+    );
+  }
+  return menu.offers.find((offer) => offer.featured) || menu.offers[0] || null;
+}
+
+function serviceById(services: FilmServiceItem[] | undefined, id: string) {
+  return services?.find((item) => item.id === id) || null;
+}
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
@@ -90,13 +113,34 @@ export default function FilmHome({
   reviews = [],
   members = [],
   menus,
+  services = [],
 }: {
   partners: FilmPartner[];
   reviews?: CustomerStory[];
   members?: HangMember[];
   menus?: ServiceMenu[];
+  services?: FilmServiceItem[];
 }) {
   const root = useRef<HTMLElement>(null);
+  const websiteOffer = menuOffer(menus, "website", "standard") || menuOffer(menus, "website");
+  const websitePrice = moneyLabel(websiteOffer?.total) || "GH₵8,399";
+  const websitePricePlain = websitePrice.replace("GH₵", "GHS ");
+  const tourService = serviceById(services, "tour");
+  const crmService = serviceById(services, "crm");
+  const crmOffer = menuOffer(menus, "crm");
+  const tourPrice =
+    tourService?.price?.replace(/^For only\s+/i, "") ||
+    moneyLabel(menuOffer(menus, "tour", "space")?.total) ||
+    "GH₵8,799";
+  const crmMonthly =
+    moneyLabel(crmOffer?.total) ||
+    crmService?.price?.match(/GH₵[\d,]+/)?.[0] ||
+    "GH₵200";
+  const crmYearly =
+    crmOffer?.total != null ? moneyLabel(crmOffer.total * 12) : "GH₵2,400";
+  const tourTags = tourService?.note
+    ? tourService.note.split("·").map((part) => part.trim()).filter(Boolean)
+    : tourIndustries;
 
   useLenis(() => {
     ScrollTrigger.update();
@@ -352,83 +396,65 @@ export default function FilmHome({
       </section>
 
       <section className="relative px-3 pb-4 md:px-5">
-        <div data-rise className="mx-auto max-w-[1180px] overflow-hidden rounded-[28px]">
-          <div className="bg-[#f6f6f4] px-5 py-12 md:px-10 md:py-16">
-            <h2 className="font-display text-[clamp(2.7rem,8.4vw,6.8rem)] font-medium leading-[0.88] tracking-tight">
-              <span className="flex flex-wrap items-center gap-x-3 gap-y-2">
-                Customers
-                <span data-pill className="inline-flex items-center rounded-full bg-[#b7dff6] px-[0.38em] py-[0.02em]">
-                  find you
-                </span>
+        <div data-rise className="mx-auto max-w-[1180px] overflow-hidden rounded-[28px] bg-[#f6f6f4] px-5 py-12 md:px-10 md:py-16">
+          <h2 className="font-display text-[clamp(2rem,5.2vw,4.2rem)] font-medium leading-[0.92] tracking-tight">
+            <span className="flex flex-wrap items-center gap-x-3 gap-y-2">
+              Customers
+              <span data-pill className="inline-flex items-center rounded-full bg-[#b7dff6] px-[0.38em] py-[0.02em]">
+                find you
               </span>
-              <span className="mt-[0.08em] flex flex-wrap items-end justify-between gap-x-6 gap-y-3">
-                <span>when they search.</span>
-                <span className="max-w-[15rem] pb-1 text-[13px] font-normal leading-snug tracking-normal text-black/55 md:max-w-xs md:text-base">
-                  Your page takes the enquiry, the booking, or the order.
-                </span>
+            </span>
+            <span className="mt-[0.08em] flex flex-wrap items-end justify-between gap-x-6 gap-y-3">
+              <span>when they search.</span>
+              <span className="max-w-[14rem] pb-1 text-[12px] font-normal leading-snug tracking-normal text-black/55 md:max-w-xs md:text-sm">
+                Your page takes the enquiry, the booking, or the order.
               </span>
-              <span className="mt-[0.12em] flex flex-wrap items-center gap-3 md:gap-5">
-                <span className="grid h-[3.1rem] w-[3.1rem] shrink-0 place-items-center rounded-full border border-[#8dce3a] text-center text-[8px] font-medium uppercase leading-tight tracking-[0.12em] md:h-[4.4rem] md:w-[4.4rem] md:text-[10px]">
-                  Then
-                  <br />
-                  they
-                </span>
-                <span data-pill className="inline-flex items-center gap-[0.2em] rounded-full bg-[#d5f5a8] px-[0.42em] py-[0.02em]">
-                  pay you
-                  <span aria-hidden>✦</span>
-                </span>
+            </span>
+            <span className="mt-[0.12em] flex flex-wrap items-center gap-3 md:gap-4">
+              <span className="grid h-[2.6rem] w-[2.6rem] shrink-0 place-items-center rounded-full border border-[#8dce3a] text-center text-[7px] font-medium uppercase leading-tight tracking-[0.12em] md:h-[3.4rem] md:w-[3.4rem] md:text-[9px]">
+                Then
+                <br />
+                they
               </span>
-            </h2>
-          </div>
-          <a href="#offers" className="block bg-[#161616] px-5 py-10 text-white md:px-10 md:py-14">
-            <p className="font-display text-[clamp(2.4rem,6.4vw,5.2rem)] font-medium leading-[0.92] tracking-tight">
-              <span className="flex flex-wrap items-baseline gap-x-[0.22em]">
-                Grab our
-                <span className="text-[0.68em]">website+SEO</span>
-                offer
+              <span data-pill className="inline-flex items-center gap-[0.2em] rounded-full bg-[#d5f5a8] px-[0.42em] py-[0.02em]">
+                pay you
+                <span aria-hidden>✦</span>
               </span>
-              <span className="mt-[0.08em] flex flex-wrap items-center gap-x-3 gap-y-2">
-                for
-                <span className="inline-flex items-center">
-                  <span data-pill className="inline-flex items-center rounded-full bg-[#b7dff6] px-[0.38em] py-[0.02em] text-[#161616]">
-                    only GHS 8,399
-                  </span>
-                  .
-                </span>
-              </span>
-            </p>
-          </a>
+            </span>
+          </h2>
         </div>
       </section>
 
       <section className="relative px-3 pb-4 md:px-5">
-        <div data-rise className="relative mx-auto flex max-w-[1180px] items-center overflow-hidden rounded-[28px] bg-[#f6f6f4] px-5 py-5 md:px-10 md:py-6">
-          <h2 className="relative z-10 max-w-[36rem] font-display text-[clamp(2rem,3.8vw,3.35rem)] font-medium leading-[0.92] tracking-tight">
-            <span className="flex flex-wrap items-center gap-x-3 gap-y-1">Our clients</span>
-            <span className="mt-[0.04em] flex flex-wrap items-center gap-x-3 gap-y-1">
-              <span data-pill className="inline-flex items-center rounded-full bg-[#d5f5a8] px-[0.32em] py-[0.02em]">
+        <div
+          data-rise
+          className="mx-auto grid max-w-[1180px] items-end overflow-hidden rounded-[28px] bg-[#f6f6f4] md:grid-cols-[minmax(0,1.15fr)_minmax(0,.85fr)]"
+        >
+          <div className="px-6 py-10 md:px-10 md:py-14">
+            <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-black/45">Our clients</p>
+            <h2 className="mt-3 max-w-xl font-display text-[clamp(2rem,4vw,3.4rem)] font-medium leading-[0.95] tracking-tight">
+              <span data-pill className="inline-flex items-center rounded-full bg-[#d5f5a8] px-[0.34em] py-[0.02em]">
                 Sales skyrocket
               </span>
-            </span>
-            <span className="mt-[0.06em] block text-[0.62em] leading-[1.05]">
-              within the first year of using our
-            </span>
-            <span className="mt-[0.04em] flex flex-wrap items-center gap-x-3 gap-y-1">
-              <span data-pill className="inline-flex items-center gap-[0.16em] rounded-full bg-[#b7dff6] px-[0.32em] py-[0.02em]">
+              <span className="mt-[0.12em] block">within the first year</span>
+            </h2>
+            <p className="mt-5 max-w-md text-sm leading-relaxed text-black/55 md:text-base">
+              of using our{" "}
+              <span data-pill className="inline-flex items-center gap-[0.16em] rounded-full bg-[#b7dff6] px-[0.34em] py-[0.02em] text-[#161616]">
                 WEBSITE+SEO
                 <span aria-hidden>✦</span>
-              </span>
-              offer
-            </span>
-          </h2>
-          <div className="pointer-events-none absolute bottom-5 right-6 top-5 w-[38%]">
+              </span>{" "}
+              offer.
+            </p>
+          </div>
+          <div className="relative h-56 w-full md:h-full md:min-h-[280px]">
             <video
               src="/videos/sales-skyrocket-cream.mp4"
               autoPlay
               muted
               loop
               playsInline
-              className="absolute bottom-0 right-0 top-0 h-full w-auto max-w-full object-contain object-right"
+              className="absolute inset-0 h-full w-full object-contain object-bottom md:object-right-bottom"
               aria-label="A figure launching upward"
             />
           </div>
@@ -627,7 +653,32 @@ export default function FilmHome({
         </div>
       </section>
 
-      <section className="relative px-3 pb-3 pt-10 md:px-5 md:pb-4 md:pt-14">
+      <section className="relative px-3 pb-4 md:px-5">
+        <a
+          href="#offers"
+          data-rise
+          className="mx-auto block max-w-[1180px] overflow-hidden rounded-[28px] bg-[#161616] px-5 py-10 text-white md:px-10 md:py-14"
+        >
+          <p className="font-display text-[clamp(2.4rem,6.4vw,5.2rem)] font-medium leading-[0.92] tracking-tight">
+            <span className="flex flex-wrap items-baseline gap-x-[0.22em]">
+              Grab our
+              <span className="text-[0.68em]">website+SEO</span>
+              offer
+            </span>
+            <span className="mt-[0.08em] flex flex-wrap items-center gap-x-3 gap-y-2">
+              for
+              <span className="inline-flex items-center">
+                <span data-pill className="inline-flex items-center rounded-full bg-[#b7dff6] px-[0.38em] py-[0.02em] text-[#161616]">
+                  only {websitePricePlain}
+                </span>
+                .
+              </span>
+            </span>
+          </p>
+        </a>
+      </section>
+
+      <section className="relative px-3 pb-3 pt-6 md:px-5 md:pb-4 md:pt-10">
         <div className="mx-auto max-w-[1180px]">
           <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-black/45">More offers</p>
           <h2 className="mt-3 max-w-3xl font-display text-[clamp(1.85rem,3.6vw,2.75rem)] font-medium leading-[1.05] tracking-tight">
@@ -642,15 +693,18 @@ export default function FilmHome({
       <section className="relative px-3 pb-4 md:px-5">
         <div data-rise className="mx-auto grid max-w-[1180px] items-center gap-8 overflow-hidden rounded-[28px] bg-[#d5f5a8] px-6 py-10 md:grid-cols-[1.05fr_.95fr] md:px-10 md:py-12">
           <div>
-            <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-black/50">Virtual tour</p>
+            <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-black/50">
+              {tourService?.kicker || "Virtual tour"}
+            </p>
             <h2 className="mt-3 font-display text-4xl font-medium leading-[1.02] tracking-tight md:text-6xl">
-              Walk the room before you book.
+              {tourService?.line || "Walk the room before you book."}
             </h2>
             <p className="mt-4 max-w-md text-sm leading-relaxed text-black/70 md:text-base">
-              A guest, a buyer, or an organiser can move through the space before they arrive. Built for hospitality and property.
+              {tourService?.body ||
+                "A guest, a buyer, or an organiser can move through the space before they arrive. Built for hospitality and property."}
             </p>
             <div className="mt-6 flex flex-wrap gap-2">
-              {tourIndustries.map((industry) => (
+              {tourTags.map((industry) => (
                 <span key={industry} className="rounded-full bg-white/80 px-3 py-1 text-xs font-medium">
                   {industry}
                 </span>
@@ -659,19 +713,19 @@ export default function FilmHome({
             <p className="mt-8 flex flex-wrap items-center gap-x-3 gap-y-2 font-display text-[clamp(1.8rem,4vw,3.2rem)] font-medium leading-none tracking-tight">
               For only
               <span className="inline-flex rounded-full bg-[#161616] px-[0.42em] py-[0.06em] text-white">
-                GH₵8,799
+                {tourPrice}
               </span>
             </p>
           </div>
           <div className="relative h-72 overflow-hidden rounded-[24px] md:h-[420px]">
             <video
-              src="/videos/virtual-tour.mp4"
+              src={tourService?.videoSrc || "/videos/virtual-tour.mp4"}
               autoPlay
               muted
               loop
               playsInline
               className="absolute inset-0 h-full w-full object-cover"
-              aria-label="A walk through a property before you book"
+              aria-label={tourService?.imageAlt || tourService?.line || "A walk through a property before you book"}
             />
           </div>
         </div>
@@ -681,13 +735,14 @@ export default function FilmHome({
         <div data-rise className="mx-auto grid max-w-[1180px] items-center gap-6 overflow-hidden rounded-[28px] bg-[#b7dff6] px-6 py-8 md:grid-cols-[1.05fr_.95fr] md:gap-8 md:px-10 md:py-9">
           <div>
             <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-black/50">
-              Customer management software
+              {crmService?.kicker || "Customer management software"}
             </p>
             <h2 className="mt-2 font-display text-3xl font-medium leading-[1.02] tracking-tight md:text-5xl">
-              Keep every customer in one place.
+              {crmService?.line || "Keep every customer in one place."}
             </h2>
             <p className="mt-3 max-w-md text-sm leading-relaxed text-black/70">
-              Names, what they asked for, and whether they have paid — so you always know who to follow up next.
+              {crmService?.body ||
+                "Names, what they asked for, and whether they have paid — so you always know who to follow up next."}
             </p>
             <div className="mt-4 flex flex-wrap gap-2">
               {crmPoints.map((point) => (
@@ -698,16 +753,16 @@ export default function FilmHome({
             </div>
             <p className="mt-5 flex flex-wrap items-center gap-x-3 gap-y-2 font-display text-[clamp(1.55rem,3.2vw,2.4rem)] font-medium leading-none tracking-tight">
               <span className="inline-flex rounded-full bg-[#161616] px-[0.42em] py-[0.06em] text-white">
-                GH₵200
+                {crmMonthly}
               </span>
               / month
-              <span className="text-[0.55em] font-medium text-black/55">· GH₵2,400 / year</span>
+              <span className="text-[0.55em] font-medium text-black/55">· {crmYearly} / year</span>
             </p>
           </div>
           <div className="relative h-56 overflow-hidden rounded-[24px] md:h-[300px]">
             <Image
-              src="/images/crm-board-crop.jpg"
-              alt="Customer list showing names, requests, and payment status"
+              src={crmService?.image || "/images/crm-board-crop.jpg"}
+              alt={crmService?.imageAlt || "Customer list showing names, requests, and payment status"}
               fill
               className="object-cover object-left"
               sizes="(min-width: 768px) 420px, 100vw"

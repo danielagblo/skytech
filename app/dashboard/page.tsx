@@ -43,14 +43,14 @@ const siteLinks = [
   {
     href: "/dashboard/pricing",
     title: "Pricing",
-    body: "Offers on the homepage and /pricing",
+    body: "Offers on home, /pricing, and the website+SEO card",
     icon: "💰",
     color: "lime",
   },
   {
     href: "/dashboard/services",
     title: "Services",
-    body: "Copy, media, and steps on /services",
+    body: "Services page plus home tour and CRM cards",
     icon: "🛠️",
     color: "teal",
   },
