@@ -365,7 +365,7 @@ export default function FilmHome({
             <div className="flex flex-1 flex-col justify-center py-8 md:py-10">
               <h1
                 data-hero-item
-                className="font-display text-[clamp(3.15rem,12.5vw,4.4rem)] font-medium leading-[0.9] tracking-tight md:text-[clamp(2.5rem,8.2vw,6.6rem)]"
+                className="font-display text-[clamp(3.85rem,15.5vw,5.4rem)] font-medium leading-[0.88] tracking-tight md:text-[clamp(2.5rem,8.2vw,6.6rem)]"
               >
                 <span className="flex flex-wrap items-center gap-x-3 gap-y-2">
                   Sites
