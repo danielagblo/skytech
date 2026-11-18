@@ -12,6 +12,7 @@ import ClientsCarousel from "@/components/skytech/sections/home/ClientsCarousel"
 import ServiceOffers from "@/components/skytech/sections/ServiceOffers";
 import CustomerSay, { type CustomerStory } from "@/components/skytech/sections/home/CustomerSay";
 import TeamHang, { type HangMember } from "@/components/skytech/sections/home/TeamHang";
+import ThankYouFooter from "@/components/skytech/layout/ThankYouFooter";
 import type { ServiceMenu } from "@/lib/crm/service-offers";
 import type { FilmServiceItem } from "@/app/lib/services-shared";
 
@@ -798,13 +799,15 @@ export default function FilmHome({
       <TeamHang members={members} />
 
       {partners.length > 0 ? (
-        <section className="relative px-3 pb-16 md:px-5">
+        <section className="relative px-3 pb-10 md:px-5">
           <div data-rise className="mx-auto max-w-[1180px] overflow-hidden rounded-[28px] bg-[#f6f6f4] py-10">
             <p className="mb-6 text-center text-xs uppercase tracking-[0.18em] text-black/45">Our partners</p>
             <ClientsCarousel partners={partners} />
           </div>
         </section>
       ) : null}
+
+      <ThankYouFooter className="mt-2" />
     </article>
   );
 }
