@@ -54,7 +54,7 @@ export default function ThankYouFooter({
 
           if (reduce) {
             gsap.set(
-              ["[data-ft-brand]", "[data-ft-meta]", "[data-ft-rule]", "[data-ft-thanks]", "[data-ft-aside]", "[data-ft-item]", "[data-ft-bottom]"],
+              ["[data-ft-brand]", "[data-ft-rule]", "[data-ft-thanks]", "[data-ft-aside]", "[data-ft-item]", "[data-ft-bottom]"],
               { clearProps: "all", opacity: 1, y: 0, x: 0, scaleX: 1 },
             );
             return;
@@ -70,8 +70,7 @@ export default function ThankYouFooter({
           });
 
           tl.from("[data-ft-brand]", { opacity: 0, y: mobile ? 10 : 16, duration: 0.45 }, 0)
-            .from("[data-ft-meta]", { opacity: 0, y: mobile ? 8 : 12, duration: 0.4 }, 0.06)
-            .from("[data-ft-rule]", { scaleX: 0, duration: mobile ? 0.55 : 0.85, ease: "power2.inOut" }, 0.12)
+            .from("[data-ft-rule]", { scaleX: 0, duration: mobile ? 0.55 : 0.85, ease: "power2.inOut" }, 0.08)
             .from("[data-ft-thanks]", { opacity: 0, y: mobile ? 20 : 36, duration: mobile ? 0.55 : 0.8 }, 0.2)
             .from("[data-ft-aside]", { opacity: 0, y: mobile ? 12 : 18, duration: 0.45 }, 0.3)
             .from(
@@ -115,24 +114,18 @@ export default function ThankYouFooter({
       />
 
       <div className="relative mx-auto w-full max-w-[80rem] px-4 pb-7 pt-10 sm:px-6 sm:pb-8 sm:pt-12 md:px-8 md:pb-10 md:pt-16">
-        <div className="flex items-end justify-between gap-3 sm:gap-6">
-          <Link href="/" data-ft-brand className="inline-flex min-w-0 items-center transition hover:opacity-80">
-            <Image
-              src="/skytech-lockup.png"
-              alt={siteName}
-              width={900}
-              height={172}
-              unoptimized
-              className="h-7 w-auto max-w-[58vw] object-contain object-left sm:h-9 sm:max-w-none md:h-10"
-            />
-          </Link>
-          <div data-ft-meta className="shrink-0 text-right text-[11px] leading-snug text-[#3a3a3a] sm:text-[12px] md:text-sm">
-            <p>Based in</p>
-            <p className="font-semibold">Accra, Ghana</p>
-          </div>
-        </div>
+        <Link href="/" data-ft-brand className="inline-flex min-w-0 items-center transition hover:opacity-80">
+          <Image
+            src="/skytech-lockup.png"
+            alt={siteName}
+            width={900}
+            height={172}
+            unoptimized
+            className="h-7 w-auto max-w-[58vw] object-contain object-left sm:h-9 sm:max-w-none md:h-10"
+          />
+        </Link>
 
-        <div data-ft-rule className="mt-4 h-px origin-left bg-[#3a3a3a]/70 sm:mt-5 md:mt-6" />
+        <div data-ft-rule className="mt-3 h-px origin-left bg-[#3a3a3a]/70 sm:mt-4 md:mt-5" />
 
         <div className="mt-8 grid gap-8 sm:mt-10 sm:gap-10 md:mt-14 md:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] md:items-end md:gap-10 lg:mt-16">
           <div data-ft-thanks className="relative min-w-0 max-w-3xl">

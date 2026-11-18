@@ -12,7 +12,7 @@ export default async function AffiliateDashboardPage() {
     <div className="space-y-8">
       <div>
         <h1 className="text-3xl font-black text-slate-900">Affiliate Network</h1>
-        <p className="text-slate-500">Manage partner logos, size, visibility, and grid layout. Changes appear on the homepage after saving.</p>
+        <p className="text-slate-500">Manage partner logos, size, visibility, and order. Changes appear in the homepage trust section after saving.</p>
       </div>
 
       <AffiliateManager initialAffiliates={affiliates} />

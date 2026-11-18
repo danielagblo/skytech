@@ -33,7 +33,7 @@ export default function ClientsCarousel({ partners }: { partners: Partner[] }) {
   }, []);
 
   // Paginate based on how many "cell units" each partner takes
-  const cellsPerSlide = cols * 4;
+  const cellsPerSlide = cols * 3;
   const slides: Partner[][] = [];
   let currentSlide: Partner[] = [];
   let cellCount = 0;
@@ -72,12 +72,12 @@ export default function ClientsCarousel({ partners }: { partners: Partner[] }) {
   const offset = currentIndex * -100;
 
   return (
-    <div className="relative bg-white border-y border-slate-200 w-full">
+    <div className="relative w-full bg-[#e8e8ea]">
       <div className="relative flex items-center group">
         {/* Left Button */}
         <button
           onClick={prevSlide}
-          className="absolute left-2 z-10 hidden items-center justify-center rounded-full border border-slate-200 bg-white p-2.5 text-slate-500 shadow-sm transition hover:bg-slate-50 hover:text-slate-900 md:group-hover:flex"
+          className="absolute left-2 z-10 hidden items-center justify-center rounded-full border border-black/10 bg-[#e8e8ea] p-2.5 text-black/55 transition hover:bg-[#f6f6f4] hover:text-[#161616] md:group-hover:flex"
           aria-label="Previous clients"
         >
           <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
@@ -112,7 +112,7 @@ export default function ClientsCarousel({ partners }: { partners: Partner[] }) {
                   return (
                     <div
                       key={`${idx}-${partner.name || partner.logoUrl}`}
-                      className="flex items-center justify-center overflow-hidden border-[0.5px] border-slate-100 bg-white p-4 min-h-0"
+                      className="flex min-h-0 items-center justify-center border-[0.5px] border-black/[0.08] bg-transparent p-3 sm:p-4"
                       style={{
                         gridColumn: `span ${cSpan}`,
                         gridRow: `span ${rSpan}`,
@@ -135,7 +135,7 @@ export default function ClientsCarousel({ partners }: { partners: Partner[] }) {
         {/* Right Button */}
         <button
           onClick={nextSlide}
-          className="absolute right-2 z-10 hidden items-center justify-center rounded-full border border-slate-200 bg-white p-2.5 text-slate-500 shadow-sm transition hover:bg-slate-50 hover:text-slate-900 md:group-hover:flex"
+          className="absolute right-2 z-10 hidden items-center justify-center rounded-full border border-black/10 bg-[#e8e8ea] p-2.5 text-black/55 transition hover:bg-[#f6f6f4] hover:text-[#161616] md:group-hover:flex"
           aria-label="Next clients"
         >
           <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">

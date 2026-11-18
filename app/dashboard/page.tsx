@@ -71,7 +71,7 @@ const siteLinks = [
   {
     href: "/dashboard/affiliates",
     title: "Partners",
-    body: "Partner logos on home and in the footer",
+    body: "Partner logos on the home trust section",
     icon: "🤝",
     color: "sky",
   },
