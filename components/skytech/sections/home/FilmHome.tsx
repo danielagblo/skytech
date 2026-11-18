@@ -12,6 +12,7 @@ import ClientsCarousel from "@/components/skytech/sections/home/ClientsCarousel"
 import ServiceOffers from "@/components/skytech/sections/ServiceOffers";
 import CustomerSay, { type CustomerStory } from "@/components/skytech/sections/home/CustomerSay";
 import TeamHang, { type HangMember } from "@/components/skytech/sections/home/TeamHang";
+import type { ServiceMenu } from "@/lib/crm/service-offers";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
@@ -26,7 +27,7 @@ const statements = [
 
 const ribbon = ["Website", "Mobile app", "SEO", "Virtual tour", "CRM"];
 const tourIndustries = ["Hospitality", "Hotels", "Apartments", "Airbnb", "Event centres", "Real estate"];
-const crmPoints = ["Who called", "What they wanted", "Have they paid"];
+const crmPoints = ["Customer names", "What they asked for", "Who to follow up", "Paid or not"];
 
 export interface FilmPartner {
   name: string;
@@ -41,10 +42,12 @@ export default function FilmHome({
   partners,
   reviews = [],
   members = [],
+  menus,
 }: {
   partners: FilmPartner[];
   reviews?: CustomerStory[];
   members?: HangMember[];
+  menus?: ServiceMenu[];
 }) {
   const root = useRef<HTMLElement>(null);
 
@@ -58,18 +61,20 @@ export default function FilmHome({
     motion.add("(prefers-reduced-motion: no-preference)", () => {
       const open = gsap.timeline({ defaults: { ease: "power3.out" } });
       open.fromTo("[data-hero-item]", { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.55, stagger: 0.05 });
-      open.call(contextSafe(() => {
-        gsap.utils.toArray<HTMLElement>("[data-pill]").forEach((pill, index) => {
-          gsap.to(pill, {
-            backgroundColor: index % 2 === 0 ? "#b7dff6" : "#d5f5a8",
-            duration: 2.8,
-            ease: "sine.inOut",
-            yoyo: true,
-            repeat: -1,
-            delay: index * 0.7,
+      if (contextSafe) {
+        open.call(contextSafe(() => {
+          gsap.utils.toArray<HTMLElement>("[data-pill]").forEach((pill, index) => {
+            gsap.to(pill, {
+              backgroundColor: index % 2 === 0 ? "#b7dff6" : "#d5f5a8",
+              duration: 2.8,
+              ease: "sine.inOut",
+              yoyo: true,
+              repeat: -1,
+              delay: index * 0.7,
+            });
           });
-        });
-      }));
+        }));
+      }
 
       const lines = gsap.utils.toArray<HTMLElement>("[data-statement]");
       const reel = gsap.timeline({
@@ -276,6 +281,18 @@ export default function FilmHome({
         </div>
       </section>
 
+      <section className="relative px-3 pb-3 pt-10 md:px-5 md:pb-4 md:pt-14">
+        <div className="mx-auto max-w-[1180px]">
+          <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-black/45">More offers</p>
+          <h2 className="mt-3 max-w-3xl font-display text-[clamp(1.85rem,3.6vw,2.75rem)] font-medium leading-[1.05] tracking-tight">
+            But that’s not all — we have other solutions to show you.
+          </h2>
+          <p className="mt-3 max-w-xl text-sm leading-relaxed text-black/55 md:text-base">
+            Our customer management software and virtual tour experience.
+          </p>
+        </div>
+      </section>
+
       <section className="relative px-3 pb-4 md:px-5">
         <div data-rise className="mx-auto grid max-w-[1180px] items-center gap-8 overflow-hidden rounded-[28px] bg-[#d5f5a8] px-6 py-10 md:grid-cols-[1.05fr_.95fr] md:px-10 md:py-12">
           <div>
@@ -315,36 +332,38 @@ export default function FilmHome({
       </section>
 
       <section className="relative px-3 pb-4 md:px-5">
-        <div data-rise className="mx-auto grid max-w-[1180px] overflow-hidden rounded-[28px] bg-[#b7dff6] md:grid-cols-[1.05fr_.95fr]">
-          <div className="px-6 py-10 md:px-10 md:py-12">
-            <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-black/50">CRM</p>
-            <h2 className="mt-3 font-display text-4xl font-medium leading-[1.02] tracking-tight md:text-6xl">
-              Know who to call back.
-            </h2>
-            <p className="mt-4 max-w-md text-sm leading-relaxed text-black/70 md:text-base">
-              A customer asks today. Tomorrow their name is still here, with what they wanted, and whether they have paid.
+        <div data-rise className="mx-auto grid max-w-[1180px] items-center gap-6 overflow-hidden rounded-[28px] bg-[#b7dff6] px-6 py-8 md:grid-cols-[1.05fr_.95fr] md:gap-8 md:px-10 md:py-9">
+          <div>
+            <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-black/50">
+              Customer management software
             </p>
-            <div className="mt-6 flex flex-wrap gap-2">
+            <h2 className="mt-2 font-display text-3xl font-medium leading-[1.02] tracking-tight md:text-5xl">
+              Keep every customer in one place.
+            </h2>
+            <p className="mt-3 max-w-md text-sm leading-relaxed text-black/70">
+              Names, what they asked for, and whether they have paid — so you always know who to follow up next.
+            </p>
+            <div className="mt-4 flex flex-wrap gap-2">
               {crmPoints.map((point) => (
                 <span key={point} className="rounded-full bg-white/80 px-3 py-1 text-xs font-medium">
                   {point}
                 </span>
               ))}
             </div>
-            <p className="mt-8 flex flex-wrap items-center gap-x-3 gap-y-2 font-display text-[clamp(1.8rem,4vw,3.2rem)] font-medium leading-none tracking-tight">
-              Priced with
+            <p className="mt-5 flex flex-wrap items-center gap-x-3 gap-y-2 font-display text-[clamp(1.55rem,3.2vw,2.4rem)] font-medium leading-none tracking-tight">
               <span className="inline-flex rounded-full bg-[#161616] px-[0.42em] py-[0.06em] text-white">
-                the brief
+                GH₵200
               </span>
+              / month
+              <span className="text-[0.55em] font-medium text-black/55">· GH₵2,400 / year</span>
             </p>
           </div>
-          <div className="flex items-end justify-end">
+          <div className="relative h-56 overflow-hidden rounded-[24px] md:h-[300px]">
             <Image
               src="/images/crm-board-crop.jpg"
-              alt="A list of customers, who called, and whether they have paid"
-              width={1024}
-              height={665}
-              className="h-auto w-full md:w-[74%]"
+              alt="Customer list showing names, requests, and payment status"
+              fill
+              className="object-cover object-left"
               sizes="(min-width: 768px) 420px, 100vw"
             />
           </div>
@@ -365,10 +384,10 @@ export default function FilmHome({
       <section id="offers" className="relative px-3 pb-4 md:px-5">
         <div data-rise className="mx-auto max-w-[1180px] rounded-[28px] bg-[#f6f6f4] px-6 py-12 md:px-10">
           <h2 className="max-w-xl font-display text-4xl font-medium leading-[1.05] tracking-tight md:text-5xl">
-            Pick the offer. We take the build.
+            Choose the offer that fits. We take it from there.
           </h2>
           <div className="mt-8">
-            <ServiceOffers />
+            <ServiceOffers menus={menus} />
           </div>
         </div>
       </section>

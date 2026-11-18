@@ -96,8 +96,10 @@ export async function updatePricingCategory(category: string, packages: any[]) {
     await savePricing(pricing);
 
     revalidatePath("/pricing");
+    revalidatePath("/services");
     revalidatePath("/");
-    
+    revalidatePath("/dashboard/pricing");
+
     return { success: true };
   } catch (error: any) {
     console.error("Pricing update error:", error);

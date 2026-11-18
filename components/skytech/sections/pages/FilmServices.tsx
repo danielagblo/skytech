@@ -11,7 +11,7 @@ import BookMeetingButton from "@/components/skytech/ui/BookMeetingButton";
 import FilmNav from "@/components/skytech/layout/FilmNav";
 import { useRise } from "@/components/skytech/motion/useRise";
 import type { BlogPost } from "@/app/lib/blog";
-import { SERVICE_MENUS } from "@/lib/crm/service-offers";
+import { SERVICE_MENUS, type ServiceMenu } from "@/lib/crm/service-offers";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
@@ -22,74 +22,82 @@ function money(amount: number | null | undefined) {
   return `GH₵${amount.toLocaleString("en-GH")}`;
 }
 
-function menuOffer(id: string, offerId?: string) {
-  const menu = SERVICE_MENUS.find((item) => item.id === id);
+function menuOffer(menus: ServiceMenu[], id: string, offerId?: string) {
+  const menu = menus.find((item) => item.id === id);
   if (!menu) return null;
-  if (offerId) return menu.offers.find((offer) => offer.id === offerId) || null;
+  if (offerId) {
+    return (
+      menu.offers.find((offer) => offer.id === offerId) ||
+      menu.offers.find((offer) => offer.name.toLowerCase().includes(offerId)) ||
+      null
+    );
+  }
   return menu.offers.find((offer) => offer.featured) || menu.offers[0] || null;
 }
 
-const websiteBasic = menuOffer("website", "basic");
-const websiteStandard = menuOffer("website", "standard");
-const websiteShop = menuOffer("website", "ecommerce");
-const appStart = menuOffer("app", "growth");
-const seoStart = menuOffer("seo", "silver");
-const seoGold = menuOffer("seo", "gold");
-const tourStart = menuOffer("tour", "space");
+function buildServices(menus: ServiceMenu[]) {
+  const websiteBasic = menuOffer(menus, "website", "basic");
+  const websiteStandard = menuOffer(menus, "website", "standard");
+  const websiteShop = menuOffer(menus, "website", "ecommerce");
+  const appStart = menuOffer(menus, "app", "growth");
+  const seoStart = menuOffer(menus, "seo", "silver");
+  const seoGold = menuOffer(menus, "seo", "gold");
+  const tourStart = menuOffer(menus, "tour", "space");
 
-const services = [
-  {
-    kicker: "Website",
-    line: "They land on the page. They should be able to ask, book, or pay.",
-    body: "The site is written around that step. Hosting, the domain, search on the page, and someone who still answers are in the same offer, from Skytech Ghana in Accra.",
-    price: `For only ${money(websiteStandard?.total)}`,
-    note: `A simpler site starts at ${money(websiteBasic?.total)}. A shop or booking site starts at ${money(websiteShop?.total)}.`,
-    href: "/pricing?service=website",
-    media: "mark" as const,
-  },
-  {
-    kicker: "Mobile app",
-    line: "The customer finishes the job on their phone.",
-    body: "Use an app when the next step is a payment, a booking, or a status they check again. Android and iOS, and your desk sees the same job.",
-    price: `Starts at ${money(appStart?.total)}`,
-    note: "8 to 12 screens, the admin side, and the store listing. A larger build is on the rate card.",
-    href: "/pricing?service=app",
-    media: "image" as const,
-    image: "/images/images/onlineEcommerceImage.png",
-    imageAlt: "A customer completing an order",
-  },
-  {
-    kicker: "SEO",
-    line: "They search. Your business should be the one they find.",
-    body: "A new site does not show up because it launched. Each month we work the words customers type, the pages that should answer, and your listing in Accra.",
-    price: `From ${money(seoStart?.total)} a month`,
-    note: `Most sites take the plan at ${money(seoGold?.total)} a month, with a review every two weeks.`,
-    href: "/pricing?service=seo",
-    media: "image" as const,
-    image: "/images/images/globeImage.png",
-    imageAlt: "Search bringing a business up when a customer looks",
-  },
-  {
-    kicker: "Virtual tour",
-    line: "Walk the room before you book.",
-    body: "A guest, a buyer, or an organiser moves through the space before they arrive. Built for hospitality and property.",
-    price: `For only ${money(tourStart?.total)}`,
-    note: tourIndustries.join(" · "),
-    href: "/pricing?service=tour",
-    media: "video" as const,
-  },
-  {
-    kicker: "CRM",
-    line: "Know who to call back.",
-    body: "A customer asks today. Tomorrow their name is still here, with what they wanted, and whether they have paid.",
-    price: money(null),
-    note: "Who called. What they wanted. Have they paid.",
-    href: "/pricing?service=crm",
-    media: "image" as const,
-    image: "/images/crm-board-crop.jpg",
-    imageAlt: "A list of customers, who called, and whether they have paid",
-  },
-];
+  return [
+    {
+      kicker: "Website",
+      line: "They land on the page. They should be able to ask, book, or pay.",
+      body: "The site is written around that step. Hosting, the domain, search on the page, and someone who still answers are in the same offer, from Skytech Ghana in Accra.",
+      price: `For only ${money(websiteStandard?.total)}`,
+      note: `A simpler site starts at ${money(websiteBasic?.total)}. A shop or booking site starts at ${money(websiteShop?.total)}.`,
+      href: "/pricing?service=website",
+      media: "mark" as const,
+    },
+    {
+      kicker: "Mobile app",
+      line: "The customer finishes the job on their phone.",
+      body: "Use an app when the next step is a payment, a booking, or a status they check again. Android and iOS, and your desk sees the same job.",
+      price: `Starts at ${money(appStart?.total)}`,
+      note: "8 to 12 screens, the admin side, and the store listing. A larger build is on the rate card.",
+      href: "/pricing?service=app",
+      media: "image" as const,
+      image: "/images/images/onlineEcommerceImage.png",
+      imageAlt: "A customer completing an order",
+    },
+    {
+      kicker: "SEO",
+      line: "They search. Your business should be the one they find.",
+      body: "A new site does not show up because it launched. Each month we work the words customers type, the pages that should answer, and your listing in Accra.",
+      price: `From ${money(seoStart?.total)} a month`,
+      note: `Most sites take the plan at ${money(seoGold?.total)} a month, with a review every two weeks.`,
+      href: "/pricing?service=seo",
+      media: "image" as const,
+      image: "/images/images/globeImage.png",
+      imageAlt: "Search bringing a business up when a customer looks",
+    },
+    {
+      kicker: "Virtual tour",
+      line: "Walk the room before you book.",
+      body: "A guest, a buyer, or an organiser moves through the space before they arrive. Built for hospitality and property.",
+      price: `For only ${money(tourStart?.total)}`,
+      note: tourIndustries.join(" · "),
+      href: "/pricing?service=tour",
+      media: "video" as const,
+    },
+    {
+      kicker: "Customer management software",
+      line: "Keep every customer in one place.",
+      body: "When someone calls or writes in, their name stays here with what they asked for and whether they have paid. You always know who needs a follow-up next.",
+      price: "GH₵200 a month",
+      note: "Or GH₵2,400 for the year.",
+      href: "/pricing?service=crm",
+      media: "image" as const,
+      image: "/images/crm-board-crop.jpg",
+      imageAlt: "Customer list showing names, requests, and payment status",
+    },
+  ];
+}
 
 const steps = [
   { label: "01", title: "The brief", body: "What the business sells, and the step a customer should take." },
@@ -97,7 +105,14 @@ const steps = [
   { label: "03", title: "The year after", body: "Hosting, domain, search, and a person who still answers." },
 ];
 
-export default function FilmServices({ posts = [] }: { posts?: BlogPost[] }) {
+export default function FilmServices({
+  posts = [],
+  menus = SERVICE_MENUS,
+}: {
+  posts?: BlogPost[];
+  menus?: ServiceMenu[];
+}) {
+  const services = buildServices(menus);
   const ref = useRise<HTMLDivElement>();
   const root = useRef<HTMLDivElement>(null);
   const pinRef = useRef<HTMLDivElement>(null);
@@ -248,7 +263,7 @@ export default function FilmServices({ posts = [] }: { posts?: BlogPost[] }) {
   );
 }
 
-function ServiceMedia({ service }: { service: (typeof services)[number] }) {
+function ServiceMedia({ service }: { service: ReturnType<typeof buildServices>[number] }) {
   if (service.media === "mark") {
     return (
       <div className="mt-6 inline-flex h-24 w-36 items-center justify-center rounded-2xl bg-[#d5f5a8]">

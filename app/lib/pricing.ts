@@ -2,8 +2,13 @@ import { isMysql } from "./db";
 import * as mysql from "./mysql";
 import dbConnect from "./mongodb";
 import Pricing from "../models/Pricing";
+import {
+  normalizePricingCategories,
+  serviceMenusToPricingCategories,
+} from "./pricing-map";
 
 export interface PricingPackage {
+  id?: string;
   name: string;
   tier: string;
   price: string;
@@ -21,22 +26,7 @@ export interface PricingCategory {
   updatedAt?: string | Date;
 }
 
-const DEFAULT_PRICING: PricingCategory[] = [
-  {
-    category: "web",
-    label: "Web Development",
-    packages: [
-      {
-        name: "Basic Website Package",
-        tier: "Startup",
-        price: "2,500",
-        usd: "175",
-        renewal: "1,000",
-        highlights: ["5-6 Pages", "SEO", "Support"],
-      }
-    ]
-  }
-];
+const DEFAULT_PRICING: PricingCategory[] = serviceMenusToPricingCategories();
 
 async function getPricingMysql(): Promise<PricingCategory[]> {
   await mysql.initSchema();
@@ -101,15 +91,7 @@ export async function getPricing(): Promise<PricingCategory[]> {
     }
   }
 
-  // Rearrange categories: Website (web), Mobile App (mobile), Marketing (marketing)
-  const categoryOrder = ["web", "mobile", "marketing"];
-  return categories.sort((a, b) => {
-    const indexA = categoryOrder.indexOf(a.category);
-    const indexB = categoryOrder.indexOf(b.category);
-    const posA = indexA === -1 ? 999 : indexA;
-    const posB = indexB === -1 ? 999 : indexB;
-    return posA - posB;
-  });
+  return normalizePricingCategories(categories.length ? categories : DEFAULT_PRICING);
 }
 
 export async function savePricing(pricing: PricingCategory[]): Promise<void> {

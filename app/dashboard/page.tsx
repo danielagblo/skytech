@@ -41,6 +41,13 @@ const siteLinks = [
     color: "violet",
   },
   {
+    href: "/dashboard/pricing",
+    title: "Pricing",
+    body: "Offers on the homepage and /pricing",
+    icon: "💰",
+    color: "lime",
+  },
+  {
     href: "/dashboard/testimonials",
     title: "Testimonials",
     body: "Customer stories on the homepage",
@@ -110,7 +117,7 @@ export default function DashboardPage() {
           Site overview
         </h1>
         <p className="mt-3 text-lg text-slate-600">
-          These tools update the live film site. Website and app offer prices stay on the invoice rate card.
+          These tools update the live film site. Edit Pricing to change the offers on home and /pricing.
         </p>
       </div>
 
@@ -204,7 +211,7 @@ export default function DashboardPage() {
           ))}
         </div>
         <p className="mt-6 rounded-xl bg-slate-50 px-4 py-3 text-sm text-slate-600">
-          Pricing cards on home and /pricing use the invoice offer list in code. Edit those totals in the CRM offer files, not in this admin.
+          CRM invoices still use the coded website offer templates. Public site prices come from Pricing in this admin.
         </p>
       </div>
     </div>

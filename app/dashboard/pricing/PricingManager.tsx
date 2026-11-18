@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { updatePricingCategory } from "../../admin/actions";
 
 const EMPTY_PACKAGE = {
+  id: "",
   name: "",
   tier: "",
   price: "",

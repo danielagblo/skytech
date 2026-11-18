@@ -2,18 +2,28 @@
 
 import { useState } from "react";
 import { useWhatsAppModal } from "@/components/WhatsAppModal";
-import { SERVICE_MENUS, serviceMenu, type ServiceKey } from "@/lib/crm/service-offers";
+import {
+  SERVICE_MENUS,
+  serviceMenu,
+  type ServiceKey,
+  type ServiceMenu,
+} from "@/lib/crm/service-offers";
 
 export default function ServiceOffers({
   initial = "website",
   syncUrl = false,
+  menus = SERVICE_MENUS,
 }: {
   initial?: string;
   syncUrl?: boolean;
+  menus?: ServiceMenu[];
 }) {
   const { open } = useWhatsAppModal();
-  const [service, setService] = useState<ServiceKey>(serviceMenu(initial).id);
-  const menu = serviceMenu(service);
+  const list = menus?.length ? menus : SERVICE_MENUS;
+  const [service, setService] = useState<ServiceKey>(
+    (list.find((item) => item.id === initial)?.id || list[0]?.id || "website") as ServiceKey,
+  );
+  const menu = list.find((item) => item.id === service) || list[0] || serviceMenu(initial);
   const money = (amount: number) => `GH₵${amount.toLocaleString("en-GH")}`;
 
   const choose = (id: ServiceKey) => {
@@ -27,7 +37,7 @@ export default function ServiceOffers({
   return (
     <div>
       <div className="flex gap-2 overflow-x-auto pb-1">
-        {SERVICE_MENUS.map((item) => {
+        {list.map((item) => {
           const active = item.id === menu.id;
           return (
             <button

@@ -2,13 +2,16 @@
 
 import ServiceOffers from "@/components/skytech/sections/ServiceOffers";
 import { useRise } from "@/components/skytech/motion/useRise";
+import type { ServiceMenu } from "@/lib/crm/service-offers";
 
 export default function FilmPricing({
   faqs = [],
   initial = "website",
+  menus,
 }: {
   faqs?: Array<{ question: string; answer: string }>;
   initial?: string;
+  menus?: ServiceMenu[];
 }) {
   const ref = useRise<HTMLDivElement>();
 
@@ -22,7 +25,7 @@ export default function FilmPricing({
       </header>
 
       <div data-rise>
-        <ServiceOffers initial={initial} syncUrl />
+        <ServiceOffers initial={initial} syncUrl menus={menus} />
       </div>
 
       {faqs.length > 0 ? (

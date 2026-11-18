@@ -3,6 +3,7 @@ export const dynamic = "force-dynamic";
 import { getAffiliates } from "../lib/affiliates";
 import { getTeamMembers } from "../lib/team";
 import { getTestimonials } from "../lib/testimonials";
+import { getServiceMenus } from "../lib/pricing-display";
 
 import FilmHome from "../../components/skytech/sections/home/FilmHome";
 
@@ -13,10 +14,11 @@ export const metadata = {
 };
 
 export default async function Home() {
-  const [partnersData, testimonials, team] = await Promise.all([
+  const [partnersData, testimonials, team, menus] = await Promise.all([
     getAffiliates(),
     getTestimonials(),
     getTeamMembers(),
+    getServiceMenus(),
   ]);
   const allPartners = (partnersData || []).filter((p) => p?.logoUrl || p?.name);
   const reviews = (testimonials || [])
@@ -37,5 +39,5 @@ export default async function Home() {
       detail: member.role || "",
     }));
 
-  return <FilmHome partners={allPartners} reviews={reviews} members={members} />;
+  return <FilmHome partners={allPartners} reviews={reviews} members={members} menus={menus} />;
 }

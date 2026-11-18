@@ -10,6 +10,7 @@ const navItems = [
   { href: "/dashboard/submissions", label: "Contact leads", icon: "💬" },
   { href: "/dashboard/blog", label: "Insights", icon: "📝" },
   { href: "/dashboard/faqs", label: "FAQs", icon: "❓" },
+  { href: "/dashboard/pricing", label: "Pricing", icon: "💰" },
   { href: "/dashboard/testimonials", label: "Testimonials", icon: "💬" },
   { href: "/dashboard/team", label: "Team", icon: "👥" },
   { href: "/dashboard/affiliates", label: "Partners", icon: "🤝" },

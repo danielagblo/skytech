@@ -1,5 +1,6 @@
 import FilmServices from "@/components/skytech/sections/pages/FilmServices";
 import { getLatestBlogPosts } from "@/app/lib/blog";
+import { getServiceMenus } from "@/app/lib/pricing-display";
 
 export const dynamic = "force-dynamic";
 
@@ -9,6 +10,6 @@ export const metadata = {
 };
 
 export default async function ServicesPage() {
-  const posts = await getLatestBlogPosts(3);
-  return <FilmServices posts={posts} />;
+  const [posts, menus] = await Promise.all([getLatestBlogPosts(3), getServiceMenus()]);
+  return <FilmServices posts={posts} menus={menus} />;
 }
