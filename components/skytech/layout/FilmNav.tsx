@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import BookMeetingButton from "@/components/skytech/ui/BookMeetingButton";
@@ -25,9 +26,16 @@ export default function FilmNav({ className = "" }: { className?: string }) {
     <div className={`relative ${className}`}>
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <Link href="/" className="text-sm font-semibold">
-            <span className="mr-1 inline-block h-2 w-2 rounded-full bg-[#8dce3a]" />
-            Skytech Ghana
+          <Link href="/" aria-label="Skytech Ghana" className="inline-flex items-center transition hover:opacity-80">
+            <Image
+              src="/skytech-lockup.png"
+              alt="Skytech Ghana"
+              width={900}
+              height={172}
+              priority
+              unoptimized
+              className="h-9 w-auto md:h-10"
+            />
           </Link>
           <BookMeetingButton className="rounded-full border border-black/10 bg-white px-3 py-1 text-xs font-medium">
             Contact us

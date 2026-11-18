@@ -10,10 +10,23 @@ import WhatsAppOfferForm from "@/components/skytech/sections/landing/WhatsAppOff
 
 gsap.registerPlugin(useGSAP);
 
-export default function FilmContact() {
+export default function FilmContact({
+  contactEmail = "hello@skytechgh.com",
+  contactPhone = "+233 53 831 1626",
+  whatsapp,
+  siteName = "Skytech Ghana",
+}: {
+  contactEmail?: string;
+  contactPhone?: string;
+  whatsapp?: string;
+  siteName?: string;
+}) {
   const ref = useRise<HTMLDivElement>();
   const root = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLDivElement>(null);
+  const phoneHref = `tel:${contactPhone.replace(/[^\d+]/g, "")}`;
+  const mailHref = `mailto:${contactEmail}`;
+  const chatHref = getWhatsAppUrl(whatsapp);
 
   useGSAP(() => {
     const motion = gsap.matchMedia();
@@ -52,13 +65,13 @@ export default function FilmContact() {
                   <Image src="/skytechlogoonly.png" alt="" fill className="object-cover" sizes="64px" />
                 </span>
                 <p className="text-sm leading-snug">
-                  <span className="font-medium">Skytech Ghana</span>
+                  <span className="font-medium">{siteName}</span>
                   <span className="text-black/70"> — in Accra, here for the first step of the project.</span>
                 </p>
               </div>
               <div data-intro className="flex flex-wrap gap-2">
-                <a href="mailto:hello@skytechgh.com" className="rounded-full bg-[#161616] px-4 py-2 text-sm text-white">
-                  hello@skytechgh.com
+                <a href={mailHref} className="rounded-full bg-[#161616] px-4 py-2 text-sm text-white">
+                  {contactEmail}
                 </a>
                 <button type="button" onClick={focusForm} className="rounded-full bg-[#161616] px-4 py-2 text-sm text-white">
                   Send message
@@ -72,13 +85,13 @@ export default function FilmContact() {
             </h1>
 
             <div data-intro className="relative mt-5 flex gap-2">
-              <RoundLink href="mailto:hello@skytechgh.com" label="Email">
+              <RoundLink href={mailHref} label="Email">
                 <MailIcon />
               </RoundLink>
-              <RoundLink href="tel:+233538311626" label="Call">
+              <RoundLink href={phoneHref} label="Call">
                 <PhoneIcon />
               </RoundLink>
-              <RoundLink href={getWhatsAppUrl()} label="WhatsApp">
+              <RoundLink href={chatHref} label="WhatsApp">
                 <ChatIcon />
               </RoundLink>
               <RoundLink href="https://maps.google.com/maps?q=5.6519898,-0.0643809" label="Accra">
@@ -92,6 +105,7 @@ export default function FilmContact() {
               showReturn={false}
               showWhatsAppLabel={false}
               subtitle="One question at a time."
+              whatsappNumber={whatsapp}
             />
           </div>
         </div>

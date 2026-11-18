@@ -132,6 +132,8 @@ export async function deleteBlogPost(id: string) {
     await deleteBlogPostMysql(id);
     revalidatePath("/dashboard/blog");
     revalidatePath("/insights");
+    revalidatePath("/services");
+    revalidatePath("/");
     return { success: true };
   }
   await dbConnect();
@@ -142,6 +144,8 @@ export async function deleteBlogPost(id: string) {
   await BlogPost.findByIdAndDelete(id);
   revalidatePath("/dashboard/blog");
   revalidatePath("/insights");
+  revalidatePath("/services");
+  revalidatePath("/");
   return { success: true };
 }
 
@@ -151,6 +155,8 @@ export async function saveBlogPost(data: any) {
       await saveBlogPostMysql(data);
       revalidatePath("/dashboard/blog");
       revalidatePath("/insights");
+      revalidatePath("/services");
+      revalidatePath("/");
       revalidatePath(`/insights/${data.slug}`);
       return { success: true };
     } catch (error: any) {
@@ -180,6 +186,8 @@ export async function saveBlogPost(data: any) {
 
     revalidatePath("/dashboard/blog");
     revalidatePath("/insights");
+    revalidatePath("/services");
+    revalidatePath("/");
     revalidatePath(`/insights/${updateData.slug}`);
     
     return { success: true };

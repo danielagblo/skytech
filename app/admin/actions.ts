@@ -156,6 +156,7 @@ export async function updateTestimonialsAction(testimonials: ITestimonial[]) {
 export async function updateTeamAction(members: ITeamMember[]) {
   try {
     await saveTeamMembers(members);
+    revalidatePath("/");
     revalidatePath("/about");
     revalidatePath("/dashboard/team");
     return { success: true };
@@ -170,6 +171,7 @@ export async function updateFAQsAction(faqs: IFAQ[]) {
     const result = await saveFAQs(faqs);
     revalidatePath("/");
     revalidatePath("/faqs");
+    revalidatePath("/pricing");
     revalidatePath("/dashboard/faqs");
     return { success: true, faqs: result.faqs };
   } catch (error: any) {

@@ -7,16 +7,16 @@ import { usePathname, useRouter } from 'next/navigation';
 const navItems = [
   { href: '/dashboard', label: 'Dashboard', icon: '📊' },
   { href: '/dashboard/analytics', label: 'Traffic & Insights', icon: '📈' },
-  { href: '/dashboard/hero', label: 'Home Hero', icon: '🖼️' },
-  { href: '/dashboard/gallery', label: 'Gallery', icon: '📸' },
-  { href: '/dashboard/pricing', label: 'Pricing Manager', icon: '💰' },
   { href: '/dashboard/submissions', label: 'Contact Forms', icon: '💬' },
-  { href: '/dashboard/internships', label: 'Internships', icon: '🎓' },
-  { href: '/dashboard/affiliates', label: 'Affiliates', icon: '🤝' },
+  { href: '/dashboard/blog', label: 'Insights / Blog', icon: '📝' },
+  { href: '/dashboard/faqs', label: 'FAQs', icon: '❓' },
   { href: '/dashboard/testimonials', label: 'Testimonials', icon: '💬' },
   { href: '/dashboard/team', label: 'Team', icon: '👥' },
-  { href: '/dashboard/blog', label: 'Blog', icon: '📝' },
-  { href: '/dashboard/faqs', label: 'FAQs', icon: '❓' },
+  { href: '/dashboard/affiliates', label: 'Partners', icon: '🤝' },
+  { href: '/dashboard/gallery', label: 'Gallery', icon: '📸' },
+  { href: '/dashboard/internships', label: 'Internships', icon: '🎓' },
+  { href: '/dashboard/hero', label: 'Landing Hero', icon: '🖼️' },
+  { href: '/dashboard/pricing', label: 'Landing Pricing', icon: '💰' },
 ];
 
 

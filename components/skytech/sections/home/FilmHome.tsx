@@ -11,7 +11,7 @@ import BookMeetingButton from "@/components/skytech/ui/BookMeetingButton";
 import ClientsCarousel from "@/components/skytech/sections/home/ClientsCarousel";
 import ServiceOffers from "@/components/skytech/sections/ServiceOffers";
 import CustomerSay, { type CustomerStory } from "@/components/skytech/sections/home/CustomerSay";
-import TeamHang from "@/components/skytech/sections/home/TeamHang";
+import TeamHang, { type HangMember } from "@/components/skytech/sections/home/TeamHang";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
@@ -25,12 +25,6 @@ const statements = [
 ];
 
 const ribbon = ["Website", "Mobile app", "SEO", "Virtual tour", "CRM"];
-const reelThumbs = [
-  "/images/images/corporateTableImage.png",
-  "/images/about-hero.png",
-  "/images/images/manFixingCamera.png",
-  "/images/hero-2.png",
-];
 const tourIndustries = ["Hospitality", "Hotels", "Apartments", "Airbnb", "Event centres", "Real estate"];
 const crmPoints = ["Who called", "What they wanted", "Have they paid"];
 
@@ -46,10 +40,11 @@ export interface FilmPartner {
 export default function FilmHome({
   partners,
   reviews = [],
+  members = [],
 }: {
-  subText?: string;
   partners: FilmPartner[];
   reviews?: CustomerStory[];
+  members?: HangMember[];
 }) {
   const root = useRef<HTMLElement>(null);
 
@@ -194,13 +189,6 @@ export default function FilmHome({
               {line.rest}
             </h2>
           ))}
-          <div className="absolute bottom-8 left-0 right-0 flex justify-center gap-3">
-            {reelThumbs.map((src) => (
-              <div key={src} className="relative h-14 w-20 overflow-hidden rounded-xl">
-                <Image src={src} alt="" fill className="object-cover" />
-              </div>
-            ))}
-          </div>
         </div>
       </section>
 
@@ -387,7 +375,7 @@ export default function FilmHome({
 
       <CustomerSay stories={reviews} />
 
-      <TeamHang />
+      <TeamHang members={members} />
 
       {partners.length > 0 ? (
         <section className="relative px-3 pb-16 md:px-5">

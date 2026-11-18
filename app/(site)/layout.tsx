@@ -4,7 +4,6 @@ import Footer from '../../components/skytech/layout/Footer';
 import { getSettings } from '../lib/settings';
 import { getLatestBlogPosts } from '../lib/blog';
 import { getAffiliates } from '../lib/affiliates';
-import FloatingWhatsApp from '../../components/FloatingWhatsApp';
 import FilmFrame from '../../components/skytech/layout/FilmFrame';
 import SmoothScroll from '../../components/skytech/layout/SmoothScroll';
 import { WhatsAppModalProvider } from '../../components/WhatsAppModal';
@@ -55,7 +54,6 @@ export default async function SiteLayout({ children }: { children: ReactNode }) 
             <main>{children}</main>
           </FilmFrame>
           <Footer latestPosts={latestPosts} sponsors={sponsors} settings={settings} />
-          <FloatingWhatsApp />
         </div>
       </WhatsAppModalProvider>
     </SmoothScroll>

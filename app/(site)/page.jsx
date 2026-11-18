@@ -1,7 +1,7 @@
 import React from "react";
 export const dynamic = "force-dynamic";
 import { getAffiliates } from "../lib/affiliates";
-import { getHeroData } from "../lib/hero";
+import { getTeamMembers } from "../lib/team";
 import { getTestimonials } from "../lib/testimonials";
 
 import FilmHome from "../../components/skytech/sections/home/FilmHome";
@@ -13,10 +13,10 @@ export const metadata = {
 };
 
 export default async function Home() {
-  const [hero, partnersData, testimonials] = await Promise.all([
-    getHeroData(),
+  const [partnersData, testimonials, team] = await Promise.all([
     getAffiliates(),
     getTestimonials(),
+    getTeamMembers(),
   ]);
   const allPartners = (partnersData || []).filter((p) => p?.logoUrl || p?.name);
   const reviews = (testimonials || [])
@@ -27,8 +27,15 @@ export default async function Home() {
       name: item.author || "Client",
       company: item.company || "Ghana",
     }));
+  const members = (team || [])
+    .filter((member) => member?.name)
+    .map((member) => ({
+      name: member.name,
+      role: member.role || "",
+      bio: member.bio || "",
+      image: member.imageUrl || undefined,
+      detail: member.role || "",
+    }));
 
-  return (
-    <FilmHome subText={hero.subText} partners={allPartners} reviews={reviews} />
-  );
+  return <FilmHome partners={allPartners} reviews={reviews} members={members} />;
 }

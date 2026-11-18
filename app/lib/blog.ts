@@ -85,7 +85,14 @@ export async function getAllBlogPosts(): Promise<BlogPost[]> {
   try {
     const posts = await getPublished();
     const mapped = posts.map(mapPost);
-    if (mapped.length > 0) return mapped;
+    if (mapped.length === 0) return SERVICE_NOTES;
+    const taken = new Set(mapped.map((post) => post.slug));
+    const extras = SERVICE_NOTES.filter((note) => !taken.has(note.slug));
+    return [...mapped, ...extras].sort((left, right) => {
+      const a = new Date(left.publishedAt || left.createdAt || 0).getTime() || 0;
+      const b = new Date(right.publishedAt || right.createdAt || 0).getTime() || 0;
+      return b - a;
+    });
   } catch (error) {
     console.error("getAllBlogPosts error:", error);
   }
