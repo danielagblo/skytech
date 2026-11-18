@@ -29,6 +29,53 @@ const ribbon = ["Website", "Mobile app", "SEO", "Virtual tour", "CRM"];
 const tourIndustries = ["Hospitality", "Hotels", "Apartments", "Airbnb", "Event centres", "Real estate"];
 const crmPoints = ["Customer names", "What they asked for", "Who to follow up", "Paid or not"];
 
+const roadmapSteps = [
+  {
+    year: "Upon entry",
+    title: "Market Entry",
+    body: "Product launch, early traction, initial customer base.",
+  },
+  {
+    year: "Year 2",
+    title: "Optimization",
+    body: "Operational improvements and revenue acceleration.",
+  },
+  {
+    year: "Year 3",
+    title: "Expansion",
+    body: "New markets and product extensions.",
+  },
+  {
+    year: "Year 4",
+    title: "Leadership",
+    body: "Strategic growth and long-term profitability.",
+  },
+];
+
+const solutionConcepts = [
+  {
+    id: "efficiency",
+    label: "Efficiency",
+    detail: "Faster delivery. Cleaner systems. Less wasted spend.",
+  },
+  {
+    id: "innovation",
+    label: "Innovation",
+    detail: "New products and channels that open the next sale.",
+  },
+  {
+    id: "scalability",
+    label: "Scalability",
+    detail: "Growth that holds after launch, not only on day one.",
+  },
+];
+
+const growthMetrics = [
+  { label: "User Growth", value: "35%" },
+  { label: "Conversion Rate", value: "+15%" },
+  { label: "Retention Target", value: "190%" },
+];
+
 export interface FilmPartner {
   name: string;
   logoUrl: string;
@@ -102,6 +149,105 @@ export default function FilmHome({
         reel.to({}, { duration: 0.42 });
       });
 
+      const performance = document.querySelector<HTMLElement>("[data-performance]");
+      const slides = gsap.utils.toArray<HTMLElement>("[data-perf-slide]");
+      const concepts = gsap.utils.toArray<HTMLElement>("[data-concept]");
+      const progressFill = document.querySelector<HTMLElement>("[data-roadmap-progress]");
+      const roadmapNodes = gsap.utils.toArray<HTMLElement>("[data-roadmap-node]");
+      const roadmapCards = gsap.utils.toArray<HTMLElement>("[data-roadmap-card]");
+      if (performance && slides.length > 1) {
+        gsap.set(slides, { autoAlpha: 0 });
+        gsap.set(slides[0], { autoAlpha: 1 });
+        const roadmapChecks = gsap.utils.toArray<HTMLElement>("[data-roadmap-check]");
+        const roadmapNums = gsap.utils.toArray<HTMLElement>("[data-roadmap-num]");
+        if (progressFill) gsap.set(progressFill, { scaleX: 0, transformOrigin: "left center" });
+        if (roadmapNodes.length) {
+          gsap.set(roadmapNodes, {
+            backgroundColor: "#ffffff",
+            borderColor: "rgba(255,255,255,0.35)",
+            scale: 1,
+          });
+          gsap.set(roadmapChecks, { autoAlpha: 0, scale: 0.6 });
+          gsap.set(roadmapNums, { autoAlpha: 1 });
+          gsap.set(roadmapNodes[0], {
+            backgroundColor: "#4ADE80",
+            borderColor: "#4ADE80",
+          });
+          if (roadmapChecks[0]) gsap.set(roadmapChecks[0], { autoAlpha: 1, scale: 1 });
+          if (roadmapNums[0]) gsap.set(roadmapNums[0], { autoAlpha: 0 });
+        }
+        if (roadmapCards.length) {
+          gsap.set(roadmapCards, { autoAlpha: 0.45, y: 12 });
+          gsap.set(roadmapCards[0], { autoAlpha: 1, y: 0 });
+        }
+        if (concepts.length) {
+          gsap.set(concepts, { y: 18, autoAlpha: 0.35, scale: 0.98 });
+          gsap.set(concepts[0], { y: 0, autoAlpha: 1, scale: 1 });
+        }
+
+        const stageCount = Math.max(roadmapCards.length, roadmapNodes.length, 4);
+        const show = gsap.timeline({
+          scrollTrigger: {
+            trigger: performance,
+            start: "top 10%",
+            end: "+=380%",
+            pin: true,
+            scrub: 0.5,
+            anticipatePin: 1,
+          },
+        });
+
+        // Slide 1: roadmap progress through each stage
+        show.to({}, { duration: 0.35 });
+        for (let index = 1; index < stageCount; index += 1) {
+          const progress = index / (stageCount - 1);
+          show.to(progressFill, { scaleX: progress, duration: 0.55, ease: "none" });
+          if (roadmapNodes[index]) {
+            show.to(
+              roadmapNodes[index],
+              { backgroundColor: "#4ADE80", borderColor: "#4ADE80", duration: 0.25 },
+              "<0.2",
+            );
+          }
+          if (roadmapChecks[index]) {
+            show.to(roadmapChecks[index], { autoAlpha: 1, scale: 1, duration: 0.2 }, "<");
+          }
+          if (roadmapNums[index]) {
+            show.to(roadmapNums[index], { autoAlpha: 0, duration: 0.15 }, "<");
+          }
+          if (roadmapCards[index]) {
+            show.to(roadmapCards[index], { autoAlpha: 1, y: 0, duration: 0.3 }, "<");
+          }
+          show.to({}, { duration: 0.28 });
+        }
+        show.to({}, { duration: 0.35 });
+
+        // Slide 2: problem & solution + concept hijack
+        show.to(slides[0], { autoAlpha: 0, duration: 0.35 });
+        show.fromTo(slides[1], { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.35 }, "<0.05");
+        show.to({}, { duration: 0.35 });
+        concepts.forEach((concept, index) => {
+          if (index === 0) {
+            show.to({}, { duration: 0.45 });
+            return;
+          }
+          show.to(concepts[index - 1], { y: -12, autoAlpha: 0.35, scale: 0.98, duration: 0.28 });
+          show.to(concept, { y: 0, autoAlpha: 1, scale: 1, duration: 0.28 }, "<");
+          show.to({}, { duration: 0.42 });
+        });
+
+        // Slide 3: marketing & growth metrics
+        show.to(slides[1], { autoAlpha: 0, duration: 0.35 });
+        show.fromTo(slides[2], { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.35 }, "<0.05");
+        show.fromTo(
+          "[data-metric]",
+          { y: 18, autoAlpha: 0 },
+          { y: 0, autoAlpha: 1, stagger: 0.12, duration: 0.35 },
+          "<0.1",
+        );
+        show.to({}, { duration: 0.7 });
+      }
+
       gsap.utils.toArray<HTMLElement>("[data-rise]").forEach((panel) => {
         gsap.from(panel, {
           y: 40,
@@ -120,6 +266,14 @@ export default function FilmHome({
     motion.add("(prefers-reduced-motion: reduce)", () => {
       gsap.set("[data-hero-item]", { opacity: 1, y: 0 });
       gsap.set("[data-statement]", { opacity: 1, y: 0, position: "relative" });
+      gsap.set("[data-perf-slide]", { opacity: 1, position: "relative" });
+      gsap.set("[data-concept]", { opacity: 1, y: 0, scale: 1 });
+      gsap.set("[data-metric]", { opacity: 1, y: 0 });
+      gsap.set("[data-roadmap-progress]", { scaleX: 1 });
+      gsap.set("[data-roadmap-node]", { backgroundColor: "#4ADE80", borderColor: "#4ADE80" });
+      gsap.set("[data-roadmap-check]", { opacity: 1, scale: 1 });
+      gsap.set("[data-roadmap-num]", { opacity: 0 });
+      gsap.set("[data-roadmap-card]", { opacity: 1, y: 0 });
     });
 
     return () => motion.revert();
@@ -277,6 +431,188 @@ export default function FilmHome({
               className="absolute bottom-0 right-0 top-0 h-full w-auto max-w-full object-contain object-right"
               aria-label="A figure launching upward"
             />
+          </div>
+        </div>
+      </section>
+
+      <section className="relative px-3 pb-4 md:px-5">
+        <div data-performance className="relative mx-auto max-w-[1180px]">
+          <div className="relative min-h-[min(78vh,720px)] overflow-hidden rounded-[28px]">
+            {/* Slide 1 — Execution Roadmap */}
+            <article
+              data-perf-slide
+              className="absolute inset-0 flex flex-col bg-[#111111] px-5 py-5 text-white md:px-8 md:py-7"
+            >
+              <header className="flex items-center justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  <span className="flex gap-1.5" aria-hidden>
+                    <span className="h-2.5 w-2.5 rounded-full bg-white/90" />
+                    <span className="h-2.5 w-2.5 rounded-full bg-white/90" />
+                    <span className="h-2.5 w-2.5 rounded-full bg-white/90" />
+                  </span>
+                  <span className="rounded-md border border-white/25 px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.14em] text-white/80">
+                    Strategy &amp; Execution
+                  </span>
+                </div>
+                <p className="hidden text-[10px] uppercase tracking-[0.16em] text-white/45 sm:block">
+                  © 2026. Skytech Ghana. All rights reserved.
+                </p>
+              </header>
+
+              <h2 className="mt-10 font-display text-[clamp(2.4rem,6vw,4.6rem)] font-medium leading-[0.95] tracking-tight md:mt-14">
+                Execution Roadmap
+              </h2>
+
+              <div className="relative mt-10 hidden md:block" aria-hidden>
+                <div className="absolute left-[12%] right-[12%] top-1/2 h-[3px] -translate-y-1/2 overflow-hidden rounded-full bg-white/20">
+                  <div
+                    data-roadmap-progress
+                    className="h-full w-full origin-left scale-x-0 bg-[#4ADE80]"
+                  />
+                </div>
+                <div className="relative grid grid-cols-4">
+                  {roadmapSteps.map((step, index) => (
+                    <span
+                      key={step.year}
+                      data-roadmap-node
+                      className="relative mx-auto flex h-9 w-9 items-center justify-center rounded-full border-2 border-white/35 bg-white"
+                    >
+                      <svg
+                        data-roadmap-check
+                        viewBox="0 0 20 20"
+                        className="h-4 w-4 opacity-0"
+                        fill="none"
+                        aria-hidden
+                      >
+                        <path
+                          d="M5 10.5 8.2 13.5 15 6.5"
+                          stroke="#ffffff"
+                          strokeWidth="2.4"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                      <span
+                        data-roadmap-num
+                        className="absolute text-sm font-semibold text-black/40"
+                      >
+                        {index + 1}
+                      </span>
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div className="mt-8 grid flex-1 gap-3 sm:grid-cols-2 md:mt-10 md:grid-cols-4">
+                {roadmapSteps.map((step) => (
+                  <div
+                    key={step.year}
+                    data-roadmap-card
+                    className="flex min-h-[180px] flex-col rounded-[18px] bg-white p-4 text-[#161616]"
+                  >
+                    <span className="w-fit rounded-full bg-[#d9d9d9] px-3 py-1 text-[11px] font-medium">
+                      {step.year}
+                    </span>
+                    <h3 className="mt-5 font-display text-2xl font-medium tracking-tight">{step.title}</h3>
+                    <p className="mt-auto pt-6 text-xs leading-relaxed text-black/55">{step.body}</p>
+                  </div>
+                ))}
+              </div>
+            </article>
+
+            {/* Slide 2 — Problem & Solution */}
+            <article
+              data-perf-slide
+              className="absolute inset-0 flex flex-col bg-[#d9d9d9] px-5 py-5 text-[#161616] opacity-0 md:px-8 md:py-7"
+            >
+              <header className="flex items-center justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  <span className="flex gap-1.5" aria-hidden>
+                    <span className="h-2.5 w-2.5 rounded-full bg-[#161616]" />
+                    <span className="h-2.5 w-2.5 rounded-full bg-[#161616]" />
+                    <span className="h-2.5 w-2.5 rounded-full bg-[#161616]" />
+                  </span>
+                  <span className="rounded-md border border-black/20 bg-white/50 px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.14em]">
+                    Problem &amp; Solution
+                  </span>
+                </div>
+                <p className="hidden text-[10px] uppercase tracking-[0.16em] text-black/40 sm:block">
+                  © 2026. Skytech Ghana. All rights reserved.
+                </p>
+              </header>
+
+              <h2 className="mt-12 max-w-4xl font-display text-[clamp(2rem,5.2vw,4.2rem)] font-medium leading-[1.02] tracking-tight md:mt-16">
+                <span className="text-white">Our solution </span>
+                bridges the gap between evolving needs and effective execution.
+              </h2>
+
+              <div className="mt-auto grid gap-3 pt-10 md:grid-cols-3">
+                {solutionConcepts.map((concept) => (
+                  <div
+                    key={concept.id}
+                    data-concept
+                    className="rounded-[18px] bg-white px-5 py-5 shadow-[0_8px_24px_rgba(0,0,0,.04)]"
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <p className="font-display text-2xl font-medium tracking-tight">{concept.label}</p>
+                        <p className="mt-2 text-sm leading-relaxed text-black/55">{concept.detail}</p>
+                      </div>
+                      <span className="mt-2 h-2.5 w-2.5 shrink-0 rounded-full bg-[#161616]" aria-hidden />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </article>
+
+            {/* Slide 3 — Marketing & Growth */}
+            <article
+              data-perf-slide
+              className="absolute inset-0 flex flex-col bg-white px-5 py-5 text-[#161616] opacity-0 md:px-8 md:py-7"
+            >
+              <header className="flex items-center justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  <span className="flex gap-1.5" aria-hidden>
+                    <span className="h-2.5 w-2.5 rounded-full bg-[#161616]" />
+                    <span className="h-2.5 w-2.5 rounded-full bg-[#161616]" />
+                    <span className="h-2.5 w-2.5 rounded-full bg-[#161616]" />
+                  </span>
+                  <span className="rounded-md border border-black/15 px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.14em]">
+                    Strategy &amp; Execution
+                  </span>
+                </div>
+                <p className="hidden text-[10px] uppercase tracking-[0.16em] text-black/40 sm:block">
+                  © 2026. Skytech Ghana. All rights reserved.
+                </p>
+              </header>
+
+              <div className="mt-12 grid flex-1 items-center gap-10 md:mt-16 md:grid-cols-[1.05fr_.95fr] md:gap-8">
+                <div>
+                  <h2 className="font-display text-[clamp(2.2rem,5vw,4rem)] font-medium leading-[0.98] tracking-tight">
+                    Marketing &amp; Growth{" "}
+                    <span className="text-black/35">Objectives</span>
+                  </h2>
+                  <p className="mt-5 max-w-md text-sm leading-relaxed text-black/60 md:text-base">
+                    Performance-driven objectives aligned with scalable growth within the first 3 years. Clear, measurable growth targets guide our execution.
+                  </p>
+                </div>
+
+                <div className="space-y-3">
+                  {growthMetrics.map((metric) => (
+                    <div
+                      key={metric.label}
+                      data-metric
+                      className="flex items-center justify-between gap-4 rounded-full bg-[#ececec] p-2 pl-2"
+                    >
+                      <span className="rounded-full bg-white px-4 py-3 text-sm font-medium">{metric.label}</span>
+                      <span className="pr-5 font-display text-3xl font-medium tracking-tight md:text-4xl">
+                        {metric.value}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </article>
           </div>
         </div>
       </section>
