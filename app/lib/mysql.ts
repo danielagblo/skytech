@@ -9,10 +9,16 @@ let cached: {
 } = (global as any).__skytech_mysql || { promise: null, pool: null };
 (global as any).__skytech_mysql = cached;
 
+const columnCache = new Map<string, Set<string>>();
+
 export async function getTableColumns(table: string): Promise<Set<string>> {
   await initSchema();
+  const cachedCols = columnCache.get(table);
+  if (cachedCols) return cachedCols;
   const rows = await query(`SHOW COLUMNS FROM \`${table}\``);
-  return new Set(rows.map((r) => String(r.Field)));
+  const cols = new Set(rows.map((r) => String(r.Field)));
+  columnCache.set(table, cols);
+  return cols;
 }
 
 export function newId(): string {
@@ -129,11 +135,14 @@ export async function initSchema(): Promise<void> {
       } finally {
         conn.release();
       }
-    })();
+      // Run once per process — parallel ALTER storms on cold start caused Hostinger 503s
+      await upgradeSchema();
+    })().catch((err) => {
+      schemaOnce = null;
+      throw err;
+    });
   }
   await schemaOnce;
-  // Always run — idempotent ALTERs; must not skip after first initSchema call
-  await upgradeSchema();
 }
 
 // Make sure the images table has the key_path column for hosts that created

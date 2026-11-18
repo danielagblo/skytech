@@ -27,6 +27,9 @@ async function dbConnect() {
   if (!cached.promise) {
     const opts = {
       bufferCommands: false,
+      // Fail fast when Mongo is down — default 30s hangs cause Hostinger 503s / slow first loads
+      serverSelectionTimeoutMS: 3000,
+      connectTimeoutMS: 3000,
     };
 
     cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
