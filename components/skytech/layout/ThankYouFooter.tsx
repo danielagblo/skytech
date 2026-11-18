@@ -129,7 +129,7 @@ export default function ThankYouFooter({
 
         <div className="mt-8 grid gap-8 sm:mt-10 sm:gap-10 md:mt-14 md:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] md:items-end md:gap-10 lg:mt-16">
           <div data-ft-thanks className="relative min-w-0 max-w-3xl">
-            <h2 className="font-display text-[clamp(2.35rem,13vw,7.5rem)] font-semibold leading-[0.9] tracking-[-0.04em] text-[#242424] sm:leading-[0.88]">
+            <h2 className="font-display text-[clamp(2.1rem,12vw,7.5rem)] font-semibold leading-[0.92] tracking-[-0.04em] text-[#242424] sm:text-[clamp(2.35rem,13vw,7.5rem)] sm:leading-[0.88]">
               Thank
               <br />
               You
