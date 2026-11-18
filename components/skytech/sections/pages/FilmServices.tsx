@@ -34,7 +34,7 @@ export default function FilmServices({
 
   useGSAP(() => {
     const motion = gsap.matchMedia();
-    motion.add("(min-width: 768px) and (prefers-reduced-motion: no-preference)", () => {
+    motion.add("(prefers-reduced-motion: no-preference)", () => {
       const pin = pinRef.current;
       if (!pin) return;
       const panels = gsap.utils.toArray<HTMLElement>("[data-panel]", pin);

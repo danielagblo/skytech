@@ -203,24 +203,7 @@ export default function FilmHome({
       const roadmapChecks = gsap.utils.toArray<HTMLElement>("[data-roadmap-check]");
       const roadmapNums = gsap.utils.toArray<HTMLElement>("[data-roadmap-num]");
 
-      // Mobile: no pin/scrub — show full card content without clipping or dimming
-      const mobilePerf = gsap.matchMedia();
-      mobilePerf.add("(max-width: 767px)", () => {
-        if (!performance || !slides.length) return;
-        gsap.set(slides, { clearProps: "position,inset,opacity,visibility", autoAlpha: 1 });
-        gsap.set(roadmapCards, { autoAlpha: 1, y: 0 });
-        gsap.set(concepts, { autoAlpha: 1, y: 0, scale: 1 });
-        gsap.set("[data-metric]", { autoAlpha: 1, y: 0 });
-        if (progressFill) gsap.set(progressFill, { scaleX: 1 });
-        if (roadmapNodes.length) {
-          gsap.set(roadmapNodes, { backgroundColor: "#4ADE80", borderColor: "#4ADE80" });
-        }
-        gsap.set(roadmapChecks, { autoAlpha: 1, scale: 1 });
-        gsap.set(roadmapNums, { autoAlpha: 0 });
-      });
-
-      mobilePerf.add("(min-width: 768px)", () => {
-        if (!performance || slides.length <= 1) return;
+      if (performance && slides.length > 1) {
         gsap.set(slides, { autoAlpha: 0 });
         gsap.set(slides[0], { autoAlpha: 1 });
         if (progressFill) gsap.set(progressFill, { scaleX: 0, transformOrigin: "left center" });
@@ -306,7 +289,7 @@ export default function FilmHome({
           "<0.1",
         );
         show.to({}, { duration: 0.7 });
-      });
+      }
 
       gsap.utils.toArray<HTMLElement>("[data-rise]").forEach((panel) => {
         gsap.from(panel, {
@@ -321,8 +304,6 @@ export default function FilmHome({
           },
         });
       });
-
-      return () => mobilePerf.revert();
     });
 
     motion.add("(prefers-reduced-motion: reduce)", () => {
@@ -483,11 +464,11 @@ export default function FilmHome({
 
       <section className="relative px-3 pb-4 md:px-5">
         <div data-performance className="relative mx-auto max-w-[1180px]">
-          <div className="relative flex flex-col gap-4 overflow-visible md:min-h-[min(78vh,720px)] md:gap-0 md:overflow-hidden md:rounded-[28px]">
+          <div className="relative min-h-[min(88svh,720px)] overflow-hidden rounded-[28px] md:min-h-[min(78vh,720px)]">
             {/* Slide 1 — Execution Roadmap */}
             <article
               data-perf-slide
-              className="relative flex flex-col overflow-hidden rounded-[28px] bg-[#111111] px-4 py-5 text-white sm:px-5 md:absolute md:inset-0 md:rounded-none md:px-8 md:py-7"
+              className="absolute inset-0 flex flex-col overflow-hidden rounded-[28px] bg-[#111111] px-4 py-5 text-white sm:px-5 md:px-8 md:py-7"
             >
               <header className="flex items-center justify-between gap-4">
                 <div className="flex items-center gap-3">
@@ -509,7 +490,7 @@ export default function FilmHome({
                 How we do it
               </h2>
 
-              <div className="relative mt-10 hidden md:block" aria-hidden>
+              <div className="relative mt-8 sm:mt-10" aria-hidden>
                 <div className="absolute left-[12%] right-[12%] top-1/2 h-[3px] -translate-y-1/2 overflow-hidden rounded-full bg-white/20">
                   <div
                     data-roadmap-progress
@@ -549,12 +530,12 @@ export default function FilmHome({
                 </div>
               </div>
 
-              <div className="mt-5 grid flex-1 gap-2.5 sm:mt-8 sm:grid-cols-2 sm:gap-3 md:mt-10 md:grid-cols-4">
+              <div className="mt-5 grid flex-1 grid-cols-2 gap-2.5 sm:mt-8 sm:gap-3 md:mt-10 md:grid-cols-4">
                 {roadmapSteps.map((step) => (
                   <div
                     key={step.year}
                     data-roadmap-card
-                    className="flex min-h-0 flex-col rounded-[16px] bg-white p-3.5 text-[#161616] sm:min-h-[180px] sm:rounded-[18px] sm:p-4"
+                    className="flex min-h-0 flex-col rounded-[16px] bg-white p-3 text-[#161616] sm:min-h-[180px] sm:rounded-[18px] sm:p-4"
                   >
                     <span className="w-fit rounded-full bg-[#d9d9d9] px-3 py-1 text-[11px] font-medium">
                       {step.year}
@@ -571,7 +552,7 @@ export default function FilmHome({
             {/* Slide 2 — Problem & Solution */}
             <article
               data-perf-slide
-              className="relative flex flex-col overflow-hidden rounded-[28px] bg-[#d9d9d9] px-4 pt-5 text-[#161616] sm:px-5 md:absolute md:inset-0 md:rounded-none md:px-8 md:pt-7 md:opacity-0"
+              className="absolute inset-0 flex flex-col overflow-hidden rounded-[28px] bg-[#d9d9d9] px-4 pt-5 text-[#161616] opacity-0 sm:px-5 md:px-8 md:pt-7"
             >
               <header className="flex items-center justify-between gap-4">
                 <div className="flex items-center gap-3">
@@ -620,7 +601,7 @@ export default function FilmHome({
             {/* Slide 3 — Marketing & Growth */}
             <article
               data-perf-slide
-              className="relative flex flex-col overflow-hidden rounded-[28px] bg-[#b7dff6] px-4 py-5 text-[#161616] sm:px-5 md:absolute md:inset-0 md:rounded-none md:px-8 md:py-7 md:opacity-0"
+              className="absolute inset-0 flex flex-col overflow-hidden rounded-[28px] bg-[#b7dff6] px-4 py-5 text-[#161616] opacity-0 sm:px-5 md:px-8 md:py-7"
             >
               <header className="flex items-center justify-between gap-4">
                 <div className="flex items-center gap-3">
