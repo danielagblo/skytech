@@ -17,6 +17,7 @@ const nextConfig = {
     ],
   },
   experimental: {
+    agentUpgrade: "security",
     cpus: 4,
     workerThreads: false,
     serverActions: {
