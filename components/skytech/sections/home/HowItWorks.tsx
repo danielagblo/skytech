@@ -92,8 +92,9 @@ export default function HowItWorks() {
   return (
     <section ref={root} className="relative px-3 pb-4 pt-2 md:px-5">
       <div className="mx-auto max-w-[1180px] overflow-hidden rounded-[28px] bg-white px-5 py-6 sm:px-8 sm:py-7 md:px-10 md:py-8">
-        <header data-hiw="head" className="max-w-2xl">
-          <h2 className="font-display text-[clamp(1.7rem,3.8vw,2.5rem)] font-medium tracking-tight text-[#161616]">
+        <header data-hiw="head" className="mx-auto max-w-2xl text-center">
+          <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-black/45">From the founder</p>
+          <h2 className="mt-2 font-display text-[clamp(1.7rem,3.8vw,2.5rem)] font-medium tracking-tight text-[#161616]">
             Founder&apos;s Remark
           </h2>
         </header>
