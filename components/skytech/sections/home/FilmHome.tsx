@@ -155,8 +155,29 @@ export default function FilmHome({
       const heroWords = gsap.utils.toArray<HTMLElement>("[data-hero-word]");
       if (heroWordPill && heroWords.length > 1) {
         const styles = getComputedStyle(heroWordPill);
-        const padX =
-          (parseFloat(styles.paddingLeft) || 0) + (parseFloat(styles.paddingRight) || 0);
+        const padY =
+          (parseFloat(styles.paddingTop) || 0) + (parseFloat(styles.paddingBottom) || 0);
+
+        // Measure each word in normal flow so "Massive" gets its full width
+        const widths: number[] = [];
+        let pillHeight = 0;
+        heroWords.forEach((word) => {
+          heroWords.forEach((other) => {
+            gsap.set(other, {
+              position: other === word ? "relative" : "absolute",
+              autoAlpha: other === word ? 1 : 0,
+              left: "auto",
+              top: "auto",
+              x: 0,
+              y: 0,
+              xPercent: 0,
+              yPercent: 0,
+            });
+          });
+          gsap.set(heroWordPill, { width: "auto", height: "auto" });
+          widths.push(Math.ceil(heroWordPill.getBoundingClientRect().width) + 2);
+          pillHeight = Math.max(pillHeight, Math.ceil(word.getBoundingClientRect().height + padY));
+        });
 
         gsap.set(heroWords, {
           position: "absolute",
@@ -165,61 +186,47 @@ export default function FilmHome({
           top: "50%",
           yPercent: -50,
           autoAlpha: 0,
+          whiteSpace: "nowrap",
         });
-
-        const widths = heroWords.map((word) => {
-          gsap.set(word, { autoAlpha: 1, visibility: "hidden" });
-          const width = Math.ceil(word.getBoundingClientRect().width) + padX;
-          gsap.set(word, { autoAlpha: 0, visibility: "visible" });
-          return width;
-        });
-        const pillHeight = Math.max(
-          ...heroWords.map((word) => {
-            gsap.set(word, { autoAlpha: 1, visibility: "hidden" });
-            const height = word.getBoundingClientRect().height;
-            gsap.set(word, { autoAlpha: 0, visibility: "visible" });
-            return height;
-          }),
-        );
-
         gsap.set(heroWordPill, {
           width: widths[0],
-          height: pillHeight || undefined,
+          height: pillHeight,
           overflow: "hidden",
         });
         gsap.set(heroWords[0], { autoAlpha: 1 });
 
-        const wordReel = gsap.timeline({ repeat: -1, repeatDelay: 0.12, paused: true });
+        const hold = 2.4; // longer pause on each word
+        const wordReel = gsap.timeline({ repeat: -1, repeatDelay: 0.2, paused: true });
         const swapTo = (from: number, to: number) => {
           wordReel.to(heroWords[from], {
             autoAlpha: 0,
-            yPercent: -120,
-            duration: 0.36,
+            yPercent: -130,
+            duration: 0.4,
             ease: "power2.in",
           });
           wordReel.to(
             heroWordPill,
-            { width: widths[to], duration: 0.5, ease: "power2.inOut" },
-            "<0.04",
+            { width: widths[to], duration: 0.55, ease: "power2.inOut" },
+            "<0.02",
           );
           wordReel.fromTo(
             heroWords[to],
             { autoAlpha: 0, yPercent: 40 },
-            { autoAlpha: 1, yPercent: -50, duration: 0.42, ease: "power2.out" },
-            "<0.06",
+            { autoAlpha: 1, yPercent: -50, duration: 0.45, ease: "power2.out" },
+            "<0.08",
           );
         };
 
-        wordReel.to({}, { duration: 1.15 });
+        wordReel.to({}, { duration: hold });
         for (let index = 1; index < heroWords.length; index += 1) {
           swapTo(index - 1, index);
-          wordReel.to({}, { duration: 1.15 });
+          wordReel.to({}, { duration: hold });
         }
         swapTo(heroWords.length - 1, 0);
 
         open.call(() => {
           wordReel.play(0);
-        }, null, "+=0.4");
+        }, null, "+=0.55");
       }
 
       if (contextSafe) {
