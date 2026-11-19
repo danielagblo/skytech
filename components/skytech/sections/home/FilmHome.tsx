@@ -151,34 +151,72 @@ export default function FilmHome({
       const open = gsap.timeline({ defaults: { ease: "power3.out" } });
       open.fromTo("[data-hero-item]", { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.55, stagger: 0.05 });
 
+      const heroWordPill = document.querySelector<HTMLElement>("[data-hero-word-pill]");
       const heroWords = gsap.utils.toArray<HTMLElement>("[data-hero-word]");
-      if (heroWords.length > 1) {
-        gsap.set(heroWords, { autoAlpha: 0, yPercent: 55 });
-        gsap.set(heroWords[0], { autoAlpha: 1, yPercent: 0 });
-        const wordReel = gsap.timeline({ repeat: -1, repeatDelay: 0.15, paused: true });
-        wordReel.to({}, { duration: 1.2 }); // hold on "big"
-        for (let index = 1; index < heroWords.length; index += 1) {
-          wordReel.to(heroWords[index - 1], { autoAlpha: 0, yPercent: -55, duration: 0.42, ease: "power2.in" });
-          wordReel.fromTo(
-            heroWords[index],
-            { autoAlpha: 0, yPercent: 55 },
-            { autoAlpha: 1, yPercent: 0, duration: 0.48, ease: "power2.out" },
-            "<0.08",
-          );
-          wordReel.to({}, { duration: 1.2 }); // hold Better / Massive
-        }
-        wordReel.to(heroWords[heroWords.length - 1], {
+      if (heroWordPill && heroWords.length > 1) {
+        const styles = getComputedStyle(heroWordPill);
+        const padX =
+          (parseFloat(styles.paddingLeft) || 0) + (parseFloat(styles.paddingRight) || 0);
+
+        gsap.set(heroWords, {
+          position: "absolute",
+          left: "50%",
+          xPercent: -50,
+          top: "50%",
+          yPercent: -50,
           autoAlpha: 0,
-          yPercent: -55,
-          duration: 0.42,
-          ease: "power2.in",
         });
-        wordReel.fromTo(
-          heroWords[0],
-          { autoAlpha: 0, yPercent: 55 },
-          { autoAlpha: 1, yPercent: 0, duration: 0.48, ease: "power2.out" },
-          "<0.08",
+
+        const widths = heroWords.map((word) => {
+          gsap.set(word, { autoAlpha: 1, visibility: "hidden" });
+          const width = Math.ceil(word.getBoundingClientRect().width) + padX;
+          gsap.set(word, { autoAlpha: 0, visibility: "visible" });
+          return width;
+        });
+        const pillHeight = Math.max(
+          ...heroWords.map((word) => {
+            gsap.set(word, { autoAlpha: 1, visibility: "hidden" });
+            const height = word.getBoundingClientRect().height;
+            gsap.set(word, { autoAlpha: 0, visibility: "visible" });
+            return height;
+          }),
         );
+
+        gsap.set(heroWordPill, {
+          width: widths[0],
+          height: pillHeight || undefined,
+          overflow: "hidden",
+        });
+        gsap.set(heroWords[0], { autoAlpha: 1 });
+
+        const wordReel = gsap.timeline({ repeat: -1, repeatDelay: 0.12, paused: true });
+        const swapTo = (from: number, to: number) => {
+          wordReel.to(heroWords[from], {
+            autoAlpha: 0,
+            yPercent: -120,
+            duration: 0.36,
+            ease: "power2.in",
+          });
+          wordReel.to(
+            heroWordPill,
+            { width: widths[to], duration: 0.5, ease: "power2.inOut" },
+            "<0.04",
+          );
+          wordReel.fromTo(
+            heroWords[to],
+            { autoAlpha: 0, yPercent: 40 },
+            { autoAlpha: 1, yPercent: -50, duration: 0.42, ease: "power2.out" },
+            "<0.06",
+          );
+        };
+
+        wordReel.to({}, { duration: 1.15 });
+        for (let index = 1; index < heroWords.length; index += 1) {
+          swapTo(index - 1, index);
+          wordReel.to({}, { duration: 1.15 });
+        }
+        swapTo(heroWords.length - 1, 0);
+
         open.call(() => {
           wordReel.play(0);
         }, null, "+=0.4");
@@ -399,9 +437,14 @@ export default function FilmHome({
 
     motion.add("(prefers-reduced-motion: reduce)", () => {
       gsap.set("[data-hero-item]", { opacity: 1, y: 0 });
+      const reducedPill = document.querySelector<HTMLElement>("[data-hero-word-pill]");
       const reducedWords = gsap.utils.toArray<HTMLElement>("[data-hero-word]");
-      gsap.set(reducedWords, { clearProps: "transform", autoAlpha: 0 });
-      if (reducedWords.length) gsap.set(reducedWords[reducedWords.length - 1], { autoAlpha: 1 });
+      gsap.set(reducedWords, { clearProps: "all", autoAlpha: 0, position: "absolute" });
+      if (reducedWords.length) {
+        const last = reducedWords[reducedWords.length - 1];
+        gsap.set(last, { autoAlpha: 1, position: "relative" });
+        if (reducedPill) gsap.set(reducedPill, { clearProps: "width,height" });
+      }
       gsap.set("[data-statement]", { opacity: 1, y: 0, position: "relative" });
       gsap.set("[data-perf-slide]", { opacity: 1, position: "relative" });
       gsap.set("[data-concept]", { opacity: 1, y: 0, scale: 1 });
@@ -454,22 +497,18 @@ export default function FilmHome({
                   your next
                   <span
                     data-pill
-                    className="relative inline-flex items-center overflow-hidden rounded-full bg-[#b7dff6] px-[0.38em] py-[0.02em]"
+                    data-hero-word-pill
+                    className="relative inline-flex items-center justify-center overflow-hidden rounded-full bg-[#b7dff6] px-[0.38em] py-[0.02em]"
                   >
-                    <span className="invisible whitespace-nowrap" aria-hidden>
-                      Massive
-                    </span>
-                    <span className="absolute inset-0 flex items-center justify-center overflow-hidden">
-                      {["big", "Better", "Massive"].map((word, index) => (
-                        <span
-                          key={word}
-                          data-hero-word
-                          className={`absolute whitespace-nowrap ${index === 0 ? "" : "opacity-0"}`}
-                        >
-                          {word}
-                        </span>
-                      ))}
-                    </span>
+                    {["big", "Better", "Massive"].map((word, index) => (
+                      <span
+                        key={word}
+                        data-hero-word
+                        className={`whitespace-nowrap ${index === 0 ? "relative" : "absolute opacity-0"}`}
+                      >
+                        {word}
+                      </span>
+                    ))}
                   </span>
                 </span>
                 <span className="mt-[0.12em] flex flex-wrap items-center gap-3 md:gap-5">
