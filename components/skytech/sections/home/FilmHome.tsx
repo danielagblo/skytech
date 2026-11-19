@@ -165,23 +165,32 @@ export default function FilmHome({
 
           const heroShell = root.current?.querySelector<HTMLElement>("[data-hero-swap]");
           const heroWords = gsap.utils.toArray<HTMLElement>("[data-hero-word]");
-          const heroColors = ["#b7dff6", "#d5f5a8", "#b7dff6"];
           if (heroShell && heroWords.length > 1) {
-            heroWords.forEach((word) => {
-              gsap.set(word, { position: "absolute", left: 0, top: 0, autoAlpha: 0 });
-            });
-            const metrics = heroWords.map((word) => {
-              gsap.set(word, { autoAlpha: 1, visibility: "hidden" });
-              const rect = word.getBoundingClientRect();
-              gsap.set(word, { autoAlpha: 0, visibility: "visible" });
-              return { width: rect.width, height: rect.height };
+            // Measure natural pill sizes while words are still in normal flow
+            const metrics = heroWords.map((word) => ({
+              width: Math.ceil(word.getBoundingClientRect().width),
+              height: Math.ceil(word.getBoundingClientRect().height),
+            }));
+
+            heroWords.forEach((word, index) => {
+              gsap.set(word, {
+                position: "absolute",
+                left: 0,
+                top: 0,
+                x: 0,
+                y: 0,
+                yPercent: 0,
+                opacity: index === 0 ? 1 : 0,
+                visibility: "visible",
+                zIndex: index === 0 ? 2 : 1,
+              });
             });
             gsap.set(heroShell, {
+              position: "relative",
               width: metrics[0].width,
               height: metrics[0].height,
-              backgroundColor: heroColors[0],
+              overflow: "hidden",
             });
-            gsap.set(heroWords[0], { autoAlpha: 1, yPercent: 0 });
 
             const swap = gsap.timeline({ repeat: -1, defaults: { ease: "power2.inOut" } });
             // Hold times: big (longer first), better, massive
@@ -190,13 +199,12 @@ export default function FilmHome({
               const nextIndex = (index + 1) % heroWords.length;
               const next = heroWords[nextIndex];
               swap.to({}, { duration: holds[index] ?? 1.2 });
-              swap.to(word, { autoAlpha: 0, yPercent: -55, duration: 0.4, ease: "power2.in" }, ">");
+              swap.to(word, { opacity: 0, yPercent: -55, duration: 0.4, ease: "power2.in", zIndex: 1 }, ">");
               swap.to(
                 heroShell,
                 {
                   width: metrics[nextIndex].width,
                   height: metrics[nextIndex].height,
-                  backgroundColor: heroColors[nextIndex % heroColors.length],
                   duration: 0.5,
                   ease: "power2.inOut",
                 },
@@ -204,8 +212,8 @@ export default function FilmHome({
               );
               swap.fromTo(
                 next,
-                { autoAlpha: 0, yPercent: 55 },
-                { autoAlpha: 1, yPercent: 0, duration: 0.46, ease: "power2.out" },
+                { opacity: 0, yPercent: 55, zIndex: 2 },
+                { opacity: 1, yPercent: 0, duration: 0.46, ease: "power2.out", zIndex: 2 },
                 "<0.05",
               );
             });
@@ -466,17 +474,21 @@ export default function FilmHome({
                   <span
                     data-pill
                     data-hero-swap
-                    className="relative inline-block overflow-hidden rounded-full align-middle"
+                    className="relative inline-block align-middle"
                   >
-                    {["big", "better", "massive"].map((word, index) => (
+                    {[
+                      { word: "big", tone: "bg-[#b7dff6]" },
+                      { word: "better", tone: "bg-[#d5f5a8]" },
+                      { word: "massive", tone: "bg-[#b7dff6]" },
+                    ].map((item, index) => (
                       <span
-                        key={word}
+                        key={item.word}
                         data-hero-word
-                        className={`inline-flex items-center whitespace-nowrap px-[0.38em] py-[0.02em] ${
+                        className={`inline-flex items-center whitespace-nowrap rounded-full px-[0.38em] py-[0.02em] text-[#161616] ${item.tone} ${
                           index === 0 ? "relative" : "absolute left-0 top-0 opacity-0"
                         }`}
                       >
-                        {word}
+                        {item.word}
                       </span>
                     ))}
                   </span>
