@@ -301,6 +301,66 @@ export default function FilmHome({
           },
         });
       });
+
+      // Founder's Remark — same pin/scrub stack as statement + performance cards
+      const founderPin = document.querySelector<HTMLElement>("[data-founder-pin]");
+      const founderSteps = gsap.utils.toArray<HTMLElement>("[data-founder-step]");
+      const founderIcons = gsap.utils.toArray<HTMLElement>("[data-founder-icon]");
+      const founderLine = document.querySelector<HTMLElement>("[data-founder-line]");
+      if (founderPin && founderSteps.length > 1) {
+        gsap.set(founderSteps, { opacity: 0.34, y: 14 });
+        gsap.set(founderSteps[0], { opacity: 1, y: 0 });
+        gsap.set(founderIcons, {
+          backgroundColor: "#ffffff",
+          borderColor: "rgba(0,0,0,0.1)",
+        });
+        gsap.set(founderIcons[0], {
+          backgroundColor: "#d5f5a8",
+          borderColor: "transparent",
+        });
+        if (founderLine) {
+          gsap.set(founderLine, { scaleY: 1 / founderSteps.length, transformOrigin: "top center" });
+        }
+
+        const founder = gsap.timeline({
+          defaults: { ease: "none" },
+          scrollTrigger: {
+            trigger: founderPin,
+            start: "top 12%",
+            end: "+=160%",
+            pin: true,
+            scrub: 0.45,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
+          },
+        });
+
+        founder.to({}, { duration: 0.3 });
+        for (let index = 1; index < founderSteps.length; index += 1) {
+          const progress = (index + 1) / founderSteps.length;
+          founder.to(founderSteps[index - 1], { opacity: 0.36, y: 0, duration: 0.35 });
+          founder.to(founderSteps[index], { opacity: 1, y: 0, duration: 0.4 }, "<");
+          if (founderIcons[index]) {
+            founder.to(
+              founderIcons[index],
+              { backgroundColor: "#d5f5a8", borderColor: "transparent", duration: 0.28 },
+              "<",
+            );
+          }
+          if (founderIcons[index - 1]) {
+            founder.to(
+              founderIcons[index - 1],
+              { backgroundColor: "#f3f3f1", borderColor: "transparent", duration: 0.25 },
+              "<",
+            );
+          }
+          if (founderLine) {
+            founder.to(founderLine, { scaleY: progress, duration: 0.4 }, "<");
+          }
+          founder.to({}, { duration: 0.32 });
+        }
+        founder.to({}, { duration: 0.25 });
+      }
     });
 
     motion.add("(prefers-reduced-motion: reduce)", () => {
@@ -314,6 +374,8 @@ export default function FilmHome({
       gsap.set("[data-roadmap-check]", { opacity: 1, scale: 1 });
       gsap.set("[data-roadmap-num]", { opacity: 0 });
       gsap.set("[data-roadmap-card]", { opacity: 1, y: 0 });
+      gsap.set("[data-founder-step]", { opacity: 1, y: 0 });
+      gsap.set("[data-founder-line]", { scaleY: 1 });
     });
 
     return () => {
