@@ -185,7 +185,7 @@ export default function FilmHome({
 
             const swap = gsap.timeline({ repeat: -1, defaults: { ease: "power2.inOut" } });
             // Hold times: big (longer first), better, massive
-            const holds = [2.4, 1.2, 1.2];
+            const holds = [4.2, 1.35, 1.35];
             heroWords.forEach((word, index) => {
               const nextIndex = (index + 1) % heroWords.length;
               const next = heroWords[nextIndex];
