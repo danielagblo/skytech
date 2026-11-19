@@ -163,20 +163,48 @@ export default function FilmHome({
             });
           });
 
+          const heroShell = root.current?.querySelector<HTMLElement>("[data-hero-swap]");
           const heroWords = gsap.utils.toArray<HTMLElement>("[data-hero-word]");
-          if (heroWords.length > 1) {
-            gsap.set(heroWords, { autoAlpha: 0, yPercent: 55 });
+          const heroColors = ["#b7dff6", "#d5f5a8", "#b7dff6"];
+          if (heroShell && heroWords.length > 1) {
+            heroWords.forEach((word) => {
+              gsap.set(word, { position: "absolute", left: 0, top: 0, autoAlpha: 0 });
+            });
+            const metrics = heroWords.map((word) => {
+              gsap.set(word, { autoAlpha: 1, visibility: "hidden" });
+              const rect = word.getBoundingClientRect();
+              gsap.set(word, { autoAlpha: 0, visibility: "visible" });
+              return { width: rect.width, height: rect.height };
+            });
+            gsap.set(heroShell, {
+              width: metrics[0].width,
+              height: metrics[0].height,
+              backgroundColor: heroColors[0],
+            });
             gsap.set(heroWords[0], { autoAlpha: 1, yPercent: 0 });
+
             const swap = gsap.timeline({ repeat: -1, defaults: { ease: "power2.inOut" } });
             heroWords.forEach((word, index) => {
-              const next = heroWords[(index + 1) % heroWords.length];
+              const nextIndex = (index + 1) % heroWords.length;
+              const next = heroWords[nextIndex];
               swap.to({}, { duration: 1.15 });
-              swap.to(word, { autoAlpha: 0, yPercent: -55, duration: 0.42, ease: "power2.in" });
+              swap.to(word, { autoAlpha: 0, yPercent: -55, duration: 0.4, ease: "power2.in" }, ">");
+              swap.to(
+                heroShell,
+                {
+                  width: metrics[nextIndex].width,
+                  height: metrics[nextIndex].height,
+                  backgroundColor: heroColors[nextIndex % heroColors.length],
+                  duration: 0.5,
+                  ease: "power2.inOut",
+                },
+                "<",
+              );
               swap.fromTo(
                 next,
                 { autoAlpha: 0, yPercent: 55 },
-                { autoAlpha: 1, yPercent: 0, duration: 0.48, ease: "power2.out" },
-                "<0.04",
+                { autoAlpha: 1, yPercent: 0, duration: 0.46, ease: "power2.out" },
+                "<0.05",
               );
             });
           }
@@ -436,16 +464,15 @@ export default function FilmHome({
                   <span
                     data-pill
                     data-hero-swap
-                    className="relative inline-flex items-center justify-center overflow-hidden rounded-full bg-[#b7dff6] px-[0.38em] py-[0.02em]"
+                    className="relative inline-block overflow-hidden rounded-full align-middle"
                   >
-                    <span className="invisible select-none whitespace-nowrap" aria-hidden>
-                      massive
-                    </span>
                     {["big", "better", "massive"].map((word, index) => (
                       <span
                         key={word}
                         data-hero-word
-                        className={`absolute inset-0 flex items-center justify-center ${index === 0 ? "" : "opacity-0"}`}
+                        className={`inline-flex items-center whitespace-nowrap px-[0.38em] py-[0.02em] ${
+                          index === 0 ? "relative" : "absolute left-0 top-0 opacity-0"
+                        }`}
                       >
                         {word}
                       </span>
