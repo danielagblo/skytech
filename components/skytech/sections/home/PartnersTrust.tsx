@@ -44,9 +44,7 @@ export default function PartnersTrust({ partners = [] }: { partners?: TrustPartn
 
         tl.from("[data-pt='title']", { opacity: 0, y: 12, duration: 0.4 }, 0)
           .from("[data-pt='stat']", { opacity: 0, y: 20, scale: 0.98, duration: 0.55 }, 0.08)
-          .from("[data-pt='copy']", { opacity: 0, y: 14, duration: 0.4 }, 0.22)
-          .from("[data-pt='mission']", { opacity: 0, y: 12, duration: 0.35 }, 0.3)
-          .from("[data-pt='logo']", { opacity: 0, y: 12, duration: 0.35, stagger: 0.04 }, 0.28);
+          .from("[data-pt='logo']", { opacity: 0, y: 12, duration: 0.35, stagger: 0.04 }, 0.22);
 
         ScrollTrigger.create({
           trigger: rootRef.current,
@@ -62,10 +60,8 @@ export default function PartnersTrust({ partners = [] }: { partners?: TrustPartn
 
         tl.from("[data-pt='title']", { opacity: 0, y: 18, duration: 0.5 }, 0)
           .from("[data-pt='stat']", { opacity: 0, y: 36, scale: 0.96, duration: 0.85 }, 0.12)
-          .from("[data-pt='copy']", { opacity: 0, y: 22, duration: 0.55 }, 0.35)
-          .from("[data-pt='mission']", { opacity: 0, y: 16, duration: 0.5 }, 0.48)
           .from("[data-pt='rule']", { scaleY: 0, duration: 0.7, ease: "power2.inOut" }, 0.28)
-          .from("[data-pt='logo']", { opacity: 0, y: 18, duration: 0.45, stagger: 0.05 }, 0.4);
+          .from("[data-pt='logo']", { opacity: 0, y: 18, duration: 0.45, stagger: 0.05 }, 0.35);
 
         ScrollTrigger.create({
           trigger: rootRef.current,
@@ -114,20 +110,6 @@ export default function PartnersTrust({ partners = [] }: { partners?: TrustPartn
               className="h-auto w-full max-w-[min(100%,22rem)] object-contain object-left sm:max-w-[34rem]"
             />
           </div>
-
-          <p
-            data-pt="copy"
-            className="mt-5 max-w-md text-[13px] leading-relaxed text-[#2f2f2f] sm:mt-7 sm:text-[15px]"
-          >
-            Year after year, businesses choose Skytech Ghana for reliable websites, intelligent
-            systems, and lasting support that drive real results.
-          </p>
-          <p
-            data-pt="mission"
-            className="mt-4 max-w-sm text-[13px] italic leading-relaxed text-[#161616] sm:mt-5 sm:text-[15px]"
-          >
-            Your success is our mission and your growth is our commitment.
-          </p>
         </div>
 
         <div className="relative min-w-0 border-t border-black/10 pt-6 sm:pt-7 lg:border-t-0 lg:pl-10 lg:pt-0 xl:pl-12">
