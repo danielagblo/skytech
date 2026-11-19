@@ -6,6 +6,7 @@ import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+import { useLenis } from "lenis/react";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
@@ -62,28 +63,95 @@ const steps = [
 
 export default function HowItWorks() {
   const root = useRef<HTMLElement>(null);
+  const pin = useRef<HTMLDivElement>(null);
+
+  useLenis(() => {
+    ScrollTrigger.update();
+  });
 
   useGSAP(
     () => {
       const mm = gsap.matchMedia();
-      mm.add("(prefers-reduced-motion: reduce)", () => {
-        gsap.set("[data-hiw]", { clearProps: "all", autoAlpha: 1, opacity: 1, y: 0 });
-      });
-      mm.add("(prefers-reduced-motion: no-preference)", () => {
-        const tl = gsap.timeline({ defaults: { ease: "power3.out" }, paused: true });
-        tl.from("[data-hiw='head']", { opacity: 0, y: 12, duration: 0.4 }, 0)
-          .from("[data-hiw='visual']", { opacity: 0, y: 16, duration: 0.45 }, 0.06)
-          .from("[data-hiw='step']", { opacity: 0, y: 12, duration: 0.35, stagger: 0.08 }, 0.12)
-          .from("[data-hiw='line']", { scaleY: 0, duration: 0.55, ease: "power2.inOut" }, 0.14);
 
-        ScrollTrigger.create({
-          trigger: root.current,
-          start: "top 82%",
-          end: "bottom top",
-          onEnter: () => tl.restart(),
-          onEnterBack: () => tl.restart(),
-        });
+      mm.add("(prefers-reduced-motion: reduce)", () => {
+        gsap.set("[data-hiw]", { clearProps: "all", autoAlpha: 1, opacity: 1, y: 0, scaleY: 1 });
+        gsap.set("[data-hiw-icon]", { backgroundColor: "#d5f5a8", borderColor: "transparent" });
       });
+
+      mm.add("(prefers-reduced-motion: no-preference)", () => {
+        const card = pin.current;
+        if (!card) return;
+
+        const stepEls = gsap.utils.toArray<HTMLElement>("[data-hiw='step']", card);
+        const icons = gsap.utils.toArray<HTMLElement>("[data-hiw-icon]", card);
+        const lineFill = card.querySelector<HTMLElement>("[data-hiw='line-fill']");
+
+        gsap.set("[data-hiw='head']", { autoAlpha: 0, y: 16 });
+        gsap.set("[data-hiw='visual']", { autoAlpha: 0, y: 22, scale: 0.985 });
+        gsap.set(stepEls, { autoAlpha: 0.28, y: 18 });
+        gsap.set(icons, {
+          backgroundColor: "#ffffff",
+          borderColor: "rgba(0,0,0,0.1)",
+          color: "#161616",
+        });
+        if (lineFill) gsap.set(lineFill, { scaleY: 0, transformOrigin: "top center" });
+
+        const show = gsap.timeline({
+          defaults: { ease: "none" },
+          scrollTrigger: {
+            trigger: card,
+            start: "top 14%",
+            end: () => `+=${Math.max(stepEls.length, 1) * 95}%`,
+            pin: true,
+            scrub: 0.55,
+            anticipatePin: 1,
+          },
+        });
+
+        show.to("[data-hiw='head']", { autoAlpha: 1, y: 0, duration: 0.45, ease: "power2.out" }, 0);
+        show.to(
+          "[data-hiw='visual']",
+          { autoAlpha: 1, y: 0, scale: 1, duration: 0.55, ease: "power2.out" },
+          0.08,
+        );
+        show.to({}, { duration: 0.2 });
+
+        stepEls.forEach((step, index) => {
+          const progress = (index + 1) / stepEls.length;
+          show.to(step, { autoAlpha: 1, y: 0, duration: 0.45, ease: "power2.out" });
+          if (icons[index]) {
+            show.to(
+              icons[index],
+              {
+                backgroundColor: "#d5f5a8",
+                borderColor: "transparent",
+                duration: 0.28,
+                ease: "power2.out",
+              },
+              "<",
+            );
+          }
+          if (lineFill) {
+            show.to(lineFill, { scaleY: progress, duration: 0.45, ease: "none" }, "<");
+          }
+          if (index > 0 && icons[index - 1]) {
+            show.to(
+              icons[index - 1],
+              {
+                backgroundColor: "#f3f3f1",
+                borderColor: "transparent",
+                duration: 0.25,
+                ease: "power1.out",
+              },
+              "<0.05",
+            );
+          }
+          show.to({}, { duration: 0.35 });
+        });
+
+        show.to({}, { duration: 0.4 });
+      });
+
       return () => mm.revert();
     },
     { scope: root },
@@ -91,7 +159,10 @@ export default function HowItWorks() {
 
   return (
     <section ref={root} className="relative px-3 pb-4 pt-2 md:px-5">
-      <div className="mx-auto max-w-[1180px] overflow-hidden rounded-[28px] bg-white px-5 py-6 sm:px-8 sm:py-7 md:px-10 md:py-8">
+      <div
+        ref={pin}
+        className="mx-auto max-w-[1180px] overflow-hidden rounded-[28px] bg-white px-5 py-6 sm:px-8 sm:py-7 md:px-10 md:py-8"
+      >
         <header data-hiw="head" className="mx-auto max-w-2xl text-center">
           <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-black/45">From the founder</p>
           <h2 className="mt-2 font-display text-[clamp(1.7rem,3.8vw,2.5rem)] font-medium tracking-tight text-[#161616]">
@@ -121,19 +192,17 @@ export default function HowItWorks() {
 
           <div className="relative lg:pl-1">
             <div
-              data-hiw="line"
               aria-hidden
-              className="absolute bottom-3 left-[1.15rem] top-3 hidden w-px origin-top bg-black/10 sm:block"
-            />
+              className="absolute bottom-3 left-[1.15rem] top-3 hidden w-px origin-top overflow-hidden bg-black/10 sm:block"
+            >
+              <span data-hiw="line-fill" className="absolute inset-0 origin-top bg-[#8dce3a]" />
+            </div>
             <ol className="space-y-4">
-              {steps.map((step, index) => (
+              {steps.map((step) => (
                 <li key={step.id} data-hiw="step" className="relative flex gap-3.5">
                   <span
-                    className={`relative z-[1] grid h-9 w-9 shrink-0 place-items-center rounded-xl ${
-                      index === 0
-                        ? "bg-[#d5f5a8] text-[#161616]"
-                        : "border border-black/10 bg-white text-[#161616]"
-                    }`}
+                    data-hiw-icon
+                    className="relative z-[1] grid h-9 w-9 shrink-0 place-items-center rounded-xl border border-black/10 bg-white text-[#161616]"
                   >
                     {step.icon}
                   </span>
