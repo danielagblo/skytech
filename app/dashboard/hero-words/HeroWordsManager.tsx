@@ -57,7 +57,7 @@ export default function HeroWordsManager({
   }
 
   function resetDefaults() {
-    if (!confirm("Reset to big / Better / Massive?")) return;
+    if (!confirm("Reset to Better / Massive?")) return;
     setWords([...DEFAULT_HERO_WORDS.words]);
   }
 

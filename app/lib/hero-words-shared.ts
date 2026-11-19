@@ -3,7 +3,7 @@ export interface HeroWordsContent {
 }
 
 export const DEFAULT_HERO_WORDS: HeroWordsContent = {
-  words: ["big", "Better", "Massive"],
+  words: ["Better", "Massive"],
 };
 
 export function normalizeHeroWordsContent(

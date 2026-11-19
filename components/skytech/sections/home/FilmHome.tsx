@@ -513,11 +513,15 @@ export default function FilmHome({
                     data-hero-word-pill
                     className="relative inline-flex items-center justify-center overflow-hidden rounded-full bg-[#b7dff6] px-[0.38em] py-[0.02em]"
                   >
+                    <span className="invisible whitespace-nowrap" aria-hidden>
+                      {rotatingWords[0]}
+                    </span>
                     {rotatingWords.map((word, index) => (
                       <span
                         key={`${word}-${index}`}
                         data-hero-word
-                        className={`whitespace-nowrap ${index === 0 ? "relative" : "absolute opacity-0"}`}
+                        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap opacity-0"
+                        style={index === 0 ? { opacity: 1 } : undefined}
                       >
                         {word}
                       </span>
