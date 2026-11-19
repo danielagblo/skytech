@@ -82,7 +82,7 @@ export default function PartnersTrust({ partners = [] }: { partners?: TrustPartn
   return (
     <section
       ref={rootRef}
-      className="relative overflow-x-clip px-4 py-10 sm:px-3 sm:py-12 md:px-5 md:py-16"
+      className="relative overflow-x-clip px-4 py-8 sm:px-3 sm:py-10 md:px-5 md:pb-6 md:pt-12"
       style={{
         backgroundColor: "#e8e8ea",
         backgroundImage:

@@ -63,7 +63,6 @@ const steps = [
 
 export default function HowItWorks() {
   const root = useRef<HTMLElement>(null);
-  const pin = useRef<HTMLDivElement>(null);
 
   useLenis(() => {
     ScrollTrigger.update();
@@ -71,85 +70,83 @@ export default function HowItWorks() {
 
   useGSAP(
     () => {
+      const section = root.current;
+      if (!section) return;
+
       const mm = gsap.matchMedia();
 
       mm.add("(prefers-reduced-motion: reduce)", () => {
-        gsap.set("[data-hiw]", { clearProps: "all", autoAlpha: 1, opacity: 1, y: 0, scaleY: 1 });
-        gsap.set("[data-hiw-icon]", { backgroundColor: "#d5f5a8", borderColor: "transparent" });
+        gsap.set("[data-hiw='step']", { clearProps: "opacity,transform" });
+        gsap.set("[data-hiw-icon]", { clearProps: "backgroundColor,borderColor" });
+        gsap.set("[data-hiw='line-fill']", { clearProps: "transform" });
       });
 
       mm.add("(prefers-reduced-motion: no-preference)", () => {
-        const card = pin.current;
-        if (!card) return;
+        const stepEls = gsap.utils.toArray<HTMLElement>("[data-hiw='step']", section);
+        const icons = gsap.utils.toArray<HTMLElement>("[data-hiw-icon]", section);
+        const lineFill = section.querySelector<HTMLElement>("[data-hiw='line-fill']");
+        if (!stepEls.length) return;
 
-        const stepEls = gsap.utils.toArray<HTMLElement>("[data-hiw='step']", card);
-        const icons = gsap.utils.toArray<HTMLElement>("[data-hiw-icon]", card);
-        const lineFill = card.querySelector<HTMLElement>("[data-hiw='line-fill']");
-
-        gsap.set("[data-hiw='head']", { autoAlpha: 0, y: 16 });
-        gsap.set("[data-hiw='visual']", { autoAlpha: 0, y: 22, scale: 0.985 });
-        gsap.set(stepEls, { autoAlpha: 0.28, y: 18 });
+        // Keep content visible — only dim inactive steps (never hide the card)
+        gsap.set(stepEls, { opacity: 0.32, y: 12 });
+        gsap.set(stepEls[0], { opacity: 1, y: 0 });
         gsap.set(icons, {
           backgroundColor: "#ffffff",
           borderColor: "rgba(0,0,0,0.1)",
-          color: "#161616",
         });
-        if (lineFill) gsap.set(lineFill, { scaleY: 0, transformOrigin: "top center" });
+        gsap.set(icons[0], {
+          backgroundColor: "#d5f5a8",
+          borderColor: "transparent",
+        });
+        if (lineFill) {
+          gsap.set(lineFill, {
+            scaleY: 1 / stepEls.length,
+            transformOrigin: "top center",
+          });
+        }
 
         const show = gsap.timeline({
           defaults: { ease: "none" },
           scrollTrigger: {
-            trigger: card,
-            start: "top 14%",
-            end: () => `+=${Math.max(stepEls.length, 1) * 95}%`,
+            trigger: section,
+            start: "top 18%",
+            end: "+=110%",
             pin: true,
-            scrub: 0.55,
+            scrub: 0.45,
             anticipatePin: 1,
+            invalidateOnRefresh: true,
           },
         });
 
-        show.to("[data-hiw='head']", { autoAlpha: 1, y: 0, duration: 0.45, ease: "power2.out" }, 0);
-        show.to(
-          "[data-hiw='visual']",
-          { autoAlpha: 1, y: 0, scale: 1, duration: 0.55, ease: "power2.out" },
-          0.08,
-        );
-        show.to({}, { duration: 0.2 });
+        show.to({}, { duration: 0.25 });
 
-        stepEls.forEach((step, index) => {
+        for (let index = 1; index < stepEls.length; index += 1) {
           const progress = (index + 1) / stepEls.length;
-          show.to(step, { autoAlpha: 1, y: 0, duration: 0.45, ease: "power2.out" });
+          show.to(stepEls[index - 1], { opacity: 0.38, y: 0, duration: 0.35 }, ">");
+          show.to(stepEls[index], { opacity: 1, y: 0, duration: 0.4 }, "<");
           if (icons[index]) {
             show.to(
               icons[index],
-              {
-                backgroundColor: "#d5f5a8",
-                borderColor: "transparent",
-                duration: 0.28,
-                ease: "power2.out",
-              },
+              { backgroundColor: "#d5f5a8", borderColor: "transparent", duration: 0.3 },
+              "<",
+            );
+          }
+          if (icons[index - 1]) {
+            show.to(
+              icons[index - 1],
+              { backgroundColor: "#f3f3f1", borderColor: "transparent", duration: 0.25 },
               "<",
             );
           }
           if (lineFill) {
-            show.to(lineFill, { scaleY: progress, duration: 0.45, ease: "none" }, "<");
+            show.to(lineFill, { scaleY: progress, duration: 0.4 }, "<");
           }
-          if (index > 0 && icons[index - 1]) {
-            show.to(
-              icons[index - 1],
-              {
-                backgroundColor: "#f3f3f1",
-                borderColor: "transparent",
-                duration: 0.25,
-                ease: "power1.out",
-              },
-              "<0.05",
-            );
-          }
-          show.to({}, { duration: 0.35 });
-        });
+          show.to({}, { duration: 0.28 });
+        }
 
-        show.to({}, { duration: 0.4 });
+        show.to({}, { duration: 0.2 });
+
+        requestAnimationFrame(() => ScrollTrigger.refresh());
       });
 
       return () => mm.revert();
@@ -158,12 +155,9 @@ export default function HowItWorks() {
   );
 
   return (
-    <section ref={root} className="relative px-3 pb-4 pt-2 md:px-5">
-      <div
-        ref={pin}
-        className="mx-auto max-w-[1180px] overflow-hidden rounded-[28px] bg-white px-5 py-6 sm:px-8 sm:py-7 md:px-10 md:py-8"
-      >
-        <header data-hiw="head" className="mx-auto max-w-2xl text-center">
+    <section ref={root} className="relative px-3 pb-3 pt-0 md:px-5">
+      <div className="mx-auto max-w-[1180px] overflow-hidden rounded-[28px] bg-white px-5 py-6 sm:px-8 sm:py-7 md:px-10 md:py-8">
+        <header className="mx-auto max-w-2xl text-center">
           <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-black/45">From the founder</p>
           <h2 className="mt-2 font-display text-[clamp(1.7rem,3.8vw,2.5rem)] font-medium tracking-tight text-[#161616]">
             Founder&apos;s Remark
@@ -171,7 +165,7 @@ export default function HowItWorks() {
         </header>
 
         <div className="mt-5 grid items-center gap-6 lg:mt-6 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:gap-10">
-          <div data-hiw="visual" className="relative mx-auto w-full max-w-md lg:mx-0 lg:max-w-none">
+          <div className="relative mx-auto w-full max-w-md lg:mx-0 lg:max-w-none">
             <div className="relative aspect-[16/11] overflow-hidden rounded-[20px] bg-[#f3f3f1]">
               <Image
                 src="/images/images/manSitting.png"
