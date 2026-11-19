@@ -164,36 +164,34 @@ export default function FilmHome({
           });
 
           const heroShell = root.current?.querySelector<HTMLElement>("[data-hero-swap]");
-          const heroWords = gsap.utils.toArray<HTMLElement>("[data-hero-word]");
+          const heroWords = gsap.utils.toArray<HTMLElement>("[data-hero-word]", heroShell || undefined);
           if (heroShell && heroWords.length > 1) {
-            // Measure natural pill sizes while words are still in normal flow
+            gsap.killTweensOf([heroShell, ...heroWords]);
+
             const metrics = heroWords.map((word) => ({
-              width: Math.ceil(word.getBoundingClientRect().width),
-              height: Math.ceil(word.getBoundingClientRect().height),
+              width: Math.ceil(word.scrollWidth),
+              height: Math.ceil(word.scrollHeight),
             }));
 
-            heroWords.forEach((word, index) => {
-              gsap.set(word, {
-                position: "absolute",
-                left: 0,
-                top: 0,
-                x: 0,
-                y: 0,
-                yPercent: 0,
-                opacity: index === 0 ? 1 : 0,
-                visibility: "visible",
-                zIndex: index === 0 ? 2 : 1,
-              });
-            });
             gsap.set(heroShell, {
-              position: "relative",
               width: metrics[0].width,
               height: metrics[0].height,
               overflow: "hidden",
             });
+            gsap.set(heroWords, {
+              position: "absolute",
+              left: 0,
+              top: 0,
+              x: 0,
+              y: 0,
+              yPercent: 0,
+              opacity: 0,
+              visibility: "visible",
+              zIndex: 1,
+            });
+            gsap.set(heroWords[0], { opacity: 1, zIndex: 2 });
 
             const swap = gsap.timeline({ repeat: -1, defaults: { ease: "power2.inOut" } });
-            // Hold times: big (longer first), better, massive
             const holds = [4.2, 1.35, 1.35];
             heroWords.forEach((word, index) => {
               const nextIndex = (index + 1) % heroWords.length;
@@ -474,19 +472,23 @@ export default function FilmHome({
                   <span
                     data-pill
                     data-hero-swap
-                    className="relative inline-block align-middle"
+                    className="relative inline-block align-middle overflow-hidden"
                   >
+                    <span
+                      className="invisible inline-flex items-center whitespace-nowrap rounded-full px-[0.38em] py-[0.02em]"
+                      aria-hidden
+                    >
+                      massive
+                    </span>
                     {[
                       { word: "big", tone: "bg-[#b7dff6]" },
                       { word: "better", tone: "bg-[#d5f5a8]" },
                       { word: "massive", tone: "bg-[#b7dff6]" },
-                    ].map((item, index) => (
+                    ].map((item) => (
                       <span
                         key={item.word}
                         data-hero-word
-                        className={`inline-flex items-center whitespace-nowrap rounded-full px-[0.38em] py-[0.02em] text-[#161616] ${item.tone} ${
-                          index === 0 ? "relative" : "absolute left-0 top-0 opacity-0"
-                        }`}
+                        className={`absolute left-0 top-0 inline-flex items-center whitespace-nowrap rounded-full px-[0.38em] py-[0.02em] text-[#161616] ${item.tone}`}
                       >
                         {item.word}
                       </span>
