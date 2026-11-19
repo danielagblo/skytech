@@ -184,10 +184,12 @@ export default function FilmHome({
             gsap.set(heroWords[0], { autoAlpha: 1, yPercent: 0 });
 
             const swap = gsap.timeline({ repeat: -1, defaults: { ease: "power2.inOut" } });
+            // Hold times: big (longer first), better, massive
+            const holds = [2.4, 1.2, 1.2];
             heroWords.forEach((word, index) => {
               const nextIndex = (index + 1) % heroWords.length;
               const next = heroWords[nextIndex];
-              swap.to({}, { duration: 1.15 });
+              swap.to({}, { duration: holds[index] ?? 1.2 });
               swap.to(word, { autoAlpha: 0, yPercent: -55, duration: 0.4, ease: "power2.in" }, ">");
               swap.to(
                 heroShell,
