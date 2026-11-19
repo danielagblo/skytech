@@ -10,6 +10,7 @@ import { useLenis } from "lenis/react";
 import BookMeetingButton from "@/components/skytech/ui/BookMeetingButton";
 import PartnersTrust from "@/components/skytech/sections/home/PartnersTrust";
 import HowItWorks from "@/components/skytech/sections/home/HowItWorks";
+import HeroWordPill from "@/components/skytech/sections/home/HeroWordPill";
 import ServiceOffers from "@/components/skytech/sections/ServiceOffers";
 import CustomerSay, { type CustomerStory } from "@/components/skytech/sections/home/CustomerSay";
 import TeamHang, { type HangMember } from "@/components/skytech/sections/home/TeamHang";
@@ -157,87 +158,9 @@ export default function FilmHome({
       const open = gsap.timeline({ defaults: { ease: "power3.out" } });
       open.fromTo("[data-hero-item]", { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.55, stagger: 0.05 });
 
-      const heroWordPill = document.querySelector<HTMLElement>("[data-hero-word-pill]");
-      const heroWords = gsap.utils.toArray<HTMLElement>("[data-hero-word]");
-      if (heroWordPill && heroWords.length > 1) {
-        const styles = getComputedStyle(heroWordPill);
-        const padY =
-          (parseFloat(styles.paddingTop) || 0) + (parseFloat(styles.paddingBottom) || 0);
-
-        // Measure each word in normal flow so "Massive" gets its full width
-        const widths: number[] = [];
-        let pillHeight = 0;
-        heroWords.forEach((word) => {
-          heroWords.forEach((other) => {
-            gsap.set(other, {
-              position: other === word ? "relative" : "absolute",
-              autoAlpha: other === word ? 1 : 0,
-              left: "auto",
-              top: "auto",
-              x: 0,
-              y: 0,
-              xPercent: 0,
-              yPercent: 0,
-            });
-          });
-          gsap.set(heroWordPill, { width: "auto", height: "auto" });
-          widths.push(Math.ceil(heroWordPill.getBoundingClientRect().width) + 2);
-          pillHeight = Math.max(pillHeight, Math.ceil(word.getBoundingClientRect().height + padY));
-        });
-
-        gsap.set(heroWords, {
-          position: "absolute",
-          left: "50%",
-          xPercent: -50,
-          top: "50%",
-          yPercent: -50,
-          autoAlpha: 0,
-          whiteSpace: "nowrap",
-        });
-        gsap.set(heroWordPill, {
-          width: widths[0],
-          height: pillHeight,
-          overflow: "hidden",
-        });
-        gsap.set(heroWords[0], { autoAlpha: 1 });
-
-        const hold = 2.4; // longer pause on each word
-        const wordReel = gsap.timeline({ repeat: -1, repeatDelay: 0.2, paused: true });
-        const swapTo = (from: number, to: number) => {
-          wordReel.to(heroWords[from], {
-            autoAlpha: 0,
-            yPercent: -130,
-            duration: 0.4,
-            ease: "power2.in",
-          });
-          wordReel.to(
-            heroWordPill,
-            { width: widths[to], duration: 0.55, ease: "power2.inOut" },
-            "<0.02",
-          );
-          wordReel.fromTo(
-            heroWords[to],
-            { autoAlpha: 0, yPercent: 40 },
-            { autoAlpha: 1, yPercent: -50, duration: 0.45, ease: "power2.out" },
-            "<0.08",
-          );
-        };
-
-        wordReel.to({}, { duration: hold });
-        for (let index = 1; index < heroWords.length; index += 1) {
-          swapTo(index - 1, index);
-          wordReel.to({}, { duration: hold });
-        }
-        swapTo(heroWords.length - 1, 0);
-
-        open.add(() => {
-          wordReel.play(0);
-        }, "+=0.55");
-      }
-
       if (contextSafe) {
         open.call(contextSafe(() => {
-          gsap.utils.toArray<HTMLElement>("[data-pill]").forEach((pill, index) => {
+          gsap.utils.toArray<HTMLElement>("[data-pill]:not([data-hero-word-pill])").forEach((pill, index) => {
             gsap.to(pill, {
               backgroundColor: index % 2 === 0 ? "#b7dff6" : "#d5f5a8",
               duration: 2.8,
@@ -450,14 +373,6 @@ export default function FilmHome({
 
     motion.add("(prefers-reduced-motion: reduce)", () => {
       gsap.set("[data-hero-item]", { opacity: 1, y: 0 });
-      const reducedPill = document.querySelector<HTMLElement>("[data-hero-word-pill]");
-      const reducedWords = gsap.utils.toArray<HTMLElement>("[data-hero-word]");
-      gsap.set(reducedWords, { clearProps: "all", autoAlpha: 0, position: "absolute" });
-      if (reducedWords.length) {
-        const last = reducedWords[reducedWords.length - 1];
-        gsap.set(last, { autoAlpha: 1, position: "relative" });
-        if (reducedPill) gsap.set(reducedPill, { clearProps: "width,height" });
-      }
       gsap.set("[data-statement]", { opacity: 1, y: 0, position: "relative" });
       gsap.set("[data-perf-slide]", { opacity: 1, position: "relative" });
       gsap.set("[data-concept]", { opacity: 1, y: 0, scale: 1 });
@@ -474,7 +389,7 @@ export default function FilmHome({
     return () => {
       motion.revert();
     };
-  }, { scope: root, dependencies: [rotatingWords.join("|")] });
+  }, { scope: root });
 
   return (
     <article ref={root} className="relative bg-[#e8e8ea] text-[#161616]">
@@ -508,25 +423,7 @@ export default function FilmHome({
                 </span>
                 <span className="mt-[0.08em] flex flex-wrap items-center gap-x-3 gap-y-2">
                   your next
-                  <span
-                    data-pill
-                    data-hero-word-pill
-                    className="relative inline-flex items-center justify-center overflow-hidden rounded-full bg-[#b7dff6] px-[0.38em] py-[0.02em]"
-                  >
-                    <span className="invisible whitespace-nowrap" aria-hidden>
-                      {rotatingWords[0]}
-                    </span>
-                    {rotatingWords.map((word, index) => (
-                      <span
-                        key={`${word}-${index}`}
-                        data-hero-word
-                        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap opacity-0"
-                        style={index === 0 ? { opacity: 1 } : undefined}
-                      >
-                        {word}
-                      </span>
-                    ))}
-                  </span>
+                  <HeroWordPill words={rotatingWords} />
                 </span>
                 <span className="mt-[0.12em] flex flex-wrap items-center gap-3 md:gap-5">
                   <span data-pill className="inline-flex items-center gap-[0.2em] rounded-full bg-[#d5f5a8] px-[0.42em] py-[0.02em]">
