@@ -152,7 +152,7 @@ export default function FilmHome({
       open.fromTo("[data-hero-item]", { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.55, stagger: 0.05 });
       if (contextSafe) {
         open.call(contextSafe(() => {
-          gsap.utils.toArray<HTMLElement>("[data-pill]").forEach((pill, index) => {
+          gsap.utils.toArray<HTMLElement>("[data-pill]:not([data-hero-swap])").forEach((pill, index) => {
             gsap.to(pill, {
               backgroundColor: index % 2 === 0 ? "#b7dff6" : "#d5f5a8",
               duration: 2.8,
@@ -162,6 +162,24 @@ export default function FilmHome({
               delay: index * 0.7,
             });
           });
+
+          const heroWords = gsap.utils.toArray<HTMLElement>("[data-hero-word]");
+          if (heroWords.length > 1) {
+            gsap.set(heroWords, { autoAlpha: 0, yPercent: 55 });
+            gsap.set(heroWords[0], { autoAlpha: 1, yPercent: 0 });
+            const swap = gsap.timeline({ repeat: -1, defaults: { ease: "power2.inOut" } });
+            heroWords.forEach((word, index) => {
+              const next = heroWords[(index + 1) % heroWords.length];
+              swap.to({}, { duration: 1.15 });
+              swap.to(word, { autoAlpha: 0, yPercent: -55, duration: 0.42, ease: "power2.in" });
+              swap.fromTo(
+                next,
+                { autoAlpha: 0, yPercent: 55 },
+                { autoAlpha: 1, yPercent: 0, duration: 0.48, ease: "power2.out" },
+                "<0.04",
+              );
+            });
+          }
         }));
       }
 
@@ -415,8 +433,23 @@ export default function FilmHome({
                 </span>
                 <span className="mt-[0.08em] flex flex-wrap items-center gap-x-3 gap-y-2">
                   your next
-                  <span data-pill className="inline-flex items-center rounded-full bg-[#b7dff6] px-[0.38em] py-[0.02em]">
-                    big
+                  <span
+                    data-pill
+                    data-hero-swap
+                    className="relative inline-flex items-center justify-center overflow-hidden rounded-full bg-[#b7dff6] px-[0.38em] py-[0.02em]"
+                  >
+                    <span className="invisible select-none whitespace-nowrap" aria-hidden>
+                      massive
+                    </span>
+                    {["big", "better", "massive"].map((word, index) => (
+                      <span
+                        key={word}
+                        data-hero-word
+                        className={`absolute inset-0 flex items-center justify-center ${index === 0 ? "" : "opacity-0"}`}
+                      >
+                        {word}
+                      </span>
+                    ))}
                   </span>
                 </span>
                 <span className="mt-[0.12em] flex flex-wrap items-center gap-3 md:gap-5">
