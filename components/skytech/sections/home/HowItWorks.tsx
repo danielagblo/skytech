@@ -87,64 +87,56 @@ export default function HowItWorks() {
         const lineFill = section.querySelector<HTMLElement>("[data-hiw='line-fill']");
         if (!stepEls.length) return;
 
-        // Keep content visible — only dim inactive steps (never hide the card)
-        gsap.set(stepEls, { opacity: 0.32, y: 12 });
-        gsap.set(stepEls[0], { opacity: 1, y: 0 });
+        gsap.set(stepEls, { opacity: 0.3, y: 16 });
         gsap.set(icons, {
           backgroundColor: "#ffffff",
           borderColor: "rgba(0,0,0,0.1)",
         });
-        gsap.set(icons[0], {
-          backgroundColor: "#d5f5a8",
-          borderColor: "transparent",
-        });
         if (lineFill) {
-          gsap.set(lineFill, {
-            scaleY: 1 / stepEls.length,
-            transformOrigin: "top center",
-          });
+          gsap.set(lineFill, { scaleY: 0, transformOrigin: "top center" });
         }
 
+        // No pin — scrub in place so Lenis/Hostinger can't leave a floating duplicate
         const show = gsap.timeline({
           defaults: { ease: "none" },
           scrollTrigger: {
             trigger: section,
-            start: "top 18%",
-            end: "+=110%",
-            pin: true,
-            scrub: 0.45,
-            anticipatePin: 1,
+            start: "top 75%",
+            end: "bottom 35%",
+            scrub: 0.5,
             invalidateOnRefresh: true,
           },
         });
 
-        show.to({}, { duration: 0.25 });
-
-        for (let index = 1; index < stepEls.length; index += 1) {
+        stepEls.forEach((step, index) => {
           const progress = (index + 1) / stepEls.length;
-          show.to(stepEls[index - 1], { opacity: 0.38, y: 0, duration: 0.35 }, ">");
-          show.to(stepEls[index], { opacity: 1, y: 0, duration: 0.4 }, "<");
+          show.to(step, { opacity: 1, y: 0, duration: 0.4 }, index * 0.35);
           if (icons[index]) {
             show.to(
               icons[index],
-              { backgroundColor: "#d5f5a8", borderColor: "transparent", duration: 0.3 },
-              "<",
+              {
+                backgroundColor: "#d5f5a8",
+                borderColor: "transparent",
+                duration: 0.3,
+              },
+              index * 0.35,
             );
           }
-          if (icons[index - 1]) {
+          if (index > 0 && icons[index - 1]) {
             show.to(
               icons[index - 1],
-              { backgroundColor: "#f3f3f1", borderColor: "transparent", duration: 0.25 },
-              "<",
+              {
+                backgroundColor: "#f3f3f1",
+                borderColor: "transparent",
+                duration: 0.25,
+              },
+              index * 0.35,
             );
           }
           if (lineFill) {
-            show.to(lineFill, { scaleY: progress, duration: 0.4 }, "<");
+            show.to(lineFill, { scaleY: progress, duration: 0.4 }, index * 0.35);
           }
-          show.to({}, { duration: 0.28 });
-        }
-
-        show.to({}, { duration: 0.2 });
+        });
 
         requestAnimationFrame(() => ScrollTrigger.refresh());
       });
