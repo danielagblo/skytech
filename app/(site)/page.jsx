@@ -5,6 +5,7 @@ import { getTeamMembers } from "../lib/team";
 import { getTestimonials } from "../lib/testimonials";
 import { getServiceMenus } from "../lib/pricing-display";
 import { getFilmServices } from "../lib/services";
+import { getHomeStatements } from "../lib/home-statements";
 
 import FilmHome from "../../components/skytech/sections/home/FilmHome";
 
@@ -15,12 +16,13 @@ export const metadata = {
 };
 
 export default async function Home() {
-  const [partnersData, testimonials, team, menus, filmServices] = await Promise.all([
+  const [partnersData, testimonials, team, menus, filmServices, homeStatements] = await Promise.all([
     getAffiliates(),
     getTestimonials(),
     getTeamMembers(),
     getServiceMenus(),
     getFilmServices(),
+    getHomeStatements(),
   ]);
   const allPartners = (partnersData || []).filter((p) => p?.logoUrl || p?.name);
   const reviews = (testimonials || [])
@@ -48,6 +50,7 @@ export default async function Home() {
       members={members}
       menus={menus}
       services={filmServices.services}
+      statements={homeStatements.statements}
     />
   );
 }

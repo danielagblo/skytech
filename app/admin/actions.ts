@@ -10,6 +10,7 @@ import { saveTestimonials, ITestimonial } from "../lib/testimonials";
 import { saveTeamMembers, ITeamMember } from "../lib/team";
 import { saveFAQs, IFAQ } from "../lib/faqs";
 import { saveFilmServices, type FilmServicesContent } from "../lib/services";
+import { saveHomeStatements, type HomeStatementsContent } from "../lib/home-statements";
 
 
 export async function updateHomeHero(formData: FormData) {
@@ -193,6 +194,18 @@ export async function updateFilmServicesAction(content: FilmServicesContent) {
     return { success: true };
   } catch (error: any) {
     console.error("Services update error:", error);
+    return { success: false, error: error.message };
+  }
+}
+
+export async function updateHomeStatementsAction(content: HomeStatementsContent) {
+  try {
+    await saveHomeStatements(content);
+    revalidatePath("/");
+    revalidatePath("/dashboard/home-statements");
+    return { success: true };
+  } catch (error: any) {
+    console.error("Home statements update error:", error);
     return { success: false, error: error.message };
   }
 }

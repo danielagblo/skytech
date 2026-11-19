@@ -55,6 +55,13 @@ const siteLinks = [
     color: "teal",
   },
   {
+    href: "/dashboard/home-statements",
+    title: "Home lines",
+    body: "Pinned statement cards under the homepage hero",
+    icon: "🧾",
+    color: "cyan",
+  },
+  {
     href: "/dashboard/testimonials",
     title: "Testimonials",
     body: "Customer stories on the homepage",

@@ -15,6 +15,8 @@ import TeamHang, { type HangMember } from "@/components/skytech/sections/home/Te
 import ThankYouFooter from "@/components/skytech/layout/ThankYouFooter";
 import type { ServiceMenu } from "@/lib/crm/service-offers";
 import type { FilmServiceItem } from "@/app/lib/services-shared";
+import type { HomeStatement } from "@/app/lib/home-statements-shared";
+import { DEFAULT_HOME_STATEMENTS } from "@/app/lib/home-statements-shared";
 
 function moneyLabel(amount: number | null | undefined) {
   if (amount == null) return null;
@@ -39,15 +41,6 @@ function serviceById(services: FilmServiceItem[] | undefined, id: string) {
 }
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
-
-const statements = [
-  { lead: "Even after launch, the work stays with", mark: "Skytech Ghana", rest: "in Accra." },
-  { lead: "Introducing", mark: "websites", rest: "that stay useful" },
-  { lead: "Introducing", mark: "apps", rest: "your customers finish" },
-  { lead: "Introducing", mark: "SEO", rest: "that keeps working" },
-  { lead: "Introducing", mark: "virtual tours", rest: "you can walk" },
-  { lead: "Introducing", mark: "a CRM", rest: "that keeps the client" },
-];
 
 const ribbon = ["Website", "Mobile app", "SEO", "Virtual tour", "CRM"];
 const tourIndustries = ["Hospitality", "Hotels", "Apartments", "Airbnb", "Event centres", "Real estate"];
@@ -115,14 +108,17 @@ export default function FilmHome({
   members = [],
   menus,
   services = [],
+  statements = DEFAULT_HOME_STATEMENTS.statements,
 }: {
   partners: FilmPartner[];
   reviews?: CustomerStory[];
   members?: HangMember[];
   menus?: ServiceMenu[];
   services?: FilmServiceItem[];
+  statements?: HomeStatement[];
 }) {
   const root = useRef<HTMLElement>(null);
+  const statementLines = statements.length ? statements : DEFAULT_HOME_STATEMENTS.statements;
   const websiteOffer = menuOffer(menus, "website", "standard") || menuOffer(menus, "website");
   const websitePrice = moneyLabel(websiteOffer?.total) || "GH₵8,399";
   const websitePricePlain = websitePrice.replace("GH₵", "GHS ");
@@ -382,9 +378,9 @@ export default function FilmHome({
 
       <section data-lines className="relative px-3 pb-4 md:px-5">
         <div className="relative mx-auto flex min-h-[78vh] max-w-[1180px] items-center justify-center overflow-hidden rounded-[28px] bg-[#f6f6f4] px-6">
-          {statements.map((line, index) => (
+          {statementLines.map((line, index) => (
             <h2
-              key={line.mark}
+              key={line.id || `${line.mark}-${index}`}
               data-statement
               className={`absolute left-6 right-6 text-center font-display text-3xl font-medium leading-tight tracking-tight md:text-5xl ${index === 0 ? "" : "opacity-0"}`}
             >

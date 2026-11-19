@@ -345,6 +345,13 @@ export const SCHEMA: string[] = [
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     UNIQUE KEY uq_film_services_page (page_key)
   )`,
+  `CREATE TABLE IF NOT EXISTS home_statements (
+    id CHAR(36) PRIMARY KEY,
+    page_key VARCHAR(50) NOT NULL,
+    payload JSON,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY uq_home_statements_page (page_key)
+  )`,
 ];
 
 export const isJsonStr = (v: any): boolean =>
