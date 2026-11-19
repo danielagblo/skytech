@@ -9,6 +9,7 @@ import { useGSAP } from "@gsap/react";
 import { useLenis } from "lenis/react";
 import BookMeetingButton from "@/components/skytech/ui/BookMeetingButton";
 import PartnersTrust from "@/components/skytech/sections/home/PartnersTrust";
+import HowItWorks from "@/components/skytech/sections/home/HowItWorks";
 import ServiceOffers from "@/components/skytech/sections/ServiceOffers";
 import CustomerSay, { type CustomerStory } from "@/components/skytech/sections/home/CustomerSay";
 import TeamHang, { type HangMember } from "@/components/skytech/sections/home/TeamHang";
@@ -797,6 +798,8 @@ export default function FilmHome({
       <TeamHang members={members} />
 
       <PartnersTrust partners={partners} />
+
+      <HowItWorks />
 
       <ThankYouFooter className="mt-2" />
     </article>
