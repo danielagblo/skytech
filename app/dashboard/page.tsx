@@ -62,6 +62,13 @@ const siteLinks = [
     color: "cyan",
   },
   {
+    href: "/dashboard/hero-words",
+    title: "Hero words",
+    body: "Rotating words in the blue hero pill (big / Better / Massive)",
+    icon: "✨",
+    color: "fuchsia",
+  },
+  {
     href: "/dashboard/testimonials",
     title: "Testimonials",
     body: "Customer stories on the homepage",

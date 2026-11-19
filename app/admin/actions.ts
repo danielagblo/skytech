@@ -11,6 +11,7 @@ import { saveTeamMembers, ITeamMember } from "../lib/team";
 import { saveFAQs, IFAQ } from "../lib/faqs";
 import { saveFilmServices, type FilmServicesContent } from "../lib/services";
 import { saveHomeStatements, type HomeStatementsContent } from "../lib/home-statements";
+import { saveHeroWords, type HeroWordsContent } from "../lib/hero-words";
 
 
 export async function updateHomeHero(formData: FormData) {
@@ -206,6 +207,18 @@ export async function updateHomeStatementsAction(content: HomeStatementsContent)
     return { success: true };
   } catch (error: any) {
     console.error("Home statements update error:", error);
+    return { success: false, error: error.message };
+  }
+}
+
+export async function updateHeroWordsAction(content: HeroWordsContent) {
+  try {
+    await saveHeroWords(content);
+    revalidatePath("/");
+    revalidatePath("/dashboard/hero-words");
+    return { success: true };
+  } catch (error: any) {
+    console.error("Hero words update error:", error);
     return { success: false, error: error.message };
   }
 }

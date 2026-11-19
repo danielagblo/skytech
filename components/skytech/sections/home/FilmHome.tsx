@@ -18,6 +18,7 @@ import type { ServiceMenu } from "@/lib/crm/service-offers";
 import type { FilmServiceItem } from "@/app/lib/services-shared";
 import type { HomeStatement } from "@/app/lib/home-statements-shared";
 import { DEFAULT_HOME_STATEMENTS } from "@/app/lib/home-statements-shared";
+import { DEFAULT_HERO_WORDS } from "@/app/lib/hero-words-shared";
 
 function moneyLabel(amount: number | null | undefined) {
   if (amount == null) return null;
@@ -110,6 +111,7 @@ export default function FilmHome({
   menus,
   services = [],
   statements = DEFAULT_HOME_STATEMENTS.statements,
+  heroWords = DEFAULT_HERO_WORDS.words,
 }: {
   partners: FilmPartner[];
   reviews?: CustomerStory[];
@@ -117,9 +119,13 @@ export default function FilmHome({
   menus?: ServiceMenu[];
   services?: FilmServiceItem[];
   statements?: HomeStatement[];
+  heroWords?: string[];
 }) {
   const root = useRef<HTMLElement>(null);
   const statementLines = statements.length ? statements : DEFAULT_HOME_STATEMENTS.statements;
+  const rotatingWords = (heroWords?.length ? heroWords : DEFAULT_HERO_WORDS.words)
+    .map((word) => String(word || "").trim())
+    .filter(Boolean);
   const websiteOffer = menuOffer(menus, "website", "standard") || menuOffer(menus, "website");
   const websitePrice = moneyLabel(websiteOffer?.total) || "GH₵8,399";
   const websitePricePlain = websitePrice.replace("GH₵", "GHS ");
@@ -468,7 +474,7 @@ export default function FilmHome({
     return () => {
       motion.revert();
     };
-  }, { scope: root });
+  }, { scope: root, dependencies: [rotatingWords.join("|")] });
 
   return (
     <article ref={root} className="relative bg-[#e8e8ea] text-[#161616]">
@@ -507,9 +513,9 @@ export default function FilmHome({
                     data-hero-word-pill
                     className="relative inline-flex items-center justify-center overflow-hidden rounded-full bg-[#b7dff6] px-[0.38em] py-[0.02em]"
                   >
-                    {["big", "Better", "Massive"].map((word, index) => (
+                    {rotatingWords.map((word, index) => (
                       <span
-                        key={word}
+                        key={`${word}-${index}`}
                         data-hero-word
                         className={`whitespace-nowrap ${index === 0 ? "relative" : "absolute opacity-0"}`}
                       >

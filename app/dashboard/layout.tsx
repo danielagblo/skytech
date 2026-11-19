@@ -13,6 +13,7 @@ const navItems = [
   { href: "/dashboard/pricing", label: "Pricing", icon: "💰" },
   { href: "/dashboard/services", label: "Services", icon: "🛠️" },
   { href: "/dashboard/home-statements", label: "Home lines", icon: "🧾" },
+  { href: "/dashboard/hero-words", label: "Hero words", icon: "✨" },
   { href: "/dashboard/testimonials", label: "Testimonials", icon: "💬" },
   { href: "/dashboard/team", label: "Team", icon: "👥" },
   { href: "/dashboard/affiliates", label: "Partners", icon: "🤝" },

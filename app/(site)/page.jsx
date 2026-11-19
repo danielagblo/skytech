@@ -6,6 +6,7 @@ import { getTestimonials } from "../lib/testimonials";
 import { getServiceMenus } from "../lib/pricing-display";
 import { getFilmServices } from "../lib/services";
 import { getHomeStatements } from "../lib/home-statements";
+import { getHeroWords } from "../lib/hero-words";
 
 import FilmHome from "../../components/skytech/sections/home/FilmHome";
 
@@ -16,14 +17,16 @@ export const metadata = {
 };
 
 export default async function Home() {
-  const [partnersData, testimonials, team, menus, filmServices, homeStatements] = await Promise.all([
-    getAffiliates(),
-    getTestimonials(),
-    getTeamMembers(),
-    getServiceMenus(),
-    getFilmServices(),
-    getHomeStatements(),
-  ]);
+  const [partnersData, testimonials, team, menus, filmServices, homeStatements, heroWords] =
+    await Promise.all([
+      getAffiliates(),
+      getTestimonials(),
+      getTeamMembers(),
+      getServiceMenus(),
+      getFilmServices(),
+      getHomeStatements(),
+      getHeroWords(),
+    ]);
   const allPartners = (partnersData || []).filter((p) => p?.logoUrl || p?.name);
   const reviews = (testimonials || [])
     .filter((item) => item?.quote)
@@ -51,6 +54,7 @@ export default async function Home() {
       menus={menus}
       services={filmServices.services}
       statements={homeStatements.statements}
+      heroWords={heroWords.words}
     />
   );
 }
