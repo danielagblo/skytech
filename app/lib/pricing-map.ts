@@ -96,6 +96,11 @@ export function normalizePricingCategories(categories: PricingCategory[]): Prici
   return [...defaults.map((fallback) => byId.get(fallback.category) || fallback), ...extras];
 }
 
+function isVirtualTourPackage(pkg: PricingPackage): boolean {
+  const hay = `${pkg.id || ""} ${pkg.name || ""} ${pkg.tier || ""}`.toLowerCase();
+  return /virtual[\s_-]*tour/.test(hay);
+}
+
 function packageToOffer(
   pkg: PricingPackage,
   index: number,
@@ -129,11 +134,16 @@ export function pricingCategoriesToMenus(categories: PricingCategory[]): Service
   return SERVICE_MENUS.map((menu) => {
     const category = known.get(menu.id);
     if (!category?.packages?.length) return menu;
+    const packages =
+      menu.id === "website"
+        ? category.packages.filter((pkg) => !isVirtualTourPackage(pkg))
+        : category.packages;
+    if (!packages.length) return menu;
     return {
       id: menu.id,
       label: category.label || menu.label,
       note: NOTES[menu.id] || menu.note,
-      offers: category.packages.map((pkg, index) =>
+      offers: packages.map((pkg, index) =>
         packageToOffer(pkg, index, category.label || menu.label, menu.id),
       ),
     };
