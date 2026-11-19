@@ -230,9 +230,9 @@ export default function FilmHome({
         }
         swapTo(heroWords.length - 1, 0);
 
-        open.call(() => {
+        open.add(() => {
           wordReel.play(0);
-        }, null, "+=0.55");
+        }, "+=0.55");
       }
 
       if (contextSafe) {
